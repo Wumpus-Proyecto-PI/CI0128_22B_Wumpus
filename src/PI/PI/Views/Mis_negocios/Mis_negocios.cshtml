@@ -4,27 +4,23 @@
     <head>
         <meta charset="UTF-8">
         <title> Mis negocios </title>
-        <link rel="stylesheet" href="./Mis_negocios.css"/>
+        <link rel="stylesheet" href="./Mis_negocios.css" />
     </head>
 
     <body>
         <header>
-            <h1> Mis Negocios </h1> 
+            <h1> Mis Negocios </h1>
         </header>
-        <div>
-            <button type="button" class = "button1"> <img src="imagen"> </button>
-            <button type="button" class = "button2"> 
-                <h3> Titulo </h3>
-                <h4> <img src="imagen"> Tipo de negocio </h4>
-                <p> Cantidad de analisis: 0 </p>
-                <p> Última actualización: DD/MM/AAAA</p>  
-            </button>
-            <button type="button" class = "button2"> 
-                <h3> Titulo </h3>
-                <h4> <img src="imagen"> Tipo de negocio </h4>
-                <p> Cantidad de analisis: 0 </p>
-                <p> Última actualización: DD/MM/AAAA</p>  
-            </button>
+        <div class="card-container">
+            <div  onclick="alert('Agregar')" class="card card-agregar"> <img class="boton-agregar" src="../Images/agregar-img.svg"> </div>
+            <div onclick="alert('Ver Negocio')" class="card card-negocio">
+                <div class="card-info">
+                    <div class="card-nombre"> Nombre del Negocio </div>
+                    <div class="card-tipo"> <img class="logo-negocio" src="../Images/ejemplo-logo.svg"> Tipo de negocio </div>
+                    <div class="texto card-analisis"> Cantidad de analisis: 0 </div>
+                    <div class="texto card-actualizacion"> Ultima actualizacion: DD/MM/AAAA</div>
+                </div>
+            </div>
         </div>
     </body>
 
