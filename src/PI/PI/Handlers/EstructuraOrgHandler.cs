@@ -71,7 +71,7 @@ namespace PI.Handlers
         public PuestoModel ObtenerUnPuesto (string nombrePuesto, string fechaAnalisis, bool extraerSubordinados = true)
         {
             // extraeamos la lista de puestos 
-            string consulta = "SELECT * FROM PUESTO WHERE" 
+            string consulta = "SELECT TOP 1 * FROM PUESTO WHERE" 
                 + "'fechaAnalisis='" + fechaAnalisis + "' and "
                 + "nombre='" + nombrePuesto + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
