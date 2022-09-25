@@ -15,7 +15,7 @@ namespace PI.Models
         public decimal SalarioBruto { get; set; }
 
         // beneficios que tiene el puesto
-        // List<BeneficioModel> Beneficios { get; set; }
+        List<BeneficioModel> Beneficios { get; set; }
 
         // lista de puestos subordinados de este puesto
         List<PuestoModel> Subordinados { get; set; }
