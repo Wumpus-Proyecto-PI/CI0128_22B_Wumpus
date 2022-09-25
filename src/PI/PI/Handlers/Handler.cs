@@ -12,8 +12,8 @@ namespace PI.Handlers
 {
     public class Handler
     {
-        private SqlConnection conexion;
-        private string rutaConexion;
+        protected SqlConnection conexion;
+        protected string rutaConexion;
 
         public Handler(string connectionStr)
         {
@@ -29,7 +29,7 @@ namespace PI.Handlers
             builder.Configuration.GetConnectionString("BaseDeDatos");
             conexion = new SqlConnection(rutaConexion);
         }
-        private DataTable CrearTablaConsulta(string consulta)
+        protected DataTable CrearTablaConsulta(string consulta)
         {
             SqlCommand comandoParaConsulta = new SqlCommand(consulta,
             conexion);
