@@ -138,20 +138,5 @@ namespace PI.Handlers
 
             return resultadoBeneficios;
         }
-
-
-        private List<PuestoModel> ObtenerSubordinados(string nombrePuestoJefe, string fechaAnalisis)
-        {
-            List < PuestoModel > resultadoSubordinados = new List<PuestoModel>();
-
-            // extraer los puesto subordinados
-            string consulta = "SELECT puestoEmpleado FROM ES_EMPLEADO_DE WHERE " 
-                + "puestoJefe='" + nombrePuestoJefe + "' and" 
-                + "fechaAnalisis='" + fechaAnalisis + "'";
-
-            DataTable tablaSubordinados = CrearTablaConsulta(consulta);
-
-            return resultadoSubordinados;
-        }
     }
 }

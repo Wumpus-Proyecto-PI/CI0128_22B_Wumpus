@@ -1,4 +1,4 @@
-using PI.Handler
+using PI.Handler;
 
 class BeneficiosHandler : Handler{
         public List<BeneficioModel> ObtenerBeneficios(string nombrePuesto)
