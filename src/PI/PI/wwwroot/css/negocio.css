@@ -1,0 +1,43 @@
+#subtitulo {
+    width: 554px;
+    height: 62px;
+    background-color: #005DB9;
+    color: white;
+    display: flex;
+    border-radius: 0px 20px 20px 0px;
+    box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+    margin-bottom: 40px;
+}
+
+#nombre_negocio {
+    padding-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: xx-large;
+}
+
+
+  #cuadro_beneficios {
+    display: flex;
+    margin-left: 50px;
+    margin-top: 100px;
+    width: 571px;
+    height: 217px;
+    border: 1px solid black;
+  }
+
+  .pestaña_cuadro_beneficios{
+    width: 33.3333%;
+    height: 30px;
+    text-align: center;
+    font-size: medium;
+    border: 1px solid black;
+    border-radius: 10px 10px 0px 0px;
+  }
+  
+  
+  div a{
+    color: black;
+    text-decoration: none;
+    font-size: medium;
+  }
