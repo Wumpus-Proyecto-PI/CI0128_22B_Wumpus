@@ -21,6 +21,7 @@ namespace PI.Handlers
             builder.Configuration.GetConnectionString("BaseDeDatos");
             conexion = new SqlConnection(rutaConexion);
         }
+
         private DataTable CrearTablaConsulta(string consulta)
         {
             SqlCommand comandoParaConsulta = new SqlCommand(consulta,
@@ -33,6 +34,7 @@ namespace PI.Handlers
             conexion.Close();
             return consultaFormatoTabla;
         }
+
         public List<NegocioModel> ObtenerNegocios()
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
@@ -50,12 +52,13 @@ namespace PI.Handlers
             }
             return negocios;
         }
-        public List<PuestoModel> ObtenerPuesto(DateOnly fechaAnalisis)
+
+        public List<PuestoModel> ObtenerPuestos(DateOnly fechaAnalisis)
         {
             // extraer los puestos
             // nombrePuesto es la llave primaria de puesto
-            string fecha = fechaAnalisis.ToString("yyyy-mm-dd");
-            string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis = '" + fecha + "'";
+            string fechaAnalisisStr = fechaAnalisis.ToString("yyyy-mm-dd");
+            string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
             // puestos y sus beneficios
             List<PuestoModel> puestos = new List<PuestoModel>();
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
@@ -63,35 +66,43 @@ namespace PI.Handlers
 
             foreach (DataRow columna in tablaResultadoPuestos.Rows)
             {
-                puestos.Add(
-                new PuestoModel
+                string nombreDelPuestoActual = Convert.ToString(columna["nombre"]);
+                // revisamos que no este repetido el puesto
+                if (!puestos.Exists(puestoX => puestoX.Nombre == nombreDelPuestoActual))
                 {
-                    Nombre = Convert.ToString(columna["nombre"]),
-                    Plazas = Convert.ToInt16(columna["plazasPorPuesto"]),
-                    SalarioBruto = Convert.ToDecimal(columna["salarioBruto"]),
-                    Beneficios = new List<BeneficioModel>()
-                });
-                
-                PuestoModel puestoAgregado = puestos.Last();
-                
-                puestoAgregado.Beneficios = ObtenerBeneficios(puestoAgregado.Nombre);
+                    PuestoModel puesActual = new PuestoModel{
+                        Nombre = nombreDelPuestoActual,
+                        Plazas = Convert.ToInt16(columna["plazasPorPuesto"]),
+                        SalarioBruto = Convert.ToDecimal(columna["salarioBruto"]),
+                        Beneficios = new List<BeneficioModel>()
+                    };
+                    puesActual.Beneficios = ObtenerBeneficios(puesActual.Nombre, fechaAnalisisStr);
 
+                    // se agregan los subordinados del puesto
+                    puesActual.Subordinados = ObtenerSubordinados(puesActual.Nombre, fechaAnalisisStr, puestos);
+
+                    puestos.Add(puesActual);
+                }
             }
+
+                // se agregan los beneficios del puesto
             return puestos;
         }
 
-        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto)
+        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, string fechaAnalisis)
         {
             List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
 
-            // extraer los beneficios
-            string consulta = "SELECT * FROM BENEFICIO_PUESTO WHERE nombrePuesto='" + nombrePuesto + "'";
+            // consulta para extraer los beneficios
+            string consulta = "SELECT * FROM BENEFICIO_PUESTO WHERE " 
+                + "nombrePuesto='" + nombrePuesto + "' and" 
+                + "fechaAnalisis='" + fechaAnalisis + "'";
             DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
+
             foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
             {
                 resultadoBeneficios.Add(new BeneficioModel
                 {
-                    // se requiere hacer consulta a la base
                     nombreBeneficio = Convert.ToString(beneficio["nombreBeneficio"]),
                     monto = Convert.ToDecimal(beneficio["monto"]),
                     plazasPorBeneficio = Convert.ToInt16(beneficio["PlazaPorBeneficio"])
@@ -99,6 +110,20 @@ namespace PI.Handlers
             }
 
             return resultadoBeneficios;
+        }
+
+        private List<PuestoModel> ObtenerSubordinados(string nombrePuestoJefe, string fechaAnalisis, List<PuestoModel> puestos)
+        {
+            List < PuestoModel > resultadoSubordinados = new List<PuestoModel>();
+
+            // extraer los puesto subordinados
+            string consulta = "SELECT puestoEmpleado FROM ES_EMPLEADO_DE WHERE " 
+                + "puestoJefe='" + nombrePuestoJefe + "' and" 
+                + "fechaAnalisis='" + fechaAnalisis + "'";
+
+            DataTable tablaSubordinados = CrearTablaConsulta(consulta);
+
+            return resultadoSubordinados;
         }
     }
 }
