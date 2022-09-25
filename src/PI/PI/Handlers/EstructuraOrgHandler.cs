@@ -53,40 +53,67 @@ namespace PI.Handlers
             return negocios;
         }
 
-        public List<PuestoModel> ObtenerPuestos(DateOnly fechaAnalisis)
+        public PuestoModel ObtenerEsrtucturaOrg(DateOnly fechaAnalisis)
         {
             // extraer los puestos
             // nombrePuesto es la llave primaria de puesto
             string fechaAnalisisStr = fechaAnalisis.ToString("yyyy-mm-dd");
-            string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
-            // puestos y sus beneficios
-            List<PuestoModel> puestos = new List<PuestoModel>();
+            string consulta = "SELECT TOP 1 nombre FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
+            DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
+            DataRow fila = tablaResultadoPuestos.Rows;
+            // puesto raiz que contiene los otros puestos como subordinados
+            // ObtenerUnPuesto es metodo recursivo que va a agregar todos los subordinados de la estructura
+            PuestoModel raizEstructura = ObtenerUnPuesto(Convert.ToString(fila["nombre"]), fechaAnalisisStr);
+
+            return raizEstructura;
+        }
+
+        public PuestoModel ObtenerUnPuesto (string nombrePuesto, string fechaAnalisis, bool extraerSubordinados = true)
+        {
+            // extraeamos la lista de puestos 
+            string consulta = "SELECT * FROM PUESTO WHERE" 
+                + "'fechaAnalisis='" + fechaAnalisisStr + "' and "
+                + "nombre='" + nombrePuesto + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
 
 
-            foreach (DataRow columna in tablaResultadoPuestos.Rows)
+            PuestoModel puestoActual = new PuestoModel{
+                Nombre = nombreDelPuestoActual,
+                Plazas = Convert.ToInt16(fila["plazasPorPuesto"]),
+                SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]),
+            };
+            puestoActual.Beneficios = ObtenerBeneficios(puestoActual.Nombre, fechaAnalisisStr);
+            
+            // si se indica que desean extraer tambien los subordinados
+            // si esta en falso se evita un query muy grande que puede tomar tiempo
+            if (extraerSubordinados)
             {
-                string nombreDelPuestoActual = Convert.ToString(columna["nombre"]);
-                // revisamos que no este repetido el puesto
-                if (!puestos.Exists(puestoX => puestoX.Nombre == nombreDelPuestoActual))
+                // extraer los puesto subordinados
+                string consulta = "SELECT * FROM ES_EMPLEADO_DE as E join Puesto as P on " 
+                    + "E.nombreEmpleado = P.nombre" +  
+                    + "WHERE E.nombreJefe='" + puestoActual.Nombre + "'" 
+                    + "AND P.fechaAnalisis='" + fechaAnalisis + "'"
+                    + "AND E.fechaEmpleado='" + fechaAnalisis + "'"
+                    + "AND E.fechaJefe='" + fechaAnalisis + "'";
+
+                DataTable tablaSubordinados = CrearTablaConsulta(consulta);
+                if (tablaSubordinados != null && tablaSubordinados.Rows.Count > 0)
                 {
-                    PuestoModel puesActual = new PuestoModel{
-                        Nombre = nombreDelPuestoActual,
-                        Plazas = Convert.ToInt16(columna["plazasPorPuesto"]),
-                        SalarioBruto = Convert.ToDecimal(columna["salarioBruto"]),
-                        Beneficios = new List<BeneficioModel>()
-                    };
-                    puesActual.Beneficios = ObtenerBeneficios(puesActual.Nombre, fechaAnalisisStr);
-
-                    // se agregan los subordinados del puesto
-                    puesActual.Subordinados = ObtenerSubordinados(puesActual.Nombre, fechaAnalisisStr, puestos);
-
-                    puestos.Add(puesActual);
+                    foreach (DataRow fila in tablaSubordinados.Rows)
+                    {
+                        PuestoModel subordinado = ObtenerUnPuesto(Convert.ToString(fila["nombre"]), fechaAnalisis, true);
+                    
+                        if (subordinado != null)
+                        {
+                            puestoActual.Subordinados.Add(subordinado);
+                        }
+                    }
+                } else {
+                    return null;
                 }
             }
 
-                // se agregan los beneficios del puesto
-            return puestos;
+            return puestoActual;
         }
 
         private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, string fechaAnalisis)
@@ -112,7 +139,8 @@ namespace PI.Handlers
             return resultadoBeneficios;
         }
 
-        private List<PuestoModel> ObtenerSubordinados(string nombrePuestoJefe, string fechaAnalisis, List<PuestoModel> puestos)
+
+        private List<PuestoModel> ObtenerSubordinados(string nombrePuestoJefe, string fechaAnalisis)
         {
             List < PuestoModel > resultadoSubordinados = new List<PuestoModel>();
 
