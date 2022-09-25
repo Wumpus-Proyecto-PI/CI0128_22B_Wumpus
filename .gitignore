@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 Debug\
+src\PI\PI\obj
