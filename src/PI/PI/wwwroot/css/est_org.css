@@ -1,0 +1,50 @@
+#subtitulo {
+  width: 554px;
+  height: 62px;
+  background-color: #005DB9;
+  color: white;
+  display: flex;
+  border-radius: 0px 20px 20px 0px;
+  box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+  margin-bottom: 40px;
+}
+
+#nombre_negocio {
+  padding-top: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: xx-large;
+}
+
+#pestañas{
+  margin-left: 85px;
+  margin-top: 50px;
+  display: flex;
+  width: 500px;    
+  height: 30px;
+}
+
+.pestaña_cuadro_beneficios{
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  font-size: medium;
+  border: 1px solid rgb(117, 115, 115);
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  align-content: center;
+}
+
+#cuadro_beneficios {
+  margin-left: 50px;
+  width: 571px;
+  height: 271px;
+  border: 1px solid rgb(117, 115, 115);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+div a{
+  color: black;
+  text-decoration: none;
+  font-size: medium;
+}
