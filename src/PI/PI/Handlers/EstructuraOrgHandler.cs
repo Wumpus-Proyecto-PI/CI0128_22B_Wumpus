@@ -66,21 +66,26 @@ namespace PI.Handlers
 
             foreach (DataRow columna in tablaResultadoPuestos.Rows)
             {
-                PuestoModel puesActual = new PuestoModel{
-                    Nombre = Convert.ToString(columna["nombre"]),
-                    Plazas = Convert.ToInt16(columna["plazasPorPuesto"]),
-                    SalarioBruto = Convert.ToDecimal(columna["salarioBruto"]),
-                    Beneficios = new List<BeneficioModel>()
-                };
+                string nombreDelPuestoActual = Convert.ToString(columna["nombre"]);
+                // revisamos que no este repetido el puesto
+                if (!puestos.Exists(puestoX => puestoX.Nombre == nombreDelPuestoActual))
+                {
+                    PuestoModel puesActual = new PuestoModel{
+                        Nombre = nombreDelPuestoActual,
+                        Plazas = Convert.ToInt16(columna["plazasPorPuesto"]),
+                        SalarioBruto = Convert.ToDecimal(columna["salarioBruto"]),
+                        Beneficios = new List<BeneficioModel>()
+                    };
+                    puesActual.Beneficios = ObtenerBeneficios(puesActual.Nombre, fechaAnalisisStr);
+
+                    // se agregan los subordinados del puesto
+                    puesActual.Subordinados = ObtenerSubordinados(puesActual.Nombre, fechaAnalisisStr, puestos);
+
+                    puestos.Add(puesActual);
+                }
+            }
 
                 // se agregan los beneficios del puesto
-                puesActual.Beneficios = ObtenerBeneficios(puesActual.Nombre, fechaAnalisisStr);
-
-                // se agregan los subordinados del puesto
-                puesActual.Subordinados = ObtenerSubordinados(puesActual.Nombre, fechaAnalisisStr, puestos);
-
-                puestos.Add(puesActual);
-            }
             return puestos;
         }
 
@@ -118,7 +123,7 @@ namespace PI.Handlers
 
             DataTable tablaSubordinados = CrearTablaConsulta(consulta);
 
-            return resultadoBeneficios;
+            return resultadoSubordinados;
         }
     }
 }
