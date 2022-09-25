@@ -1,4 +1,4 @@
-namespace PersonalProject.Models
+namespace PI.Models
 {
     public class PuestoModel
     {
