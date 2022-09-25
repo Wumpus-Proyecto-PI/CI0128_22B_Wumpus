@@ -60,10 +60,10 @@ namespace PI.Handlers
             string fechaAnalisisStr = fechaAnalisis.ToString("yyyy-mm-dd");
             string consulta = "SELECT TOP 1 nombre FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
-            DataRow fila = tablaResultadoPuestos.Rows;
+            var filas = tablaResultadoPuestos.Rows;
             // puesto raiz que contiene los otros puestos como subordinados
             // ObtenerUnPuesto es metodo recursivo que va a agregar todos los subordinados de la estructura
-            PuestoModel raizEstructura = ObtenerUnPuesto(Convert.ToString(fila["nombre"]), fechaAnalisisStr);
+            PuestoModel raizEstructura = ObtenerUnPuesto(Convert.ToString(filas[0]["nombre"]), fechaAnalisisStr);
 
             return raizEstructura;
         }
@@ -72,25 +72,30 @@ namespace PI.Handlers
         {
             // extraeamos la lista de puestos 
             string consulta = "SELECT * FROM PUESTO WHERE" 
-                + "'fechaAnalisis='" + fechaAnalisisStr + "' and "
+                + "'fechaAnalisis='" + fechaAnalisis + "' and "
                 + "nombre='" + nombrePuesto + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
-
+            var filas = tablaResultadoPuestos.Rows;
+            
+            if (tablaResultadoPuestos == null && tablaResultadoPuestos.Rows.Count <= 0)
+            {
+                return null;
+            }
 
             PuestoModel puestoActual = new PuestoModel{
-                Nombre = nombreDelPuestoActual,
-                Plazas = Convert.ToInt16(fila["plazasPorPuesto"]),
-                SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]),
+                Nombre = nombrePuesto,
+                Plazas = Convert.ToInt16(filas[0]["plazasPorPuesto"]),
+                SalarioBruto = Convert.ToDecimal(filas[0]["salarioBruto"]),
             };
-            puestoActual.Beneficios = ObtenerBeneficios(puestoActual.Nombre, fechaAnalisisStr);
+            puestoActual.Beneficios = ObtenerBeneficios(puestoActual.Nombre, fechaAnalisis);
             
             // si se indica que desean extraer tambien los subordinados
             // si esta en falso se evita un query muy grande que puede tomar tiempo
             if (extraerSubordinados)
             {
                 // extraer los puesto subordinados
-                string consulta = "SELECT * FROM ES_EMPLEADO_DE as E join Puesto as P on " 
-                    + "E.nombreEmpleado = P.nombre" +  
+                consulta = "SELECT * FROM ES_EMPLEADO_DE as E join Puesto as P on " 
+                    + "E.nombreEmpleado = P.nombre"  
                     + "WHERE E.nombreJefe='" + puestoActual.Nombre + "'" 
                     + "AND P.fechaAnalisis='" + fechaAnalisis + "'"
                     + "AND E.fechaEmpleado='" + fechaAnalisis + "'"
