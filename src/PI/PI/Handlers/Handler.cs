@@ -22,6 +22,13 @@ namespace PI.Handlers
             builder.Configuration.GetConnectionString(connectionStr);
             conexion = new SqlConnection(rutaConexion);
         }
+        public Handler()
+        {
+            var builder = WebApplication.CreateBuilder();
+            rutaConexion =
+            builder.Configuration.GetConnectionString("BaseDeDatos");
+            conexion = new SqlConnection(rutaConexion);
+        }
         private DataTable CrearTablaConsulta(string consulta)
         {
             SqlCommand comandoParaConsulta = new SqlCommand(consulta,
