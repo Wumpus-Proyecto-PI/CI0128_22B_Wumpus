@@ -3,7 +3,7 @@ namespace PI.Models
     public class PuestoModel
     {
         // nombre del puesto, no deben haber dos iguales
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = String.Empty;
 
         // numero de plazas que puede tener un puesto
         public int Plazas { get; set; }
@@ -15,10 +15,10 @@ namespace PI.Models
         public decimal SalarioBruto { get; set; }
 
         // beneficios que tiene el puesto
-        List<BeneficioModel> Beneficios { get; set; }
+        public List<BeneficioModel> Beneficios { get; set; }
 
         // lista de puestos subordinados de este puesto
-        List<PuestoModel> Subordinados { get; set; }
+        public List<PuestoModel> Subordinados { get; set; }
 
     }
 }
