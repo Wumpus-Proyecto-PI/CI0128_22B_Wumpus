@@ -12,6 +12,8 @@ namespace PI.Handlers
 {
     public class EstructuraOrgHandler : Handler
     {
+        public EstructuraOrgHandler() : base() { }
+
         public List<NegocioModel> ObtenerNegocios()
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
@@ -30,21 +32,22 @@ namespace PI.Handlers
             return negocios;
         }
 
-        public List<PuestoModel> ObtenerListaDePuestos(DateOnly fechaAnalisis)
+        public List<PuestoModel> ObtenerListaDePuestos(string fechaAnalisisStr)
         {
-            string fechaAnalisisStr = fechaAnalisis.ToString("yyyy-mm-dd");
-            string consulta = "SELECT TOP * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
+            string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
 
             List<PuestoModel> puestos = new List<PuestoModel>();
             foreach (DataRow fila in tablaResultadoPuestos.Rows)
             {
                 PuestoModel puesto = new PuestoModel();
+                Console.WriteLine(puesto.Nombre);
                 puesto.Nombre = Convert.ToString(fila["nombre"]);
                 puesto.Plazas = Convert.ToInt16(fila["cantidadPlazas"]);
                 puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
 
                 puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisisStr);
+                puestos.Add(puesto);
             }
 
             return puestos;
@@ -123,8 +126,8 @@ namespace PI.Handlers
             List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
 
             // consulta para extraer los beneficios
-            string consulta = "SELECT * FROM BENEFICIO_PUESTO WHERE " 
-                + "nombrePuesto='" + nombrePuesto + "' and" 
+            string consulta = "SELECT * FROM BENEFICIO WHERE " 
+                + "nombrePuesto='" + nombrePuesto + "' and " 
                 + "fechaAnalisis='" + fechaAnalisis + "'";
             DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
 
