@@ -1,4 +1,4 @@
-﻿namespace PI.Models
+﻿namespace PI.Models;
 using System;
 
 public class NegocioModel
