@@ -1,0 +1,58 @@
+﻿@using PI.Models
+@using PI.Handlers
+
+
+
+<div id="mostrar-puestos">
+       <p>Aqui se muestran los puestos</p>
+    <PuestoParcialView puesto="@test"></PuestoParcialView>
+</div>
+
+
+@if (!primerPuestoAgreado) {
+    <div id="@cssId" @onmouseover="@Hover" @onmouseout="@HoverOut" @onclick="@AgregarPrimerPuestro">
+        <a><img style="@styleHover" src=" @imgAgregarPath" alt="">@hoverText</a>
+    </div>
+}
+
+@code {
+    PuestoModel test = new PuestoModel
+    {
+        Nombre = "test1",
+        SalarioBruto = 45M,
+        SalarioNeto = 10M
+    };
+
+    string imgAgregarPath = "img/estructuraOrg/addPrimerPuesto.png";
+    string hoverText = "";
+    string styleHover = "";
+    string cssId = "agregar-primer-puesto";
+    bool primerPuestoAgreado = false;
+    MarkupString htmlPuestos;
+
+    List<PuestoModel> PuestoAgregados = new List<PuestoModel>();
+
+    public void Hover(MouseEventArgs mouseEvent)
+    {
+        cssId = "agregar-primer-puesto-hover";
+        imgAgregarPath = "";
+        hoverText = "Agregar Puesto";
+    }
+    public void HoverOut(MouseEventArgs mouseEvent)
+    {
+        styleHover = "";
+        cssId = "agregar-primer-puesto";
+        imgAgregarPath = "img/estructuraOrg/addPrimerPuesto.png";
+        hoverText = "";
+    }
+
+    public void AgregarPrimerPuestro(MouseEventArgs mouseEvent)
+    {
+        primerPuestoAgreado = true;
+        string htmlPuestos = string.Empty;
+        htmlPuestos =
+        " ";
+
+    }
+}
+

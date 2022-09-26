@@ -17,7 +17,21 @@
     <div id="nombre_negocio">@ViewData["NombreNegocio"]</div>
 </div>
 
-    <div id="pestañas">
+<div id="contenido-puestos-pestañas">   
+    <div class="altura-seccion" id="seccion-pestañas">
+        @*Aqui se agrega lo de las pestanas*@
+    </div>
+    <div class="altura-seccion" id="seccion-puestos">
+        @*Seccion de puestos donde se ven los puestos en cajas con organigrama*@
+
+
+        @*<div id="agregar-primer-puesto">
+            <a><img src="~/img/estructuraOrg/addPrimerPuesto.png"></a>
+        </div>*@
+        @(await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered))
+    </div>
+
+    @*<div id="pestañas">
         <a class="pestaña_cuadro_beneficios" href="#">
             <p>
                 Configuración
@@ -30,4 +44,9 @@
         </a>
     </div>
     <div id="cuadro_beneficios">
-    </div>
+    </div>*@
+</div>
+
+
+@*Necesario para componentes razor*@
+<script src="_framework/blazor.server.js"><script/>
