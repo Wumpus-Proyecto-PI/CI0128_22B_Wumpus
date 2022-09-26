@@ -10,31 +10,8 @@ using Microsoft.VisualBasic;
 
 namespace PI.Handlers
 {
-    public class EstructuraOrgHandler
+    public class EstructuraOrgHandler : Handler
     {
-        private SqlConnection conexion;
-        private string rutaConexion;
-        public EstructuraOrgHandler()
-        {
-            var builder = WebApplication.CreateBuilder();
-            rutaConexion =
-            builder.Configuration.GetConnectionString("BaseDeDatos");
-            conexion = new SqlConnection(rutaConexion);
-        }
-
-        private DataTable CrearTablaConsulta(string consulta)
-        {
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta,
-            conexion);
-            SqlDataAdapter adaptadorParaTabla = new
-            SqlDataAdapter(comandoParaConsulta);
-            DataTable consultaFormatoTabla = new DataTable();
-            conexion.Open();
-            adaptadorParaTabla.Fill(consultaFormatoTabla);
-            conexion.Close();
-            return consultaFormatoTabla;
-        }
-
         public List<NegocioModel> ObtenerNegocios()
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
@@ -53,7 +30,27 @@ namespace PI.Handlers
             return negocios;
         }
 
-        public PuestoModel ObtenerEsrtucturaOrg(DateOnly fechaAnalisis)
+        public List<PuestoModel> ObtenerListaDePuestos(DateOnly fechaAnalisis)
+        {
+            string fechaAnalisisStr = fechaAnalisis.ToString("yyyy-mm-dd");
+            string consulta = "SELECT TOP * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
+            DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
+
+            List<PuestoModel> puestos = new List<PuestoModel>();
+            foreach (DataRow fila in tablaResultadoPuestos.Rows)
+            {
+                PuestoModel puesto = new PuestoModel();
+                puesto.Nombre = Convert.ToString(fila["nombre"]);
+                puesto.Plazas = Convert.ToInt16(fila["cantidadPlazas"]);
+                puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
+
+                puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisisStr);
+            }
+
+            return puestos;
+        }
+
+        public PuestoModel ObtenerEstructuraOrg(DateOnly fechaAnalisis)
         {
             // extraer los puestos
             // nombrePuesto es la llave primaria de puesto
