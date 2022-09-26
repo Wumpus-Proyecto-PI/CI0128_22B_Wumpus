@@ -87,7 +87,7 @@ div a{
     margin-left: 75px;
 }
 
-#agregar-primer-puesto {
+#agregar-puesto {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -101,13 +101,13 @@ div a{
     margin: 10px;
 }
 
-#agregar-primer-puesto img {
+#agregar-puesto img {
     width: 35px;
     padding: 5px;
 }
 
 
-#agregar-primer-puesto-hover {
+#agregar-puesto-hover {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -125,6 +125,7 @@ div a{
 
 #mostrar-puestos {
     display: flex;
+    flex-direction: column;
     width: fit-content;
     height: fit-content;
     align-items: center;
