@@ -8,8 +8,9 @@ namespace PI.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["TituloPaso"] = "Estructura organizativa";
             EstructuraOrgHandler estructura = new EstructuraOrgHandler();
-
+            ViewData["NombreNegocio"] = "Un negocio";
             // fecha quemada de testing
             string fechaAnalisis = "2002-09-09 12:00:00 AM";
             List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
