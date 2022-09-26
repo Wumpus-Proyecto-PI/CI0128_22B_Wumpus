@@ -1,4 +1,6 @@
-﻿@*
+﻿@model List<PuestoModel>
+
+@*
     Html para la estructura orgranizativa.
     Como este es dinamico del lado del cliente se utilzan componentes razor
 *@
@@ -11,10 +13,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HTML template</title>
     <link rel="stylesheet" href="css/est_org.css">
+    <link rel="stylesheet" href="css/estructuraOrg/PuestoParcialView.css">
+
 </head>
 
 <div id="subtitulo">
-    <div id="nombre_negocio">@ViewData["NombreNegocio"]</div>
+    <div id="nombre_negocio">@ViewData["NombreNegocio"]</div><PuestoParcialView />
 </div>
 
 <div id="contenido-puestos-pestañas">   
@@ -24,11 +28,9 @@
     <div class="altura-seccion" id="seccion-puestos">
         @*Seccion de puestos donde se ven los puestos en cajas con organigrama*@
 
-
-        @*<div id="agregar-primer-puesto">
-            <a><img src="~/img/estructuraOrg/addPrimerPuesto.png"></a>
-        </div>*@
-        @(await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered))
+        @(
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model})
+        )
     </div>
 
     @*<div id="pestañas">
