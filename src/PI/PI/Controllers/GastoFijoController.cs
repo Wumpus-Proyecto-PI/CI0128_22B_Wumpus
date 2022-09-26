@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PI.Controllers
 {
-    public class GastosFijosController : Controller
+    public class GastoFijoController : Controller
     {
-        public IActionResult Index()
+        public IActionResult GastoFijo()
         {
             return View();
         }

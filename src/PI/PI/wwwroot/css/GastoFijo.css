@@ -1,0 +1,44 @@
+﻿.table-header {
+    color: white;
+    background-color: rgb(88, 88, 88);
+}
+
+.table-container {
+    display: flex;
+    width: 100%;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.addColumn:hover {
+    cursor: pointer;
+    background-color: #aef8ffa9;
+}
+
+.boton-agregar {
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+}
+
+td {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+}
+
+th {
+    padding: 0px 10px 0px 10px;
+    text-align: center;
+}
+
+.text-total {
+    font-size: 10px;
+    text-align: center;
+    color: #e5e5e5;
+    font-weight: normal;
+}

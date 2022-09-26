@@ -1,0 +1,55 @@
+﻿<!-- models -->
+<!-- head -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- links -->
+    <link rel="stylesheet" href=~/css/GastoFijo.css>
+    <!--  -->
+    <title>Gastos Fijos</title>
+</head>
+<!-- body -->
+<body>
+    <div class="table-container">
+
+        <table>
+        <tr class="table-header">
+            <th>Rubro</th>
+            <th>
+                    <div>Gasto mensual </div>
+                    <div class="text-total">Total: </div>
+                </th>
+            <th> 
+                
+                    <div>Gasto anual</div>
+                    <div class="text-total">Total: </div>
+            </th>
+        </tr>
+        <tr>
+            <a asp-controller="GastoFijo" asp-action="AgregarGastoFijo">
+            <td class="addColumn"colspan="3"> <img class="boton-agregar" src="~/Images/agregar-img.svg"> </td>
+            </a>
+        </tr>
+        <tr>
+            <!--Gastos cargados de estructura organizativa-->
+            <td> Salarios </td>
+            <td> 170.000 </td>
+            <td> 15.000 </td>
+        </tr>
+        <tr>
+                <!--Nuevos gastos-->
+            <td> Salarios </td>
+            <td> 170.000 </td>
+            <td> 15.000 </td>
+        </tr>
+
+    </table>
+    </div>
+</body>
+<!-- footer -->
+<!-- end -->
+
+</html>
