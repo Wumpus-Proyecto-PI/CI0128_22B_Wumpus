@@ -16,7 +16,7 @@ namespace PI.Controllers
             var negocios = handler.ObtenerNegocios();
             return View(negocios);
         }
-        public IActionResult ViewAgregarNegocio()
+        public IActionResult FormAgregarNegocio()
         {
             // Retorna el formulario (popup) para ingresar el nombre y tipo de negocio.
             return View();
@@ -29,7 +29,7 @@ namespace PI.Controllers
             handler.ingresarNegocio(nombreNegocio, tipoNegocio);
             
             // Redirecciona a la página donde tiene todos los negocios
-            return RedirectToAction("Negocio");
+            return RedirectToAction("Index");
         }
     }
 }
