@@ -1,10 +1,8 @@
 ﻿@using PI.Models
 @using PI.Handlers
 
-
-
 <div id="mostrar-puestos">
-       <p>Aqui se muestran los puestos</p>
+    @htmlPuestos
     <PuestoParcialView puesto="@test"></PuestoParcialView>
 </div>
 
@@ -29,6 +27,7 @@
     string cssId = "agregar-primer-puesto";
     bool primerPuestoAgreado = false;
     MarkupString htmlPuestos;
+    string htmlPuestosStr = "";
 
     List<PuestoModel> PuestoAgregados = new List<PuestoModel>();
 
@@ -49,10 +48,9 @@
     public void AgregarPrimerPuestro(MouseEventArgs mouseEvent)
     {
         primerPuestoAgreado = true;
-        string htmlPuestos = string.Empty;
-        htmlPuestos =
-        " ";
-
+        htmlPuestosStr += "<p>Som text</p><PuestoParcialView puesto=\"@test\"></PuestoParcialView>";
+        var html = Markdig.Markdown.ToHtml(htmlPuestosStr);
+        htmlPuestos = new MarkupString(html);
     }
 }
 
