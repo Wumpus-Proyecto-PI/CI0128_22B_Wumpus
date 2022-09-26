@@ -1,0 +1,73 @@
+﻿@charset "UTF-8";
+
+.puesto {
+    border: solid;
+    border-color: lightgray;
+    background-color: white;
+    transition-duration: 0.4s;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.3);
+    min-height: fit-content;
+    max-width: fit-content;
+    min-width: 250px;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 10px;
+    align-items: center;
+}
+
+.puesto:hover {
+    color: black;
+    cursor: pointer;
+    transform: scale(1.03);
+    transition: box-shadow .3s;
+    box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);
+}
+
+.top-puesto {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0px 0px 0px;
+    align-content: center;
+}
+
+.puesto-salario-neto {
+    text-align: center;
+    margin: 0px;
+    font-size: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.puesto-salario-neto p {
+    margin: 0px 6px 5px 0px;
+    font-size: 20px;
+}
+
+.puesto-nombre h1 {
+    display: flex;
+    margin: 4px 8px 8px 8px;
+    font-size: 25px;
+    flex-wrap: wrap;
+}
+
+.puesto-plazas p {
+    border: solid;
+    border-color: lightgray;
+    transition-duration: 0.4s;
+    padding: 2px 3px 2px 3px;
+    margin: 0px;
+    border-radius: 20px;
+    max-width: fit-content;
+    min-width: 30px;
+    text-align: center;
+}
+
+.divisa-img {
+    width: 20px;
+    height: auto;
+}
