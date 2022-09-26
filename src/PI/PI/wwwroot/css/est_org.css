@@ -36,11 +36,24 @@
 }
 
 #cuadro_beneficios {
-  margin-left: 50px;
+  margin: 10px;
   width: 571px;
   height: 271px;
   border: 1px solid rgb(117, 115, 115);
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#cuadro_configuracion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 10px;
+    width: 571px;
+    height: fit-content;
+    border: 1px solid rgb(117, 115, 115);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 div a{
@@ -73,11 +86,15 @@ div a{
 }
 
 .altura-seccion {
-    height: 600px;
+    min-height: 600px;
+    max-height: fit-content;
 }
 
 #seccion-pestañas {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     border: solid;
     border-right-color: transparent;
     border-width: 1px;
@@ -85,6 +102,19 @@ div a{
     width: fit-content;
     margin-right: 0px;
     margin-left: 75px;
+}
+
+#titulo-contenido {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+
+#agregar-puesto img {
+    width: 35px;
+    padding: 5px;
 }
 
 #agregar-puesto {
@@ -98,14 +128,8 @@ div a{
     border: solid;
     border-width: 1px;
     border-radius: 10px;
-    margin: 10px;
+    margin: 20px;
 }
-
-#agregar-puesto img {
-    width: 35px;
-    padding: 5px;
-}
-
 
 #agregar-puesto-hover {
     display: flex;
@@ -118,15 +142,105 @@ div a{
     border: solid;
     border-width: 1px;
     border-radius: 10px;
-    margin: 10px;
+    margin: 20px;
     padding-inline: 5px;
     font-size: 15px;
+    cursor: pointer;
+}
+
+#guardar-puesto img {
+    width: 35px;
+    padding: 5px;
+}
+
+
+#guardar-puesto {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+#guardar-puesto-hover {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 49px;
+    width: fit-content;
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    margin: 20px;
+    padding-inline: 5px;
+    font-size: 15px;
+    cursor: pointer;
 }
 
 #mostrar-puestos {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: fit-content;
     height: fit-content;
     align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
+
+#form_configuracion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 20px; 
+}
+
+.fila-form-configuracion {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 10px 0px 10px 0px;
+}
+
+.fila-form-configuracion label {
+    border: solid;
+    border-radius: 20px 0px 0px 20px;
+    padding: 5px 10px 5px 10px;
+    border-width: 1px;
+    font-size: 25px;
+    width: 100px;
+    text-align: center;
+    background-color: #E2E2E2;
+}
+
+.fila-form-configuracion input {
+    border: solid;
+    border-radius: 0px 20px 20px 0px;
+    padding: 5px 10px 5px 10px;
+    border-width: 1px;
+    font-size: 25px;
+    width: 200px;
+    text-align: center;
+}
+
+#inferior-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+
