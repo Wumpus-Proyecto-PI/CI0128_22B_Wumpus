@@ -22,31 +22,12 @@
 </div>
 
 <div id="contenido-puestos-pestañas">   
-    <div class="altura-seccion" id="seccion-pestañas">
-        @*Aqui se agrega lo de las pestanas*@
-    </div>
-    <div class="altura-seccion" id="seccion-puestos">
-        @*Seccion de puestos donde se ven los puestos en cajas con organigrama*@
-
+    
+    <div style="width: 100%; display: flex;">
         @(
             await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model})
         )
     </div>
-
-    @*<div id="pestañas">
-        <a class="pestaña_cuadro_beneficios" href="#">
-            <p>
-                Configuración
-            </p>
-        </a>
-        <a class="pestaña_cuadro_beneficios" href="#">
-            <p>
-                Beneficios
-            </p>
-        </a>
-    </div>
-    <div id="cuadro_beneficios">
-    </div>*@
 </div>
 
 
