@@ -69,7 +69,7 @@ div a{
     min-width: 600px;
     margin-right: 75px;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .altura-seccion {
@@ -126,5 +126,6 @@ div a{
 #mostrar-puestos {
     display: flex;
     width: fit-content;
-    height: 400px;
+    height: fit-content;
+    align-items: center;
 }
