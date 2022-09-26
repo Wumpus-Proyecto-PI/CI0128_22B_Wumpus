@@ -1,0 +1,41 @@
+@model List<PI.Models.NegocioModel>;
+
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title> Mis negocios </title>
+        <link rel="stylesheet" href="/index.cshtml.css" />
+    </head>
+
+    <body>
+        <header>
+            <h1> Mis Negocios </h1>
+        </header>
+        <div class="card-container">
+        <a asp-controller="Negocio" asp-action="FormAgregarNegocio">
+            <div class="card card-agregar">
+                <img class="boton-agregar" src=Images/agregar-img.svg>
+            </div>
+        </a>
+
+        @foreach (var item in Model)
+        {
+            <div class="card card-negocio">
+                <div class="card-info">
+                    <div class="card-nombre"> 
+                        <span> @item.Nombre </span></div>
+                    <div class="card-tipo">
+                        <span id="tipoNegocio">tipo</span>
+                        <div class="inicial-nombre">
+                            <span> @item.Nombre[0] </span></div>
+                    </div>
+                    <div class="card-analisis"> cant-analisis </div>
+                    <div class="card-actualizacion"> fecha </div>
+                </div>
+            </div>
+        }
+        </div>
+    </body>
+</html>
