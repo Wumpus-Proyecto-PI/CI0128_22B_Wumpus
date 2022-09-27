@@ -1,0 +1,45 @@
+﻿
+
+
+
+@*<h3>GastoFijo</h3>
+
+<div class="table-container">
+
+    <table>
+        <tr class="table-header">
+            <th>Rubro</th>
+            <th>
+                <div>Gasto mensual </div>
+                <div class="text-total">Total: </div>
+            </th>
+            <th>
+
+                <div>Gasto anual</div>
+                <div class="text-total">Total: </div>
+            </th>
+        </tr>
+        <tr>
+            <!--Gastos cargados de estructura organizativa-->
+            <td class="gastofijo"> Salarios </td>
+            <td class="gastofijo"> 170.000 </td>
+            <td class="gastofijo"> 15.000 </td>
+        </tr>
+
+        <!--Nuevas tablas-->
+    </table>
+    <div class="boton-agregar" @onclick="AgregarFormGastoFijo"> PRUEBAAAA </div>
+    @((MarkupString)nuevaFila)
+</div>
+
+
+@code {
+
+    public string nuevaFila = "";
+
+    public void AgregarFormGastoFijo()
+    {
+        nuevaFila += "text";
+    }
+}
+*@

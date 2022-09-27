@@ -17,11 +17,9 @@
 }
 
 .boton-agregar {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
     cursor: pointer;
 }
 
@@ -34,11 +32,13 @@ td {
 th {
     padding: 0px 10px 0px 10px;
     text-align: center;
+    border-color:white;
 }
 
 .text-total {
-    font-size: 10px;
+    font-size: 4px;
     text-align: center;
     color: #e5e5e5;
     font-weight: normal;
 }
+
