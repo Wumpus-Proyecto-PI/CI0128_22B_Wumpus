@@ -76,9 +76,10 @@ namespace PI.Handlers
         // Inserta el nuevo negocio a la base de datos.
         public void ingresarNegocio(string Nombre, string tipo) 
         {
-            DateTime fechaProv = DateTime.Today;
-            DateOnly fecha = DateOnly.FromDateTime(fechaProv);
-            string consulta = "INSERT INTO Negocio (ID,Nombre,FechaCreacion) VALUES (" + getNextID() + ",'" + Nombre + "', '" + fecha + "');";
+            DateTime myDateTime = DateTime.Now;
+            string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            string consulta = "INSERT INTO Negocio (ID,Nombre,FechaCreacion) VALUES (" + getNextID() + ",'" + Nombre + "', '" + sqlFormattedDate + "');";
             SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
             conexion.Open();
             comandoParaConsulta.ExecuteNonQuery();
