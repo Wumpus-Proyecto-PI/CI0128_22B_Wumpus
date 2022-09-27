@@ -1,48 +1,20 @@
-﻿
-<div class="table-container">
-    <table>
-        <tr class="table-header">
-            <th>Rubro</th>
-            <th>
-                <div>Gasto mensual </div>
-                <div class="text-total">Total: </div>
-            </th>
-            <th>
+﻿@using PI.Models
 
-                <div>Gasto anual</div>
-                <div class="text-total">Total: </div>
-            </th>
-        </tr>
-        <tr>
-            <!--Gastos cargados de estructura organizativa-->
-            <td class="gastofijo"> Salarios </td>
-            <td class="gastofijo"> 170.000 </td>
-            <td class="gastofijo"> 15.000 </td>
-        </tr>
-        <tr> 
-            <td class="gastoNuevo">
-                <input type="text" placeholder="Nombre"/>
-            </td>
-            <td class="gastoNuevo" >
-                <input type="text" placeholder="Monto mensual"/>
-            </td>
-            <td class="gastoNuevo"></td>
-        </tr>
-
-        @((MarkupString)nuevaFila)
-        <!--Nuevas tablas-->
-    </table>
-<div @onclick="AgregarFormGastoFijo" class="boton-agregar-container">
-    <img id="add" src=/Images/AddButton.jpg/>
-</div>
+<div class="gasto gasto-editar">
+    <div class="top-gasto">
+        <div class="gastoFijo-nombre"><h1>@*@gastoFijo.Nombre*@nombre</h1></div>
     </div>
+    <div class="gastoFijo-monto Mensual">
+        <p>@*@gastoFijo.Monto.ToString()*@monto</p>
+        <img class="divisa-img" src=img/puesto/divisa.png>
+    </div>
+    <div class="gastoFijo-monto Anual">
+        <p>@*@gastoFijo.Monto.ToString()*@monto2</p>
+        <img class="divisa-img" src=img/puesto/divisa.png>
+    </div>
+</div>
 
 @code {
-
-    public string nuevaFila = "";
-
-    public void AgregarFormGastoFijo()
-    {
-        nuevaFila += "<tr><td class=\"gastoNuevo\"> <input type=\"text\"placeholder=\"Nombre\"/> </td> <td class=\"gastoNuevo\"> <input type = \"text\" placeholder=\"Monto mensual\"/></td><td class=\"gastoNuevo\"></td> </tr>";
-    }
+    [Parameter]
+    public GastoFijoModel gastoFijo { get; set; }
 }

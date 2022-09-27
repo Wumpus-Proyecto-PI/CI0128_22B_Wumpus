@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PI.Handlers;
+using PI.Models;
 
 namespace PI.Controllers
 {
@@ -10,7 +8,13 @@ namespace PI.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            ViewData["TituloPaso"] = "Estructura organizativa";
+            EstructuraOrgHandler estructura = new EstructuraOrgHandler();
+            ViewData["NombreNegocio"] = "Un negocio";
+            // fecha quemada de testing
+            string fechaAnalisis = "2022-09-26 12:00:00 AM";
+            List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
+            return View(puestos);
         }
     }
 }

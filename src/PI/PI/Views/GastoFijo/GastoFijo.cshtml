@@ -1,17 +1,31 @@
-﻿<!-- models -->
+﻿@{
+    Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+}
+<h2>hola</h2>
+@*
+
+
+<!-- models -->
+@model List<GastoFijoModel>
 <!-- head -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- links -->
-    <link rel="stylesheet" href=~/css/GastoFijo.css>
+    <link rel="stylesheet" href=css/GastoFijo.css>
     <!--  -->
     <title>Gastos Fijos</title>
 </head>
 
-@(await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo>(RenderMode.ServerPrerendered))
+<div id="subtitulo">
+    <div id="nombre_negocio">@ViewData["NombreNegocio"]</div>
+</div>
 
+@(
+await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo>(RenderMode.ServerPrerendered, new { gastoFijo = Model })
+)
+*@
 @*Necesario para componentes razor*@
 <base href="~/" />
 <script src="_framework/blazor.server.js"><script/>

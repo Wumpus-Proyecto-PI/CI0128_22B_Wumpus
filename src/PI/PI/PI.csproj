@@ -7,9 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Shared\Components\SeccionPuestos.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Shared\Components\SeccionPuestos.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markdig.Signed" Version="0.30.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Markdig.Signed" Version="0.30.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.9" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\estructuraOrg\PuestoParcialView.css" />
   </ItemGroup>
 
 </Project>
