@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using PI.Models;
+using PI.Handlers;
 using System.Data.Common;
 using PI.Controllers;
 
@@ -31,6 +32,32 @@ namespace PI.Handlers
             conexion.Close();
             return consultaFormatoTabla;
         }
+
+        // Obtiene el tipo de ne
+
+        // Obtiene la cantidad de analisis del negocio 
+        public List<AnalisisModel> ObtenerAnalisis(string IDNegocio)
+        {
+            List<AnalisisModel> analisisDelNegocio = new List<AnalisisModel>();
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+
+            string consulta = "SELECT IDNegocio from ANALISIS as A inner join Negocio as N on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            foreach (DataRow columna in tablaResultado.Rows)
+            {
+                string fechaAnalisisActual = Convert.ToString(columna["fechaCreacion"]);
+                Boolean tipoAnalisisActual = Convert.ToBoolean(analisisHandler.ObtenerTipoAnalisis(fechaAnalisisActual));
+                analisisDelNegocio.Add(
+                new AnalisisModel
+                {
+                    FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
+                    Configuracion = { TipoNegocio = tipoAnalisisActual }
+                }
+                );
+            }
+
+            return analisisDelNegocio;
+        }
         // Crea una lista de los negocios existentes en la BD
         public List<NegocioModel> ObtenerNegocios()
         {
@@ -45,7 +72,7 @@ namespace PI.Handlers
                     Nombre = Convert.ToString(columna["nombre"]),
                     ID = Convert.ToInt32(columna["id"]),
                     CorreoUsuario = Convert.ToString(columna["correoUsuario"]),
-                    Analisis = new List<AnalisisModel>(),
+                    Analisis = ObtenerAnalisis(Convert.ToString(columna["id"])),
                     FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]) 
                 }
                 );
