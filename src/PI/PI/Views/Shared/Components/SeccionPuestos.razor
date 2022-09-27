@@ -1,6 +1,5 @@
 ﻿@using PI.Models
 @using PI.Handlers
-
 <div class="altura-seccion" id="seccion-pestañas">
     <div id="titulo-contenido">
         @*Aqui se agrega lo de las pestanas*@
@@ -46,10 +45,9 @@
             </div>
         }   
     </div>
-
     <div id="inferior-horizontal">
         <div id="@cssIdGuardar" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
-            <a><img style="@styleHover" src=" @imgGuadarPath" alt="">@hoverTextGuardar</a>
+            <a asp-controller="EstructuraOrg" asp-action="Index"><img style="@styleHover" src=" @imgGuadarPath" alt="">@hoverTextGuardar</a>
         </div>
     </div>
 </div>
@@ -70,6 +68,7 @@
     </div>
 </div>
 
+<a asp-controller="EstructuraOrg" asp-action="Index">EstruturaOrg[Testing]</a>
 
 @code {
     [Parameter]
@@ -79,7 +78,6 @@
     public bool hayPuestoActivo = false;
 
     public PuestoModel nuevoPuesto = new PuestoModel();
-
 
     string imgAgregarPath = "img/estructuraOrg/addPuesto.png";
     string imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
@@ -136,13 +134,15 @@
     public void AgregarNuevoPuesto() {
         hayPuestoActivo = false;
         pestanyaConfiguracionActiva = true;
+        nuevoPuesto = new PuestoModel();
     }
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
         if (hayPuestoActivo == false) {
             htmlPuestosStr = nuevoPuesto.Nombre + " " + nuevoPuesto.SalarioBruto + " " + nuevoPuesto.Plazas;
-
             nuevoPuesto = new PuestoModel();
+        } else {
+            htmlPuestosStr = puestoGuardar.Nombre + " " + puestoGuardar.SalarioBruto + " " + puestoGuardar.Plazas;
         }
     }
 }
