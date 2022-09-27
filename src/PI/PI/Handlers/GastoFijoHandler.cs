@@ -63,5 +63,19 @@ namespace PI.Handlers
             comandoParaConsulta.ExecuteNonQuery();
             conexion.Close();
         }
+
+        public double obtenerSalarios()
+        {
+            double totalSalarios = 0.0;
+
+            string consulta = "select SUM(cantidadPlazas*SalarioBruto) as TotalSalarios FROM PUESTO";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+            totalSalarios = Convert.ToDouble(tablaResultado.Rows[0]["TotalSalarios"]); 
+
+            return totalSalarios;
+        }
+
+
     }
 }
