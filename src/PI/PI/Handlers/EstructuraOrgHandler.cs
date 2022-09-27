@@ -32,6 +32,51 @@ namespace PI.Handlers
             return negocios;
         }
 
+        public int InsertarPuesto(PuestoModel puesotAInsertar)
+        {
+            int filasAfectadas = 0;
+            if (existePuestoEnBase(puesotAInsertar.Nombre, puesotAInsertar.FechaAnalisis))
+            {
+                ActualizarPuesto(puesotAInsertar.Nombre, puesotAInsertar);
+            } else
+            {
+                string insert = "INSERT INTO PUESTO values ("
+                + "nombrePuesto='" + puesotAInsertar.Nombre + "' and "
+                + "fechaAnalisis='" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'"
+                + "cantidadPlazas='" + puesotAInsertar.Plazas.ToString() + "' "
+                + "salarioBruto='" + puesotAInsertar.SalarioBruto.ToString() + "'"
+                + ")";
+                filasAfectadas = enviarConsulta(insert);
+            }
+            return filasAfectadas;
+        }
+
+        public bool existePuestoEnBase(string nombrePuesto, DateTime fechaAnalisis)
+        {
+            bool encontrado = false;
+            string consulta = "SELECT * FROM PUESTO WHERE "
+                + "nombrePuesto='" + nombrePuesto + "' and "
+                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
+            if (tablaResultadoPuestos.Rows.Count > 0 && tablaResultadoPuestos.Rows[0].IsNull("nombre") == false)
+            {
+                encontrado = true;
+            }
+            return encontrado;
+        }
+
+        public bool ActualizarPuesto(string nombrePuesto, PuestoModel puestoInsertar)
+        {
+            bool error = false;
+            string consulta = "UPDATE PUESTO SET " 
+                + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "' "
+                + "salarioBruto='" + puestoInsertar.SalarioBruto.ToString() + "' "
+                + "WHERE "
+                + "nombrePuesto='" + nombrePuesto + "' and "
+                + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            return error;
+        }
+
         public List<PuestoModel> ObtenerListaDePuestos(string fechaAnalisisStr)
         {
             string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
@@ -45,14 +90,39 @@ namespace PI.Handlers
                 puesto.Nombre = Convert.ToString(fila["nombre"]);
                 puesto.Plazas = Convert.ToInt16(fila["cantidadPlazas"]);
                 puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
-
-                puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisisStr);
+                puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
+                //puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisisStr);
                 puestos.Add(puesto);
             }
 
             return puestos;
         }
 
+        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, string fechaAnalisis)
+        {
+            List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
+
+            // consulta para extraer los beneficios
+            string consulta = "SELECT * FROM BENEFICIO WHERE " 
+                + "nombrePuesto='" + nombrePuesto + "' and " 
+                + "fechaAnalisis='" + fechaAnalisis + "'";
+            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
+
+            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
+            {
+                resultadoBeneficios.Add(new BeneficioModel
+                {
+                    nombreBeneficio = Convert.ToString(beneficio["nombreBeneficio"]),
+                    monto = Convert.ToDecimal(beneficio["monto"]),
+                    plazasPorBeneficio = Convert.ToInt16(beneficio["PlazaPorBeneficio"])
+                });
+            }
+
+            return resultadoBeneficios;
+        }
+
+
+        /* metodos para obtener los puestos con estructura. No son utilizados en el primer sprint */
         public PuestoModel ObtenerEstructuraOrg(DateOnly fechaAnalisis)
         {
             // extraer los puestos
@@ -121,27 +191,5 @@ namespace PI.Handlers
             return puestoActual;
         }
 
-        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, string fechaAnalisis)
-        {
-            List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
-
-            // consulta para extraer los beneficios
-            string consulta = "SELECT * FROM BENEFICIO WHERE " 
-                + "nombrePuesto='" + nombrePuesto + "' and " 
-                + "fechaAnalisis='" + fechaAnalisis + "'";
-            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
-
-            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
-            {
-                resultadoBeneficios.Add(new BeneficioModel
-                {
-                    nombreBeneficio = Convert.ToString(beneficio["nombreBeneficio"]),
-                    monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["PlazaPorBeneficio"])
-                });
-            }
-
-            return resultadoBeneficios;
-        }
     }
 }
