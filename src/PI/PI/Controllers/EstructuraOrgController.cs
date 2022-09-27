@@ -12,7 +12,7 @@ namespace PI.Controllers
             EstructuraOrgHandler estructura = new EstructuraOrgHandler();
             ViewData["NombreNegocio"] = "Un negocio";
             // fecha quemada de testing
-            string fechaAnalisis = "2002-09-09 12:00:00 AM";
+            string fechaAnalisis = "2022-09-26 12:00:00 AM";
             List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
             return View(puestos);
         }
