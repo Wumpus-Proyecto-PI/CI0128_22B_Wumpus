@@ -8,4 +8,6 @@ public class NegocioModel
     public int ID { get; set; }
     public List<AnalisisModel> Analisis { set; get; }
 
+    public DateOnly FechaCreacion { set; get; }
+
 }

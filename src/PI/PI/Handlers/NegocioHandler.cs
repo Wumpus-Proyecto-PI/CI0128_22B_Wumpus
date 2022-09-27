@@ -45,6 +45,8 @@ namespace PI.Handlers
                     Nombre = Convert.ToString(columna["nombre"]),
                     ID = Convert.ToInt32(columna["id"]),
                     CorreoUsuario = Convert.ToString(columna["correoUsuario"]),
+                    Analisis = new List<AnalisisModel>(),
+                    FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]) 
                 }
                 );
             }
@@ -72,9 +74,11 @@ namespace PI.Handlers
         }
 
         // Inserta el nuevo negocio a la base de datos.
-        public void ingresarNegocio(string Nombre, string tipo)
+        public void ingresarNegocio(string Nombre, string tipo) 
         {
-            string consulta = "INSERT INTO Negocio (ID,Nombre) VALUES (" + getNextID() + ",'" + Nombre + "');";
+            DateTime fechaProv = DateTime.Today;
+            DateOnly fecha = DateOnly.FromDateTime(fechaProv);
+            string consulta = "INSERT INTO Negocio (ID,Nombre,FechaCreacion) VALUES (" + getNextID() + ",'" + Nombre + "', '" + fecha + "');";
             SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
             conexion.Open();
             comandoParaConsulta.ExecuteNonQuery();

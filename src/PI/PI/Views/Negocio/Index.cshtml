@@ -6,9 +6,10 @@
     <head>
         <meta charset="UTF-8">
         <title> Mis negocios </title>
+<!-- links -->
         <link rel="stylesheet" href="/index.cshtml.css" />
     </head>
-
+<!-- body -->
     <body>
         <header>
             <h1> Mis Negocios </h1>
@@ -19,7 +20,7 @@
                 <img class="boton-agregar" src=Images/agregar-img.svg>
             </div>
         </a>
-
+<!-- negocio cards-->
         @foreach (var item in Model)
         {
             <div class="card card-negocio">
@@ -31,8 +32,8 @@
                         <div class="inicial-nombre">
                             <span> @item.Nombre[0] </span></div>
                     </div>
-                    <div class="card-analisis"> cant-analisis </div>
-                    <div class="card-actualizacion"> fecha </div>
+                    <div class="card-analisis"> <span>Cantidad de analisis: @item.Analisis.Count</span> </div>
+                    <div class="card-actualizacion"> <span>Fecha de creacion: @item.FechaCreacion.ToString() </span> </div>
                 </div>
             </div>
         }
