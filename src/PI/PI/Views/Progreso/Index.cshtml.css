@@ -1,0 +1,102 @@
+﻿@charset "UTF-8";
+
+.analisis-header {
+    background-color: #005DB9;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.25);
+}
+
+.header-part {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.texto-header {
+    font-size: 1.3rem;
+}
+
+.header-data {
+    font-size: 15px;
+    color: white;
+    text-align: center;
+}
+
+.card-container {
+    margin-block: 10px;
+    display: flex;
+    justify-content: center;
+    /*vertical consideration*/
+    height: 400px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+hr {
+    height: auto;
+    border: 1px solid #808080;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
+.card {
+    background-color: white;
+    transition-duration: 0.4s;
+    box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    height: 264px;
+    border-radius: 22px;
+    margin: 40px;
+    padding: 10px;
+}
+
+
+.card-container .card-negocio {
+    display: flex;
+    text-align: center;
+}
+
+.card:hover {
+    background-color: lightgray;
+    color: black;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.card-container {
+    line-height: 35px;
+}
+
+.card-nombre {
+    line-height: 20px;
+    font-size: 25px;
+    margin: 8px;
+    font-weight: 400;
+}
+
+.image-container {
+    /* align-content:center;*/
+    left: 20.14%;
+    right: 75.35%;
+    top: 70.03%;
+    bottom: 20.28%;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.logo-negocio {
+    margin-top: 25px;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+}
+
+.texto {
+    font-size: 17px;
+    text-align: center;
+    color: #808080;
+    letter-spacing: normal;
+    line-height: 1.5;
+}
