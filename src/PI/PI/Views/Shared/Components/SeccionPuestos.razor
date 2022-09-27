@@ -64,22 +64,20 @@
             </div>
         }
     </div>
-    @((MarkupString)htmlPuestosStr)
     <div id="@cssIdAgregar" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
         <a><img style="@styleHover" src=" @imgAgregarPath" alt="">@hoverTextAgregar</a>
     </div>
 </div>
 
-<a asp-controller="EstructuraOrg" asp-action="Index">EstruturaOrg[Testing]</a>
 
 @code {
     [Parameter]
     public List<PuestoModel> puestos { get; set; }
 
-    public PuestoModel puestoActivo;
-    public bool hayPuestoActivo = false;
 
     public PuestoModel nuevoPuesto = new PuestoModel();
+    public bool hayPuestoActivo = false;
+    public PuestoModel puestoActivo;
 
     string imgAgregarPath = "img/estructuraOrg/addPuesto.png";
     string imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
@@ -137,14 +135,13 @@
         hayPuestoActivo = false;
         pestanyaConfiguracionActiva = true;
         nuevoPuesto = new PuestoModel();
+        puestoActivo = nuevoPuesto;
     }
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
         if (hayPuestoActivo == false) {
-            htmlPuestosStr = NavigationManager.Uri + " " + nuevoPuesto.Nombre + " " + nuevoPuesto.SalarioBruto + " " + nuevoPuesto.Plazas;
             nuevoPuesto = new PuestoModel();
         } else {
-            htmlPuestosStr = NavigationManager.Uri + " " + puestoGuardar.Nombre + " " + puestoGuardar.SalarioBruto + " " + puestoGuardar.Plazas;
         }
 
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
