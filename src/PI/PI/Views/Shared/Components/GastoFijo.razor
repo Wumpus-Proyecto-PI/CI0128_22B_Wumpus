@@ -1,11 +1,6 @@
 ﻿
-
-
-
-@*<h3>GastoFijo</h3>
-
 <div class="table-container">
-
+    
     <table>
         <tr class="table-header">
             <th>Rubro</th>
@@ -25,11 +20,22 @@
             <td class="gastofijo"> 170.000 </td>
             <td class="gastofijo"> 15.000 </td>
         </tr>
+        <tr> 
+            <td class="gastoNuevo">
+                <input type="text" placeholder="Nombre"/>
+            </td>
+            <td class="gastoNuevo" >
+                <input type="text" placeholder="Monto mensual"/>
+            </td>
+            <td class="gastoNuevo"></td>
+        </tr>
 
+        @((MarkupString)nuevaFila)
         <!--Nuevas tablas-->
     </table>
-    <div class="boton-agregar" @onclick="AgregarFormGastoFijo"> PRUEBAAAA </div>
-    @((MarkupString)nuevaFila)
+    <div @onclick="AgregarFormGastoFijo" class="boton-agregar-container">
+        <img id="add" src=/Images/AddButton.jpg alt="Sample Photo" />
+    </div>
 </div>
 
 
@@ -39,7 +45,6 @@
 
     public void AgregarFormGastoFijo()
     {
-        nuevaFila += "text";
+        nuevaFila += "<tr><td class=\"gastoNuevo\"> <input type=\"text\"placeholder=\"Nombre\"/> </td> <td class=\"gastoNuevo\"> <input type = \"text\" placeholder=\"Monto mensual\"/></td><td class=\"gastoNuevo\"></td> </tr>";
     }
 }
-*@

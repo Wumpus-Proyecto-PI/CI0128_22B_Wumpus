@@ -10,7 +10,8 @@
     <title>Gastos Fijos</title>
 </head>
 
-
+@(await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo>(RenderMode.ServerPrerendered))
 
 @*Necesario para componentes razor*@
+<base href="~/" />
 <script src="_framework/blazor.server.js"><script/>

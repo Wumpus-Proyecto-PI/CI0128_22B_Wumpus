@@ -6,8 +6,6 @@
 .table-container {
     display: flex;
     width: 100%;
-    align-content: center;
-    align-items: center;
     justify-content: center;
 }
 
@@ -16,11 +14,19 @@
     background-color: #aef8ffa9;
 }
 
-.boton-agregar {
-    width: 20px;
-    height: 20px;
-    display: block;
+.boton-agregar-container {
+    /**/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    margin: 0px 0px 0px 5px;
     cursor: pointer;
+}
+
+#add {
+    width: 30px;
+    height: 30px;
 }
 
 td {
@@ -42,3 +48,11 @@ th {
     font-weight: normal;
 }
 
+input {
+    border: none;
+}
+
+input:active {
+    
+    border-color: #ccc;
+}
