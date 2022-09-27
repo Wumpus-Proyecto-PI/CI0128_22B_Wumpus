@@ -1,0 +1,17 @@
+﻿@using PI.Models
+
+<div class="puesto puesto-editar">
+    <div class="top-puesto">
+        <div class="puesto-plazas"><p>@puesto.Plazas.ToString()</p></div>
+        <div class="puesto-nombre"><h1>@puesto.Nombre</h1></div>
+    </div>
+    <div class="puesto-salario-neto">
+        <p>@puesto.SalarioBruto.ToString()</p>
+        <img class="divisa-img" src=img/puesto/divisa.png>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PuestoModel puesto { get; set;}
+}

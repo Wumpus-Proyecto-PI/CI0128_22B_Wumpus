@@ -10,6 +10,7 @@ namespace PI.Controllers
     {
         public IActionResult GastoFijo()
         {
+            ViewData["NombreNegocio"] = "Nombre del negocio";
             return View();
         }
     }
