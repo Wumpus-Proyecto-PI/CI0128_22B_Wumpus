@@ -1,5 +1,7 @@
 ﻿@using PI.Models
 @using PI.Handlers
+@inject NavigationManager NavigationManager;
+
 <div class="altura-seccion" id="seccion-pestañas">
     <div id="titulo-contenido">
         @*Aqui se agrega lo de las pestanas*@
@@ -30,15 +32,15 @@
                         </div>
                     } else {
                         <div class="fila-form-configuracion">
-                            <label>Nombre</label> <input name="" type="text" value="@puestoActivo.Nombre">
+                            <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@puestoActivo.Nombre">
                         </div>
 
                         <div class="fila-form-configuracion">
-                            <label>Salario</label> <input name="" type="number" step="any" value="@puestoActivo.SalarioBruto.ToString()">
+                            <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@puestoActivo.SalarioBruto.ToString()">
                         </div>
 
                         <div class="fila-form-configuracion">
-                            <label>Plazas</label> <input name="" type="number" value="@puestoActivo.Plazas.ToString()">
+                            <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@puestoActivo.Plazas.ToString()">
                         </div>
                     }
                 </form>
@@ -139,11 +141,13 @@
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
         if (hayPuestoActivo == false) {
-            htmlPuestosStr = nuevoPuesto.Nombre + " " + nuevoPuesto.SalarioBruto + " " + nuevoPuesto.Plazas;
+            htmlPuestosStr = NavigationManager.Uri + " " + nuevoPuesto.Nombre + " " + nuevoPuesto.SalarioBruto + " " + nuevoPuesto.Plazas;
             nuevoPuesto = new PuestoModel();
         } else {
-            htmlPuestosStr = puestoGuardar.Nombre + " " + puestoGuardar.SalarioBruto + " " + puestoGuardar.Plazas;
+            htmlPuestosStr = NavigationManager.Uri + " " + puestoGuardar.Nombre + " " + puestoGuardar.SalarioBruto + " " + puestoGuardar.Plazas;
         }
+
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
     }
 }
 
