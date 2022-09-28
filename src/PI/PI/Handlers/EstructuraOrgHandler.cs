@@ -93,7 +93,7 @@ namespace PI.Handlers
                 puesto.Plazas = Convert.ToInt16(fila["cantidadPlazas"]);
                 puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
                 puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
-                //puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisisStr);
+                puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisis);
                 puestos.Add(puesto);
             }
 
@@ -108,23 +108,23 @@ namespace PI.Handlers
             return enviarConsulta(delete);
         }
 
-        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, string fechaAnalisis)
+        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, DateTime fechaAnalisis)
         {
             List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
 
             // consulta para extraer los beneficios
-            string consulta = "SELECT * FROM BENEFICIO WHERE " 
+            string consulta = "SELECT nombre, monto, cantidadPlazas FROM BENEFICIO WHERE " 
                 + "nombrePuesto='" + nombrePuesto + "' and " 
-                + "fechaAnalisis='" + fechaAnalisis + "'";
+                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
 
             foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
             {
                 resultadoBeneficios.Add(new BeneficioModel
                 {
-                    nombreBeneficio = Convert.ToString(beneficio["nombreBeneficio"]),
+                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
                     monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["PlazaPorBeneficio"])
+                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"])
                 });
             }
 
@@ -169,7 +169,7 @@ namespace PI.Handlers
                 Plazas = Convert.ToInt16(filas[0]["plazasPorPuesto"]),
                 SalarioBruto = Convert.ToDecimal(filas[0]["salarioBruto"]),
             };
-            puestoActual.Beneficios = ObtenerBeneficios(puestoActual.Nombre, fechaAnalisis);
+            // puestoActual.Beneficios = ObtenerBeneficios(puestoActual.Nombre, fechaAnalisis);
             
             // si se indica que desean extraer tambien los subordinados
             // si esta en falso se evita un query muy grande que puede tomar tiempo
