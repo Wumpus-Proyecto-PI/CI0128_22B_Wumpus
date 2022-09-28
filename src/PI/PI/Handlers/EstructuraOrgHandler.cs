@@ -32,19 +32,19 @@ namespace PI.Handlers
             return negocios;
         }
 
-        public int InsertarPuesto(PuestoModel puesotAInsertar)
+        public int InsertarPuesto(string nombrePuesto, PuestoModel puesotAInsertar)
         {
             int filasAfectadas = 0;
-            if (existePuestoEnBase(puesotAInsertar.Nombre, puesotAInsertar.FechaAnalisis))
+            if (existePuestoEnBase(nombrePuesto, puesotAInsertar.FechaAnalisis))
             {
-                ActualizarPuesto(puesotAInsertar.Nombre, puesotAInsertar);
+                ActualizarPuesto(nombrePuesto, puesotAInsertar);
             } else
             {
                 string insert = "INSERT INTO PUESTO values ("
-                + "nombrePuesto='" + puesotAInsertar.Nombre + "' and "
-                + "fechaAnalisis='" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'"
-                + "cantidadPlazas='" + puesotAInsertar.Plazas.ToString() + "' "
-                + "salarioBruto='" + puesotAInsertar.SalarioBruto.ToString() + "'"
+                + "'" + puesotAInsertar.Nombre + "', "
+                + "'" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
+                + puesotAInsertar.Plazas.ToString() + ", "
+                + "'" + puesotAInsertar.SalarioBruto.ToString() + "'"
                 + ")";
                 filasAfectadas = enviarConsulta(insert);
             }
@@ -55,7 +55,7 @@ namespace PI.Handlers
         {
             bool encontrado = false;
             string consulta = "SELECT * FROM PUESTO WHERE "
-                + "nombrePuesto='" + nombrePuesto + "' and "
+                + "nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
             if (tablaResultadoPuestos.Rows.Count > 0 && tablaResultadoPuestos.Rows[0].IsNull("nombre") == false)
@@ -68,12 +68,14 @@ namespace PI.Handlers
         public bool ActualizarPuesto(string nombrePuesto, PuestoModel puestoInsertar)
         {
             bool error = false;
-            string consulta = "UPDATE PUESTO SET " 
-                + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "' "
+            string update = "UPDATE PUESTO SET "
+                + "nombre='" + puestoInsertar.Nombre + "', "
+                + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
                 + "salarioBruto='" + puestoInsertar.SalarioBruto.ToString() + "' "
                 + "WHERE "
-                + "nombrePuesto='" + nombrePuesto + "' and "
-                + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+                + "nombre='" + nombrePuesto + "' and "
+                + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";
+            int filasAfectadas = enviarConsulta(update);
             return error;
         }
 
