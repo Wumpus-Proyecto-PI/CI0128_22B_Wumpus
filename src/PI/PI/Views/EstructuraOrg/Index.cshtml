@@ -1,5 +1,4 @@
 ﻿@model List<PuestoModel>
-
 @*
     Html para la estructura orgranizativa.
     Como este es dinamico del lado del cliente se utilzan componentes razor
@@ -25,8 +24,8 @@
     
     <div style="width: 100%; display: flex;">
         @(
-            await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model})
-        )
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model, fechaAnalasis = ViewBag.FechaAnalisis})
+            )
     </div>
 </div>
 
