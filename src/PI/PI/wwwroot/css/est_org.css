@@ -84,6 +84,7 @@ div a{
     margin-right: 75px;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.19);
 }
 
 .altura-seccion {
@@ -103,6 +104,7 @@ div a{
     width: fit-content;
     margin-right: 0px;
     margin-left: 75px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.19);
 }
 
 #titulo-contenido {
@@ -127,12 +129,13 @@ div a{
     height: fit-content;
     width: fit-content;
     border: solid;
-    border-width: 1px;
+    border-width: 2px;
     border-radius: 10px;
     margin: 20px;
+    transition-duration: 0.5s;
 }
 
-#agregar-puesto-hover {
+#agregar-puesto:hover {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -141,12 +144,14 @@ div a{
     height: 49px;
     width: fit-content;
     border: solid;
-    border-width: 1px;
+    border-color: transparent;
     border-radius: 10px;
     margin: 20px;
     padding-inline: 5px;
-    font-size: 15px;
+    font-size: 20px;
     cursor: pointer;
+    background-color: #BFFFB3;
+    transition-duration: 0.4s;
 }
 
 #guardar-puesto img {
@@ -164,12 +169,13 @@ div a{
     height: fit-content;
     width: fit-content;
     border: solid;
-    border-width: 1px;
+    border-width: 2px;
     border-radius: 10px;
     margin: 20px;
+    transition-duration: 0.5s;
 }
 
-#guardar-puesto-hover {
+#guardar-puesto:hover {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -178,12 +184,15 @@ div a{
     height: 49px;
     width: fit-content;
     border: solid;
-    border-width: 1px;
+    border-color: transparent;
+    border-width: 2px;
     border-radius: 10px;
     margin: 20px;
     padding-inline: 5px;
-    font-size: 15px;
+    font-size: 20px;
     cursor: pointer;
+    background-color: #BCFFFA;
+    transition-duration: 0.4s;
 }
 
 #mostrar-puestos {
@@ -257,26 +266,33 @@ div a{
     width: fit-content;
     height: fit-content;
     margin: 0px 7px 0px 7px;
+    transition-duration: 0.4s;
 }
 
-    .puesto-clickeable-eliminable:hover {
-        color: black;
-        cursor: pointer;
-        transform: scale(1.03);
-        transition: box-shadow .3s;
-        /*box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
-    }
+.puesto-clickeable-eliminable:hover {
+    color: black;
+    cursor: pointer;
+    transform: scale(1.03);
+    transition-duration: 0.2s;
+    /*box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
+}
 
 .puesto-icono-eliminar {
     width: 35px;
     padding: 1px;
     margin-left: -33px;
     border: solid;
+    border-width: 3px;
+    border-color: lightgray;
     border-radius: 20px;
     background-color: white;
+    transition-duration: 0.4s;
 }
 
-    .puesto-icono-eliminar:hover {
-        transform: scale(1.1);
-        background-color: lightpink;
-    }
+.puesto-icono-eliminar:hover {
+    transform: scale(1.1);
+    background-color: #FFC8C8;
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+}
+
