@@ -3,9 +3,9 @@
 .puesto {
     border: solid;
     border-color: lightgray;
+    border-width: 4px;
     background-color: white;
-    transition-duration: 0.4s;
-    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.3);
+    /*box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.3);*/
     min-height: fit-content;
     max-width: fit-content;
     min-width: 230px;
@@ -13,14 +13,18 @@
     margin: 10px;
     padding: 10px;
     align-items: center;
+    transition-duration: 0.4s;
 }
 
 .puesto:hover {
     /*color: black;
-    cursor: pointer;
-    transform: scale(1.03);
-    transition: box-shadow .3s;
-    box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
+cursor: pointer;
+transform: scale(1.03);
+transition: box-shadow .3s;
+box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
+    background-color: #E2F2FF;
+    border-color: #E2F2FF;
+    transition-duration: 0.4s;
 }
 
 .top-puesto {
