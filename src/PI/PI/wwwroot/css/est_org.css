@@ -194,6 +194,7 @@ div a{
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
+    justify-content: space-evenly
 }
 
 #form_configuracion {
