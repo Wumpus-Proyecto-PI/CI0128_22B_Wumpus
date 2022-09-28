@@ -5,7 +5,7 @@
 <div class="altura-seccion" id="seccion-pestañas">
     <div id="titulo-contenido">
         @*Aqui se agrega lo de las pestanas*@
-        @if (hayPuestoActivo == false)
+        @if (hayPuestoSeleccionado == false)
         {
             <h1>Nuevo puesto</h1>
         } else {
@@ -17,32 +17,17 @@
             <div id="cuadro_configuracion">
 
                 <form id="form_configuracion">
-                    @if (hayPuestoActivo == false)
-                    {
-                        <div class="fila-form-configuracion">
-                            <label>Nombre</label> <input required @bind="nuevoPuesto.Nombre" type="text" placeholder="Ingresar nombre">
-                        </div>
+                    <div class="fila-form-configuracion">
+                    <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                    </div>
 
-                        <div class="fila-form-configuracion">
-                            <label>Salario</label> <input required @bind="nuevoPuesto.SalarioBruto" type="number" step="any" placeholder="Ingresar salario">
-                        </div>
+                    <div class="fila-form-configuracion">
+                    <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
+                    </div>
 
-                        <div class="fila-form-configuracion">
-                            <label>Plazas</label> <input required @bind="nuevoPuesto.Plazas" type="number" placeholder="Ingresar plazas">
-                        </div>
-                    } else {
-                        <div class="fila-form-configuracion">
-                            <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@puestoActivo.Nombre">
-                        </div>
-
-                        <div class="fila-form-configuracion">
-                            <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@puestoActivo.SalarioBruto.ToString()">
-                        </div>
-
-                        <div class="fila-form-configuracion">
-                            <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@puestoActivo.Plazas.ToString()">
-                        </div>
-                    }
+                    <div class="fila-form-configuracion">
+                    <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                    </div>
                 </form>
             </div>
         }   
@@ -74,22 +59,29 @@
     [Parameter]
     public List<PuestoModel> puestos { get; set; }
 
+    [Parameter]
+    public DateTime fechaAnalasis { get; set; }
 
-    public PuestoModel nuevoPuesto = new PuestoModel();
-    public bool hayPuestoActivo = false;
-    public PuestoModel puestoActivo;
+    public bool hayPuestoSeleccionado = false;
+    public PuestoModel puestoActivo = new PuestoModel();
 
     public EstructuraOrgHandler HandlerPuesto = new EstructuraOrgHandler();
 
-    string imgAgregarPath = "img/estructuraOrg/addPuesto.png";
-    string imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
+    public string copiaNombreOriginal = "";
 
-    string hoverTextAgregar = "";
-    string hoverTextGuardar = "";
+    public string placeHolderNombre = "Ingresar nombre";
+    public string placeHolderSalario = "Ingresar salario";
+    public string placeHolderPlazas = "Ingresar plazas";
 
-    string styleHover = "";
-    string cssIdAgregar = "agregar-puesto";
-    string cssIdGuardar = "guardar-puesto";
+    public string imgAgregarPath = "img/estructuraOrg/addPuesto.png";
+    public string imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
+
+    public string hoverTextAgregar = "";
+    public string hoverTextGuardar = "";
+
+    public string styleHover = "";
+    public string cssIdAgregar = "agregar-puesto";
+    public string cssIdGuardar = "guardar-puesto";
 
 
     string htmlPuestosStr = "";
@@ -130,23 +122,31 @@
     public void SeleccionarPuesto(PuestoModel puestoSeleccionado)
     {
         puestoActivo = puestoSeleccionado;
-        hayPuestoActivo = true;
+        placeHolderNombre = puestoActivo.Nombre;
+        placeHolderSalario = puestoActivo.SalarioBruto.ToString();
+        placeHolderPlazas = puestoActivo.Plazas.ToString();
+        copiaNombreOriginal = puestoActivo.Nombre;
+        hayPuestoSeleccionado = true;
+
     }
 
     public void AgregarNuevoPuesto() {
-        hayPuestoActivo = false;
+        placeHolderNombre = "Ingresar nombre";
+        placeHolderSalario = "Ingresar salario";
+        placeHolderPlazas = "Ingresar plazas";
+        hayPuestoSeleccionado = false;
         pestanyaConfiguracionActiva = true;
-        nuevoPuesto = new PuestoModel();
-        puestoActivo = nuevoPuesto;
+        puestoActivo = new PuestoModel();
     }
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
-        if (hayPuestoActivo == false) {
-            HandlerPuesto.
-            nuevoPuesto = new PuestoModel();
-        } else {
-        }
 
+        puestoGuardar.FechaAnalisis = fechaAnalasis;
+        HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
+        if (hayPuestoSeleccionado == false)
+        {
+            puestoActivo = new PuestoModel();
+        }
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
     }
 }
