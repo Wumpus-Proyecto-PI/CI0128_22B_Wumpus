@@ -44,8 +44,11 @@
     <div id="mostrar-puestos">
         @foreach (PuestoModel puestoActual in puestos)
         {
-            <div @onclick="() => SeleccionarPuesto(puestoActual)">
-                <PuestoParcialView puesto=puestoActual></PuestoParcialView>
+            <div class="puesto-clickeable-eliminable" >
+                <div @onclick="() => SeleccionarPuesto(puestoActual)">
+                    <PuestoParcialView puesto=puestoActual></PuestoParcialView>
+                </div>
+                <img @onclick="eliminarPuesto" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
             </div>
         }
     </div>
@@ -148,6 +151,10 @@
             puestoActivo = new PuestoModel();
         }
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
+    }
+    public void eliminarPuesto()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
 

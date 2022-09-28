@@ -1,11 +1,13 @@
 ﻿@using PI.Models
+@inject NavigationManager NavigationManager;
 
 <div class="puesto puesto-editar">
     <div class="top-puesto">
+        <img class="plaza-img" src=img/puesto/plaza.png>
         <div class="puesto-plazas"><p>@puesto.Plazas.ToString()</p></div>
         <div class="puesto-nombre"><h1>@puesto.Nombre</h1></div>
     </div>
-    <div class="puesto-salario-neto">
+    <div class="puesto-salario-bruto">
         <p>@puesto.SalarioBruto.ToString()</p>
         <img class="divisa-img" src=img/puesto/divisa.png>
     </div>
@@ -14,4 +16,9 @@
 @code {
     [Parameter]
     public PuestoModel puesto { get; set;}
+
+    public void eliminarPuesto() {
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
 }
