@@ -3,14 +3,21 @@
 
 <div class="puesto puesto-editar">
     <div class="top-puesto">
-        <img class="plaza-img" src=img/puesto/plaza.png>
-        <div class="puesto-plazas"><p>@puesto.Plazas.ToString()</p></div>
         <div class="puesto-nombre"><h1>@puesto.Nombre</h1></div>
     </div>
-    <div class="puesto-salario-bruto">
-        <p>@puesto.SalarioBruto.ToString()</p>
-        <img class="divisa-img" src=img/puesto/divisa.png>
+    <div class="bottom-puesto">
+        <div class="puesto-caracteristica puesto-salario-bruto">
+            <p>@puesto.SalarioBruto.ToString()</p>
+            <img class="divisa-img" src=img/puesto/divisa.png>
+        </div>
+        <div>
+            <div class="puesto-caracteristica puesto-numero-plazas">
+                <p>@puesto.Plazas.ToString()</p>
+                <img class="plaza-img" src=img/puesto/plaza.png>
+            </div>
+        </div>
     </div>
+
 </div>
 
 @code {
