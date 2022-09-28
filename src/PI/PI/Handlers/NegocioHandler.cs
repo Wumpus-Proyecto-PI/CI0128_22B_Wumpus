@@ -33,36 +33,12 @@ namespace PI.Handlers
             return consultaFormatoTabla;
         }
 
-        // Obtiene el tipo de ne
-
-        // Obtiene la cantidad de analisis del negocio 
-        public List<AnalisisModel> ObtenerAnalisis(string IDNegocio)
-        {
-            List<AnalisisModel> analisisDelNegocio = new List<AnalisisModel>();
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-
-            string consulta = "SELECT IDNegocio from ANALISIS as A inner join Negocio as N on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            foreach (DataRow columna in tablaResultado.Rows)
-            {
-                string fechaAnalisisActual = Convert.ToString(columna["fechaCreacion"]);
-                Boolean tipoAnalisisActual = Convert.ToBoolean(analisisHandler.ObtenerTipoAnalisis(fechaAnalisisActual));
-                analisisDelNegocio.Add(
-                new AnalisisModel
-                {
-                    FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
-                    Configuracion = { TipoNegocio = tipoAnalisisActual }
-                }
-                );
-            }
-
-            return analisisDelNegocio;
-        }
         // Crea una lista de los negocios existentes en la BD
         public List<NegocioModel> ObtenerNegocios()
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
-            string consulta = "SELECT * FROM Negocio";
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            string consulta = "SELECT * FROM Negocio ORDER BY FechaCreacion DESC";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
             {
@@ -72,7 +48,7 @@ namespace PI.Handlers
                     Nombre = Convert.ToString(columna["nombre"]),
                     ID = Convert.ToInt32(columna["id"]),
                     CorreoUsuario = Convert.ToString(columna["correoUsuario"]),
-                    Analisis = ObtenerAnalisis(Convert.ToString(columna["id"])),
+                    Analisis = analisisHandler.ObtenerAnalisis(Convert.ToString(columna["id"])),
                     FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]) 
                 }
                 );
@@ -101,16 +77,22 @@ namespace PI.Handlers
         }
 
         // Inserta el nuevo negocio a la base de datos.
-        public void ingresarNegocio(string Nombre, string tipo) 
+        public void IngresarNegocio(string Nombre, string tipo) 
         {
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+
             DateTime myDateTime = DateTime.Now;
             string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
-
-            string consulta = "INSERT INTO Negocio (ID,Nombre,FechaCreacion) VALUES (" + getNextID() + ",'" + Nombre + "', '" + sqlFormattedDate + "');";
+            
+            int nextID = getNextID();
+            
+            string consulta = "INSERT INTO Negocio (ID,Nombre,FechaCreacion) VALUES (" + nextID + ",'" + Nombre + "', '" + sqlFormattedDate + "');";
             SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
             conexion.Open();
             comandoParaConsulta.ExecuteNonQuery();
             conexion.Close();
+
+            analisisHandler.IngresarAnalisis(Convert.ToString(nextID), tipo);
         }
     }
 }

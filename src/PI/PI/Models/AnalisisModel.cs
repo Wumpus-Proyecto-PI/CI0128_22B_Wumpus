@@ -5,6 +5,6 @@
 
         // Atributos
         public DateTime FechaCreacion { get; set; }
-        public ConfigAnalisis Configuracion { get; set; } = new ConfigAnalisis();
+        public ConfigAnalisisModel Configuracion { get; set; } = new ConfigAnalisisModel();
     }
 }

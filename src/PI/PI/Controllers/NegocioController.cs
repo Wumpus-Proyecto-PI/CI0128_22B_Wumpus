@@ -26,7 +26,7 @@ namespace PI.Controllers
         {
             // Inserta el negocio en la base de datos.
             NegocioHandler handler = new NegocioHandler();
-            handler.ingresarNegocio(nombreNegocio, tipoNegocio);
+            handler.IngresarNegocio(nombreNegocio, tipoNegocio);
             
             // Redirecciona a la página donde tiene todos los negocios
             return RedirectToAction("Index");
