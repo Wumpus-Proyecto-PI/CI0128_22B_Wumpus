@@ -1,0 +1,298 @@
+#subtitulo {
+  width: 554px;
+  height: 62px;
+  background-color: #005DB9;
+  color: white;
+  display: flex;
+  border-radius: 0px 20px 20px 0px;
+  box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+  margin-bottom: 40px;
+ margin-top: 40px;
+}
+
+#nombre_negocio {
+  padding-top: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: xx-large;
+}
+
+#pestañas{
+  margin-left: 85px;
+  margin-top: 0px;
+  display: flex;
+  width: 500px;    
+  height: 30px;
+}
+
+.pestaña_cuadro_beneficios{
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  font-size: medium;
+  border: 1px solid rgb(117, 115, 115);
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  align-content: center;
+}
+
+#cuadro_beneficios {
+  margin: 10px;
+  width: 571px;
+  height: 271px;
+  border: 1px solid rgb(117, 115, 115);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#cuadro_configuracion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 10px;
+    width: 571px;
+    height: fit-content;
+    border: 1px solid rgb(117, 115, 115);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+div a{
+  color: black;
+  text-decoration: none;
+  font-size: medium;
+}
+
+#contenido-puestos-pestañas {
+    display: flex;
+    flex-direction:row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+
+}
+
+#seccion-puestos {
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    border-width: 1px;
+    border-radius: 0px 20px 20px 0px;
+    width: 100%;
+    min-width: 600px;
+    margin-right: 75px;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.19);
+}
+
+.altura-seccion {
+    min-height: 600px;
+    max-height: fit-content;
+}
+
+#seccion-pestañas {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: solid;
+    border-right-color: transparent;
+    border-width: 1px;
+    border-radius: 20px 0px 0px 20px;
+    width: fit-content;
+    margin-right: 0px;
+    margin-left: 75px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.19);
+}
+
+#titulo-contenido {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+
+#agregar-puesto img {
+    width: 35px;
+    padding: 5px;
+}
+
+#agregar-puesto {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    margin: 20px;
+    transition-duration: 0.5s;
+}
+
+#agregar-puesto:hover {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 49px;
+    width: fit-content;
+    border: solid;
+    border-color: transparent;
+    border-radius: 10px;
+    margin: 20px;
+    padding-inline: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #BFFFB3;
+    transition-duration: 0.4s;
+}
+
+#guardar-puesto img {
+    width: 35px;
+    padding: 5px;
+}
+
+
+#guardar-puesto {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    margin: 20px;
+    transition-duration: 0.5s;
+}
+
+#guardar-puesto:hover {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 49px;
+    width: fit-content;
+    border: solid;
+    border-color: transparent;
+    border-width: 2px;
+    border-radius: 10px;
+    margin: 20px;
+    padding-inline: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #BCFFFA;
+    transition-duration: 0.4s;
+}
+
+#mostrar-puestos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: fit-content;
+    height: fit-content;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+#form_configuracion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 20px; 
+}
+
+.fila-form-configuracion {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 10px 0px 10px 0px;
+}
+
+.fila-form-configuracion label {
+    border: solid;
+    border-radius: 20px 0px 0px 20px;
+    padding: 5px 10px 5px 10px;
+    border-width: 1px;
+    font-size: 25px;
+    width: 100px;
+    text-align: center;
+    background-color: #E2E2E2;
+}
+
+.fila-form-configuracion input {
+    border: solid;
+    border-radius: 0px 20px 20px 0px;
+    padding: 5px 10px 5px 10px;
+    border-width: 1px;
+    font-size: 25px;
+    width: 200px;
+    text-align: center;
+}
+
+#inferior-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.puesto-clickeable-eliminable {
+    display: flex;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: fit-content;
+    height: fit-content;
+    margin: 0px 7px 0px 7px;
+    transition-duration: 0.4s;
+}
+
+.puesto-clickeable-eliminable:hover {
+    color: black;
+    cursor: pointer;
+    transform: scale(1.03);
+    transition-duration: 0.2s;
+    /*box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
+}
+
+.puesto-icono-eliminar {
+    width: 35px;
+    padding: 1px;
+    margin-left: -33px;
+    border: solid;
+    border-width: 3px;
+    border-color: lightgray;
+    border-radius: 20px;
+    background-color: white;
+    transition-duration: 0.4s;
+}
+
+.puesto-icono-eliminar:hover {
+    transform: scale(1.1);
+    background-color: #FFC8C8;
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+}
+

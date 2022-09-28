@@ -3,12 +3,12 @@
 <!doctype html>
 <html>
 
-    <head>
+<head>
         <meta charset="UTF-8">
         <title> Mis negocios </title>
 <!-- links -->
         <link rel="stylesheet" href="/index.cshtml.css" />
-    </head>
+</head>
 <!-- body -->
     <body>
         <header>
@@ -18,8 +18,8 @@
         <a asp-controller="Negocio" asp-action="FormAgregarNegocio">
             <div class="card card-agregar">
                 <img class="boton-agregar" src=Images/agregar-img.svg>
-            </div>
-        </a>
+</div>
+   </a>
 <!-- negocio cards-->
         @foreach (var item in Model)
         {
@@ -37,6 +37,6 @@
                 </div>
             </div>
         }
-        </div>
+</div>
     </body>
 </html>
