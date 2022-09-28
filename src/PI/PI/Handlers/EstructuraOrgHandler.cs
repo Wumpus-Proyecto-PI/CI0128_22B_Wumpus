@@ -100,6 +100,14 @@ namespace PI.Handlers
             return puestos;
         }
 
+        public int EliminarPuesto(PuestoModel puestoELiminar)
+        {
+            string delete = "DELETE FROM PUESTO WHERE fechaAnalisis='" + 
+                puestoELiminar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' " 
+                + "and nombre='" + puestoELiminar.Nombre + "';";
+            return enviarConsulta(delete);
+        }
+
         private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, string fechaAnalisis)
         {
             List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
@@ -123,8 +131,10 @@ namespace PI.Handlers
             return resultadoBeneficios;
         }
 
-
-        /* metodos para obtener los puestos con estructura. No son utilizados en el primer sprint */
+        /* 
+         * Importante!
+         * metodos para obtener los puestos con estructura no son utilizados en el primer sprint 
+         */
         public PuestoModel ObtenerEstructuraOrg(DateOnly fechaAnalisis)
         {
             // extraer los puestos
