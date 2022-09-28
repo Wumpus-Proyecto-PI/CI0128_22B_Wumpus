@@ -33,8 +33,12 @@
         }   
     </div>
     <div id="inferior-horizontal">
-        <div id="@cssIdGuardar" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
-            <a asp-controller="EstructuraOrg" asp-action="Index"><img style="@styleHover" src=" @imgGuadarPath" alt="">@hoverTextGuardar</a>
+        <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
+            <a asp-controller="EstructuraOrg" asp-action="Index">
+                @if (hoverGuardar == false) {
+                    <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                }
+                @hoverTextGuardar</a>
         </div>
     </div>
 </div>
@@ -48,12 +52,18 @@
                 <div @onclick="() => SeleccionarPuesto(puestoActual)">
                     <PuestoParcialView puesto=puestoActual></PuestoParcialView>
                 </div>
-                <img @onclick="eliminarPuesto" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
+                <img @onclick="() => eliminarPuesto(puestoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
             </div>
         }
     </div>
-    <div id="@cssIdAgregar" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
-        <a><img style="@styleHover" src=" @imgAgregarPath" alt="">@hoverTextAgregar</a>
+    <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+        <a>
+            @if (hoverAgregar == false)
+            {
+                <img src="img/estructuraOrg/addPuesto.png" alt="">
+            }
+            @hoverTextAgregar
+            </a>
     </div>
 </div>
 
@@ -76,18 +86,11 @@
     public string placeHolderSalario = "Ingresar salario";
     public string placeHolderPlazas = "Ingresar plazas";
 
-    public string imgAgregarPath = "img/estructuraOrg/addPuesto.png";
-    public string imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
-
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
 
-    public string styleHover = "";
-    public string cssIdAgregar = "agregar-puesto";
-    public string cssIdGuardar = "guardar-puesto";
-
-
-    string htmlPuestosStr = "";
+    public bool hoverGuardar = false;
+    public bool hoverAgregar = false;
 
     bool pestanyaConfiguracionActiva = true;
 
@@ -95,14 +98,12 @@
     {
 
         if (action == 1) {
-            imgAgregarPath = "";
             hoverTextAgregar = "Agregar Puesto";
-            cssIdAgregar = "agregar-puesto-hover";
+            hoverAgregar = true;
         }
         else if (action == 2)
         {
-            cssIdGuardar = "guardar-puesto-hover";
-            imgGuadarPath = "";
+            hoverGuardar = true;
             hoverTextGuardar = "Guardar datos";
         }
     }
@@ -110,15 +111,11 @@
     {
         if (action == 1)
         {
-            styleHover = "";
-            cssIdAgregar = "agregar-puesto";
-            imgAgregarPath = "img/estructuraOrg/addPuesto.png";
             hoverTextAgregar = "";
+            hoverAgregar = false;
         } else {
-            styleHover = "";
+            hoverGuardar = false;
             hoverTextGuardar = "";
-            imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
-            cssIdGuardar = "guardar-puesto";
         }
     }
 
@@ -152,8 +149,9 @@
         }
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
     }
-    public void eliminarPuesto()
+    public void eliminarPuesto(PuestoModel puestoEliminar)
     {
+        HandlerPuesto.EliminarPuesto(puestoEliminar);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
