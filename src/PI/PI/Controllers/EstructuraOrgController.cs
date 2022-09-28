@@ -16,7 +16,7 @@ namespace PI.Controllers
             string fecha = "2022-09-26 00:00:00.000";
             DateTime fechaAnalisis = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
 
-            List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fecha);
+            List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
 
             ViewBag.FechaAnalisis = fechaAnalisis;
             return View(puestos);
