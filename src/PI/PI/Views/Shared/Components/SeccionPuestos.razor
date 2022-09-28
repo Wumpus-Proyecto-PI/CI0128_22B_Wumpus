@@ -79,6 +79,8 @@
     public bool hayPuestoActivo = false;
     public PuestoModel puestoActivo;
 
+    public EstructuraOrgHandler HandlerPuesto = new EstructuraOrgHandler();
+
     string imgAgregarPath = "img/estructuraOrg/addPuesto.png";
     string imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
 
@@ -140,6 +142,7 @@
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
         if (hayPuestoActivo == false) {
+            HandlerPuesto.
             nuevoPuesto = new PuestoModel();
         } else {
         }
