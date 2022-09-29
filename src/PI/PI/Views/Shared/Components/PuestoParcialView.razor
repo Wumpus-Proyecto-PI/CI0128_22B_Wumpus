@@ -1,5 +1,4 @@
 ﻿@using PI.Models
-@inject NavigationManager NavigationManager;
 
 <div class="puesto puesto-editar">
     <div class="top-puesto">
@@ -23,9 +22,4 @@
 @code {
     [Parameter]
     public PuestoModel puesto { get; set;}
-
-    public void eliminarPuesto() {
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-    }
-
 }
