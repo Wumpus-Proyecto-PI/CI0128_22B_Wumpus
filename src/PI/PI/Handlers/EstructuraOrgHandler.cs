@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using PI.Models;
+using PI.Handlers;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
@@ -13,24 +14,6 @@ namespace PI.Handlers
     public class EstructuraOrgHandler : Handler
     {
         public EstructuraOrgHandler() : base() { }
-
-        public List<NegocioModel> ObtenerNegocios()
-        {
-            List<NegocioModel> negocios = new List<NegocioModel>();
-            string consulta = "SELECT * FROM NEGOCIO";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            foreach (DataRow columna in tablaResultado.Rows)
-            {
-                negocios.Add(
-                new NegocioModel
-                {
-                    id = Convert.ToInt32(columna["id"]),
-                    nombre = Convert.ToString(columna["nombre"]),
-                    correoUsuario = Convert.ToString(columna["correoUsuario"]),
-                });
-            }
-            return negocios;
-        }
 
         public int InsertarPuesto(string nombrePuesto, PuestoModel puesotAInsertar)
         {

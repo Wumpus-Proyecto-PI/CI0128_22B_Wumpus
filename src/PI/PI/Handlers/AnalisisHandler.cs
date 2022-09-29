@@ -4,26 +4,12 @@ using PI.Models;
 
 namespace PI.Handlers
 {
-    public class AnalisisHandler
+    public class AnalisisHandler : Handler
     {
         private SqlConnection conexion;
         private string rutaConexion;
-        public AnalisisHandler()
-        {
-            var builder = WebApplication.CreateBuilder();
-            rutaConexion = builder.Configuration.GetConnectionString("WumpusTEST");
-            conexion = new SqlConnection(rutaConexion);
-        }
-        private DataTable CrearTablaConsulta(string consulta)
-        {
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
-            SqlDataAdapter adaptadorParaTabla = new SqlDataAdapter(comandoParaConsulta);
-            DataTable consultaFormatoTabla = new DataTable();
-            conexion.Open();
-            adaptadorParaTabla.Fill(consultaFormatoTabla);
-            conexion.Close();
-            return consultaFormatoTabla;
-        }
+        public AnalisisHandler(): base() { }
+
 
         // Obtiene los analisis de un negocio 
         public List<AnalisisModel> ObtenerAnalisis(string IDNegocio)
@@ -49,12 +35,17 @@ namespace PI.Handlers
 
             return analisisDelNegocio;
         }
-/*        // Obtiene la fecha de creacion de un analisis
-        public DateTime obtenerFechaCreacion()
+        // Obtiene la fecha de creacion de un analisis
+        public DateTime UltimaFechaCreacion(string IDNegocio)
         {
-            string consulta = "SELECT A.fechaCreacion from ANALISIS as A inner join Negocio as N " +
+            string consulta = "SELECT Max(A.fechaCreacion) as UltimoAnalisis from ANALISIS as A inner join Negocio as N " +
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
-        }*/
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+            DateTime fecha = (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
+
+            return fecha;
+        }
 
         // Obtiene el tipo de analisis
         public Boolean ObtenerTipoAnalisis(DateTime FechaCreacion)
@@ -82,10 +73,7 @@ namespace PI.Handlers
             string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             string consulta = "INSERT INTO Analisis (idNegocio,FechaCreacion) VALUES (" + idNegocio + ", '" + sqlFormattedDate + "');";
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
-            conexion.Open();
-            comandoParaConsulta.ExecuteNonQuery();
-            conexion.Close();
+            enviarConsultaVoid(consulta);
 
             // Crea una config por defecto asociada al analisis
             CrearConfigPorDefecto(sqlFormattedDate, tipo);
@@ -103,10 +91,7 @@ namespace PI.Handlers
                 tipoAnalisis = 1;
             }
             string consulta = "INSERT INTO CONFIGURACION (fechaAnalisis, tipoNegocio) VALUES ('" + fecha + "', " + tipoAnalisis + ")";
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
-            conexion.Open();
-            comandoParaConsulta.ExecuteNonQuery();
-            conexion.Close();
+            enviarConsultaVoid(consulta);
         }
     }
 }

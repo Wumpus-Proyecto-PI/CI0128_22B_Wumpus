@@ -7,7 +7,8 @@ using System;
     public string CorreoUsuario { get; set; }
     public int ID { get; set; }
     public List<AnalisisModel> Analisis { set; get; }
-
     public DateOnly FechaCreacion { set; get; }
+    public bool TipoUltimoAnalisis { set; get; }
+
 
 }

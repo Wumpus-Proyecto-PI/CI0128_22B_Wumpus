@@ -12,26 +12,11 @@ using PI.Controllers;
 
 namespace PI.Handlers
 {
-    public class NegocioHandler
+    public class NegocioHandler : Handler
     {
         private SqlConnection conexion;
         private string rutaConexion;
-        public NegocioHandler()
-        {
-            var builder = WebApplication.CreateBuilder();
-            rutaConexion = builder.Configuration.GetConnectionString("WumpusTEST");
-            conexion = new SqlConnection(rutaConexion);
-        }
-        private DataTable CrearTablaConsulta(string consulta)
-        {
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
-            SqlDataAdapter adaptadorParaTabla = new SqlDataAdapter(comandoParaConsulta);
-            DataTable consultaFormatoTabla = new DataTable();
-            conexion.Open();
-            adaptadorParaTabla.Fill(consultaFormatoTabla);
-            conexion.Close();
-            return consultaFormatoTabla;
-        }
+        public NegocioHandler() : base() { }
 
         // Crea una lista de los negocios existentes en la BD
         public List<NegocioModel> ObtenerNegocios()
@@ -42,6 +27,7 @@ namespace PI.Handlers
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
             {
+                DateTime fechaUltAnalisis = analisisHandler.UltimaFechaCreacion(Convert.ToString(columna["id"]));
                 negocios.Add(
                 new NegocioModel
                 {
@@ -49,7 +35,8 @@ namespace PI.Handlers
                     ID = Convert.ToInt32(columna["id"]),
                     CorreoUsuario = Convert.ToString(columna["correoUsuario"]),
                     Analisis = analisisHandler.ObtenerAnalisis(Convert.ToString(columna["id"])),
-                    FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]) 
+                    FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]),
+                    TipoUltimoAnalisis = analisisHandler.ObtenerTipoAnalisis(fechaUltAnalisis)
                 }
                 );
             }
@@ -87,10 +74,7 @@ namespace PI.Handlers
             int nextID = getNextID();
             
             string consulta = "INSERT INTO Negocio (ID,Nombre,FechaCreacion) VALUES (" + nextID + ",'" + Nombre + "', '" + sqlFormattedDate + "');";
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
-            conexion.Open();
-            comandoParaConsulta.ExecuteNonQuery();
-            conexion.Close();
+            enviarConsultaVoid(consulta);
 
             analisisHandler.IngresarAnalisis(Convert.ToString(nextID), tipo);
         }

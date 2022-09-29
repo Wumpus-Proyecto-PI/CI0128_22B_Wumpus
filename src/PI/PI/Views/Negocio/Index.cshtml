@@ -28,7 +28,12 @@
                     <div class="card-nombre"> 
                         <span> @item.Nombre </span></div>
                     <div class="card-tipo">
-                        <span id="tipoNegocio">tipo</span>
+                        @if (@item.TipoUltimoAnalisis == false)
+                        {
+                            <span id="tipoNegocio">Emprendimiento</span>
+                        }else {
+                            <span id="tipoNegocio">En marcha</span>
+                        }
                         <div class="inicial-nombre">
                             <span> @item.Nombre[0] </span></div>
                     </div>
