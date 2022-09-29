@@ -41,5 +41,23 @@ namespace PI.Handlers
             conexion.Close();
             return consultaFormatoTabla;
         }
+
+        protected int enviarConsulta(string insert)
+        {
+            int filasAfectadas = 0;
+            SqlCommand comando = new SqlCommand(insert, conexion);
+            conexion.Open();
+            filasAfectadas = comando.ExecuteNonQuery();
+            conexion.Close();
+            return filasAfectadas;
+        }
+
+        protected void enviarConsultaVoid(string insert)
+        {
+            SqlCommand comando = new SqlCommand(insert, conexion);
+            conexion.Open();
+            comando.ExecuteNonQuery();
+            conexion.Close();
+        }
     }
 }

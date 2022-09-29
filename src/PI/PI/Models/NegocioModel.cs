@@ -1,9 +1,14 @@
-namespace PI.Models
-{
+﻿namespace PI.Models;
+using System;
+
     public class NegocioModel
     {
-        public int id { get; set; }
-        public string nombre { get; set; } = string.Empty;
-        public string correoUsuario { get; set; } = string.Empty;
-    }
+    public string Nombre { get; set; }
+    public string CorreoUsuario { get; set; }
+    public int ID { get; set; }
+    public List<AnalisisModel> Analisis { set; get; }
+    public DateOnly FechaCreacion { set; get; }
+    public bool TipoUltimoAnalisis { set; get; }
+
+
 }

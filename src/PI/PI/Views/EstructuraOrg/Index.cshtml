@@ -1,5 +1,4 @@
 ﻿@model List<PuestoModel>
-
 @*
     Html para la estructura orgranizativa.
     Como este es dinamico del lado del cliente se utilzan componentes razor
@@ -12,8 +11,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HTML template</title>
-    <link rel="stylesheet" href="css/est_org.css">
-    <link rel="stylesheet" href="css/estructuraOrg/PuestoParcialView.css">
+    <link rel="stylesheet" href="~/css/est_org.css">
+    <link rel="stylesheet" href="~/css/estructuraOrg/PuestoParcialView.css">
 
 </head>
 
@@ -25,11 +24,12 @@
     
     <div style="width: 100%; display: flex;">
         @(
-            await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model})
-        )
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model, fechaAnalasis = ViewBag.FechaAnalisis})
+            )
     </div>
 </div>
 
 
 @*Necesario para componentes razor*@
+<base href="~/"/>
 <script src="_framework/blazor.server.js"><script/>

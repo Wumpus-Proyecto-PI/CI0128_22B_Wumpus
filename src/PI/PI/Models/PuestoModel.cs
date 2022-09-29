@@ -21,7 +21,7 @@ namespace PI.Models
         public List<PuestoModel> Subordinados { get; set; } = new List<PuestoModel>();
 
         // dateTime del analisis al que pertenece el puesto
-        DateTime FechaAnalisis { get; set; }
+        public DateTime FechaAnalisis { get; set; }
 
     }
 }

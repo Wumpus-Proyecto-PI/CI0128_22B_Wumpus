@@ -5,7 +5,7 @@
 <div class="altura-seccion" id="seccion-pestañas">
     <div id="titulo-contenido">
         @*Aqui se agrega lo de las pestanas*@
-        @if (hayPuestoActivo == false)
+        @if (hayPuestoSeleccionado == false)
         {
             <h1>Nuevo puesto</h1>
         } else {
@@ -17,39 +17,28 @@
             <div id="cuadro_configuracion">
 
                 <form id="form_configuracion">
-                    @if (hayPuestoActivo == false)
-                    {
-                        <div class="fila-form-configuracion">
-                            <label>Nombre</label> <input required @bind="nuevoPuesto.Nombre" type="text" placeholder="Ingresar nombre">
-                        </div>
+                    <div class="fila-form-configuracion">
+                    <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                    </div>
 
-                        <div class="fila-form-configuracion">
-                            <label>Salario</label> <input required @bind="nuevoPuesto.SalarioBruto" type="number" step="any" placeholder="Ingresar salario">
-                        </div>
+                    <div class="fila-form-configuracion">
+                    <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
+                    </div>
 
-                        <div class="fila-form-configuracion">
-                            <label>Plazas</label> <input required @bind="nuevoPuesto.Plazas" type="number" placeholder="Ingresar plazas">
-                        </div>
-                    } else {
-                        <div class="fila-form-configuracion">
-                            <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@puestoActivo.Nombre">
-                        </div>
-
-                        <div class="fila-form-configuracion">
-                            <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@puestoActivo.SalarioBruto.ToString()">
-                        </div>
-
-                        <div class="fila-form-configuracion">
-                            <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@puestoActivo.Plazas.ToString()">
-                        </div>
-                    }
+                    <div class="fila-form-configuracion">
+                    <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                    </div>
                 </form>
             </div>
         }   
     </div>
     <div id="inferior-horizontal">
-        <div id="@cssIdGuardar" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
-            <a asp-controller="EstructuraOrg" asp-action="Index"><img style="@styleHover" src=" @imgGuadarPath" alt="">@hoverTextGuardar</a>
+        <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
+            <a asp-controller="EstructuraOrg" asp-action="Index">
+                @if (hoverGuardar == false) {
+                    <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                }
+                @hoverTextGuardar</a>
         </div>
     </div>
 </div>
@@ -59,40 +48,49 @@
     <div id="mostrar-puestos">
         @foreach (PuestoModel puestoActual in puestos)
         {
-            <div @onclick="() => SeleccionarPuesto(puestoActual)">
-                <PuestoParcialView puesto=puestoActual></PuestoParcialView>
+            <div class="puesto-clickeable-eliminable" >
+                <div @onclick="() => SeleccionarPuesto(puestoActual)">
+                    <PuestoParcialView puesto=puestoActual></PuestoParcialView>
+                </div>
+                <img @onclick="() => eliminarPuesto(puestoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
             </div>
         }
     </div>
-    @((MarkupString)htmlPuestosStr)
-    <div id="@cssIdAgregar" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
-        <a><img style="@styleHover" src=" @imgAgregarPath" alt="">@hoverTextAgregar</a>
+    <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+        <a>
+            @if (hoverAgregar == false)
+            {
+                <img src="img/estructuraOrg/addPuesto.png" alt="">
+            }
+            @hoverTextAgregar
+            </a>
     </div>
 </div>
 
-<a asp-controller="EstructuraOrg" asp-action="Index">EstruturaOrg[Testing]</a>
 
 @code {
     [Parameter]
     public List<PuestoModel> puestos { get; set; }
 
-    public PuestoModel puestoActivo;
-    public bool hayPuestoActivo = false;
+    [Parameter]
+    public DateTime fechaAnalasis { get; set; }
 
-    public PuestoModel nuevoPuesto = new PuestoModel();
+    public bool hayPuestoSeleccionado = false;
+    public PuestoModel puestoActivo = new PuestoModel();
 
-    string imgAgregarPath = "img/estructuraOrg/addPuesto.png";
-    string imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
+    public EstructuraOrgHandler HandlerPuesto = new EstructuraOrgHandler();
 
-    string hoverTextAgregar = "";
-    string hoverTextGuardar = "";
+    public string copiaNombreOriginal = "";
 
-    string styleHover = "";
-    string cssIdAgregar = "agregar-puesto";
-    string cssIdGuardar = "guardar-puesto";
+    public string placeHolderNombre = "Ingresar nombre";
+    public string placeHolderSalario = "Ingresar salario";
+    public string placeHolderPlazas = "Ingresar plazas";
 
+    public string hoverTextAgregar = "";
+    public string hoverTextGuardar = "";
 
-    string htmlPuestosStr = "";
+    public bool hoverGuardar = false;
+    public bool hoverAgregar = false;
 
     bool pestanyaConfiguracionActiva = true;
 
@@ -100,14 +98,12 @@
     {
 
         if (action == 1) {
-            imgAgregarPath = "";
             hoverTextAgregar = "Agregar Puesto";
-            cssIdAgregar = "agregar-puesto-hover";
+            hoverAgregar = true;
         }
         else if (action == 2)
         {
-            cssIdGuardar = "guardar-puesto-hover";
-            imgGuadarPath = "";
+            hoverGuardar = true;
             hoverTextGuardar = "Guardar datos";
         }
     }
@@ -115,39 +111,49 @@
     {
         if (action == 1)
         {
-            styleHover = "";
-            cssIdAgregar = "agregar-puesto";
-            imgAgregarPath = "img/estructuraOrg/addPuesto.png";
             hoverTextAgregar = "";
+            hoverAgregar = false;
         } else {
-            styleHover = "";
+            hoverGuardar = false;
             hoverTextGuardar = "";
-            imgGuadarPath = "img/estructuraOrg/guardarPuesto.png";
-            cssIdGuardar = "guardar-puesto";
         }
     }
 
     public void SeleccionarPuesto(PuestoModel puestoSeleccionado)
     {
         puestoActivo = puestoSeleccionado;
-        hayPuestoActivo = true;
+        placeHolderNombre = puestoActivo.Nombre;
+        placeHolderSalario = puestoActivo.SalarioBruto.ToString();
+        placeHolderPlazas = puestoActivo.Plazas.ToString();
+        copiaNombreOriginal = puestoActivo.Nombre;
+        hayPuestoSeleccionado = true;
+
     }
 
     public void AgregarNuevoPuesto() {
-        hayPuestoActivo = false;
+        placeHolderNombre = "Ingresar nombre";
+        placeHolderSalario = "Ingresar salario";
+        placeHolderPlazas = "Ingresar plazas";
+        hayPuestoSeleccionado = false;
         pestanyaConfiguracionActiva = true;
-        nuevoPuesto = new PuestoModel();
+        copiaNombreOriginal = "";
+        puestoActivo = new PuestoModel();
     }
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
-        if (hayPuestoActivo == false) {
-            htmlPuestosStr = NavigationManager.Uri + " " + nuevoPuesto.Nombre + " " + nuevoPuesto.SalarioBruto + " " + nuevoPuesto.Plazas;
-            nuevoPuesto = new PuestoModel();
-        } else {
-            htmlPuestosStr = NavigationManager.Uri + " " + puestoGuardar.Nombre + " " + puestoGuardar.SalarioBruto + " " + puestoGuardar.Plazas;
-        }
 
+        puestoGuardar.FechaAnalisis = fechaAnalasis;
+        HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
+        if (hayPuestoSeleccionado == false)
+        {
+            puestoActivo = new PuestoModel();
+        }
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
+    }
+    public void eliminarPuesto(PuestoModel puestoEliminar)
+    {
+        HandlerPuesto.EliminarPuesto(puestoEliminar);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
 

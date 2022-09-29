@@ -1,0 +1,53 @@
+﻿<!-- models -->
+
+<!-- head -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- links -->
+    <link rel="stylesheet" href="NuevoNegocio.cshtml.css">
+    <!--  -->
+    <title>NuevoNegocio</title>
+</head>
+<!-- body -->
+<body>
+    <div class="flexbox-container-nuevoNegocio">
+        <div class="flexbox-item flexbox-item-nuevoNegocio">
+            <h2>Nuevo negocio</h2>
+            <form asp-controller="Negocio" asp-action="agregarNegocio_BD" method="get">
+                <br>
+                <!--text Nombre del negocio-->
+                <div class="NombreNegocio">
+                    <div>Nombre del negocio</div>
+                    <input type="text" name="nombreNegocio" placeholder="Panadería Tiquicia">
+                </div>
+                <br>
+                <!--radiobutton Emprendimiento-Ya iniciado-->
+                <div class="TipoNegocio">
+                    <div>Tipo</div>
+                    <div class="boxRadio">
+                        <input name="tipoNegocio" type="radio" value="Emprendimiento" /> Emprendimiento
+                        <br>
+                        <input name="tipoNegocio" type="radio" value="Ya iniciado"  /> Ya iniciado
+                    </div>
+                </div>
+                <br>
+                <!--submit Aceptar y cancelar (botones)-->
+                <div class="botones">
+                    <!-- Guarda la información ingresada en la base de datos-->
+                    <input type="submit" value="Aceptar">
+                    <!-- Retorna la página de los negocios creados -->
+                    <input asp-controller="Negocio" asp-action="Index" type="submit" value="Cancelar">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<!-- footer -->
+
+<!-- end -->
+
+</html>

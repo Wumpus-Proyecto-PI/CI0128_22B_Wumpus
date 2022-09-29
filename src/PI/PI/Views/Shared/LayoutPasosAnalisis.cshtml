@@ -4,14 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PersonalProject</title>
-    <link rel="stylesheet" href="css/LayoutPasosAnalisis.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="~/css/LayoutPasosAnalisis.css" asp-append-version="true" />
 </head>
 <body>
-    <div id="encabezado">
+    <header id="encabezado">
         <div id="logo">
-            <a href="#">
-                <img src=img/lagoysarmiento.png alt="Logo de la empresa">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="~/img/lagoysarmiento.png" alt="Logo de la empresa">
             </a>
         </div>
         <div id="nombre_seccion">
@@ -19,14 +18,14 @@
         </div>
         <div id="botones_der">
             <div id="boton_usuario">
-                <a href="#"><img src=img/user.png alt="Usuario"></a>
+                <a asp-controller="Mensajes" asp-action="BajoConstruccion" ><img src="~/img/user.png" alt="Usuario"></a>
             </div>
             <div id="boton_ajustes">
-                <a href="#"><img src=img/settings.png alt="Ajustes"></a>
+                <a asp-controller="Mensajes" asp-action="BajoConstruccion" ><img src="~/img/settings.png" alt="Ajustes"></a>
             </div>
-            <div id="boton_negocios"><a href="#">Mis negocios</a></div>
+            <div id="boton_negocios"><a asp-controller="Mensajes" asp-action="BajoConstruccion" >Mis negocios</a></div>
         </div>
-    </div>
+    </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -38,3 +37,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<base href="~/" />
+<script src="_framework/blazor.server.js"><script/>
