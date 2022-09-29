@@ -80,11 +80,17 @@ namespace PI.Handlers
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             decimal totalMensual = Convert.ToDecimal(tablaResultado.Rows[0]["totalMensual"]);
 
-            Console.WriteLine(totalMensual.ToString() + "fecha: " + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"));
             return totalMensual;
-
         }
 
+        public string obtenerNombreNegocio (DateTime fechaAnalisis)
+        {
+            string consulta = "SELECT DISTINCT NEGOCIO.nombre FROM NEGOCIO JOIN ANALISIS ON NEGOCIO.id = ANALISIS.idNegocio JOIN GASTO_FIJO ON GASTO_FIJO.fechaAnalisis = ANALISIS.fechaCreacion WHERE GASTO_FIJO.fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            string nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+            return nombreNegocio;
+        }
 
     }
 }

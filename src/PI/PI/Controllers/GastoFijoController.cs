@@ -13,7 +13,6 @@ namespace PI.Controllers
         public IActionResult GastoFijo()
         {
 
-            ViewData["NombreNegocio"] = "Nombre del negocio";
             ViewData["TituloPaso"] = "Gastos Fijos";
             DateTime fechaConversion = DateTime.ParseExact("2022-09-28 23:22:17.427", "yyyy-MM-dd HH:mm:ss.fff", null);
             ViewBag.fechaAnalisis = fechaConversion;
@@ -22,6 +21,7 @@ namespace PI.Controllers
             List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaConversion);
 
             ViewBag.totalMensual = gastoFijoHandler.obtenerTotalMensual(fechaConversion);
+            ViewData["NombreNegocio"] = gastoFijoHandler.obtenerNombreNegocio(fechaConversion);
 
 
             return View(gastosFijos);
