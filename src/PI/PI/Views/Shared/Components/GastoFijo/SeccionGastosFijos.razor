@@ -138,11 +138,12 @@
     public void GuardarDatosPuesto(GastoFijoModel puestoGuardar) {
 
         puestoGuardar.FechaAnalisis = fechaAnalasis;
-        HandlerGastoFijo.ingresarGastoFijo(puestoGuardar.Nombre, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
+        HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, puestoGuardar.Nombre, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
         if (hayPuestoSeleccionado == false)
         {
             gastoFijoActivo = new GastoFijoModel();
         }
+        copiaNombreOriginal = string.Empty;
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
     }
     public void eliminarPuesto(GastoFijoModel puestoEliminar)
