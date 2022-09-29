@@ -39,11 +39,13 @@ namespace PI.Handlers
 
 
         // Inserta el nuevo gasto fijo a la BD.
-        public void ingresarGastoFijo(string Nombre, string monto, DateTime fechaAnalisis)
+        public void ingresarGastoFijo(string nombreAnterior, string Nombre, string monto, DateTime fechaAnalisis)
         {
             // TODO arreglar el datetime para que esté asociado al análisis realmente.
             string consulta = "EXECUTE insertarGastoFijo '"
-                + Nombre + "', '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"', " + monto + ";";
+                + nombreAnterior + "', '"
+                + Nombre + "', '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") 
+                + "', " + monto + ";";
 
             enviarConsulta(consulta);
         }
