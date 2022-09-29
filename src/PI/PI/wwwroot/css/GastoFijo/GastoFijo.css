@@ -13,14 +13,14 @@
     margin: 10px;
     padding: 10px;
     align-items: center;
-    transition-duration: 0.4s;
+    transition-duration: 0.2s;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .puesto:hover {
     background-color: #E2F2FF;
     border-color: #E2F2FF;
-    transition-duration: 0.4s;
+    transition-duration: 0.2s;
 }
 
 .top-puesto {
@@ -77,7 +77,7 @@
 .puesto-plazas p {
     border: solid;
     border-color: lightgray;
-    transition-duration: 0.4s;
+    transition-duration: 0.2s;
     padding: 2px 3px 2px 3px;
     margin: 0px;
     border-radius: 20px;
@@ -235,7 +235,7 @@ div a {
     border-width: 2px;
     border-radius: 10px;
     margin: 20px;
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
 }
 
     #agregar-puesto:hover {
@@ -254,7 +254,7 @@ div a {
         font-size: 20px;
         cursor: pointer;
         background-color: #BFFFB3;
-        transition-duration: 0.4s;
+        transition-duration: 0.2s;
     }
 
 #guardar-puesto img {
@@ -275,7 +275,7 @@ div a {
     border-width: 2px;
     border-radius: 10px;
     margin: 20px;
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
 }
 
     #guardar-puesto:hover {
@@ -295,7 +295,7 @@ div a {
         font-size: 20px;
         cursor: pointer;
         background-color: #BCFFFA;
-        transition-duration: 0.4s;
+        transition-duration: 0.2s;
     }
 
 #mostrar-puestos {
@@ -381,7 +381,7 @@ div a {
     width: fit-content;
     height: fit-content;
     margin: 0px 7px 0px 7px;
-    transition-duration: 0.4s;
+    transition-duration: 0.2s;
 }
 
     .puesto-clickeable-eliminable:hover {
@@ -401,14 +401,14 @@ div a {
     border-color: lightgray;
     border-radius: 20px;
     background-color: white;
-    transition-duration: 0.4s;
+    transition-duration: 0.2s;
 }
 
     .puesto-icono-eliminar:hover {
         transform: scale(1.1);
         background-color: #FFC8C8;
         border-color: #FFC8C8;
-        transition-duration: 0.4s;
+        transition-duration: 0.2s;
     }
 
 
