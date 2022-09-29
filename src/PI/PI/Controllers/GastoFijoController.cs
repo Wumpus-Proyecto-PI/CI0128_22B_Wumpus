@@ -20,6 +20,10 @@ namespace PI.Controllers
 
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaConversion);
+
+            ViewBag.totalMensual = gastoFijoHandler.obtenerTotalMensual(fechaConversion);
+
+
             return View(gastosFijos);
         }
     }

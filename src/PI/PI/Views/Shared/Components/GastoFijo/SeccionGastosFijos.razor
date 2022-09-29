@@ -2,7 +2,8 @@
 @using PI.Handlers
 @inject NavigationManager NavigationManager;
 
-<div class="altura-seccion" id="seccion-pestañas">
+
+<div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
     <div id="titulo-contenido">
         @*Aqui se agrega lo de las pestanas*@
         @if (hayPuestoSeleccionado == false)
@@ -43,13 +44,13 @@
 <div class="altura-seccion" id="seccion-puestos">
     <div class="totales"> 
         <div class="fila-form-configuracion">
-
-            <label>Total anual</label> <p> @((gastoFijoActivo.Monto * 12).ToString()) </p>
+            <label>Total mensual</label> <p> @((totalMensual).ToString()) </p>
         </div>
-
         <div class="fila-form-configuracion">
-            <label>Total mensual</label> <p> @((gastoFijoActivo.Monto * 12).ToString()) </p>
+
+            <label>Total anual</label> <p> @((totalMensual * 12).ToString()) </p>
         </div>
+
     </div>
     @*Seccion de puestos donde se ven los puestos en cajas con organigrama*@
 
@@ -84,6 +85,9 @@
     [Parameter]
     public DateTime fechaAnalasis { get; set; }
 
+    [Parameter]
+    public decimal totalMensual { get; set; }
+
     public bool hayPuestoSeleccionado = false;
     public GastoFijoModel gastoFijoActivo = new GastoFijoModel();
 
@@ -93,7 +97,6 @@
 
     public string placeHolderNombre = "Ingresar nombre";
     public string placeHolderMonto = "Ingresar monto";
-    public string placeHolderPlazas = "Ingresar plazas";
 
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
@@ -107,7 +110,7 @@
     {
 
         if (action == 1) {
-            hoverTextAgregar = "Agregar Puesto";
+            hoverTextAgregar = "Agregar gasto fijo";
             hoverAgregar = true;
         }
         else if (action == 2)
@@ -141,7 +144,6 @@
     public void AgregarNuevoPuesto() {
         placeHolderNombre = "Ingresar nombre";
         placeHolderMonto = "Ingresar salario";
-        placeHolderPlazas = "Ingresar plazas";
         hayPuestoSeleccionado = false;
         pestanyaConfiguracionActiva = true;
         copiaNombreOriginal = "";
@@ -157,12 +159,16 @@
             gastoFijoActivo = new GastoFijoModel();
         }
         copiaNombreOriginal = string.Empty;
+        actualizarMontoMensual();
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
     }
     public void eliminarPuesto(GastoFijoModel puestoEliminar)
     {
         HandlerGastoFijo.eliminarGastoFijo(puestoEliminar.Nombre, puestoEliminar.FechaAnalisis);
+        actualizarMontoMensual();
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
-
+    public void actualizarMontoMensual () {
+        this.totalMensual = HandlerGastoFijo.obtenerTotalMensual(this.fechaAnalasis);
+    }
 }

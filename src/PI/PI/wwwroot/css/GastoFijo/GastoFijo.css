@@ -17,11 +17,11 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-    .puesto:hover {
-        background-color: #E2F2FF;
-        border-color: #E2F2FF;
-        transition-duration: 0.4s;
-    }
+.puesto:hover {
+    background-color: #E2F2FF;
+    border-color: #E2F2FF;
+    transition-duration: 0.4s;
+}
 
 .top-puesto {
     display: flex;

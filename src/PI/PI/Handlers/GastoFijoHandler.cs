@@ -8,6 +8,7 @@ using PI.Controllers;
 using System.Data;
 using System.Data.SqlClient;
 using PI.Models;
+using PI.Views.Shared.Components.GastoFijo;
 
 namespace PI.Handlers
 {
@@ -69,6 +70,19 @@ namespace PI.Handlers
             totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["TotalSalarios"]); 
 
             return totalSalarios;
+        }
+
+        public decimal obtenerTotalMensual (DateTime fechaAnalisis)
+        {
+            string consulta = "SELECT SUM(GASTO_FIJO.monto) totalMensual FROM GASTO_FIJO WHERE GASTO_FIJO.fechaAnalisis = '" +
+                fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            decimal totalMensual = Convert.ToDecimal(tablaResultado.Rows[0]["totalMensual"]);
+
+            Console.WriteLine(totalMensual.ToString() + "fecha: " + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            return totalMensual;
+
         }
 
 

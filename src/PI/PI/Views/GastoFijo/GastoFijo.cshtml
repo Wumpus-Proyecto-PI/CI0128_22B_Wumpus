@@ -20,7 +20,7 @@
     
     <div style="width: 100%; display: flex;">
         @(
-            await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo.SeccionGastosFijos>(RenderMode.ServerPrerendered, new { gastosFijos = Model, fechaAnalasis = ViewBag.fechaAnalisis})
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo.SeccionGastosFijos>(RenderMode.ServerPrerendered, new { gastosFijos = Model, fechaAnalasis = ViewBag.fechaAnalisis, totalMensual = ViewBag.totalMensual})
             )
     </div>
 
