@@ -14,8 +14,6 @@ namespace PI.Handlers
 {
     public class NegocioHandler : Handler
     {
-        private SqlConnection conexion;
-        private string rutaConexion;
         public NegocioHandler() : base() { }
 
         // Crea una lista de los negocios existentes en la BD

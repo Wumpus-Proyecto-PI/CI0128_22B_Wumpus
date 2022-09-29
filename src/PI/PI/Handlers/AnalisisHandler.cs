@@ -6,8 +6,6 @@ namespace PI.Handlers
 {
     public class AnalisisHandler : Handler
     {
-        private SqlConnection conexion;
-        private string rutaConexion;
         public AnalisisHandler(): base() { }
 
 
