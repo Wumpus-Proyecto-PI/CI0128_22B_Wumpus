@@ -67,6 +67,7 @@
     </div>
 </div>
 @if (PopupVisible) {
+    <div id="overlay" @onclick="cambiarVisibilidadPopup"></div>
     <SeccionBeneficios puesto=puestoActivo fechaAnali=fechaAnalasis popUpVisible=true> </SeccionBeneficios>
 }
 

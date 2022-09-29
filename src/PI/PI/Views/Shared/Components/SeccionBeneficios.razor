@@ -1,7 +1,6 @@
 ﻿@using PI.Models
 @using PI.Handlers
 @*@if (popUpVisible) {*@
-    <div id="overlay" @onclick="cambiarVisibilidadPopUp"></div>
 
     <div id="contenedor_beneficios">
         <h1 id="titulo_beneficios" >Beneficios</h1>
@@ -22,12 +21,12 @@
             @((MarkupString)html)
         </table>
         @if (formVisible)
-        {
+        {   <h2>Nuevo beneficio</h2>
             <div id="tabla_form">
                     <input id = "input_nombre_beneficio" placeholder="NombreBeneficio" @bind="comodin.nombreBeneficio">
                     <input id = "input_monto_beneficio" placeholder="Monto" type="number" @bind="comodin.monto">
                     <input id = "input_plazas_beneficio" placeholder="Plazas" type="number" @bind="comodin.plazasPorBeneficio">
-                    <div id = "boton_agregar_beneficio" @onclick="agregarBeneficioNuevo">fa</div>
+                    <button id = "boton_agregar_beneficio" @onclick="agregarBeneficioNuevo">Agregar</button>
             </div>
         }
 
