@@ -1,0 +1,120 @@
+﻿@using PI.Models
+@using PI.Handlers
+@*@if (popUpVisible) {*@
+    <div id="overlay" @onclick="cambiarVisibilidadPopUp"></div>
+
+    <div id="contenedor_beneficios">
+        <h1 id="titulo_beneficios" >Beneficios</h1>
+        <table id=lista_beneficios>
+            <tr>
+                <th>Nombre</th>
+                <th>Monto</th>
+                <th> Plazas </th>
+            </tr>
+            @foreach (var i in puesto.Beneficios)
+            {
+                <tr>
+                    <td>@i.nombreBeneficio</td>
+                    <td> @i.monto</td>
+                    <td> @i.plazasPorBeneficio </td>
+                </tr>
+            }
+            @((MarkupString)html)
+        </table>
+        @if (formVisible)
+        {
+            <div id="tabla_form">
+                    <input id = "input_nombre_beneficio" placeholder="NombreBeneficio" @bind="comodin.nombreBeneficio">
+                    <input id = "input_monto_beneficio" placeholder="Monto" type="number" @bind="comodin.monto">
+                    <input id = "input_plazas_beneficio" placeholder="Plazas" type="number" @bind="comodin.plazasPorBeneficio">
+                    <div id = "boton_agregar_beneficio" @onclick="agregarBeneficioNuevo">fa</div>
+            </div>
+        }
+
+
+        <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="cambiarVisibilidadForm">
+            <a>
+                @if (hoverAgregar == false)
+                {
+                    <img src="img/estructuraOrg/addPuesto.png" alt="">
+                }
+                @hoverTextAgregar
+            </a>
+        </div>
+    </div>
+@*}*@
+@code {
+    [Parameter]
+    public PuestoModel puesto { get; set; }
+
+    [Parameter]
+    public DateTime fechaAnali { get; set; }
+
+    [Parameter]
+    public bool popUpVisible { get; set; }
+
+    public BeneficioModel comodin = new BeneficioModel();
+
+    public bool formVisible = false;
+
+    public string html = "";
+
+    public void agregarBeneficioNuevo()
+    {
+        EstructuraOrgHandler h = new EstructuraOrgHandler();
+        comodin.fechaAnalisis = fechaAnali;
+        comodin.nombrePuesto = puesto.Nombre;
+        formVisible = false;
+        html += "<tr><td>"+comodin.nombreBeneficio+"</td><td>"+ comodin.monto+"</td><td>"+comodin.plazasPorBeneficio+"</td></tr>";
+        h.AgregarBeneficio(comodin);
+    }
+
+    public void cambiarVisibilidadForm()
+    {
+        if (formVisible)
+        {
+            formVisible = false;
+        }
+        else
+        {
+            formVisible = true;
+        }
+    }
+
+    public void cambiarVisibilidadPopUp()
+    {
+        popUpVisible = false;
+    }
+
+    public string hoverTextAgregar = "";
+    public string hoverTextGuardar = "";
+
+    public bool hoverGuardar = false;
+    public bool hoverAgregar = false;
+
+    public void Hover(int action)
+    {
+
+        if (action == 1) {
+            hoverTextAgregar = "Agregar Beneficio";
+            hoverAgregar = true;
+        }
+        else if (action == 2)
+        {
+            hoverGuardar = true;
+            hoverTextGuardar = "Guardar datos";
+        }
+    }
+    public void HoverOut(int action)
+    {
+        if (action == 1)
+        {
+            hoverTextAgregar = "";
+            hoverAgregar = false;
+        } else {
+            hoverGuardar = false;
+            hoverTextGuardar = "";
+        }
+    }
+
+}

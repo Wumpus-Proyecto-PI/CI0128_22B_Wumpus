@@ -1,47 +1,138 @@
+#overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    cursor: pointer;
+    background-color: black;
+    opacity: 0.5;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+}
+
+#header_tabla {
+    display: flex;
+    width: 100%;
+    height: 30px;
+    align-items: center;
+}
+
+#tabla_form {
+    display: flex;
+    width: 100%;
+    height: 50px;
+}
+
+#input_nombre_beneficio {
+    height: 30px;
+    width: 55%
+}
+
+#input_monto_beneficio {
+    height: 30px;
+    width: 15%
+}
+
+#input_plazas_beneficio {
+    height: 30px;
+    width: 15%
+}
+
+#boton_agregar_beneficio {
+    height: 30px;
+    width: 15%
+}
+
+
+.dato_tabla_beneficios {
+    width: 33.33%;
+    text-align: left;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#lista_beneficios {
+    width: 100%;
+}
+
+#contenedor_beneficios {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    color: black;
+    background-color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    width: 700px;
+    height: 700px;
+    border-color: black;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px 20px 20px 20px;
+}
+
 #subtitulo {
-  width: 554px;
-  height: 62px;
-  background-color: #005DB9;
-  color: white;
-  display: flex;
-  border-radius: 0px 20px 20px 0px;
-  box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
-  margin-bottom: 40px;
- margin-top: 40px;
+    width: 554px;
+    height: 62px;
+    background-color: #005DB9;
+    color: white;
+    display: flex;
+    border-radius: 0px 20px 20px 0px;
+    box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+    margin-bottom: 40px;
+    margin-top: 40px;
 }
 
 #nombre_negocio {
-  padding-top: 10px;
-  width: 100%;
-  text-align: center;
-  font-size: xx-large;
+    padding-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: xx-large;
 }
 
-#pestañas{
-  margin-left: 85px;
-  margin-top: 0px;
-  display: flex;
-  width: 500px;    
-  height: 30px;
+#pestañas {
+    margin-left: 85px;
+    margin-top: 0px;
+    display: flex;
+    width: 500px;
+    height: 30px;
 }
 
-.pestaña_cuadro_beneficios{
-  width: 50%;
-  height: 100%;
-  text-align: center;
-  font-size: medium;
-  border: 1px solid rgb(117, 115, 115);
-  border-radius: 10px 10px 0px 0px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-  align-content: center;
+.pestaña_cuadro_beneficios {
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    font-size: medium;
+    border: 1px solid rgb(117, 115, 115);
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    align-content: center;
 }
 
 #cuadro_beneficios {
-  margin: 10px;
-  width: 571px;
-  height: 271px;
-  border: 1px solid rgb(117, 115, 115);
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    margin: 10px;
+    width: 571px;
+    height: 271px;
+    border: 1px solid rgb(117, 115, 115);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 #cuadro_configuracion {
@@ -57,20 +148,19 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-div a{
-  color: black;
-  text-decoration: none;
-  font-size: medium;
+div a {
+    color: black;
+    text-decoration: none;
+    font-size: medium;
 }
 
 #contenido-puestos-pestañas {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
     align-content: center;
     align-items: center;
     justify-content: center;
     height: fit-content;
-
 }
 
 #seccion-puestos {
@@ -135,24 +225,24 @@ div a{
     transition-duration: 0.5s;
 }
 
-#agregar-puesto:hover {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    height: 49px;
-    width: fit-content;
-    border: solid;
-    border-color: transparent;
-    border-radius: 10px;
-    margin: 20px;
-    padding-inline: 5px;
-    font-size: 20px;
-    cursor: pointer;
-    background-color: #BFFFB3;
-    transition-duration: 0.4s;
-}
+    #agregar-puesto:hover {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        height: 49px;
+        width: fit-content;
+        border: solid;
+        border-color: transparent;
+        border-radius: 10px;
+        margin: 20px;
+        padding-inline: 5px;
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #BFFFB3;
+        transition-duration: 0.4s;
+    }
 
 #guardar-puesto img {
     width: 35px;
@@ -175,25 +265,25 @@ div a{
     transition-duration: 0.5s;
 }
 
-#guardar-puesto:hover {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    height: 49px;
-    width: fit-content;
-    border: solid;
-    border-color: transparent;
-    border-width: 2px;
-    border-radius: 10px;
-    margin: 20px;
-    padding-inline: 5px;
-    font-size: 20px;
-    cursor: pointer;
-    background-color: #BCFFFA;
-    transition-duration: 0.4s;
-}
+    #guardar-puesto:hover {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        height: 49px;
+        width: fit-content;
+        border: solid;
+        border-color: transparent;
+        border-width: 2px;
+        border-radius: 10px;
+        margin: 20px;
+        padding-inline: 5px;
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #BCFFFA;
+        transition-duration: 0.4s;
+    }
 
 #mostrar-puestos {
     display: flex;
@@ -213,7 +303,7 @@ div a{
     align-items: center;
     justify-content: center;
     align-content: center;
-    margin: 20px; 
+    margin: 20px;
 }
 
 .fila-form-configuracion {
@@ -225,26 +315,26 @@ div a{
     margin: 10px 0px 10px 0px;
 }
 
-.fila-form-configuracion label {
-    border: solid;
-    border-radius: 20px 0px 0px 20px;
-    padding: 5px 10px 5px 10px;
-    border-width: 1px;
-    font-size: 25px;
-    width: 100px;
-    text-align: center;
-    background-color: #E2E2E2;
-}
+    .fila-form-configuracion label {
+        border: solid;
+        border-radius: 20px 0px 0px 20px;
+        padding: 5px 10px 5px 10px;
+        border-width: 1px;
+        font-size: 25px;
+        width: 100px;
+        text-align: center;
+        background-color: #E2E2E2;
+    }
 
-.fila-form-configuracion input {
-    border: solid;
-    border-radius: 0px 20px 20px 0px;
-    padding: 5px 10px 5px 10px;
-    border-width: 1px;
-    font-size: 25px;
-    width: 200px;
-    text-align: center;
-}
+    .fila-form-configuracion input {
+        border: solid;
+        border-radius: 0px 20px 20px 0px;
+        padding: 5px 10px 5px 10px;
+        border-width: 1px;
+        font-size: 25px;
+        width: 200px;
+        text-align: center;
+    }
 
 #inferior-horizontal {
     display: flex;
@@ -269,13 +359,13 @@ div a{
     transition-duration: 0.4s;
 }
 
-.puesto-clickeable-eliminable:hover {
-    color: black;
-    cursor: pointer;
-    transform: scale(1.03);
-    transition-duration: 0.2s;
-    /*box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
-}
+    .puesto-clickeable-eliminable:hover {
+        color: black;
+        cursor: pointer;
+        transform: scale(1.03);
+        transition-duration: 0.2s;
+        /*box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
+    }
 
 .puesto-icono-eliminar {
     width: 35px;
@@ -289,10 +379,9 @@ div a{
     transition-duration: 0.4s;
 }
 
-.puesto-icono-eliminar:hover {
-    transform: scale(1.1);
-    background-color: #FFC8C8;
-    border-color: #FFC8C8;
-    transition-duration: 0.4s;
-}
-
+    .puesto-icono-eliminar:hover {
+        transform: scale(1.1);
+        background-color: #FFC8C8;
+        border-color: #FFC8C8;
+        transition-duration: 0.4s;
+    }
