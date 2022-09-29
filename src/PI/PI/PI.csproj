@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\estructuraOrg\PuestoParcialView.css" />
+    <None Include="wwwroot\css\negocio\FormAgregarNegocio.css" />
+    <None Include="wwwroot\css\negocio\Index.css" />
   </ItemGroup>
 
 </Project>
