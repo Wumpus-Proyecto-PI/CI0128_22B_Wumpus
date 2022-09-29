@@ -49,7 +49,7 @@
         @foreach (PuestoModel puestoActual in puestos)
         {
             <div class="puesto-clickeable-eliminable" >
-                <div @onclick="() => SeleccionarPuesto(puestoActual)">
+                <div @onclick="() => {SeleccionarPuesto(puestoActual); cambiarVisibilidadPopup();}">
                     <PuestoParcialView puesto=puestoActual></PuestoParcialView>
                 </div>
                 <img @onclick="() => eliminarPuesto(puestoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
@@ -66,6 +66,9 @@
             </a>
     </div>
 </div>
+@if (PopupVisible) {
+    <SeccionBeneficios puesto=puestoActivo fechaAnali=fechaAnalasis popUpVisible=true> </SeccionBeneficios>
+}
 
 
 @code {
@@ -77,6 +80,8 @@
 
     public bool hayPuestoSeleccionado = false;
     public PuestoModel puestoActivo = new PuestoModel();
+
+    public bool PopupVisible { get; set; } = false;
 
     public EstructuraOrgHandler HandlerPuesto = new EstructuraOrgHandler();
 
@@ -116,6 +121,18 @@
         } else {
             hoverGuardar = false;
             hoverTextGuardar = "";
+        }
+    }
+
+    public void cambiarVisibilidadPopup()
+    {
+        if (PopupVisible)
+        {
+            PopupVisible = false;
+        }
+        else
+        {
+            PopupVisible = true;
         }
     }
 

@@ -186,5 +186,28 @@ namespace PI.Handlers
             return puestoActual;
         }
 
+        public List<BeneficioModel> AgregarBeneficio(BeneficioModel b)
+        {
+            List<BeneficioModel> resultadoBeneficios = new List<BeneficioModel>();
+
+            // consulta para extraer los beneficios
+            string consulta = "INSERT INTO BENEFICIO VALUES('" + b.nombrePuesto + "','" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "','" + b.nombreBeneficio + "'," + b.monto.ToString() + "," + b.plazasPorBeneficio.ToString() + ") SELECT * FROM BENEFICIO";
+            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
+
+            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
+            {
+                resultadoBeneficios.Add(new BeneficioModel
+                {
+                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
+                    monto = Convert.ToDecimal(beneficio["monto"]),
+                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"]),
+                    nombrePuesto = Convert.ToString(beneficio["nombrePuesto"]),
+                    fechaAnalisis = Convert.ToDateTime(beneficio["fechaAnalisis"])
+                });
+            }
+
+            return resultadoBeneficios;
+        }
+
     }
 }
