@@ -22,11 +22,13 @@ namespace PI.Controllers
             return View();
         }
 
-        public IActionResult agregarNegocio_BD(String nombreNegocio, String tipoNegocio)
+        public IActionResult agregarNegocio_BD(String nombreNegocio, String tipoNegocio, string correoUsuario)
         {
+            // usuario quemado para efectos del primer sprint
+            correoUsuario = "gabrielperezorozco@testing.com";
             // Inserta el negocio en la base de datos.
             NegocioHandler handler = new NegocioHandler();
-            handler.IngresarNegocio(nombreNegocio, tipoNegocio);
+            handler.IngresarNegocio(nombreNegocio, tipoNegocio, correoUsuario);
             
             // Redirecciona a la página donde tiene todos los negocios
             return RedirectToAction("Index");
