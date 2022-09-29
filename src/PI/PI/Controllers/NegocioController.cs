@@ -37,8 +37,18 @@ namespace PI.Controllers
             AnalisisHandler analisisHandler = new AnalisisHandler();
             DateTime ultimoFechaAnalisis = analisisHandler.UltimaFechaCreacion(negocioIngresado.ID.ToString());
 
-            // Redirecciona a la página donde tiene todos los negocios
+            // Redirecciona al analisis por defecto
             return RedirectToAction("Index", "Analisis", new { fechaAnalisis = ultimoFechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+        }
+
+        public IActionResult eliminarNegocio_BD(string IDNegocio)
+        {
+            NegocioHandler handler = new NegocioHandler();
+            handler.EliminarNegocio(IDNegocio);
+
+            var negocios = handler.ObtenerNegocios();
+
+            return RedirectToAction("Index", "Negocio");
         }
     }
 }

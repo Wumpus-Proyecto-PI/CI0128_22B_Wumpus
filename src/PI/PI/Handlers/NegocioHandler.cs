@@ -86,5 +86,11 @@ namespace PI.Handlers
             return negocioIngresado;
 
         }
+
+        public void EliminarNegocio(string idNegocio) 
+        { 
+            string consulta = "DELETE FROM NEGOCIO WHERE id =" + idNegocio + "";
+            enviarConsultaVoid(consulta);
+        }
     }
 }

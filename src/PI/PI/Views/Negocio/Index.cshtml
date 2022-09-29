@@ -39,6 +39,11 @@
                         <div class="inicial-nombre">
                             <span> @item.Nombre[0] </span></div>
                     </div>
+                    <a asp-controller="Negocio" asp-action="eliminarNegocio_BD" asp-route-IDNegocio="@item.ID">
+                        <div class="trash-container">
+                            <div class="trash-can"> <img class="trash-img" src=img/puesto/trashCan.png> </div>
+                        </div>
+                    </a>
                     <div class="card-analisis"> <span>Cantidad de analisis: @item.Analisis.Count</span> </div>
                     <div class="card-actualizacion"> <span>Fecha de creacion: @item.FechaCreacion.ToString() </span> </div>
                 </div>
@@ -47,3 +52,4 @@
 </div>
     </body>
 </html>
+
