@@ -30,7 +30,7 @@
         <div class="col-md-4">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">Último análisis</p>
-                <p class="mb-4">DD/MM/AAAA</p>
+                <p class="mb-4">@Model.FechaCreacion</p>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
         <div class="row ml-5 mr-5 text-center">
             <div class="col-md-4 d-flex mb-3 justify-content-center">
                 <div class="carta card m-4">
-                    <a asp-area="" asp-controller="EstructuraOrg" asp-action="Index">
+                    <a asp-area="" asp-controller="EstructuraOrg" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                         <div class="m-2">
                             <img src="Images/est_org.svg" class="card-img-top" alt="">
                             <div class="card-body">
@@ -53,7 +53,7 @@
             </div>
 
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card m-4">
+                <div class="card m-4">              
                     <div class="m-2">
                         <img src="Images/gastos_fijos.svg" class="card-img-top" alt="">
                         <div class="card-body">
