@@ -25,6 +25,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Negocio" asp-action="Index">Negocio</a>
+                        </li>
                         @* [Inicio Testing] de la estructura organizativa*@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="EstructuraOrg" asp-action="Index">EstruturaOrg[Testing]</a>
@@ -35,22 +38,19 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="GastoFijo" asp-action="GastoFijo">Gastos Fijos</a>
                             </li>
                         @*[Fin Testing] de los gastos fijos*@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Progreso" asp-action="Index">Progreso</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="main">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - PI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -1,33 +1,47 @@
-﻿<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>HTML template</title>
-    <link rel="stylesheet" href="css/negocio.css">
+@model List<PI.Models.NegocioModel>;
+
+<!doctype html>
+<html>
+
+<head>
+        <meta charset="UTF-8">
+        <title> Mis negocios </title>
+<!-- links -->
+        <link rel="stylesheet" href="/index.cshtml.css" />
 </head>
-
-<div id="subtitulo">
-    <div id="nombre_negocio">@ViewData["NombreNegocio"]</div>
+<!-- body -->
+    <body>
+        <header>
+            <h1> Mis Negocios </h1>
+        </header>
+        <div class="card-container">
+        <a asp-controller="Negocio" asp-action="FormAgregarNegocio">
+            <div class="card card-agregar">
+                <img class="boton-agregar" src=Images/agregar-img.svg>
 </div>
-
-
-<div id="cuadro_beneficios">
-   <a class="pestaña_cuadro_beneficios" href="#">
-         <p>
-            Configuración
-        </p>
    </a>
-   <a class="pestaña_cuadro_beneficios" href="#">
-        <p>
-            Beneficios
-        </p>
-   </a>
-   <a class="pestaña_cuadro_beneficios" href="#">
-        <p>
-            Jerarquía
-        </p>
-   </a>
-   <>
+<!-- negocio cards-->
+        @foreach (var item in Model)
+        {
+            <div class="card card-negocio">
+                <div class="card-info">
+                    <div class="card-nombre"> 
+                        <span> @item.Nombre </span></div>
+                    <div class="card-tipo">
+                        @if (@item.TipoUltimoAnalisis == false)
+                        {
+                            <span id="tipoNegocio">Emprendimiento</span>
+                        }else {
+                            <span id="tipoNegocio">En marcha</span>
+                        }
+                        <div class="inicial-nombre">
+                            <span> @item.Nombre[0] </span></div>
+                    </div>
+                    <div class="card-analisis"> <span>Cantidad de analisis: @item.Analisis.Count</span> </div>
+                    <div class="card-actualizacion"> <span>Fecha de creacion: @item.FechaCreacion.ToString() </span> </div>
+                </div>
+            </div>
+        }
 </div>
-
-
-
+    </body>
+</html>

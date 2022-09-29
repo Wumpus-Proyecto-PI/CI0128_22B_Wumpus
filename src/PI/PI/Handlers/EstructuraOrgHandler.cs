@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using PI.Models;
+using PI.Handlers;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
@@ -14,37 +15,19 @@ namespace PI.Handlers
     {
         public EstructuraOrgHandler() : base() { }
 
-        public List<NegocioModel> ObtenerNegocios()
-        {
-            List<NegocioModel> negocios = new List<NegocioModel>();
-            string consulta = "SELECT * FROM NEGOCIO";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            foreach (DataRow columna in tablaResultado.Rows)
-            {
-                negocios.Add(
-                new NegocioModel
-                {
-                    id = Convert.ToInt32(columna["id"]),
-                    nombre = Convert.ToString(columna["nombre"]),
-                    correoUsuario = Convert.ToString(columna["correoUsuario"]),
-                });
-            }
-            return negocios;
-        }
-
-        public int InsertarPuesto(PuestoModel puesotAInsertar)
+        public int InsertarPuesto(string nombrePuesto, PuestoModel puesotAInsertar)
         {
             int filasAfectadas = 0;
-            if (existePuestoEnBase(puesotAInsertar.Nombre, puesotAInsertar.FechaAnalisis))
+            if (existePuestoEnBase(nombrePuesto, puesotAInsertar.FechaAnalisis))
             {
-                ActualizarPuesto(puesotAInsertar.Nombre, puesotAInsertar);
+                ActualizarPuesto(nombrePuesto, puesotAInsertar);
             } else
             {
                 string insert = "INSERT INTO PUESTO values ("
-                + "nombrePuesto='" + puesotAInsertar.Nombre + "' and "
-                + "fechaAnalisis='" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'"
-                + "cantidadPlazas='" + puesotAInsertar.Plazas.ToString() + "' "
-                + "salarioBruto='" + puesotAInsertar.SalarioBruto.ToString() + "'"
+                + "'" + puesotAInsertar.Nombre + "', "
+                + "'" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
+                + puesotAInsertar.Plazas.ToString() + ", "
+                + "'" + puesotAInsertar.SalarioBruto.ToString() + "'"
                 + ")";
                 filasAfectadas = enviarConsulta(insert);
             }
@@ -55,7 +38,7 @@ namespace PI.Handlers
         {
             bool encontrado = false;
             string consulta = "SELECT * FROM PUESTO WHERE "
-                + "nombrePuesto='" + nombrePuesto + "' and "
+                + "nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
             if (tablaResultadoPuestos.Rows.Count > 0 && tablaResultadoPuestos.Rows[0].IsNull("nombre") == false)
@@ -68,18 +51,20 @@ namespace PI.Handlers
         public bool ActualizarPuesto(string nombrePuesto, PuestoModel puestoInsertar)
         {
             bool error = false;
-            string consulta = "UPDATE PUESTO SET " 
-                + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "' "
+            string update = "UPDATE PUESTO SET "
+                + "nombre='" + puestoInsertar.Nombre + "', "
+                + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
                 + "salarioBruto='" + puestoInsertar.SalarioBruto.ToString() + "' "
                 + "WHERE "
-                + "nombrePuesto='" + nombrePuesto + "' and "
-                + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+                + "nombre='" + nombrePuesto + "' and "
+                + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";
+            int filasAfectadas = enviarConsulta(update);
             return error;
         }
 
-        public List<PuestoModel> ObtenerListaDePuestos(string fechaAnalisisStr)
+        public List<PuestoModel> ObtenerListaDePuestos(DateTime fechaAnalisis)
         {
-            string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisisStr + "'";
+            string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
 
             List<PuestoModel> puestos = new List<PuestoModel>();
@@ -91,38 +76,48 @@ namespace PI.Handlers
                 puesto.Plazas = Convert.ToInt16(fila["cantidadPlazas"]);
                 puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
                 puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
-                //puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisisStr);
+                puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisis);
                 puestos.Add(puesto);
             }
 
             return puestos;
         }
 
-        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, string fechaAnalisis)
+        public int EliminarPuesto(PuestoModel puestoELiminar)
+        {
+            string delete = "DELETE FROM PUESTO WHERE fechaAnalisis='" + 
+                puestoELiminar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' " 
+                + "and nombre='" + puestoELiminar.Nombre + "';";
+            return enviarConsulta(delete);
+        }
+
+        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, DateTime fechaAnalisis)
         {
             List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
 
             // consulta para extraer los beneficios
-            string consulta = "SELECT * FROM BENEFICIO WHERE " 
+            string consulta = "SELECT nombre, monto, cantidadPlazas FROM BENEFICIO WHERE " 
                 + "nombrePuesto='" + nombrePuesto + "' and " 
-                + "fechaAnalisis='" + fechaAnalisis + "'";
+                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
 
             foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
             {
                 resultadoBeneficios.Add(new BeneficioModel
                 {
-                    nombreBeneficio = Convert.ToString(beneficio["nombreBeneficio"]),
+                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
                     monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["PlazaPorBeneficio"])
+                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"])
                 });
             }
 
             return resultadoBeneficios;
         }
 
-
-        /* metodos para obtener los puestos con estructura. No son utilizados en el primer sprint */
+        /* 
+         * Importante!
+         * metodos para obtener los puestos con estructura no son utilizados en el primer sprint 
+         */
         public PuestoModel ObtenerEstructuraOrg(DateOnly fechaAnalisis)
         {
             // extraer los puestos
@@ -157,7 +152,7 @@ namespace PI.Handlers
                 Plazas = Convert.ToInt16(filas[0]["plazasPorPuesto"]),
                 SalarioBruto = Convert.ToDecimal(filas[0]["salarioBruto"]),
             };
-            puestoActual.Beneficios = ObtenerBeneficios(puestoActual.Nombre, fechaAnalisis);
+            // puestoActual.Beneficios = ObtenerBeneficios(puestoActual.Nombre, fechaAnalisis);
             
             // si se indica que desean extraer tambien los subordinados
             // si esta en falso se evita un query muy grande que puede tomar tiempo
