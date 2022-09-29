@@ -62,7 +62,7 @@ namespace PI.Handlers
         }
 
         // Inserta el nuevo negocio a la base de datos.
-        public void IngresarNegocio(string Nombre, string tipo, string correoUsuario) 
+        public NegocioModel IngresarNegocio(string Nombre, string tipo, string correoUsuario) 
         {
             AnalisisHandler analisisHandler = new AnalisisHandler();
 
@@ -76,6 +76,15 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
 
             analisisHandler.IngresarAnalisis(Convert.ToString(nextID), tipo);
+
+            NegocioModel negocioIngresado = new NegocioModel();
+            negocioIngresado.Nombre = Nombre;
+            negocioIngresado.CorreoUsuario = correoUsuario;
+            negocioIngresado.FechaCreacion = DateOnly.FromDateTime(myDateTime);
+            negocioIngresado.ID = nextID;
+
+            return negocioIngresado;
+
         }
     }
 }
