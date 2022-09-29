@@ -9,6 +9,40 @@ namespace PI.Handlers
         public AnalisisHandler(): base() { }
 
 
+        public AnalisisModel ObtenerUnAnalisis(DateTime fechaCreacion)
+        {
+            string consulta = "SELECT * FROM ANALISIS Where fechaCreacion='" 
+                + fechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            DateTime fechaAnalisisActual = (DateTime)tablaResultado.Rows[0]["fechaCreacion"];
+            bool tipoAnalisisActual = Convert.ToBoolean(ObtenerTipoAnalisis(fechaAnalisisActual));
+            
+            AnalisisModel analisisResultado = new AnalisisModel
+            {
+                FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
+                Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+            };
+
+            return analisisResultado;
+        }
+
+        public AnalisisModel ObtenerAnalisisMasReciente(int ideNegocio)
+        {
+            string consulta = "SELECT TOP 1 * FROM ANALISIS Where idNegocio="
+                + ideNegocio.ToString() + " ORDER BY ANALISIS.fechaCreacion DESC";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            DateTime fechaAnalisisActual = (DateTime)tablaResultado.Rows[0]["fechaCreacion"];
+            bool tipoAnalisisActual = Convert.ToBoolean(ObtenerTipoAnalisis(fechaAnalisisActual));
+
+            AnalisisModel analisisMasReciente = new AnalisisModel
+            {
+                FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
+                Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+            };
+            
+            return analisisMasReciente;
+        }
+
         // Obtiene los analisis de un negocio 
         public List<AnalisisModel> ObtenerAnalisis(string IDNegocio)
         {
