@@ -7,9 +7,9 @@
         @*Aqui se agrega lo de las pestanas*@
         @if (hayPuestoSeleccionado == false)
         {
-            <h1>Nuevo puesto</h1>
+            <h1>Nuevo gasto fijo</h1>
         } else {
-            <h1>Editar puesto</h1>
+            <h1>Editar gasto fijo</h1>
         }
 
         @if (pestanyaConfiguracionActiva == true)
@@ -22,8 +22,9 @@
                     </div>
 
                     <div class="fila-form-configuracion">
-                        <label>Salario</label> <input name="" type="number" step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderSalario">
+                        <label>Monto mensual</label> <input name="" type="number" step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
                     </div>
+
                 </form>
             </div>
         }   
@@ -40,8 +41,20 @@
 </div>
 
 <div class="altura-seccion" id="seccion-puestos">
+    <div class="totales"> 
+        <div class="fila-form-configuracion">
+
+            <label>Total anual</label> <p> @((gastoFijoActivo.Monto * 12).ToString()) </p>
+        </div>
+
+        <div class="fila-form-configuracion">
+            <label>Total mensual</label> <p> @((gastoFijoActivo.Monto * 12).ToString()) </p>
+        </div>
+    </div>
     @*Seccion de puestos donde se ven los puestos en cajas con organigrama*@
+
     <div id="mostrar-puestos">
+
         @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
         {
             <div class="puesto-clickeable-eliminable" >
@@ -79,7 +92,7 @@
     public string copiaNombreOriginal = "";
 
     public string placeHolderNombre = "Ingresar nombre";
-    public string placeHolderSalario = "Ingresar salario";
+    public string placeHolderMonto = "Ingresar monto";
     public string placeHolderPlazas = "Ingresar plazas";
 
     public string hoverTextAgregar = "";
@@ -119,7 +132,7 @@
     {
         gastoFijoActivo = puestoSeleccionado;
         placeHolderNombre = gastoFijoActivo.Nombre;
-        placeHolderSalario = gastoFijoActivo.Monto.ToString();
+        placeHolderMonto = gastoFijoActivo.Monto.ToString();
         copiaNombreOriginal = gastoFijoActivo.Nombre;
         hayPuestoSeleccionado = true;
 
@@ -127,7 +140,7 @@
 
     public void AgregarNuevoPuesto() {
         placeHolderNombre = "Ingresar nombre";
-        placeHolderSalario = "Ingresar salario";
+        placeHolderMonto = "Ingresar salario";
         placeHolderPlazas = "Ingresar plazas";
         hayPuestoSeleccionado = false;
         pestanyaConfiguracionActiva = true;
@@ -150,4 +163,5 @@
         // HandlerPuesto.EliminarPuesto(puestoEliminar);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
+
 }
