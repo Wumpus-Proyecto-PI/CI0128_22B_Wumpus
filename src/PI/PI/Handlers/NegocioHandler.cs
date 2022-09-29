@@ -62,7 +62,7 @@ namespace PI.Handlers
         }
 
         // Inserta el nuevo negocio a la base de datos.
-        public void IngresarNegocio(string Nombre, string tipo) 
+        public void IngresarNegocio(string Nombre, string tipo, string correoUsuario) 
         {
             AnalisisHandler analisisHandler = new AnalisisHandler();
 
@@ -71,7 +71,8 @@ namespace PI.Handlers
             
             int nextID = getNextID();
             
-            string consulta = "INSERT INTO Negocio (ID,Nombre,FechaCreacion) VALUES (" + nextID + ",'" + Nombre + "', '" + sqlFormattedDate + "');";
+            string consulta = "INSERT INTO Negocio (ID,Nombre,correoUsuario,FechaCreacion) VALUES (" 
+                + nextID + ",'" + Nombre + "', '" + correoUsuario + "', '" + sqlFormattedDate + "');";
             enviarConsultaVoid(consulta);
 
             analisisHandler.IngresarAnalisis(Convert.ToString(nextID), tipo);
