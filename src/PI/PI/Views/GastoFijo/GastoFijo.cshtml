@@ -1,31 +1,29 @@
-﻿@{
+﻿@model List<GastoFijoModel>
+@*
+    Html para el manejo de gastos fijos
+*@
+@{
     Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
 }
-<h2>hola</h2>
-@*
 
-
-<!-- models -->
-@model List<GastoFijoModel>
-<!-- head -->
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- links -->
-    <link rel="stylesheet" href=css/GastoFijo.css>
-    <!--  -->
-    <title>Gastos Fijos</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTML template</title>
+    <link rel="stylesheet" href="~/css/GastoFijo/GastoFijo.css">
+
 </head>
 
 <div id="subtitulo">
     <div id="nombre_negocio">@ViewData["NombreNegocio"]</div>
 </div>
+    
+    <div style="width: 100%; display: flex;">
+        @(
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo.SeccionGastosFijos>(RenderMode.ServerPrerendered, new { gastosFijos = Model, fechaAnalasis = ViewBag.fechaAnalisis})
+            )
+    </div>
 
-@(
-await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo>(RenderMode.ServerPrerendered, new { gastoFijo = Model })
-)
-*@
 @*Necesario para componentes razor*@
-<base href="~/" />
+<base href="~/"/>
 <script src="_framework/blazor.server.js"><script/>

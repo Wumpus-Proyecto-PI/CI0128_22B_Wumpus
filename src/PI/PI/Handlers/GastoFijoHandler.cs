@@ -28,6 +28,7 @@ namespace PI.Handlers
                 new GastoFijoModel
                 {
                     Nombre = Convert.ToString(columna["nombre"]),
+                    
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Monto = Convert.ToDecimal(columna["monto"]),
                 }

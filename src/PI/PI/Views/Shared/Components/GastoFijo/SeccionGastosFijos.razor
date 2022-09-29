@@ -1,0 +1,153 @@
+﻿@using PI.Models
+@using PI.Handlers
+@inject NavigationManager NavigationManager;
+
+<div class="altura-seccion" id="seccion-pestañas">
+    <div id="titulo-contenido">
+        @*Aqui se agrega lo de las pestanas*@
+        @if (hayPuestoSeleccionado == false)
+        {
+            <h1>Nuevo puesto</h1>
+        } else {
+            <h1>Editar puesto</h1>
+        }
+
+        @if (pestanyaConfiguracionActiva == true)
+        {
+            <div id="cuadro_configuracion">
+
+                <form id="form_configuracion">
+                    <div class="fila-form-configuracion">
+                        <label>Nombre</label> <input name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
+                    </div>
+
+                    <div class="fila-form-configuracion">
+                        <label>Salario</label> <input name="" type="number" step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderSalario">
+                    </div>
+                </form>
+            </div>
+        }   
+    </div>
+    <div id="inferior-horizontal">
+        <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(gastoFijoActivo)">
+
+                @if (hoverGuardar == false) {
+                    <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                }
+                @hoverTextGuardar
+        </div>
+    </div>
+</div>
+
+<div class="altura-seccion" id="seccion-puestos">
+    @*Seccion de puestos donde se ven los puestos en cajas con organigrama*@
+    <div id="mostrar-puestos">
+        @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
+        {
+            <div class="puesto-clickeable-eliminable" >
+                <div @onclick="() => SeleccionarPuesto(gastoFijoActual)">
+                    <GastoFijoCarta gastoFijo=gastoFijoActual></GastoFijoCarta>
+                </div>
+                <img @onclick="() => eliminarPuesto(gastoFijoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
+            </div>
+        }
+    </div>
+    <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+        <a>
+            @if (hoverAgregar == false)
+            {
+                <img src="img/estructuraOrg/addPuesto.png" alt="">
+            }
+            @hoverTextAgregar
+            </a>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public List<GastoFijoModel> gastosFijos { get; set; }
+
+    [Parameter]
+    public DateTime fechaAnalasis { get; set; }
+
+    public bool hayPuestoSeleccionado = false;
+    public GastoFijoModel gastoFijoActivo = new GastoFijoModel();
+
+    public GastoFijoHandler HandlerGastoFijo = new GastoFijoHandler();
+
+    public string copiaNombreOriginal = "";
+
+    public string placeHolderNombre = "Ingresar nombre";
+    public string placeHolderSalario = "Ingresar salario";
+    public string placeHolderPlazas = "Ingresar plazas";
+
+    public string hoverTextAgregar = "";
+    public string hoverTextGuardar = "";
+
+    public bool hoverGuardar = false;
+    public bool hoverAgregar = false;
+
+    bool pestanyaConfiguracionActiva = true;
+
+    public void Hover(int action)
+    {
+
+        if (action == 1) {
+            hoverTextAgregar = "Agregar Puesto";
+            hoverAgregar = true;
+        }
+        else if (action == 2)
+        {
+            hoverGuardar = true;
+            hoverTextGuardar = "Guardar datos";
+        }
+    }
+    public void HoverOut(int action)
+    {
+        if (action == 1)
+        {
+            hoverTextAgregar = "";
+            hoverAgregar = false;
+        } else {
+            hoverGuardar = false;
+            hoverTextGuardar = "";
+        }
+    }
+
+    public void SeleccionarPuesto(GastoFijoModel puestoSeleccionado)
+    {
+        gastoFijoActivo = puestoSeleccionado;
+        placeHolderNombre = gastoFijoActivo.Nombre;
+        placeHolderSalario = gastoFijoActivo.Monto.ToString();
+        copiaNombreOriginal = gastoFijoActivo.Nombre;
+        hayPuestoSeleccionado = true;
+
+    }
+
+    public void AgregarNuevoPuesto() {
+        placeHolderNombre = "Ingresar nombre";
+        placeHolderSalario = "Ingresar salario";
+        placeHolderPlazas = "Ingresar plazas";
+        hayPuestoSeleccionado = false;
+        pestanyaConfiguracionActiva = true;
+        copiaNombreOriginal = "";
+        gastoFijoActivo = new GastoFijoModel();
+    }
+
+    public void GuardarDatosPuesto(GastoFijoModel puestoGuardar) {
+
+        puestoGuardar.FechaAnalisis = fechaAnalasis;
+        HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
+        if (hayPuestoSeleccionado == false)
+        {
+            gastoFijoActivo = new GastoFijoModel();
+        }
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
+    }
+    public void eliminarPuesto(GastoFijoModel puestoEliminar)
+    {
+        // HandlerPuesto.EliminarPuesto(puestoEliminar);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+}

@@ -1,0 +1,19 @@
+﻿@using PI.Models
+
+<div class="puesto puesto-editar">
+    <div class="top-puesto">
+        <div class="puesto-nombre"><h1>@gastoFijo.Nombre prueba</h1></div>
+    </div>
+    <div class="bottom-puesto">
+        <div class="puesto-caracteristica puesto-salario-bruto">
+            <p>@gastoFijo.Monto.ToString()</p>
+            <img class="divisa-img" src=img/puesto/divisa.png>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public GastoFijoModel gastoFijo { get; set; }
+}
