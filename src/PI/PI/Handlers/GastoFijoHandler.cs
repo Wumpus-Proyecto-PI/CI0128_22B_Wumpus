@@ -11,31 +11,16 @@ using PI.Models;
 
 namespace PI.Handlers
 {
-    public class GastoFijoHandler
+    public class GastoFijoHandler : Handler
     {
-        private SqlConnection conexion;
-        private string rutaConexion;
-        public GastoFijoHandler()
-        {
-            var builder = WebApplication.CreateBuilder();
-            rutaConexion = builder.Configuration.GetConnectionString("WumpusTEST");
-            conexion = new SqlConnection(rutaConexion);
-        }
-        private DataTable CrearTablaConsulta(string consulta)
-        {
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
-            SqlDataAdapter adaptadorParaTabla = new SqlDataAdapter(comandoParaConsulta);
-            DataTable consultaFormatoTabla = new DataTable();
-            conexion.Open();
-            adaptadorParaTabla.Fill(consultaFormatoTabla);
-            conexion.Close();
-            return consultaFormatoTabla;
-        }
+        public GastoFijoHandler(): base() { }
+
         // Crea una lista de los gastos fijos existentes en la BD
-        public List<GastoFijoModel> ObtenerGastosFijos()
+        public List<GastoFijoModel> ObtenerGastosFijos(DateTime fechaAnalisis)
         {
             List<GastoFijoModel> gastosFijos = new List<GastoFijoModel>();
-            string consulta = "SELECT * FROM Gasto_Fijo";
+            string consulta = "SELECT * FROM Gasto_Fijo WHERE "
+                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
             {
@@ -56,7 +41,8 @@ namespace PI.Handlers
         public void ingresarGastoFijo(string Nombre, string monto, DateTime fechaAnalisis)
         {
             // TODO arreglar el datetime para que esté asociado al análisis realmente.
-            string consulta = "INSERT INTO Gasto_fijo (nombre, fechaAnalisis, monto) VALUES ('" + Nombre + "','2002-09-09 12:00:00 AM,'" + monto + ");";
+            string consulta = "INSERT INTO Gasto_fijo (nombre, fechaAnalisis, monto) " +
+                "VALUES ('" + Nombre + ", '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"', " + monto + ");";
 
             SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
             conexion.Open();
@@ -64,14 +50,15 @@ namespace PI.Handlers
             conexion.Close();
         }
 
-        public double obtenerSalarios()
+        public decimal obtenerSalarios(DateTime fechaAnalisis)
         {
-            double totalSalarios = 0.0;
+            decimal totalSalarios = 0.0m;
 
-            string consulta = "select SUM(cantidadPlazas*SalarioBruto) as TotalSalarios FROM PUESTO";
+            string consulta = "select SUM(cantidadPlazas*SalarioBruto) as TotalSalarios FROM PUESTO WHERE "
+                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'"; ;
             DataTable tablaResultado = CrearTablaConsulta(consulta);
 
-            totalSalarios = Convert.ToDouble(tablaResultado.Rows[0]["TotalSalarios"]); 
+            totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["TotalSalarios"]); 
 
             return totalSalarios;
         }
