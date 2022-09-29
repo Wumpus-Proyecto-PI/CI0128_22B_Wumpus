@@ -73,7 +73,7 @@ namespace PI.Handlers
                 PuestoModel puesto = new PuestoModel();
                 Console.WriteLine(puesto.Nombre);
                 puesto.Nombre = Convert.ToString(fila["nombre"]);
-                puesto.Plazas = Convert.ToInt16(fila["cantidadPlazas"]);
+                puesto.Plazas = Convert.ToInt32(fila["cantidadPlazas"]);
                 puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
                 puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
                 puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisis);
