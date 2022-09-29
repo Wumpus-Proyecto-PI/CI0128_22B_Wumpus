@@ -147,7 +147,7 @@
     }
     public void eliminarPuesto(GastoFijoModel puestoEliminar)
     {
-        // HandlerPuesto.EliminarPuesto(puestoEliminar);
+        HandlerGastoFijo.eliminarGastoFijo(puestoEliminar.Nombre, puestoEliminar.FechaAnalisis);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }

@@ -42,13 +42,18 @@ namespace PI.Handlers
         public void ingresarGastoFijo(string Nombre, string monto, DateTime fechaAnalisis)
         {
             // TODO arreglar el datetime para que esté asociado al análisis realmente.
-            string consulta = "INSERT INTO Gasto_fijo (nombre, fechaAnalisis, monto) " +
-                "VALUES ('" + Nombre + ", '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"', " + monto + ");";
+            string consulta = "EXECUTE insertarGastoFijo '"
+                + Nombre + "', '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"', " + monto + ";";
 
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion);
-            conexion.Open();
-            comandoParaConsulta.ExecuteNonQuery();
-            conexion.Close();
+            enviarConsulta(consulta);
+        }
+
+        public void eliminarGastoFijo(string Nombre, DateTime fechaAnalisis)
+        {
+            // TODO arreglar el datetime para que esté asociado al análisis realmente.
+            string consulta = "EXECUTE eliminarGastoFijo '"
+                + Nombre + "', '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";
+            enviarConsulta(consulta);
         }
 
         public decimal obtenerSalarios(DateTime fechaAnalisis)
