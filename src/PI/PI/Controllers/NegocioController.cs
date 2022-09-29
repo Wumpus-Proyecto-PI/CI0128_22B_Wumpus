@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PI.Handlers;
+using PI.Models;
 
 namespace PI.Controllers
 {
@@ -28,10 +29,13 @@ namespace PI.Controllers
             correoUsuario = "gabrielperezorozco@testing.com";
             // Inserta el negocio en la base de datos.
             NegocioHandler handler = new NegocioHandler();
-            handler.IngresarNegocio(nombreNegocio, tipoNegocio, correoUsuario);
-            
+            NegocioModel negocioIngresado =  handler.IngresarNegocio(nombreNegocio, tipoNegocio, correoUsuario);
+
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            DateTime ultimoFechaAnalisis = analisisHandler.UltimaFechaCreacion(negocioIngresado.ID.ToString());
+
             // Redirecciona a la página donde tiene todos los negocios
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = ultimoFechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
         }
     }
 }
