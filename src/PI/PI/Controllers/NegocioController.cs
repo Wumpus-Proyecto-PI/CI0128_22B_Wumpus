@@ -15,6 +15,9 @@ namespace PI.Controllers
         {
             NegocioHandler handler = new NegocioHandler();
             var negocios = handler.ObtenerNegocios();
+            ViewData["Title"] = "Mis negocios";
+
+            ViewData["TituloPaso"] = "Mis negocios";
             return View(negocios);
         }
         public IActionResult FormAgregarNegocio()
