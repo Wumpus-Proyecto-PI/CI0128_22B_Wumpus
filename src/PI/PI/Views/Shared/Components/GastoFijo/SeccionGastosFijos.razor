@@ -46,7 +46,7 @@
         {
             <div class="puesto-clickeable-eliminable" >
                 <div @onclick="() => SeleccionarPuesto(gastoFijoActual)">
-                    <GastoFijoCarta gastoFijo=gastoFijoActual></GastoFijoCarta>
+                    <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
                 </div>
                 <img @onclick="() => eliminarPuesto(gastoFijoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
             </div>
@@ -138,7 +138,7 @@
     public void GuardarDatosPuesto(GastoFijoModel puestoGuardar) {
 
         puestoGuardar.FechaAnalisis = fechaAnalasis;
-        HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
+        HandlerGastoFijo.ingresarGastoFijo(puestoGuardar.Nombre, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
         if (hayPuestoSeleccionado == false)
         {
             gastoFijoActivo = new GastoFijoModel();
