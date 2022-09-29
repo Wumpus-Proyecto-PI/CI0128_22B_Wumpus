@@ -1,5 +1,9 @@
 @model List<PI.Models.NegocioModel>;
 
+@{
+    Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+}
+
 <!doctype html>
 <html>
 
@@ -7,13 +11,11 @@
         <meta charset="UTF-8">
         <title> Mis negocios </title>
 <!-- links -->
-        <link rel="stylesheet" href="/index.cshtml.css" />
+        <link rel="stylesheet" href="~/css/negocio/Index.css" />
 </head>
 <!-- body -->
     <body>
-        <header>
-            <h1> Mis Negocios </h1>
-        </header>
+
         <div class="card-container">
         <a asp-controller="Negocio" asp-action="FormAgregarNegocio">
             <div class="card card-agregar">
