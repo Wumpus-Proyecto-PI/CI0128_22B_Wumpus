@@ -59,15 +59,17 @@ namespace PI.Handlers
             enviarConsulta(consulta);
         }
 
-        public decimal obtenerSalarios(DateTime fechaAnalisis)
+        public decimal obtenerSalariosNeto(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)
         {
             decimal totalSalarios = 0.0m;
 
-            string consulta = "select SUM(cantidadPlazas*SalarioBruto) as TotalSalarios FROM PUESTO WHERE "
-                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'"; ;
+            string consulta = "EXEC obtTotalSalariosNeto '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "', '" + prestaciones.ToString() + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
 
-            totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["TotalSalarios"]);
+            if (!tablaResultado.Rows[0].IsNull("SalariosNeto"))
+            {
+                totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["SalariosNeto"]);
+            }
 
             return totalSalarios;
         }
