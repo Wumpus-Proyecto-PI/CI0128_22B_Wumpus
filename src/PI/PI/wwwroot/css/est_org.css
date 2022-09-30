@@ -11,12 +11,7 @@
     height: 100%;
 }
 
-#header_tabla {
-    display: flex;
-    width: 100%;
-    height: 30px;
-    align-items: center;
-}
+
 
 #tabla_form {
     display: flex;
@@ -63,8 +58,30 @@ td, th {
     padding: 8px;
 }
 
+th {
+    font-size: x-large;
+}
+
+td {
+    font-size: x-large;
+}
+
+.filas_tabla_beneficio:hover {
+    background-color: #E2F2FF;
+}
+
 #lista_beneficios {
     width: 100%;
+}
+
+#botones_beneficios {
+    display:flex;
+    align-items: center;
+}
+
+#boton_guardar_datos {
+    width:80px;
+    height:55px;
 }
 
 #contenedor_beneficios {

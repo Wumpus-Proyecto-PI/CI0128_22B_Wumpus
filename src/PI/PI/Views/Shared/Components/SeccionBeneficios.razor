@@ -1,5 +1,7 @@
 ﻿@using PI.Models
 @using PI.Handlers
+@inject NavigationManager NavigationManager;
+
 @*@if (popUpVisible) {*@
 
     <div id="contenedor_beneficios">
@@ -12,7 +14,7 @@
             </tr>
             @foreach (var i in puesto.Beneficios)
             {
-                <tr>
+                <tr class="filas_tabla_beneficio">
                     <td>@i.nombreBeneficio</td>
                     <td> @i.monto</td>
                     <td> @i.plazasPorBeneficio </td>
@@ -29,17 +31,18 @@
                     <button id = "boton_agregar_beneficio" @onclick="agregarBeneficioNuevo">Agregar</button>
             </div>
         }
-
-
-        <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="cambiarVisibilidadForm">
-            <a>
-                @if (hoverAgregar == false)
-                {
-                    <img src="img/estructuraOrg/addPuesto.png" alt="">
-                }
-                @hoverTextAgregar
-            </a>
-        </div>
+            <div id="botones_beneficios">
+                <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="cambiarVisibilidadForm">
+                    <a>
+                        @if (hoverAgregar == false)
+                        {
+                            <img src="img/estructuraOrg/addPuesto.png" alt="">
+                        }
+                        @hoverTextAgregar
+                    </a>
+                </div>
+                <button id="boton_guardar_datos" @onclick="refrescarPagina"> Guardar Cambios</button>
+            </div>
     </div>
 @*}*@
 @code {
@@ -114,6 +117,10 @@
             hoverGuardar = false;
             hoverTextGuardar = "";
         }
+    }
+
+    public void refrescarPagina() { 
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
 }
