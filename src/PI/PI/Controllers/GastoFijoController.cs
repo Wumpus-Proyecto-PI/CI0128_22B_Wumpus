@@ -14,7 +14,7 @@ namespace PI.Controllers
         {
 
             ViewData["TituloPaso"] = "Gastos Fijos";
-            DateTime fechaConversion = DateTime.ParseExact("2022-09-28 23:22:17.427", "yyyy-MM-dd HH:mm:ss.fff", null);
+            DateTime fechaConversion = DateTime.ParseExact("2022-09-29 17:25:27.807", "yyyy-MM-dd HH:mm:ss.fff", null);
             ViewBag.fechaAnalisis = fechaConversion;
 
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();

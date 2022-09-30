@@ -21,6 +21,7 @@
                     <div class="fila-form-configuracion">
                         <label>Nombre</label> <input name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
                     </div>
+                    @((MarkupString)CasoRepetido)
 
                     <div class="fila-form-configuracion">
                         <label>Monto mensual</label> <input name="" type="number" step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
@@ -44,11 +45,11 @@
 <div class="altura-seccion" id="seccion-puestos">
     <div class="totales"> 
         <div class="fila-form-configuracion">
-            <label>Total mensual</label> <p> @((totalMensual).ToString()) </p>
+            <label class="total">Total mensual</label> <p> @((totalMensual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
         </div>
         <div class="fila-form-configuracion">
-
-            <label>Total anual</label> <p> @((totalMensual * 12).ToString()) </p>
+           
+            <label class="total">Total anual </label> <p> @((totalMensual * 12).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
         </div>
 
     </div>
@@ -105,6 +106,7 @@
     public bool hoverAgregar = false;
 
     bool pestanyaConfiguracionActiva = true;
+    string CasoRepetido = "";
 
     public void Hover(int action)
     {
@@ -133,6 +135,7 @@
 
     public void SeleccionarPuesto(GastoFijoModel puestoSeleccionado)
     {
+        CasoRepetido = "";
         gastoFijoActivo = puestoSeleccionado;
         placeHolderNombre = gastoFijoActivo.Nombre;
         placeHolderMonto = gastoFijoActivo.Monto.ToString();
@@ -142,8 +145,9 @@
     }
 
     public void AgregarNuevoPuesto() {
+        CasoRepetido = "";
         placeHolderNombre = "Ingresar nombre";
-        placeHolderMonto = "Ingresar salario";
+        placeHolderMonto = "Ingresar monto";
         hayPuestoSeleccionado = false;
         pestanyaConfiguracionActiva = true;
         copiaNombreOriginal = "";
@@ -152,18 +156,25 @@
 
     public void GuardarDatosPuesto(GastoFijoModel puestoGuardar) {
 
-        puestoGuardar.FechaAnalisis = fechaAnalasis;
-        HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, puestoGuardar.Nombre, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
-        if (hayPuestoSeleccionado == false)
-        {
-            gastoFijoActivo = new GastoFijoModel();
+        if (gastosFijos.Exists(x => x.Nombre == puestoGuardar.Nombre) && hayPuestoSeleccionado == false)
+        {  // ya existe el gasto fijo
+            CasoRepetido = "<p class=\"error-gastoFijoRepetido\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
+        } else {
+            CasoRepetido = "";
+            puestoGuardar.FechaAnalisis = fechaAnalasis;
+            HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, puestoGuardar.Nombre, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
+            if (hayPuestoSeleccionado == false)
+            {
+                gastoFijoActivo = new GastoFijoModel();
+            }
+            copiaNombreOriginal = string.Empty;
+            actualizarMontoMensual();
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
-        copiaNombreOriginal = string.Empty;
-        actualizarMontoMensual();
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
     }
     public void eliminarPuesto(GastoFijoModel puestoEliminar)
     {
+        CasoRepetido = "";
         HandlerGastoFijo.eliminarGastoFijo(puestoEliminar.Nombre, puestoEliminar.FechaAnalisis);
         actualizarMontoMensual();
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);

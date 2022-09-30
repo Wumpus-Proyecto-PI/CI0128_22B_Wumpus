@@ -2,7 +2,7 @@
 
 .puesto {
     border: solid;
-    border-color: lightgray;
+    border-color: white;
     border-width: 4px;
     background-color: white;
     /*box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.3);*/
@@ -234,8 +234,10 @@ div a {
     border: solid;
     border-width: 2px;
     border-radius: 10px;
-    margin: 20px;
-    transition-duration: 0.2s;
+    border-color: #ccc;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin: 25px;
+    transition-duration: 0.5s;
 }
 
     #agregar-puesto:hover {
@@ -249,12 +251,12 @@ div a {
         border: solid;
         border-color: transparent;
         border-radius: 10px;
-        margin: 20px;
+        margin: 25px;
         padding-inline: 5px;
         font-size: 20px;
         cursor: pointer;
-        background-color: #BFFFB3;
-        transition-duration: 0.2s;
+        transition-duration: 0.5s;
+        background-color: #E2F2FF;
     }
 
 #guardar-puesto img {
@@ -274,8 +276,11 @@ div a {
     border: solid;
     border-width: 2px;
     border-radius: 10px;
+    border-color: #ccc;
     margin: 20px;
-    transition-duration: 0.2s;
+    transition-duration: 0.5s;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+
 }
 
     #guardar-puesto:hover {
@@ -294,8 +299,9 @@ div a {
         padding-inline: 5px;
         font-size: 20px;
         cursor: pointer;
-        background-color: #BCFFFA;
-        transition-duration: 0.2s;
+        background-color: #E2F2FF;
+        transition-duration: 0.5s;
+
     }
 
 #mostrar-puestos {
@@ -331,18 +337,19 @@ div a {
     .fila-form-configuracion label {
         border: solid;
         border-radius: 20px 0px 0px 20px;
-        padding: 5px 10px 5px 10px;
+        padding: 9px 10px 9px 10px;
         border-width: 1px;
         font-size: 25px;
         width: 180px;
         text-align: center;
         background-color: #E2E2E2;
+
     }
 
     .fila-form-configuracion input {
         border: solid;
         border-radius: 0px 20px 20px 0px;
-        padding: 5px 10px 5px 10px;
+        padding: 9px 10px 9px 10px;
         border-width: 1px;
         font-size: 25px;
         width: 200px;
@@ -436,4 +443,11 @@ div a {
 }
 .totales label {
     background-color: white;
+}
+
+.error-gastoFijoRepetido {
+    font-size: 4px;
+    color: red;
+    width: fit-content;
+    height: auto;
 }

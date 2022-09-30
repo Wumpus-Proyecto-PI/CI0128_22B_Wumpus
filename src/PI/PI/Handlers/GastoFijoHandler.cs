@@ -67,30 +67,41 @@ namespace PI.Handlers
                 + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'"; ;
             DataTable tablaResultado = CrearTablaConsulta(consulta);
 
-            totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["TotalSalarios"]); 
+            totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["TotalSalarios"]);
 
             return totalSalarios;
         }
 
-        public decimal obtenerTotalMensual (DateTime fechaAnalisis)
+        public decimal obtenerTotalMensual(DateTime fechaAnalisis)
         {
-            string consulta = "SELECT SUM(GASTO_FIJO.monto) totalMensual FROM GASTO_FIJO WHERE GASTO_FIJO.fechaAnalisis = '" +
-                fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            decimal totalMensual = 0.0m;
 
+            string consulta = "EXEC obtSumGastosFijos '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            decimal totalMensual = Convert.ToDecimal(tablaResultado.Rows[0]["totalMensual"]);
+            if (!tablaResultado.Rows[0].IsNull("totalMensual"))
+            {
+                totalMensual = Convert.ToDecimal(tablaResultado.Rows[0]["totalMensual"]);
+            }
 
             return totalMensual;
         }
 
         public string obtenerNombreNegocio (DateTime fechaAnalisis)
         {
-            string consulta = "SELECT DISTINCT NEGOCIO.nombre FROM NEGOCIO JOIN ANALISIS ON NEGOCIO.id = ANALISIS.idNegocio JOIN GASTO_FIJO ON GASTO_FIJO.fechaAnalisis = ANALISIS.fechaCreacion WHERE GASTO_FIJO.fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            string consulta = "EXEC obtNombreNegocio '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            string nombreNegocio = "";
 
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            string nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+            {
+                nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+            }
+            else
+            {
+                nombreNegocio = "Sin nombre";
+            }
+
             return nombreNegocio;
         }
-
     }
 }
