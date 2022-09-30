@@ -2,7 +2,7 @@
 
 .card-container {
     display: flex;
-    justify-content: left;
+    justify-content: center;
 
     /*vertical consideration*/
     height: 400px;
