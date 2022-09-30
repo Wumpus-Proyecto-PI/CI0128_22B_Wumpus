@@ -24,25 +24,25 @@
                 <!--text Nombre del negocio-->
                 <div class="NombreNegocio">
                     <div>Nombre del negocio</div>
-                    <input type="text" name="nombreNegocio" placeholder="Panadería Tiquicia">
+                    <input type="text" name="nombreNegocio" placeholder="Panadería Tiquicia" required>
                 </div>
                 <br>
                 <!--radiobutton Emprendimiento-Ya iniciado-->
                 <div class="TipoNegocio">
                     <div>Tipo</div>
                     <div class="boxRadio">
-                        <input name="tipoNegocio" type="radio" value="Emprendimiento" /> Emprendimiento
+                        <input name="tipoNegocio" type="radio" value="Emprendimiento" required/> Emprendimiento
                         <br>
-                        <input name="tipoNegocio" type="radio" value="Ya iniciado"  /> Ya iniciado
+                        <input name="tipoNegocio" type="radio" value="Ya iniciado"  required/> Ya iniciado
                     </div>
                 </div>
                 <br>
                 <!--submit Aceptar y cancelar (botones)-->
                 <div class="botones">
                     <!-- Guarda la información ingresada en la base de datos-->
-                    <input type="submit" value="Aceptar">
+                    <input class="boton-aceptar" type="submit" value="Aceptar">
                     <!-- Retorna la página de los negocios creados -->
-                    <input asp-controller="Negocio" asp-action="Index" type="submit" value="Cancelar">
+                    <input class="boton-cancelar" asp-controller="Negocio" asp-action="Index" type="submit" value="Cancelar">
                 </div>
             </form>
         </div>

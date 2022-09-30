@@ -87,6 +87,7 @@ namespace PI.Handlers
 
         }
 
+        // Elimina el negocio con el id indicado
         public void EliminarNegocio(string idNegocio) 
         { 
             string consulta = "DELETE FROM NEGOCIO WHERE id =" + idNegocio + "";

@@ -86,7 +86,18 @@ input[type=text] {
     align-items: center;
 }
 
-input[type="submit"] {
+.botones .boton-cancelar {
+    font-size: small;
+    background-color:#e5e3e3;
+    margin: 10px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    padding: 4px;
+    cursor: pointer;
+    font-size: medium;
+}
+
+.botones .boton-aceptar {
     font-size: small;
     background-color: #71c9ff;
     margin: 10px;
