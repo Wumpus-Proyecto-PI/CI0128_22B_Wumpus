@@ -20,8 +20,9 @@ namespace PI.Handlers
         public List<GastoFijoModel> ObtenerGastosFijos(DateTime fechaAnalisis)
         {
             List<GastoFijoModel> gastosFijos = new List<GastoFijoModel>();
-            string consulta = "SELECT * FROM Gasto_Fijo WHERE "
-                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+
+            string consulta = "EXEC obtGastosFijosList @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
             {
