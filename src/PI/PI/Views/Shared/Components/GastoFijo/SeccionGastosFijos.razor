@@ -32,7 +32,7 @@
         }   
     </div>
     <div id="inferior-horizontal">
-        <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(gastoFijoActivo)">
+        <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(gastoFijoActivo)">
 
                 @if (hoverGuardar == false) {
                     <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -59,15 +59,15 @@
 
         @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
         {
-            <div class="puesto-clickeable-eliminable" >
+            <div class="gastoFijo-clickeable-eliminable" >
                 <div @onclick="() => SeleccionarPuesto(gastoFijoActual)">
                     <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
                 </div>
-                <img @onclick="() => eliminarPuesto(gastoFijoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
+                <img @onclick="() => eliminarPuesto(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
             </div>
         }
     </div>
-    <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+    <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
         <a>
             @if (hoverAgregar == false)
             {

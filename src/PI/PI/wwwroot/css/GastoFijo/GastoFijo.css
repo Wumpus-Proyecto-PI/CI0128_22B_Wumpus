@@ -1,6 +1,6 @@
 ﻿@charset "UTF-8";
 
-.puesto {
+.gastoFijo {
     border: solid;
     border-color: white;
     border-width: 4px;
@@ -17,13 +17,13 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-.puesto:hover {
+.gastoFijo:hover {
     background-color: #E2F2FF;
     border-color: #E2F2FF;
     transition-duration: 0.2s;
 }
 
-.top-puesto {
+.top-gastoFijo {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -32,7 +32,7 @@
     align-content: center;
 }
 
-.bottom-puesto {
+.bottom-gastoFijo {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,7 +41,7 @@
     flex-direction: row;
 }
 
-.puesto-caracteristica {
+.gastoFijo-caracteristica {
     text-align: center;
     margin: 10px 0px 5px 0px;
     font-size: 25px;
@@ -52,29 +52,29 @@
     align-items: center;
 }
 
-    .puesto-caracteristica p {
+    .gastoFijo-caracteristica p {
         margin: 0px 5px 0px 5px;
         font-size: 20px;
     }
 
-.puesto-numero-plazas {
+.gastoFijo-numero-plazas {
     margin-left: 10px
 }
 
 
-.puesto-salario-bruto {
+.gastoFijo-salario-bruto {
     margin-right: 10px
 }
 
 
-.puesto-nombre h1 {
+.gastoFijo-nombre h1 {
     display: flex;
     margin: 0px;
     font-size: 25px;
     flex-wrap: wrap;
 }
 
-.puesto-plazas p {
+.gastoFijo-plazas p {
     border: solid;
     border-color: lightgray;
     transition-duration: 0.2s;
@@ -218,12 +218,12 @@ div a {
 }
 
 
-#agregar-puesto img {
+#agregar-gastoFijo img {
     width: 35px;
     padding: 5px;
 }
 
-#agregar-puesto {
+#agregar-gastoFijo {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -240,7 +240,7 @@ div a {
     transition-duration: 0.5s;
 }
 
-    #agregar-puesto:hover {
+    #agregar-gastoFijo:hover {
         display: flex;
         flex-direction: row;
         align-content: center;
@@ -255,17 +255,17 @@ div a {
         padding-inline: 5px;
         font-size: 20px;
         cursor: pointer;
-        transition-duration: 0.5s;
+        transition-duration: 0.8s;
         background-color: #E2F2FF;
     }
 
-#guardar-puesto img {
+#guardar-gastoFijo img {
     width: 35px;
     padding: 5px;
 }
 
 
-#guardar-puesto {
+#guardar-gastoFijo {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -283,7 +283,7 @@ div a {
 
 }
 
-    #guardar-puesto:hover {
+    #guardar-gastoFijo:hover {
         display: flex;
         flex-direction: row;
         align-content: center;
@@ -300,8 +300,7 @@ div a {
         font-size: 20px;
         cursor: pointer;
         background-color: #E2F2FF;
-        transition-duration: 0.5s;
-
+        transition-duration: 0.8s;
     }
 
 #mostrar-puestos {
@@ -377,7 +376,7 @@ div a {
 }
 
 
-.puesto-clickeable-eliminable {
+.gastoFijo-clickeable-eliminable {
     display: flex;
     display: flex;
     flex-wrap: wrap;
@@ -391,7 +390,7 @@ div a {
     transition-duration: 0.2s;
 }
 
-    .puesto-clickeable-eliminable:hover {
+    .gastoFijo-clickeable-eliminable:hover {
         color: black;
         cursor: pointer;
         transform: scale(1.03);
@@ -399,7 +398,7 @@ div a {
         /*box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
     }
 
-.puesto-icono-eliminar {
+.gastoFijo-icono-eliminar {
     width: 35px;
     padding: 1px;
     margin-left: -33px;
@@ -411,7 +410,7 @@ div a {
     transition-duration: 0.2s;
 }
 
-    .puesto-icono-eliminar:hover {
+    .gastoFijo-icono-eliminar:hover {
         transform: scale(1.1);
         background-color: #FFC8C8;
         border-color: #FFC8C8;

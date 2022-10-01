@@ -7,9 +7,9 @@
         @*Aqui se agrega lo de las pestanas*@
         @if (hayPuestoSeleccionado == false)
         {
-            <h1>Nuevo puesto</h1>
+            <h1>Nuevo gastoFijo</h1>
         } else {
-            <h1>Editar puesto</h1>
+            <h1>Editar gastoFijo</h1>
         }
 
         @if (pestanyaConfiguracionActiva == true)
@@ -33,7 +33,7 @@
         }   
     </div>
     <div id="inferior-horizontal">
-        <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
+        <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
             <a asp-controller="EstructuraOrg" asp-action="Index">
                 @if (hoverGuardar == false) {
                     <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -48,15 +48,15 @@
     <div id="mostrar-puestos">
         @foreach (PuestoModel puestoActual in puestos)
         {
-            <div class="puesto-clickeable-eliminable" >
+            <div class="gastoFijo-clickeable-eliminable" >
                 <div @onclick="() => SeleccionarPuesto(puestoActual)">
-                    <PuestoParcialView puesto=puestoActual></PuestoParcialView>
+                    <PuestoParcialView gastoFijo=puestoActual></PuestoParcialView>
                 </div>
-                <img @onclick="() => eliminarPuesto(puestoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
+                <img @onclick="() => eliminarPuesto(puestoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
             </div>
         }
     </div>
-    <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+    <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
         <a>
             @if (hoverAgregar == false)
             {

@@ -1,18 +1,18 @@
 ﻿@using PI.Models
 
-<div class="puesto puesto-editar">
-    <div class="top-puesto">
-        <div class="puesto-nombre"><h1>@gastoFijo.Nombre</h1></div>
+<div class="gastoFijo gastoFijo-editar">
+    <div class="top-gastoFijo">
+        <div class="gastoFijo-nombre"><h1>@gastoFijo.Nombre</h1></div>
     </div>
-    <div class="bottom-puesto">
-        <div class="puesto-caracteristica puesto-salario-bruto">
+    <div class="bottom-gastoFijo">
+        <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
             <p>Mensual: @gastoFijo.Monto.ToString()</p>
             <img class="divisa-img" src="/img/generic/coin-icon.svg">
         </div>
     </div>
 
-    <div class="bottom-puesto">
-        <div class="puesto-caracteristica puesto-salario-bruto">
+    <div class="bottom-gastoFijo">
+        <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
             <p>Anual: @((gastoFijo.Monto*12).ToString())</p>
             <img class="divisa-img" src="/img/generic/coin-icon.svg">
         </div>
