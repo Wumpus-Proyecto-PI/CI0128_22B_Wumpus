@@ -119,7 +119,7 @@ namespace PI.Handlers
         }
         public void actualizarPrestaciones(DateTime fechaAnalisis, decimal prestaciones)
         {
-            string consulta = "EXEC actualizarGastoPrestaciones '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + prestaciones.ToString() + "'";
+            string consulta = "EXEC actualizarGastoPrestaciones @fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @porcentaje = '" + prestaciones.ToString() + "';";
             enviarConsulta(consulta);
         }
 
