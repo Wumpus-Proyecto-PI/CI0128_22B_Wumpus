@@ -59,19 +59,6 @@ namespace PI.Handlers
             enviarConsulta(consulta);
         }
 
-        public decimal obtenerSalarios(DateTime fechaAnalisis)
-        {
-            decimal totalSalarios = 0.0m;
-
-            string consulta = "select SUM(cantidadPlazas*SalarioBruto) as TotalSalarios FROM PUESTO WHERE "
-                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'"; ;
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-            totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["TotalSalarios"]);
-
-            return totalSalarios;
-        }
-
         public decimal obtenerTotalMensual(DateTime fechaAnalisis)
         {
             decimal totalMensual = 0.0m;
@@ -102,6 +89,44 @@ namespace PI.Handlers
             }
 
             return nombreNegocio;
+        }
+
+        public decimal obtenerSeguroSocial (DateTime fechaAnalisis, decimal porcentajeSeguroSocial)
+        {
+            decimal totalSalarios = 0.0m;
+
+            string consulta = "SELECT dbo.obtGastoSeguroSocial ('" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '0.2') AS SeguroSocial";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+            if (!tablaResultado.Rows[0].IsNull("SalariosNeto"))
+            {
+                totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["SalariosNeto"]);
+            }
+
+            return totalSalarios;
+        }
+
+        public void actualizarSalariosNeto(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)
+        {
+            string consulta = "EXEC actualizarSalariosNeto '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "', '" + prestaciones.ToString() + "'";
+            enviarConsulta(consulta);
+        }
+
+        public void actualizarSeguroSocial(DateTime fechaAnalisis, decimal seguroSocial)
+        {
+            string consulta = "EXEC actualizarGastoSeguroSocial '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "'";
+            enviarConsulta(consulta);
+        }
+        public void actualizarPrestaciones(DateTime fechaAnalisis, decimal prestaciones)
+        {
+            string consulta = "EXEC actualizarGastoPrestaciones '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + prestaciones.ToString() + "'";
+            enviarConsulta(consulta);
+        }
+
+        public void actualizarBeneficios(DateTime fechaAnalisis)
+        {
+            string consulta = "EXEC actualizarBeneficios '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsulta(consulta);
         }
     }
 }
