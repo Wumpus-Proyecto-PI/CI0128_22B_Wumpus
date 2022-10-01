@@ -131,8 +131,10 @@ div a{
     border: solid;
     border-width: 2px;
     border-radius: 10px;
-    margin: 20px;
-    transition-duration: 0.5s;
+    border-color: #ccc;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin: 25px;
+    transition-duration: 0.3s;
 }
 
 #agregar-puesto:hover {
@@ -146,12 +148,12 @@ div a{
     border: solid;
     border-color: transparent;
     border-radius: 10px;
-    margin: 20px;
+    margin: 25px;
     padding-inline: 5px;
     font-size: 20px;
     cursor: pointer;
-    background-color: #BFFFB3;
-    transition-duration: 0.4s;
+    transition-duration: 0.8s;
+    background-color: #E2F2FF;
 }
 
 #guardar-puesto img {
@@ -171,8 +173,10 @@ div a{
     border: solid;
     border-width: 2px;
     border-radius: 10px;
+    border-color: #ccc;
     margin: 20px;
-    transition-duration: 0.5s;
+    transition-duration: 0.3s;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
 }
 
 #guardar-puesto:hover {
@@ -191,8 +195,8 @@ div a{
     padding-inline: 5px;
     font-size: 20px;
     cursor: pointer;
-    background-color: #BCFFFA;
-    transition-duration: 0.4s;
+    background-color: #E2F2FF;
+    transition-duration: 0.8s;
 }
 
 #mostrar-puestos {
