@@ -59,21 +59,6 @@ namespace PI.Handlers
             enviarConsulta(consulta);
         }
 
-        public decimal obtenerSalariosNeto(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)
-        {
-            decimal totalSalarios = 0.0m;
-
-            string consulta = "EXEC obtTotalSalariosNeto '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "', '" + prestaciones.ToString() + "'";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-            if (!tablaResultado.Rows[0].IsNull("SalariosNeto"))
-            {
-                totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["SalariosNeto"]);
-            }
-
-            return totalSalarios;
-        }
-
         public decimal obtenerTotalMensual(DateTime fechaAnalisis)
         {
             decimal totalMensual = 0.0m;
@@ -104,6 +89,27 @@ namespace PI.Handlers
             }
 
             return nombreNegocio;
+        }
+
+        public decimal obtenerSeguroSocial (DateTime fechaAnalisis, decimal porcentajeSeguroSocial)
+        {
+            decimal totalSalarios = 0.0m;
+
+            string consulta = "SELECT dbo.obtGastoSeguroSocial ('" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '0.2') AS SeguroSocial";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+            if (!tablaResultado.Rows[0].IsNull("SalariosNeto"))
+            {
+                totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["SalariosNeto"]);
+            }
+
+            return totalSalarios;
+        }
+
+        public void actualizarSalariosNeto(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)
+        {
+            string consulta = "EXEC actualizarSalariosNeto '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "', '" + prestaciones.ToString() + "'";
+            enviarConsulta(consulta);
         }
     }
 }
