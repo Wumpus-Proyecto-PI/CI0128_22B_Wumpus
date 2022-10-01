@@ -13,14 +13,16 @@
                 <th style="border:none;"> Plazas </th>
             <th style="border:none;" width="40px"></th>
             </tr>
-            @foreach (var i in puesto.Beneficios)
+            @for(int i = 0; i < puesto.Beneficios.Count(); i += 1)
             {
-                <tr class="filas_tabla_beneficio">
-                    <td>@i.nombreBeneficio</td>
-                    <td> @i.monto</td>
-                    <td> @i.plazasPorBeneficio </td>
-                    <td class="columna-borrar"><div class="borrar-beneficio"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
-                </tr>
+                int index = i;
+
+                    <tr class="filas_tabla_beneficio">
+                        <td> @puesto.Beneficios[i].nombreBeneficio</td>
+                        <td> @puesto.Beneficios[i].monto</td>
+                        <td> @puesto.Beneficios[i].plazasPorBeneficio </td>
+                        <td class="columna-borrar-beneficio"><div class="borrar-beneficio" @onclick="()=>borrarBeneficio(puesto.Beneficios[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
+                     </tr>
             }
             @((MarkupString)html)
         </table>
@@ -41,13 +43,10 @@
 @*}*@
 @code {
     [Parameter]
-    public PuestoModel puesto { get; set; }
+    public PuestoModel puesto { get; set; } = new PuestoModel();
 
     [Parameter]
     public DateTime fechaAnali { get; set; }
-
-    [Parameter]
-    public bool popUpVisible { get; set; }
 
     public BeneficioModel comodin = new BeneficioModel();
 
@@ -55,14 +54,26 @@
 
     public string html = "";
 
+    Queue<Tuple<BeneficioModel, int>> cambiosBeneficios = new Queue<Tuple<BeneficioModel, int>>();
+
     public void agregarBeneficioNuevo()
     {
         EstructuraOrgHandler h = new EstructuraOrgHandler();
         comodin.fechaAnalisis = fechaAnali;
         comodin.nombrePuesto = puesto.Nombre;
         formVisible = false;
-        html += "<tr><td>"+comodin.nombreBeneficio+"</td><td>"+ comodin.monto+"</td><td>"+comodin.plazasPorBeneficio+"</td></tr>";
+        puesto.Beneficios.Add(comodin);
         h.AgregarBeneficio(comodin);
+    }
+
+
+    public void borrarBeneficio(BeneficioModel b) {
+        b.fechaAnalisis = puesto.FechaAnalisis;
+        b.nombrePuesto = puesto.Nombre;
+        EstructuraOrgHandler h = new EstructuraOrgHandler();
+        puesto.Beneficios.Remove(b);
+        h.BorrarBeneficio(b);
+
     }
 
     public void cambiarVisibilidadForm()
@@ -76,12 +87,6 @@
             formVisible = true;
         }
     }
-
-    public void cambiarVisibilidadPopUp()
-    {
-        popUpVisible = false;
-    }
-
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
 

@@ -65,7 +65,7 @@ td {
 #lista_beneficios {
     width: 100%;
 }
-.columna-borrar {
+.columna-borrar-beneficio {
     display:flex;
     align-items:center;
     border:none;
@@ -81,7 +81,11 @@ td {
 }
 
     .borrar-beneficio:hover {
-        background-color:#FFC8C8;
+        background-color: #FFC8C8;
+        transform: scale(1.1);
+        background-color: #FFC8C8;
+        border-color: #FFC8C8;
+        transition-duration: 0.4s;
     }
 
 #botones_beneficios {
