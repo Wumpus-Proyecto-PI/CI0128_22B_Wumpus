@@ -8,9 +8,10 @@
         <h1 id="titulo_beneficios" >Beneficios</h1>
         <table id=lista_beneficios>
             <tr>
-                <th>Nombre</th>
-                <th>Monto</th>
-                <th> Plazas </th>
+                <th style ="border:none;">Nombre</th>
+                <th style="border:none;">Monto</th>
+                <th style="border:none;"> Plazas </th>
+            <th style="border:none;" width="40px"></th>
             </tr>
             @foreach (var i in puesto.Beneficios)
             {
@@ -18,6 +19,7 @@
                     <td>@i.nombreBeneficio</td>
                     <td> @i.monto</td>
                     <td> @i.plazasPorBeneficio </td>
+                    <td class="columna-borrar"><div class="borrar-beneficio"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
                 </tr>
             }
             @((MarkupString)html)
@@ -32,12 +34,8 @@
             </div>
         }
             <div id="botones_beneficios">
-                <div>
-                    <button id="agregar-beneficio" @onclick="cambiarVisibilidadForm">Agregar Beneficio</button>
-                </div>
-                <div>
-                <button id="boton_guardar_datos" @onclick="refrescarPagina"> Guardar Cambios</button>
-                </div>
+                <button id="boton-agregar-beneficio" @onclick="cambiarVisibilidadForm">Agregar Beneficio</button>
+                <button id="boton-guardar-datos" @onclick="refrescarPagina"> Guardar Cambios</button>
             </div>
     </div>
 @*}*@

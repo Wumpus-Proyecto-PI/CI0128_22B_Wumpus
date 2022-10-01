@@ -34,10 +34,6 @@
     width: 15%
 }
 
-#boton_agregar_beneficio {
-    height: 30px;
-    width: 15%
-}
 
 
 .dato_tabla_beneficios {
@@ -66,28 +62,43 @@ td {
     font-size: x-large;
 }
 
-.filas_tabla_beneficio:hover {
-    background-color: #E2F2FF;
-}
-
 #lista_beneficios {
     width: 100%;
 }
+.columna-borrar {
+    display:flex;
+    align-items:center;
+    border:none;
+}
+.borrar-beneficio {
+    width: 40px;
+    height: 40px;
+    display:flex;
+    justify-content:center;
+    border-radius:40px;
+    border: 1px solid rgb(117, 115, 115);
+    align-items: center;
+}
+
+    .borrar-beneficio:hover {
+        background-color:#FFC8C8;
+    }
 
 #botones_beneficios {
     width:100%;
     display:flex;
-    flex-direction:row;
-    align-items:center;
-    justify-content:center;
+    justify-content: center;
 }
 
-#boton_guardar_datos {
-    width:66%;
+#boton-guardar-datos {
     width:80px;
     height:55px;
-    margin-right:10px;
-    justify-self:center;
+}
+
+#boton-agregar-beneficio {
+    width: 80px;
+    height: 55px;
+    align-self: center;
 }
 
 #contenedor_beneficios {
@@ -229,6 +240,12 @@ div a {
 #agregar-puesto img {
     width: 35px;
     padding: 5px;
+}
+
+.seccion-botones-beneficios {
+    width:33.3333%;
+    display:flex;
+    border-color:black;
 }
 
 #boton-beneficios {
