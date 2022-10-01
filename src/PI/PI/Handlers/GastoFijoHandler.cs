@@ -91,24 +91,6 @@ namespace PI.Handlers
             return totalMensual;
         }
 
-        public string obtenerNombreNegocio (DateTime fechaAnalisis)
-        {
-            string consulta = "EXEC obtNombreNegocio '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
-            string nombreNegocio = "";
-
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
-            {
-                nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
-            }
-            else
-            {
-                nombreNegocio = "Sin nombre";
-            }
-
-            return nombreNegocio;
-        }
-
         public decimal obtenerSeguroSocial (DateTime fechaAnalisis, decimal porcentajeSeguroSocial)
         {
             decimal totalSalarios = 0.0m;
