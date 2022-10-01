@@ -122,5 +122,11 @@ namespace PI.Handlers
             string consulta = "EXEC actualizarGastoPrestaciones '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + prestaciones.ToString() + "'";
             enviarConsulta(consulta);
         }
+
+        public void actualizarBeneficios(DateTime fechaAnalisis)
+        {
+            string consulta = "EXEC actualizarBeneficios '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsulta(consulta);
+        }
     }
 }
