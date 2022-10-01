@@ -111,5 +111,11 @@ namespace PI.Handlers
             string consulta = "EXEC actualizarSalariosNeto '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "', '" + prestaciones.ToString() + "'";
             enviarConsulta(consulta);
         }
+
+        public void actualizarSeguroSocial(DateTime fechaAnalisis, decimal seguroSocial)
+        {
+            string consulta = "EXEC actualizarGastoSeguroSocial '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "'";
+            enviarConsulta(consulta);
+        }
     }
 }
