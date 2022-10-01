@@ -59,12 +59,21 @@
 
         @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
         {
-            <div class="gastoFijo-clickeable-eliminable" >
+            @* Verifica la diferencia entre un gasto editable y uno que no *@
+            @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
+            { 
+                <div class="gastoFijo-clickeable-eliminable" >
                 <div @onclick="() => SeleccionarPuesto(gastoFijoActual)">
                     <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
                 </div>
-                <img @onclick="() => eliminarPuesto(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
+                    <img @onclick="() => eliminarPuesto(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
             </div>
+            } else {
+                <div class="gastoFijo-noClickeable-noEliminable">
+                        <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                 </div>
+            }
+
         }
     </div>
     <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
@@ -107,6 +116,8 @@
 
     bool pestanyaConfiguracionActiva = true;
     string CasoRepetido = "";
+
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios", "Prestaciones", "SeguroSocial", "Salarios" };
 
     public void Hover(int action)
     {

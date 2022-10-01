@@ -1,6 +1,9 @@
 ﻿@using PI.Models
 
-<div class="gastoFijo gastoFijo-editar">
+@if (nombresEstOrg.Contains(gastoFijo.Nombre)) {
+    tipoGasto = "gastoFijo gastoFijo-NoEditable";
+}
+<div class=@((MarkupString)tipoGasto)>
     <div class="top-gastoFijo">
         <div class="gastoFijo-nombre"><h1>@gastoFijo.Nombre</h1></div>
     </div>
@@ -24,4 +27,7 @@
 @code {
     [Parameter]
     public GastoFijoModel gastoFijo { get; set; }
+
+    public string tipoGasto = "gastoFijo gastoFijo-editable";
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios", "Prestaciones", "SeguroSocial", "Salarios" };
 }
