@@ -17,7 +17,7 @@ namespace PI.Controllers
             DateTime fechaAnalisis = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
 
             List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
-
+            ViewData["NombreNegocio"] = estructura.obtenerNombreNegocio(fechaAnalisis);
             ViewBag.FechaAnalisis = fechaAnalisis;
             return View(puestos);
         }

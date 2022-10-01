@@ -10,11 +10,11 @@ namespace PI.Controllers
 {
     public class GastoFijoController : Controller
     {
-        public IActionResult GastoFijo()
+        public IActionResult GastoFijo(string fecha)
         {
 
-            ViewData["TituloPaso"] = "Gastos Fijos";
-            DateTime fechaConversion = DateTime.ParseExact("2022-09-29 17:25:27.807", "yyyy-MM-dd HH:mm:ss.fff", null);
+            ViewData["TituloPaso"] = "Gastos fijos";
+            DateTime fechaConversion = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
             ViewBag.fechaAnalisis = fechaConversion;
 
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();

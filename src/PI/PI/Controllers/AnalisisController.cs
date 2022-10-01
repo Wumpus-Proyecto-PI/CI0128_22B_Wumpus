@@ -23,7 +23,7 @@ namespace PI.Controllers
             AnalisisHandler handler = new AnalisisHandler();
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
             AnalisisModel analisisActual = handler.ObtenerUnAnalisis(fechaCreacionAnalisis);
-
+            ViewData["NombreNegocio"] = handler.obtenerNombreNegocio(fechaCreacionAnalisis);
             // var tipoAnalisis = handler.ObtenerTipoAnalisis();
             return View(analisisActual);
         }
