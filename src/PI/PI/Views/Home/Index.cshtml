@@ -25,11 +25,22 @@
         transform: scale(1.09);
         background: #E2F2FF;
     }
+
+    .msg-bajoConstruccion {
+       border: 1px solid #ccc;
+       border-radius: 10px;
+       margin-bottom: 20px;
+       padding: 40px;
+       width: 100%;
+       height: auto;
+    }
 </style>
 <div class="text-center">
-    <h1 class="display-4">Bienvenido</h1>
-    <p>El homepage se encuentra en construcci&oacuten.</p>
-        <button class="nav-item">
+    <div class="msg-bajoConstruccion">
+        <h1 class="display-4">Bienvenido</h1>
+        <p>El homepage se encuentra en construcci&oacuten.</p>
+    </div>
+    <button class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Negocio" asp-action="Index">Ir a mis negocios</a>
     </button>
 </div>
