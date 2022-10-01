@@ -32,16 +32,12 @@
             </div>
         }
             <div id="botones_beneficios">
-                <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="cambiarVisibilidadForm">
-                    <a>
-                        @if (hoverAgregar == false)
-                        {
-                            <img src="img/estructuraOrg/addPuesto.png" alt="">
-                        }
-                        @hoverTextAgregar
-                    </a>
+                <div>
+                    <button id="agregar-beneficio" @onclick="cambiarVisibilidadForm">Agregar Beneficio</button>
                 </div>
+                <div>
                 <button id="boton_guardar_datos" @onclick="refrescarPagina"> Guardar Cambios</button>
+                </div>
             </div>
     </div>
 @*}*@

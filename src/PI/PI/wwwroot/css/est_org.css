@@ -75,13 +75,19 @@ td {
 }
 
 #botones_beneficios {
+    width:100%;
     display:flex;
-    align-items: center;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
 }
 
 #boton_guardar_datos {
+    width:66%;
     width:80px;
     height:55px;
+    margin-right:10px;
+    justify-self:center;
 }
 
 #contenedor_beneficios {
@@ -225,6 +231,18 @@ div a {
     padding: 5px;
 }
 
+#boton-beneficios {
+    font-size: large;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    width: 120px;
+    height: 50px;
+    border-radius:10px;
+}
+    #boton-beneficios:hover {
+        background-color: #E2F2FF;
+        border-color: transparent;
+    }
 #agregar-puesto {
     display: flex;
     flex-direction: row;

@@ -29,6 +29,7 @@
                     <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
                     </div>
                 </form>
+                <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
             </div>
         }   
     </div>
@@ -41,6 +42,7 @@
                 @hoverTextGuardar</a>
         </div>
     </div>
+
 </div>
 
 <div class="altura-seccion" id="seccion-puestos">
@@ -49,7 +51,7 @@
         @foreach (PuestoModel puestoActual in puestos)
         {
             <div class="puesto-clickeable-eliminable" >
-                <div @onclick="() => {SeleccionarPuesto(puestoActual); cambiarVisibilidadPopup();}">
+                <div @onclick="() => SeleccionarPuesto(puestoActual)">
                     <PuestoParcialView puesto=puestoActual></PuestoParcialView>
                 </div>
                 <img @onclick="() => eliminarPuesto(puestoActual)" class="puesto-icono-eliminar" src=img/puesto/trashCan.png>
