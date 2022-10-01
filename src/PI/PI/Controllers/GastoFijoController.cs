@@ -18,11 +18,13 @@ namespace PI.Controllers
             ViewBag.fechaAnalisis = fechaConversion;
 
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaConversion);
 
             ViewBag.totalMensual = gastoFijoHandler.obtenerTotalMensual(fechaConversion);
             ViewData["NombreNegocio"] = gastoFijoHandler.obtenerNombreNegocio(fechaConversion);
 
+            List<GastoFijoModel> gf_unorded = gastoFijoHandler.ObtenerGastosFijos(fechaConversion);
+            // ordena la lista de gastos fijos
+            List<GastoFijoModel> gastosFijos = gf_unorded.OrderBy(x => x.orden).ToList();
 
             return View(gastosFijos);
         }

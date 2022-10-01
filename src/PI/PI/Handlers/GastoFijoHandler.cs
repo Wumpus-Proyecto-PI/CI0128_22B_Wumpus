@@ -32,28 +32,46 @@ namespace PI.Handlers
                     
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Monto = Convert.ToDecimal(columna["monto"]),
+                    orden = Convert.ToInt32(columna["orden"])
                 }
                 );
             }
             return gastosFijos;
         }
-
+        public int getNextOrden()
+        {
+            string consulta = "SELECT MAX(orden) AS orden FROM Gasto_Fijo";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            int result = 1;  // Valor por omisiÃ³n (inicial)
+            // Verifica que haya devuelto una tupla
+            if (tablaResultado.Rows.Count > 0)
+            {
+                // Verifica que no sea nulo
+                DataRow lastOrder = tablaResultado.Rows[0];
+                if (!lastOrder.IsNull("orden"))
+                {
+                    result = Convert.ToInt32(lastOrder["orden"]) + 1;
+                }
+            }
+            return result;
+        }
 
         // Inserta el nuevo gasto fijo a la BD.
         public void ingresarGastoFijo(string nombreAnterior, string Nombre, string monto, DateTime fechaAnalisis)
         {
-            // TODO arreglar el datetime para que esté asociado al análisis realmente.
+            // TODO arreglar el datetime para que estï¿½ asociado al anï¿½lisis realmente.
             string consulta = "EXECUTE insertarGastoFijo '"
                 + nombreAnterior + "', '"
                 + Nombre + "', '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") 
-                + "', " + monto + ";";
+                + "', " + monto + ","
+                + getNextOrden() + ";";
 
             enviarConsulta(consulta);
         }
 
         public void eliminarGastoFijo(string Nombre, DateTime fechaAnalisis)
         {
-            // TODO arreglar el datetime para que esté asociado al análisis realmente.
+            // TODO arreglar el datetime para que estï¿½ asociado al anï¿½lisis realmente.
             string consulta = "EXECUTE eliminarGastoFijo '"
                 + Nombre + "', '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";
             enviarConsulta(consulta);
