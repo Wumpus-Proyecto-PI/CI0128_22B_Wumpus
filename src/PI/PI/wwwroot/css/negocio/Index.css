@@ -41,6 +41,7 @@
     height: 200px;
     border-radius: 20px;
     padding: 10px;
+    transition-duration: 0.5s;
 }
 
 .card-container .card-agregar {
@@ -58,9 +59,9 @@
 }
 
 .card:hover {
-    transition: box-shadow .2s;
+    transition-duration: 0.3s;
     transform: scale(1.03);
-    box-shadow: 0px 0px 10px 4px rgba(0, 195, 255, 0.611);
+    background-color: #E2F2FF;
     cursor: pointer;
 }
 
