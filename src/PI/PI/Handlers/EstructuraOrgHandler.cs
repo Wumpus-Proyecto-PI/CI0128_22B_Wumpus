@@ -64,7 +64,7 @@ namespace PI.Handlers
 
         public List<PuestoModel> ObtenerListaDePuestos(DateTime fechaAnalisis)
         {
-            string consulta = "SELECT * FROM PUESTO WHERE fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            string consulta = "execute ObtenerPuestos @fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultadoPuestos = CrearTablaConsulta(consulta);
 
             List<PuestoModel> puestos = new List<PuestoModel>();
