@@ -141,7 +141,7 @@
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
 
-        if (revisarNombre(puestoGuardar.Nombre))
+        if (revisarNombre(puestoGuardar))
         {
             puestoGuardar.FechaAnalisis = fechaAnalasis;
             HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
@@ -153,19 +153,24 @@
         }
     }
 
-    private bool revisarNombre(string nombre) {
+    private bool revisarNombre(PuestoModel puestoGuardar)
+    {
 
-        if (string.IsNullOrWhiteSpace(nombre))
+        if (string.IsNullOrWhiteSpace(puestoGuardar.Nombre))
         {
             ErrorNombre = "<p class=\"puesto-error-nombrevacio\">Error: ingrese un nombre para el puesto.</p>";
             return false;
         }
+        if (!hayPuestoSeleccionado) {
+            if (puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
+            {
+                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del gasto fijo ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                return false;
+            }
+        } else {
 
-        if (puestos.Exists(x => x.Nombre.ToLower() == nombre.ToLower()))
-        {
-            ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del gasto fijo ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
-            return false;
         }
+
 
         return true;
     }
