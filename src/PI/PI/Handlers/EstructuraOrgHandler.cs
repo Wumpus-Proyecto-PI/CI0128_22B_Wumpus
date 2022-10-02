@@ -23,12 +23,12 @@ namespace PI.Handlers
                 ActualizarPuesto(nombrePuesto, puesotAInsertar);
             } else
             {
-                string insert = "INSERT INTO PUESTO values ("
+                string insert = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '"+ puesotAInsertar.SalarioBruto.ToString() 
+                + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.') INSERT INTO PUESTO values ("
                 + "'" + puesotAInsertar.Nombre + "', "
                 + "'" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
                 + puesotAInsertar.Plazas.ToString() + ", "
-                + "'" + puesotAInsertar.SalarioBruto.ToString() + "'"
-                + ")";
+                + "dbo.convertTOdecimal ( @salarioTemp))";
                 filasAfectadas = enviarConsulta(insert);
             }
             return filasAfectadas;
