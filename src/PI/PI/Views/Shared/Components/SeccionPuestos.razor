@@ -25,6 +25,13 @@
                 <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
                 </div>
 
+                    <div class="fila-form-configuracion">
+                    <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                    </div>
+                </form>
+                <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
+            </div>
+        }   
                 <div class="fila-form-configuracion">
                 <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
                 </div>
@@ -40,6 +47,7 @@
                 @hoverTextGuardar</a>
         </div>
     </div>
+
 </div>
 
 <div class="altura-seccion" id="seccion-puestos">
@@ -65,6 +73,10 @@
             </a>
     </div>
 </div>
+@if (PopupVisible) {
+    <div id="overlay" @onclick="cambiarVisibilidadPopup"></div>
+    <SeccionBeneficios puesto=puestoActivo fechaAnali=fechaAnalasis> </SeccionBeneficios>
+}
 
 
 @code {
@@ -76,6 +88,8 @@
 
     public bool hayPuestoSeleccionado = false;
     public PuestoModel puestoActivo = new PuestoModel();
+
+    public bool PopupVisible { get; set; } = false;
 
     public EstructuraOrgHandler HandlerPuesto = new EstructuraOrgHandler();
 
@@ -115,6 +129,18 @@
         } else {
             hoverGuardar = false;
             hoverTextGuardar = "";
+        }
+    }
+
+    public void cambiarVisibilidadPopup()
+    {
+        if (PopupVisible)
+        {
+            PopupVisible = false;
+        }
+        else
+        {
+            PopupVisible = true;
         }
     }
 
