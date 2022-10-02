@@ -31,12 +31,7 @@
                 </form>
                 <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
             </div>
-        }   
-                <div class="fila-form-configuracion">
-                <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
-                </div>
-            </form>
-        </div>
+
     </div>
     <div id="inferior-horizontal">
         <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
