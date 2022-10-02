@@ -96,4 +96,10 @@ margin-left: 10px
     height: auto;
 }
 
+.puesto-error-nombrevacio {
+    font-size: 12px;
+    color: red;
+    width: fit-content;
+    height: auto;
+}
 

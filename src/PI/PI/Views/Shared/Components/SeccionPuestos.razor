@@ -12,25 +12,23 @@
             <h1>Editar puesto</h1>
         }
 
-        @if (pestanyaConfiguracionActiva == true)
-        {
-            <div id="cuadro_configuracion">
+        <div id="cuadro_configuracion">
 
-                <form id="form_configuracion">
-                    <div class="fila-form-configuracion">
-                    <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
-                    </div>
+            <form id="form_configuracion">
+                <div class="fila-form-configuracion">
+                <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                </div>
+                @((MarkupString)ErrorNombre)
 
-                    <div class="fila-form-configuracion">
-                    <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
-                    </div>
+                <div class="fila-form-configuracion">
+                <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
+                </div>
 
-                    <div class="fila-form-configuracion">
-                    <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
-                    </div>
-                </form>
-            </div>
-        }   
+                <div class="fila-form-configuracion">
+                <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                </div>
+            </form>
+        </div>
     </div>
     <div id="inferior-horizontal">
         <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
@@ -92,7 +90,7 @@
     public bool hoverGuardar = false;
     public bool hoverAgregar = false;
 
-    bool pestanyaConfiguracionActiva = true;
+    public string ErrorNombre = "";
 
     public void Hover(int action)
     {
@@ -135,20 +133,25 @@
         placeHolderSalario = "Ingresar salario";
         placeHolderPlazas = "Ingresar plazas";
         hayPuestoSeleccionado = false;
-        pestanyaConfiguracionActiva = true;
         copiaNombreOriginal = "";
         puestoActivo = new PuestoModel();
     }
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
 
-        puestoGuardar.FechaAnalisis = fechaAnalasis;
-        HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
-        if (hayPuestoSeleccionado == false)
+        if (string.IsNullOrEmpty(puestoGuardar.Nombre))
         {
-            puestoActivo = new PuestoModel();
+            ErrorNombre = "<p class=\"puesto-error-nombrevacio\">Error: ingrese un nombre para el puesto.</p>";
+        } else {
+
+            puestoGuardar.FechaAnalisis = fechaAnalasis;
+            HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
+            if (hayPuestoSeleccionado == false)
+            {
+                puestoActivo = new PuestoModel();
+            }
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
         }
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
     }
     public void eliminarPuesto(PuestoModel puestoEliminar)
     {
