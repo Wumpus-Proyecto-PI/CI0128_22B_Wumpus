@@ -18,6 +18,9 @@ body {
 #logo {
     width: fit-content;
     margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #logo a {
@@ -27,7 +30,7 @@ body {
 }
 
 #logo img{
-    width: 191px
+    width: 150px
 }
 
 
@@ -64,7 +67,7 @@ body {
     padding: 0px;
     width: fit-content;
     height: fit-content;
-    margin: 10px;
+    margin: 20px;
 }
 
 #boton_ajustes a {

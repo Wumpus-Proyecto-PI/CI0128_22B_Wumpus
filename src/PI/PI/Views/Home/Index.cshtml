@@ -1,7 +1,49 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    body{
+        display:flex;
+        justify-content: center;
+        height: 700px;
+        flex-wrap: wrap;
+        align-items: center;
+        align-content: space-around;
+    }
+    *{
+        font-size: 30px;
+    }
+    button {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.4);
+        background: white;
+        transition-duration: 0.3s;
+    }
+    button:hover {
+        transition-duration: 0.3s;
+        transform: scale(1.09);
+        background: #E2F2FF;
+    }
+
+    .msg-bajoConstruccion {
+       border: 1px solid #ccc;
+       border-radius: 10px;
+       margin-bottom: 20px;
+       padding: 40px;
+       width: 100%;
+       height: auto;
+    }
+</style>
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="msg-bajoConstruccion">
+        <h1 class="display-4">Bienvenido</h1>
+        <p>El homepage se encuentra en construcci&oacuten.</p>
+    </div>
+    <button class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Negocio" asp-action="Index">Ir a mis negocios</a>
+    </button>
 </div>
+
+@*Necesario para componentes razor*@
+<script src="_framework/blazor.server.js"><script/>

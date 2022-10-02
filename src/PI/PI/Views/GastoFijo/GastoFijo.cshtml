@@ -1,0 +1,26 @@
+﻿@model List<GastoFijoModel>
+@*
+    Html para el manejo de gastos fijos
+*@
+@{
+    Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+}
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTML template</title>
+    <link rel="stylesheet" href="~/css/GastoFijo/GastoFijo.css">
+
+</head>
+
+<div id="subtitulo">
+    <div id="nombre_negocio">@ViewData["NombreNegocio"]</div>
+</div>
+    
+    <div style="width: 100%; display: flex;">
+        @(
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo.SeccionGastosFijos>(RenderMode.ServerPrerendered, new { gastosFijos = Model, fechaAnalasis = ViewBag.fechaAnalisis, totalMensual = ViewBag.totalMensual})
+            )
+    </div>
+

@@ -17,19 +17,19 @@
     <div class="analisis-header row">
         <div class="col-md-4">
             <div class="text-white text-center mt-3">
-                <p class="texto-header mb-0 fw-bold">Cantidad de análisis</p>
+                <p class="texto-header mb-0 fw-bold">Cantidad de an&aacutelisis</p>
                 <p class="mb-4">####</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="text-white text-center mt-3">
-                <p class="texto-header mb-0 fw-bold">Nombre del negocio</p>
+                <p class="texto-header mb-0 fw-bold">@ViewData["NombreNegocio"]</p>
                 <p class="mb-4">Estado del negocio</p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="text-white text-center mt-3">
-                <p class="texto-header mb-0 fw-bold">Último análisis</p>
+                <p class="texto-header mb-0 fw-bold">Fecha de creaci&oacuten</p>
                 <p class="mb-4">@Model.FechaCreacion</p>
             </div>
         </div>
@@ -53,7 +53,8 @@
             </div>
 
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card m-4">              
+                <div class="card m-4">   
+                    <a asp-area="" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                     <div class="m-2">
                         <img src="Images/gastos_fijos.svg" class="card-img-top" alt="">
                         <div class="card-body">
@@ -62,6 +63,7 @@
                         </div>
                         <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">2</span>
                     </div>
+                    </a>
                 </div>
             </div>
 

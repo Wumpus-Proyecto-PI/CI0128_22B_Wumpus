@@ -1,0 +1,33 @@
+﻿@using PI.Models
+
+@if (nombresEstOrg.Contains(gastoFijo.Nombre)) {
+    tipoGasto = "gastoFijo gastoFijo-NoEditable";
+}
+<div class=@((MarkupString)tipoGasto)>
+    <div class="top-gastoFijo">
+        <div class="gastoFijo-nombre"><h1>@gastoFijo.Nombre</h1></div>
+    </div>
+    <div class="bottom-gastoFijo">
+        <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
+            <p>Mensual: @gastoFijo.Monto.ToString()</p>
+            <img class="divisa-img" src="/img/generic/coin-icon.svg">
+        </div>
+    </div>
+
+    <div class="bottom-gastoFijo">
+        <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
+            <p>Anual: @((gastoFijo.Monto*12).ToString())</p>
+            <img class="divisa-img" src="/img/generic/coin-icon.svg">
+        </div>
+    </div>
+
+</div>
+
+
+@code {
+    [Parameter]
+    public GastoFijoModel gastoFijo { get; set; }
+
+    public string tipoGasto = "gastoFijo gastoFijo-editable";
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios", "Prestaciones", "SeguroSocial", "Salarios" };
+}
