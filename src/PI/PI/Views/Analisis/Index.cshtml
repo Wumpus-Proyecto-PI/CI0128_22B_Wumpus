@@ -1,4 +1,5 @@
 ﻿@model AnalisisModel
+@using PI.Controllers
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -38,22 +39,33 @@
     <div class="row mx-5 mt-4">
         <div class="row ml-5 mr-5 text-center">
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="carta card m-4">
-                    <a asp-area="" asp-controller="EstructuraOrg" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
-                        <div class="m-2">
-                            <img src="Images/est_org.svg" class="card-img-top" alt="">
-                            <div class="card-body">
-                                <div class="titulo-carta">Estructura Organizativa</div>
-                                <p class="texto-carta card-text">Crea un organigrama de los puestos y salarios de tu negocio.</p>
+                    <div class="card card-clickeable m-4">
+                        <a asp-area="" asp-controller="EstructuraOrg" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
+                            <div class="m-2">
+                                <img src="Images/est_org.svg" class="card-img-top" alt="">
+                                <div class="card-body">
+                                    <div class="titulo-carta">Estructura Organizativa</div>
+                                    <p class="texto-carta card-text">Crea un organigrama de los puestos y salarios de tu negocio.</p>
+                                </div>
+                                <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">1</span>
                             </div>
-                            <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">1</span>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
-            </div>
-
+            
+            @{
+                string claseCarta = "card card-no-clickeable m-4";
+                string claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+            }
+            @if (AnalisisController.hayPuestos(Model))
+            {
+                claseCarta = "card card-clickeable m-4";
+                claseCirculo = "circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+            }
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card m-4">   
+                <div class="@claseCarta">
+                    @if (AnalisisController.hayPuestos(Model))
+                    {
                     <a asp-area="" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                     <div class="m-2">
                         <img src="Images/gastos_fijos.svg" class="card-img-top" alt="">
@@ -61,21 +73,40 @@
                             <div class="titulo-carta">Gastos Fijos</div>
                             <p class="texto-carta card-text">Añade los gastos fijos de tu negocio.</p>
                         </div>
-                        <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">2</span>
+                        <span class="@claseCirculo">2</span>
                     </div>
                     </a>
+                    }
+                    else {
+                        <div class="m-2">
+                            <img src="Images/gastos_fijos.svg" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <div class="titulo-carta">Gastos Fijos</div>
+                                <p class="texto-carta card-text">Añade los gastos fijos de tu negocio.</p>
+                            </div>
+                            <span class="@claseCirculo">2</span>
+                        </div>
+                    }
                 </div>
             </div>
-
+            @{
+                claseCarta = "card card-no-clickeable m-4";
+                claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+            }
+            @if (AnalisisController.contieneGastosFijos(Model))
+            {
+                claseCarta = "card card-clickeable m-4";
+                claseCirculo = "circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+            }
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card m-4">
+                <div class="@claseCarta">
                     <div class="m-2">
                         <img src="Images/gastos_variables.svg" class="card-img-top" alt="">
                         <div class="card-body">
                             <div class="titulo-carta">Gastos variables</div>
                             <p class="texto-carta card-text">Añade los productos, servicios y componentes de tu negocio.</p>
                         </div>
-                        <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">3</span>
+                        <span class="@claseCirculo">3</span>
                     </div>
                 </div>
             </div>
@@ -83,40 +114,40 @@
 
         <div class="row ml-5 mr-5 text-center">
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card m-4">
+                <div class="card card-no-clickeable m-4">
                     <div class="m-2">
                         <img src="Images/analisis_rentabilidad.svg" class="card-img-top" alt="">
                         <div class="card-body">
                             <div class="titulo-carta">Análisis de rentabilidad</div>
                             <p class="texto-carta card-text">Ingresa tu meta de ganancias mensual y calcula la meta de ventas.</p>
                         </div>
-                        <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">4</span>
+                        <span class="circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">4</span>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card m-4">
+                <div class="card card-no-clickeable m-4">
                     <div class="m-2">
                         <img src="Images/inversion_inicial.svg" class="card-img-top" alt="">
                         <div class="card-body">
                             <div class="titulo-carta">Inversión inicial</div>
                             <p class="texto-carta card-text">Ingresa los gastos iniciales que son necesarios para comenzar el emprendimiento.</p>
                         </div>
-                        <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">5</span>
+                        <span class="circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">5</span>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card m-4">
+                <div class="card card-no-clickeable m-4">
                     <div class="m-2">
                         <img src="Images/flujo_caja.svg" class="card-img-top" alt="">
                         <div class="card-body">
                             <div class="titulo-carta">Flujo de caja</div>
                             <p class="texto-carta card-text">Agrega los porcentajes de venta por mes y visualiza los ingresos y egresos a lo largo de un año.</p>
                         </div>
-                        <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">6</span>
+                        <span class="circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">6</span>
                     </div>
                 </div>
             </div>

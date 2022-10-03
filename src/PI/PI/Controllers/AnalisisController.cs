@@ -28,5 +28,28 @@ namespace PI.Controllers
             // var tipoAnalisis = handler.ObtenerTipoAnalisis();
             return View(analisisActual);
         }
+
+        public static bool hayPuestos(AnalisisModel analisis) {
+            bool resultado = false;
+            EstructuraOrgHandler estHandler = new EstructuraOrgHandler();
+            List<PuestoModel> puestos = estHandler.ObtenerListaDePuestos(analisis.FechaCreacion);
+            if (puestos.Count > 0) {
+                resultado = true;
+            }
+            return resultado;
+        }
+
+        public static bool contieneGastosFijos(AnalisisModel analisis) {
+            bool resultado = false;
+            GastoFijoHandler gastosHandler = new GastoFijoHandler();
+            List<GastoFijoModel> gastosFijos = gastosHandler.ObtenerGastosFijos(analisis.FechaCreacion);
+            for (int i = 0; i<gastosFijos.Count(); i += 1) {
+                if (gastosFijos[i].Nombre != "Seguridad social" && gastosFijos[i].Nombre != "Prestaciones laborales" && gastosFijos[i].Nombre != "Beneficios de empleados" && gastosFijos[i].Nombre != "Salarios netos") {
+                    resultado = true;
+                    break;
+                }
+            }
+            return resultado;
+        }
     }
 }
