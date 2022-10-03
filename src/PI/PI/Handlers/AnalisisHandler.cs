@@ -125,5 +125,29 @@ namespace PI.Handlers
             string consulta = "INSERT INTO CONFIGURACION (fechaAnalisis, tipoNegocio) VALUES ('" + fecha + "', " + tipoAnalisis + ")";
             enviarConsultaVoid(consulta);
         }
+
+        public ConfigAnalisisModel ObtenerConfigAnalisis(DateTime fechaAnalisis)
+        {
+            string consulta = "execute ObtenerConfigAnalisis @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            ConfigAnalisisModel resultado = new ConfigAnalisisModel
+            {
+                fechaAnalisis = Convert.ToDateTime(tablaResultado.Rows[0]["fechaAnalisis"]),
+                TipoNegocio = Convert.ToBoolean(tablaResultado.Rows[0]["tipoNegocio"]),
+                PorcentajePL = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajePL"]),
+                PorcentajeSS = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajeSS"])
+            };
+            return resultado;
+        }
+
+        public void ActualizarConfiguracionAnalisis(ConfigAnalisisModel configuracionNueva)
+        {
+            string actualizar = "execute insertarConfiguracionAnalisis @fechaAnalisis='"
+                + configuracionNueva.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")
+                + "', @procentajeSS="
+                + configuracionNueva.PorcentajeSS.ToString()
+                + ",@procentajePL=" + configuracionNueva.PorcentajePL.ToString();
+            enviarConsultaVoid(actualizar);
+        }
     }
 }

@@ -46,6 +46,10 @@ body {
     margin-right: 20px;
 }
 
+#botones_der div{
+    margin: 10px;
+}
+
 #boton_usuario {
     padding: 0px;
     width: fit-content;
@@ -67,7 +71,6 @@ body {
     padding: 0px;
     width: fit-content;
     height: fit-content;
-    margin: 20px;
 }
 
 #boton_ajustes a {

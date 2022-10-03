@@ -1,0 +1,125 @@
+﻿.contenido-configAnalisis {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: fit-content;
+    width: 100%;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.seccion-boton-volver {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: fit-content;
+    width: 100%;
+    align-content: center;
+    flex-direction: column;
+}
+
+.flexbox-item {
+    /*Default style for boxes*/
+    margin: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+
+.flexbox-item-configAnalisis {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: fit-content;
+    padding: 20px;
+    width: fit-content;
+    flex-direction: column;
+}
+
+
+.datos-configAnalisis p {
+    margin: 15px 0px 15px 0px;
+    text-align: center;
+    font-size: large;
+}
+
+.fila-input-configAnalisis {
+    text-align: left;
+    font-size: large;
+    margin: 10px 0px 10px 0px;
+}
+
+input[type=number] {
+    font-size: large;
+    border-radius: 5px;
+    border-color: #ccc;
+    width: 50px;
+    margin-left: 5px;
+    text-align:center;
+
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.botones-form-configAnalisis {
+    font-size: small;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0px 10px 0px;
+}
+
+.botones-form-configAnalisis .boton-cancelar {
+    font-size: small;
+    background-color: #e5e3e3;
+    margin: 10px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    padding: 4px;
+    cursor: pointer;
+    font-size: medium;
+}
+
+.botones-form-configAnalisis .boton-aceptar {
+    font-size: small;
+    background-color: #71c9ff;
+    margin: 10px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    padding: 4px;
+    cursor: pointer;
+    font-size: large;
+}
+
+
+.boton-volver {
+    padding: 10px;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-width: 2px;
+    border-radius: 20px;
+    border-color: #ccc;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin: 25px;
+    transition-duration: 0.3s;
+}
+
+.boton-volver:hover {
+    padding: 10px;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-color: transparent;
+    border-radius: 20px;
+    margin: 25px;
+    cursor: pointer;
+    transition-duration: 0.8s;
+    background-color: #E2F2FF;
+}
