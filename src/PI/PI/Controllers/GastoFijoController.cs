@@ -12,14 +12,17 @@ namespace PI.Controllers
     {
         public IActionResult GastoFijo(string fecha)
         {
-            decimal seguroSocial = 0.1m;
-            decimal prestaciones = 0.2m;
 
             ViewData["TituloPaso"] = "Gastos fijos";
             DateTime fechaConversion = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
             ViewBag.fechaAnalisis = fechaConversion;
 
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            ConfigAnalisisModel configuracionAnalisis = analisisHandler.ObtenerConfigAnalisis(fechaConversion);
+            decimal seguroSocial = configuracionAnalisis.PorcentajeSS / 100;
+            decimal prestaciones = configuracionAnalisis.PorcentajePL / 100;
+
 
             gastoFijoHandler.actualizarSalariosNeto(fechaConversion, seguroSocial, prestaciones);
             gastoFijoHandler.actualizarSeguroSocial(fechaConversion, seguroSocial);
