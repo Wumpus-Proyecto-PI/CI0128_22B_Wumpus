@@ -81,6 +81,7 @@
         background-color: #E2F2FF;
         border-color: #E2F2FF;
         transition-duration: 0.4s;
+        cursor:pointer;
     }
 
 
@@ -168,6 +169,7 @@ td {
         transform: scale(1.1);
         border-color: #FFC8C8;
         transition-duration: 0.4s;
+        cursor:pointer;
     }
 
 #lista_beneficios {
@@ -195,6 +197,7 @@ td {
         background-color: #FFC8C8;
         border-color: #FFC8C8;
         transition-duration: 0.4s;
+        cursor:pointer;
     }
 
 #botones_beneficios {
@@ -227,6 +230,7 @@ td {
         transform: scale(1.1);
         border-color: #E2F2FF;
         transition-duration: 0.4s;
+        cursor:pointer;
     }
 
 #boton-cerrar-form-beneficio {
@@ -246,6 +250,7 @@ td {
         transform: scale(1.1);
         border-color: #E2F2FF;
         transition-duration: 0.4s;
+        cursor:pointer;
     }
 
 #contenedor_beneficios {
@@ -408,6 +413,7 @@ div a {
         transform: scale(1.1);
         border-color: #E2F2FF;
         transition-duration: 0.4s;
+        cursor:pointer;
     }
 #agregar-puesto {
     display: flex;
@@ -587,4 +593,5 @@ div a {
         background-color: #FFC8C8;
         border-color: #FFC8C8;
         transition-duration: 0.4s;
+        cursor:pointer;
     }
