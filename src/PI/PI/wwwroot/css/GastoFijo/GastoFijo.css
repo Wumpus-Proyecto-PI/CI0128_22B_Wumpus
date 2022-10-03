@@ -206,7 +206,7 @@ div a {
     height: fit-content;
 }
 
-#seccion-puestos {
+#seccion-gastosFijos {
     display: flex;
     flex-direction: column;
     border: solid;
@@ -333,7 +333,7 @@ div a {
     transition-duration: 0.8s;
 }
 
-#mostrar-puestos {
+#mostrar-gastosFijos {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
