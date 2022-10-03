@@ -4,5 +4,7 @@
     {
         public DateTime fechaAnalisis { get; set; }
         public bool TipoNegocio { set; get; }
+        public decimal PorcentajeSS { get; set; }
+        public decimal PorcentajePL { get; set; }
     }
 }
