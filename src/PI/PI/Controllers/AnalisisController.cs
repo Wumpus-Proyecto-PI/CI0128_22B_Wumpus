@@ -51,7 +51,7 @@ namespace PI.Controllers
             };
 
             analisisHandler.ActualizarConfiguracionAnalisis(configAnalisis);
-            return RedirectToAction("ConfiguracionAnalisis", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
         }
     }
 }
