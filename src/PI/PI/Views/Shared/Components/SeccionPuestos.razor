@@ -24,10 +24,12 @@
                 <div class="fila-form-configuracion">
                 <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
                 </div>
+                @((MarkupString)ErrorSalario)
 
-                    <div class="fila-form-configuracion">
-                    <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
-                    </div>
+                <div class="fila-form-configuracion">
+                <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                </div>
+                @((MarkupString)ErrorPlaza)
                 </form>
                 <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
             </div>
@@ -70,7 +72,78 @@
 </div>
 @if (PopupVisible) {
     <div id="overlay" @onclick="cambiarVisibilidadPopup"></div>
-    <SeccionBeneficios puesto=puestoActivo fechaAnali=fechaAnalasis> </SeccionBeneficios>
+    <div id="contenedor_beneficios">
+        <h1 id="titulo_beneficios">Beneficios</h1>
+        <table id=lista_beneficios>
+            @if (puestoActivo.Beneficios.Count() > 0)
+            {
+                <tr>
+                    <th style="border:none;">Nombre</th>
+                    <th style="border:none;">Monto</th>
+                    <th style="border:none;"> Plazas </th>
+                    <th style="border:none;" width="40px"></th>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th style="border:none; text-align:center; opacity:0.5;"> No hay beneficios que mostrar</th>
+                </tr>
+            }
+            @for (int i = 0; i < puestoActivo.Beneficios.Count(); i += 1)
+            {
+                int index = i;
+
+                <tr class="filas_tabla_beneficio">
+                    <td> @puestoActivo.Beneficios[index].nombreBeneficio</td>
+                    <td> @puestoActivo.Beneficios[index].monto</td>
+                    <td> @puestoActivo.Beneficios[index].plazasPorBeneficio </td>
+                    <td class="columna-borrar-beneficio"><div class="borrar-beneficio" @onclick="()=>borrarBeneficio(puestoActivo.Beneficios[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
+                </tr>
+            }
+        </table>
+        @if (formVisible)
+        {
+            comodines.Add(new BeneficioModel());
+            <h2>Nuevo beneficio</h2>
+            <div id="tabla_form">
+                <div id="container-input-nombre-beneficio">
+                    <label for="nombreBeneficio">Nombre:</label>
+                    <input id="input_nombre_beneficio" name="nombreBeneficio" @bind="comodines[comodinActual].nombreBeneficio">
+                </div>
+                <div id="container-input-monto-beneficio">
+                    <label for="montoBeneficio">Monto:</label>
+                    <input id="input_monto_beneficio" name="montoBeneficio" type="number" @bind="comodines[comodinActual].monto">
+                </div>
+                <div id="container-input-plazas-beneficio">
+                    <label for="montoBeneficio">Plazas:</label>
+                    <input id="input_plazas_beneficio" name="plazasBeneficio" type="number" @bind="comodines[comodinActual].plazasPorBeneficio">
+                </div>
+                <div id="seccion-guardar-beneficio">
+                    <div id="boton-guardar-beneficio" @onclick="agregarBeneficioNuevo">
+                        <img src="img/estructuraOrg/guardarPuesto.png" alt="" width="30px" height="30px">
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="botones_beneficios">
+            @if (!formVisible)
+            {
+                <div id="boton-agregar-beneficio">
+                    <img src="img/estructuraOrg/addPuesto.png" alt="" width="30px" height="30px" @onclick="cambiarVisibilidadForm">
+                </div>
+            }
+            else
+            {
+                <div id="boton-cerrar-form-beneficio">
+                    <img src="img/estructuraOrg/up-arrow.png" alt="" width="30px" height="30px" @onclick="cambiarVisibilidadForm">
+                </div>
+            }
+        </div>
+        <div id="salir-popup-beneficios">
+            <img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarVisibilidadPopup">
+        </div>
+    </div>
 }
 
 
@@ -101,6 +174,8 @@
     public bool hoverAgregar = false;
 
     public string ErrorNombre = "";
+    public string ErrorSalario = "";
+    public string ErrorPlaza = "";
 
     public void Hover(int action)
     {
@@ -148,6 +223,8 @@
         copiaNombreOriginal = puestoActivo.Nombre;
         hayPuestoSeleccionado = true;
         ErrorNombre = "";
+        ErrorSalario = "";
+        ErrorPlaza = "";
     }
 
     public void AgregarNuevoPuesto() {
@@ -158,11 +235,13 @@
         copiaNombreOriginal = "";
         puestoActivo = new PuestoModel();
         ErrorNombre = "";
+        ErrorSalario = "";
+        ErrorPlaza = "";
     }
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
 
-        if (revisarNombre(puestoGuardar))
+        if (revisarNombre(puestoGuardar) && revisarSalario(puestoGuardar) && revisarPlazasPuesto(puestoGuardar))
         {
             puestoGuardar.FechaAnalisis = fechaAnalasis;
             HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
@@ -171,6 +250,8 @@
                 puestoActivo = new PuestoModel();
             }
             ErrorNombre = "";
+            ErrorSalario = "";
+            ErrorPlaza = "";
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
         }
     }
@@ -199,13 +280,97 @@
             }
             puestos.Insert(index, puestoGuardar);
         }
+        if (valido)
+        {
+            ErrorNombre = "";
+        }
+        return valido;
+    }
 
+    private bool revisarPlazasPuesto(PuestoModel puestoGuardar)
+    {
+        bool valido = true;
+        if (puestoGuardar.Plazas < 0.0m)
+        {
+            ErrorPlaza = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un número de plazas positivo.</p>";
+            valido = false;
+        } else {
+            ErrorPlaza = "";
+        }
+
+
+        return valido;
+    }
+
+    private bool revisarSalario(PuestoModel puestoGuardar)
+    {
+        bool valido = true;
+        if (puestoGuardar.SalarioBruto < 0.0m)
+        {
+            ErrorSalario = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un salario positivo.</p>";
+            valido = false;
+        } else {
+            ErrorSalario = "";
+        }
         return valido;
     }
 
     public void eliminarPuesto(PuestoModel puestoEliminar)
     {
         HandlerPuesto.EliminarPuesto(puestoEliminar);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
+
+    public BeneficioModel comodin = new BeneficioModel();
+
+    public List<BeneficioModel> comodines = new List<BeneficioModel>();
+
+    int comodinActual = 0;
+
+    public bool formVisible = false;
+
+    public string html = "";
+
+    Queue<Tuple<BeneficioModel, int>> cambiosBeneficios = new Queue<Tuple<BeneficioModel, int>>();
+
+    public void agregarBeneficioNuevo()
+    {
+        EstructuraOrgHandler h = new EstructuraOrgHandler();
+        comodines[comodinActual].fechaAnalisis = fechaAnalasis;
+        comodines[comodinActual].nombrePuesto = puestoActivo.Nombre;
+        formVisible = false;
+        puestoActivo.Beneficios.Add(comodines[comodinActual]);
+        h.AgregarBeneficio(comodines[comodinActual]);
+        comodines.Add(new BeneficioModel());
+        comodinActual += 1;
+    }
+
+
+    public void borrarBeneficio(BeneficioModel b)
+    {
+        b.fechaAnalisis = puestoActivo.FechaAnalisis;
+        b.nombrePuesto = puestoActivo.Nombre;
+        EstructuraOrgHandler h = new EstructuraOrgHandler();
+        puestoActivo.Beneficios.Remove(b);
+        h.BorrarBeneficio(b);
+
+    }
+
+    public void cambiarVisibilidadForm()
+    {
+        if (formVisible)
+        {
+            formVisible = false;
+        }
+        else
+        {
+            formVisible = true;
+        }
+    }
+
+    public void refrescarPagina()
+    {
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }

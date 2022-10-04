@@ -16,19 +16,20 @@
 
 <body>
     <div class="analisis-header row">
-        <div class="col-md-4">
-            <div class="text-white text-center mt-3">
-                <p class="texto-header mb-0 fw-bold">Cantidad de an&aacutelisis</p>
-                <p class="mb-4">####</p>
-            </div>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">@ViewData["NombreNegocio"]</p>
-                <p class="mb-4">Estado del negocio</p>
+                @if (Model.Configuracion.TipoNegocio == false)
+                {
+                    <p class="mb-4">Estado: emprendimiento</p>
+                }
+                else
+                {
+                    <p class="mb-4">Estado: ya iniciado</p>
+                }
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">Fecha de creaci&oacuten</p>
                 <p class="mb-4">@Model.FechaCreacion</p>
