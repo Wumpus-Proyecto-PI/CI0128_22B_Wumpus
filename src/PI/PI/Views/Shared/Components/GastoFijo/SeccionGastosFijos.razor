@@ -6,7 +6,7 @@
 <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
     <div id="titulo-contenido">
         @*Aqui se agrega lo de las pestanas*@
-        @if (hayPuestoSeleccionado == false)
+        @if (hayGastoFijoSeleccionado == false)
         {
             <h1>Nuevo gasto fijo</h1>
         } else {
@@ -21,18 +21,18 @@
                     <div class="fila-form-configuracion">
                         <label>Nombre</label> <input name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
                     </div>
-                    @((MarkupString)CasoRepetido)
+                    @((MarkupString)CasoError_repetido)
 
                     <div class="fila-form-configuracion">
-                        <label>Monto mensual</label> <input name="" type="number" step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
+                        <label>Monto mensual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
                     </div>
-
+                    @((MarkupString)CasoError_negativo)
                 </form>
             </div>
         }   
     </div>
     <div id="inferior-horizontal">
-        <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(gastoFijoActivo)">
+        <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
 
                 @if (hoverGuardar == false) {
                     <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -42,7 +42,7 @@
     </div>
 </div>
 
-<div class="altura-seccion" id="seccion-puestos">
+<div class="altura-seccion" id="seccion-gastosFijos">
     <div class="totales"> 
         <div class="fila-form-configuracion">
             <label class="total">Total mensual</label> <p> @((totalMensual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
@@ -53,9 +53,7 @@
         </div>
 
     </div>
-    @*Seccion de puestos donde se ven los puestos en cajas con organigrama*@
-
-    <div id="mostrar-puestos">
+    <div id="mostrar-gastosFijos">
 
         @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
         {
@@ -63,10 +61,10 @@
             @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
             { 
                 <div class="gastoFijo-clickeable-eliminable" >
-                <div @onclick="() => SeleccionarPuesto(gastoFijoActual)">
+                <div @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
                     <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
                 </div>
-                    <img @onclick="() => eliminarPuesto(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
+                    <img @onclick="() => eliminarGastoFijo(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
             </div>
             } else {
                 <div class="gastoFijo-noClickeable-noEliminable">
@@ -76,7 +74,7 @@
 
         }
     </div>
-    <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+    <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
         <a>
             @if (hoverAgregar == false)
             {
@@ -98,7 +96,7 @@
     [Parameter]
     public decimal totalMensual { get; set; }
 
-    public bool hayPuestoSeleccionado = false;
+    public bool hayGastoFijoSeleccionado = false;
     public GastoFijoModel gastoFijoActivo = new GastoFijoModel();
 
     public GastoFijoHandler HandlerGastoFijo = new GastoFijoHandler();
@@ -115,7 +113,8 @@
     public bool hoverAgregar = false;
 
     bool pestanyaConfiguracionActiva = true;
-    string CasoRepetido = "";
+    string CasoError_repetido = "";
+    string CasoError_negativo = "";
 
     string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
 
@@ -144,37 +143,43 @@
         }
     }
 
-    public void SeleccionarPuesto(GastoFijoModel puestoSeleccionado)
+    public void SeleccionarGastoFijo(GastoFijoModel gastoFijoSeleccionado)
     {
-        CasoRepetido = "";
-        gastoFijoActivo = puestoSeleccionado;
+        CasoError_negativo = "";
+        CasoError_repetido = "";
+
+        gastoFijoActivo = gastoFijoSeleccionado;
         placeHolderNombre = gastoFijoActivo.Nombre;
         placeHolderMonto = gastoFijoActivo.Monto.ToString();
         copiaNombreOriginal = gastoFijoActivo.Nombre;
-        hayPuestoSeleccionado = true;
+        hayGastoFijoSeleccionado = true;
 
     }
 
-    public void AgregarNuevoPuesto() {
-        CasoRepetido = "";
+    public void AgregarNuevoGastoFijo() {
+        CasoError_negativo = "";
+        CasoError_repetido = "";
         placeHolderNombre = "Ingresar nombre";
         placeHolderMonto = "Ingresar monto";
-        hayPuestoSeleccionado = false;
+        hayGastoFijoSeleccionado = false;
         pestanyaConfiguracionActiva = true;
         copiaNombreOriginal = "";
         gastoFijoActivo = new GastoFijoModel();
     }
 
-    public void GuardarDatosPuesto(GastoFijoModel puestoGuardar) {
+    public void GuardarDatosGastoFijo(GastoFijoModel gastoFijoGuardar) {
 
-        if (gastosFijos.Exists(x => x.Nombre == puestoGuardar.Nombre) && hayPuestoSeleccionado == false)
+        if (gastosFijos.Exists(x => x.Nombre == gastoFijoGuardar.Nombre) && hayGastoFijoSeleccionado == false)
         {  // ya existe el gasto fijo
-            CasoRepetido = "<p class=\"error-gastoFijoRepetido\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
-        } else {
-            CasoRepetido = "";
-            puestoGuardar.FechaAnalisis = fechaAnalasis;
-            HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, puestoGuardar.Nombre, puestoGuardar.Monto.ToString(), puestoGuardar.FechaAnalisis);
-            if (hayPuestoSeleccionado == false)
+            CasoError_repetido = "<p class=\"error error-gastoFijo\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
+        } else if (gastoFijoGuardar.Monto < 0) {
+            CasoError_negativo = "<p class=\"error error-gastoFijo\">Error: el monto es un número negativo.<br>ingrese un monto positivo.</p>";
+        }
+        else {
+            CasoError_negativo = "";
+            gastoFijoGuardar.FechaAnalisis = fechaAnalasis;
+            HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, gastoFijoGuardar.Nombre, gastoFijoGuardar.Monto.ToString(), gastoFijoGuardar.FechaAnalisis);
+            if (hayGastoFijoSeleccionado == false)
             {
                 gastoFijoActivo = new GastoFijoModel();
             }
@@ -183,10 +188,11 @@
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
-    public void eliminarPuesto(GastoFijoModel puestoEliminar)
+    public void eliminarGastoFijo(GastoFijoModel gastoFijoEliminar)
     {
-        CasoRepetido = "";
-        HandlerGastoFijo.eliminarGastoFijo(puestoEliminar.Nombre, puestoEliminar.FechaAnalisis);
+        CasoError_negativo = "";
+        CasoError_repetido = "";
+        HandlerGastoFijo.eliminarGastoFijo(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
         actualizarMontoMensual();
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
