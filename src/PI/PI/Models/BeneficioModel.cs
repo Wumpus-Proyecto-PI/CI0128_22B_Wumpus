@@ -5,8 +5,8 @@ namespace PI.Models
         public string nombrePuesto {get; set; }
         public string nombreBeneficio {get;set;}
         public DateTime fechaAnalisis {get;set; }
-        public decimal monto {get; set;}
-        public int plazasPorBeneficio {get; set;}
+        public decimal monto { get; set; } = 0.0m;
+        public int plazasPorBeneficio { get; set; } = 1;
 
     }
 }
