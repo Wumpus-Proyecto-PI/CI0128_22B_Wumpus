@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/LayoutPasosAnalisis.css" asp-append-version="true" />
+</head>
+<body>
+    <header id="encabezado">
+        <div id="logo">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="~/img/lagoysarmiento.png" alt="Logo de la empresa">
+            </a>
+        </div>
+        <div id="nombre_seccion">
+            @ViewData["TituloPaso"]
+        </div>
+        <div id="botones_der">
+            <div id="boton_usuario">
+                <a asp-controller="Mensajes" asp-action="BajoConstruccion" ><img src="~/img/user.png" alt="Usuario"></a>
+            </div>
+            @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios" && @ViewBag.fechaAnalisis != null)
+            {
+                <div id="boton_ajustes">
+                    <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
+                </div>
+            }
+            <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+<base href="~/" />
+<script src="_framework/blazor.server.js"></script>

@@ -1,0 +1,58 @@
+﻿@model ConfigAnalisisModel
+
+<!-- models -->
+@{
+    Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+}
+<!-- head -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- links -->
+    <link rel="stylesheet" href="~/css/Analisis/configuracionAnalisis.css">
+    <!--  -->
+    <title>Configuraci&oacute de an&aacutelisis</title>
+</head>
+<!-- body -->
+<body>
+    <div class="contenido-configAnalisis">
+        <div class="seccion-boton-volver" >    
+            <a class="boton-volver" asp-action="Index" asp-controller="Analisis" asp-route-fechaAnalisis="@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")">Volver al an&aacutelisis</a>
+        </div>
+        <div class="flexbox-item flexbox-item-configAnalisis">
+            <div class="datos-configAnalisis">
+                <div>
+                    <p>Fecha del an&aacutelisis: @ViewData["fechaFormateada"]</p>
+                </div>
+            </div>
+            <div>
+                <form asp-controller="Analisis" asp-action="GuardarConfiguracion" method="post">
+                    <input hidden type="text" name="fechaAnalisis" value="@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")"></input>
+                    <div class="fila-input-configAnalisis">
+                        <label>Porcentaje dirigido al seguro social:</label>
+                        <input type="number" step="any" name="porcentajeSS" min=0 max=100 placeholder="@Model.PorcentajeSS" value="@Model.PorcentajeSS" required>%
+                    </div>
+                    <div class="fila-input-configAnalisis">
+                        <label>Porcentaje dirigido a prestaciones laborales:</label>
+                        <input type="number" step="any" min=0 max=100 name="porcentajePL" placeholder="@Model.PorcentajePL" value="@Model.PorcentajePL" required>%
+                    </div>
+                    <!--submit Aceptar y cancelar (botones)-->
+                    <div class="botones-form-configAnalisis">
+                        <!-- Guarda la información ingresada en la base de datos-->
+                        <input class="boton-aceptar" type="submit" value="Guardar">
+                        <!-- Retorna la página de los negocios creados -->
+                        <a class="boton-cancelar" asp-action="Index" asp-controller="Analisis" asp-route-fechaAnalisis="@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+<br />
+<!-- footer -->
+<!-- end -->
+
+</html>

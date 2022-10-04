@@ -1,0 +1,108 @@
+﻿
+.flexbox-container {
+    display: flex;
+    justify-content: space-around;
+    /* justify-content: space-between; */
+    /* justify-content: center; */
+    /* justify-content: flex-start; */
+    /*vertical consideration*/
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: space-around;
+}
+
+.flexbox-item {
+    /*Default style for boxes*/
+    margin: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+
+/* .flexbox-item:hover {
+  transition: box-shadow .3s;
+  transform: scale(1.03);
+  box-shadow: 0px 0px 10px 4px rgba(0, 195, 255, 0.611);;
+} */
+
+.flexbox-item-Steps {
+    height: 500px;
+    width: 400px;
+}
+
+.flexbox-container-nuevoNegocio {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 750px;
+    align-content: space-around;
+}
+
+.flexbox-item-nuevoNegocio {
+    height: 390px;
+    width: 400px;
+}
+
+h2 {
+    margin: 20px 0px 0px 0px;
+    text-align: center;
+    font-size: xx-large;
+}
+
+.NombreNegocio {
+    text-align: center;
+    font-size: large;
+}
+
+input[type=text] {
+    font-size: large;
+    border-radius: 5px;
+    border-color: #ccc;
+}
+
+.TipoNegocio {
+    margin: 20px;
+    text-align: center;
+    font-size: large;
+}
+
+.boxRadio {
+    display: block;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+    width: 180px;
+    height: 60px;
+    margin: 3px 0px 0px 90px;
+    padding: 15px 0px 0px 10px;
+}
+
+.botones {
+    font-size: small;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.botones .boton-cancelar {
+    font-size: small;
+    background-color:#e5e3e3;
+    margin: 10px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    padding: 4px;
+    cursor: pointer;
+    font-size: medium;
+}
+
+.botones .boton-aceptar {
+    font-size: small;
+    background-color: #71c9ff;
+    margin: 10px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    padding: 4px;
+    cursor: pointer;
+    font-size: large;
+}

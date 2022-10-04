@@ -1,0 +1,122 @@
+﻿@charset "UTF-8";
+
+.analisis-header {
+    background-color: #005DB9;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.25);
+}
+
+.header-part {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.texto-header {
+    font-size: 1.3rem;
+}
+
+.titulo-carta {
+    font-size: 1.2rem;
+    font-weight:bold;
+    margin-bottom:1rem;
+}
+
+.texto-carta {
+    font-size: 1rem;
+    color: #808080;
+    line-height:1.2rem;
+    /*padding-bottom: 1rem;*/
+    margin-bottom:1rem;
+}
+
+.circulo-num {
+    display:flex;
+    place-items:center;
+    justify-content:center;
+    background-color: #F8F8F8;
+ /*   font-weight:bold;*/
+    font-size:1.5rem;
+    color:black;
+    width:3rem;
+    height:3rem;
+    box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.25);
+}
+
+.circulo-num-no-clickeable {
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    background-color: #BDBDBD;
+    /*   font-weight:bold;*/
+    font-size: 1.5rem;
+    color: black;
+    width: 3rem;
+    height: 3rem;
+    box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.25);
+}
+
+.header-data {
+    font-size: 15px;
+    color: white;
+    text-align: center;
+}
+
+.row {
+    padding-right:0rem;
+}
+
+.imagenes-verde {
+    width:4.5rem;
+    height:4.5rem;
+    fill: green;
+}
+
+.titulo-cartas-abajo {
+    font-size:1.8rem;
+    margin-bottom:1rem;
+}
+
+hr {
+    height: auto;
+    border: 1px solid #808080;
+    margin-top:4rem;
+    margin-bottom:4rem;
+    padding-right: 1rem;
+}
+
+.card-clickeable {
+    background-color: white;
+    transition-duration: 0.4s;
+    box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);
+    width: 18rem;
+    border-radius: 22px;
+}
+
+.card-no-clickeable {
+    opacity: 0.75;
+    background-color: lightgray;
+    transition-duration: 0.4s;
+    /*box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);*/
+    width: 18rem;
+    border-radius: 22px;
+}
+
+.card-no-clickeable img {
+/*    opacity: 0.5;*/
+}
+
+.card-clickeable:hover {
+    transition: box-shadow .2s;
+    transform: scale(1.03);
+    background-color: white;
+    color: black;
+    /* box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); */
+    cursor:pointer;
+}
+
+
+
+
+

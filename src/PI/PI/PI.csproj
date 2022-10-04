@@ -6,4 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Markdig.Signed" Version="0.30.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.9" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\estructuraOrg\PuestoParcialView.css" />
+    <None Include="wwwroot\css\negocio\FormAgregarNegocio.css" />
+    <None Include="wwwroot\css\negocio\Index.css" />
+  </ItemGroup>
+
 </Project>

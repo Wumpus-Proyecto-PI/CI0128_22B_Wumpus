@@ -1,0 +1,202 @@
+﻿@using PI.Models
+@using PI.Handlers
+@inject NavigationManager NavigationManager;
+
+
+<div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
+    <div id="titulo-contenido">
+        @*Aqui se agrega lo de las pestanas*@
+        @if (hayGastoFijoSeleccionado == false)
+        {
+            <h1>Nuevo gasto fijo</h1>
+        } else {
+            <h1>Editar gasto fijo</h1>
+        }
+
+        @if (pestanyaConfiguracionActiva == true)
+        {
+            <div id="cuadro_configuracion">
+
+                <form id="form_configuracion">
+                    <div class="fila-form-configuracion">
+                        <label>Nombre</label> <input name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
+                    </div>
+                    @((MarkupString)CasoError_repetido)
+
+                    <div class="fila-form-configuracion">
+                        <label>Monto mensual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
+                    </div>
+                    @((MarkupString)CasoError_negativo)
+                </form>
+            </div>
+        }   
+    </div>
+    <div id="inferior-horizontal">
+        <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
+
+                @if (hoverGuardar == false) {
+                    <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                }
+                @hoverTextGuardar
+        </div>
+    </div>
+</div>
+
+<div class="altura-seccion" id="seccion-gastosFijos">
+    <div class="totales"> 
+        <div class="fila-form-configuracion">
+            <label class="total">Total mensual</label> <p> @((totalMensual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+        </div>
+        <div class="fila-form-configuracion">
+           
+            <label class="total">Total anual </label> <p> @((totalMensual * 12).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+        </div>
+
+    </div>
+    <div id="mostrar-gastosFijos">
+
+        @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
+        {
+            @* Verifica la diferencia entre un gasto editable y uno que no *@
+            @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
+            { 
+                <div class="gastoFijo-clickeable-eliminable" >
+                <div @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
+                    <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                </div>
+                    <img @onclick="() => eliminarGastoFijo(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
+            </div>
+            } else {
+                <div class="gastoFijo-noClickeable-noEliminable">
+                        <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                 </div>
+            }
+
+        }
+    </div>
+    <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
+        <a>
+            @if (hoverAgregar == false)
+            {
+                <img src="img/estructuraOrg/addPuesto.png" alt="">
+            }
+            @hoverTextAgregar
+            </a>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public List<GastoFijoModel> gastosFijos { get; set; }
+
+    [Parameter]
+    public DateTime fechaAnalasis { get; set; }
+
+    [Parameter]
+    public decimal totalMensual { get; set; }
+
+    public bool hayGastoFijoSeleccionado = false;
+    public GastoFijoModel gastoFijoActivo = new GastoFijoModel();
+
+    public GastoFijoHandler HandlerGastoFijo = new GastoFijoHandler();
+
+    public string copiaNombreOriginal = "";
+
+    public string placeHolderNombre = "Ingresar nombre";
+    public string placeHolderMonto = "Ingresar monto";
+
+    public string hoverTextAgregar = "";
+    public string hoverTextGuardar = "";
+
+    public bool hoverGuardar = false;
+    public bool hoverAgregar = false;
+
+    bool pestanyaConfiguracionActiva = true;
+    string CasoError_repetido = "";
+    string CasoError_negativo = "";
+
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
+
+    public void Hover(int action)
+    {
+
+        if (action == 1) {
+            hoverTextAgregar = "Agregar gasto fijo";
+            hoverAgregar = true;
+        }
+        else if (action == 2)
+        {
+            hoverGuardar = true;
+            hoverTextGuardar = "Guardar datos";
+        }
+    }
+    public void HoverOut(int action)
+    {
+        if (action == 1)
+        {
+            hoverTextAgregar = "";
+            hoverAgregar = false;
+        } else {
+            hoverGuardar = false;
+            hoverTextGuardar = "";
+        }
+    }
+
+    public void SeleccionarGastoFijo(GastoFijoModel gastoFijoSeleccionado)
+    {
+        CasoError_negativo = "";
+        CasoError_repetido = "";
+
+        gastoFijoActivo = gastoFijoSeleccionado;
+        placeHolderNombre = gastoFijoActivo.Nombre;
+        placeHolderMonto = gastoFijoActivo.Monto.ToString();
+        copiaNombreOriginal = gastoFijoActivo.Nombre;
+        hayGastoFijoSeleccionado = true;
+
+    }
+
+    public void AgregarNuevoGastoFijo() {
+        CasoError_negativo = "";
+        CasoError_repetido = "";
+        placeHolderNombre = "Ingresar nombre";
+        placeHolderMonto = "Ingresar monto";
+        hayGastoFijoSeleccionado = false;
+        pestanyaConfiguracionActiva = true;
+        copiaNombreOriginal = "";
+        gastoFijoActivo = new GastoFijoModel();
+    }
+
+    public void GuardarDatosGastoFijo(GastoFijoModel gastoFijoGuardar) {
+
+        if (gastosFijos.Exists(x => x.Nombre == gastoFijoGuardar.Nombre) && hayGastoFijoSeleccionado == false)
+        {  // ya existe el gasto fijo
+            CasoError_repetido = "<p class=\"error error-gastoFijo\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
+        } else if (gastoFijoGuardar.Monto < 0) {
+            CasoError_negativo = "<p class=\"error error-gastoFijo\">Error: el monto es un número negativo.<br>ingrese un monto positivo.</p>";
+        }
+        else {
+            CasoError_negativo = "";
+            gastoFijoGuardar.FechaAnalisis = fechaAnalasis;
+            HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, gastoFijoGuardar.Nombre, gastoFijoGuardar.Monto.ToString(), gastoFijoGuardar.FechaAnalisis);
+            if (hayGastoFijoSeleccionado == false)
+            {
+                gastoFijoActivo = new GastoFijoModel();
+            }
+            copiaNombreOriginal = string.Empty;
+            actualizarMontoMensual();
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        }
+    }
+    public void eliminarGastoFijo(GastoFijoModel gastoFijoEliminar)
+    {
+        CasoError_negativo = "";
+        CasoError_repetido = "";
+        HandlerGastoFijo.eliminarGastoFijo(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
+        actualizarMontoMensual();
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+    public void actualizarMontoMensual () {
+        this.totalMensual = HandlerGastoFijo.obtenerTotalMensual(this.fechaAnalasis);
+    }
+}

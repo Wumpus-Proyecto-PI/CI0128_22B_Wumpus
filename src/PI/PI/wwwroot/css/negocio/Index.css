@@ -1,0 +1,195 @@
+@charset "UTF-8";
+
+.card-container {
+    display: flex;
+    justify-content: center;
+
+    /*vertical consideration*/
+    height: 400px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
+.card-trash-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    margin-left: 50px;
+    z-index: 0;
+}
+
+.card-trash-container:hover {
+    transition: box-shadow .2s;
+    transform: scale(1.03);
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 20px;
+}
+
+.card {
+    border: solid 1px;
+    border-color: lightgray;
+    background-color: white;
+    transition-duration: 0.2s;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    height: 200px;
+    border-radius: 20px;
+    padding: 10px;
+    transition-duration: 0.5s;
+}
+
+.card-container .card-agregar {
+    order: initial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+    margin-left: 50px;
+}
+
+.card-container .card-negocio {
+    display: flex;
+    text-align: left;
+}
+
+.card:hover {
+    transition-duration: 0.3s;
+    transform: scale(1.03);
+    background-color: #E2F2FF;
+    cursor: pointer;
+}
+
+.card-container {
+    line-height: 35px;
+}
+
+h1 {
+    position: relative;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.card-nombre {
+    line-height: 20px;
+    font-size: 25px;
+    margin: 8px;;
+    font-weight:600;
+}
+
+.card-tipo {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    margin-top: 25px;
+}
+
+.boton-agregar {
+    width: 50px;
+    height: 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo-negocio {
+    width: 50px;
+    height: 50px;
+    float: left;
+}
+
+.inicial-nombre {
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    width: 40px;
+    height: 40px;
+    background: #5d96d4;
+    float: left;
+    font-size: 25px;
+    border: solid 1px #ccc;
+    border-radius: 100%;
+    padding: 0px 10px -10px 10px;
+    margin: 0px 10px 0px 0px;
+}
+
+.inicial-nombre span {
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+#tipoNegocio {
+    margin: 0;
+    padding: 0;
+    font-weight:600;
+    text-decoration: none;
+}
+
+.link-tarjeta {
+    width: fit-content;
+}
+
+.card-analisis {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+
+.card-actualizacion {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+
+.trash-container {
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    margin-left: -10px;
+}
+
+.trash-can {
+    display: flex;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: fit-content;
+    height: fit-content;
+    margin: -5px 7px -10px 7px;
+    transition-duration: 0.4s;
+}
+
+.trash-can:hover {
+    color: black;
+    cursor: pointer;
+    transform: scale(1.03);
+    transition-duration: 0.2s;
+}
+
+.trash-img {
+    width: 35px;
+    padding: 1px;
+    margin-left: -20px;
+    border: solid;
+    border-width: 3px;
+    border-color: lightgray;
+    border-radius: 20px;
+    background-color: white;
+    transition-duration: 0.4s;
+}
+
+.trash-img:hover {
+    transform: scale(1.1);
+    background-color: #FFC8C8;
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+}
+

@@ -1,0 +1,111 @@
+div {
+    font-family: sans-serif;
+}
+
+body {
+    margin: 0px;
+}
+
+#encabezado {
+    width: 100%;
+    padding-top: 10px;
+    height: 100px;
+    box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 5px 0px 5px;
+    align-items: center;
+}
+
+#logo {
+    width: fit-content;
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logo a {
+    width: fit-content;
+    height: fit-content;
+    display: block;
+}
+
+#logo img{
+    width: 150px
+}
+
+
+#botones_der {
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    flex-direction: row-reverse;
+    margin-right: 20px;
+}
+
+#botones_der div{
+    margin: 10px;
+}
+
+#boton_usuario {
+    padding: 0px;
+    width: fit-content;
+    height: fit-content;
+}
+
+#boton_usuario a {
+    width: fit-content;
+    height: 40px;
+    display: block;
+    padding: 0px;
+}
+
+#boton_usuario img {
+    width: 40px
+}
+
+#boton_ajustes {
+    padding: 0px;
+    width: fit-content;
+    height: fit-content;
+}
+
+#boton_ajustes a {
+    width: fit-content;
+    height: 40px;
+    padding: 0px;
+    display: block;
+    margin: 
+}
+
+#boton_ajustes img {
+    width: 40px
+}
+
+#boton_negocios {
+    padding: 0px;
+    width: fit-content;
+    height: fit-content;
+}
+
+#boton_negocios a {
+    font-size: 26px;
+}
+
+#nombre_seccion {
+    width: fit-content;
+    top: 10px;
+    text-align: center;
+    font-size: 40px;
+}
+
+div a {
+    color: black;
+    text-decoration: none;
+    font-size: 25px;
+}

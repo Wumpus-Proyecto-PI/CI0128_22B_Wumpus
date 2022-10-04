@@ -1,0 +1,25 @@
+﻿@using PI.Models
+
+<div class="puesto puesto-editar">
+    <div class="top-puesto">
+        <div class="puesto-nombre"><h1>@puesto.Nombre</h1></div>
+    </div>
+    <div class="bottom-puesto">
+        <div class="puesto-caracteristica puesto-salario-bruto">
+            <p>@puesto.SalarioBruto.ToString()</p>
+            <img class="divisa-img" src="/img/generic/coin-icon.svg">
+        </div>
+        <div>
+            <div class="puesto-caracteristica puesto-numero-plazas">
+                <p>@puesto.Plazas.ToString()</p>
+                <img class="plaza-img" src=img/puesto/plaza.png>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public PuestoModel puesto { get; set;}
+}
