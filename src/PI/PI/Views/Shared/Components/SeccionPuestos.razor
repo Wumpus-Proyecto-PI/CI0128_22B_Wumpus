@@ -22,12 +22,14 @@
                  @((MarkupString)ErrorNombre)
 
                 <div class="fila-form-configuracion">
-                <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
+                <label>Salario</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
                 </div>
+                @((MarkupString)ErrorSalario)
 
-                    <div class="fila-form-configuracion">
-                    <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
-                    </div>
+                <div class="fila-form-configuracion">
+                <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                </div>
+                @((MarkupString)ErrorPlaza)
                 </form>
                 <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
             </div>
@@ -189,6 +191,8 @@
     public bool hoverAgregar = false;
 
     public string ErrorNombre = "";
+    public string ErrorSalario = "";
+    public string ErrorPlaza = "";
 
     public void Hover(int action)
     {
@@ -236,6 +240,8 @@
         copiaNombreOriginal = puestoActivo.Nombre;
         hayPuestoSeleccionado = true;
         ErrorNombre = "";
+        ErrorSalario = "";
+        ErrorPlaza = "";
     }
 
     public void AgregarNuevoPuesto() {
@@ -246,11 +252,13 @@
         copiaNombreOriginal = "";
         puestoActivo = new PuestoModel();
         ErrorNombre = "";
+        ErrorSalario = "";
+        ErrorPlaza = "";
     }
 
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
 
-        if (revisarNombre(puestoGuardar))
+        if (revisarNombre(puestoGuardar) && revisarSalario(puestoGuardar) && revisarPlazasPuesto(puestoGuardar))
         {
             puestoGuardar.FechaAnalisis = fechaAnalasis;
             HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
@@ -259,6 +267,8 @@
                 puestoActivo = new PuestoModel();
             }
             ErrorNombre = "";
+            ErrorSalario = "";
+            ErrorPlaza = "";
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
         }
     }
@@ -287,7 +297,38 @@
             }
             puestos.Insert(index, puestoGuardar);
         }
+        if (valido)
+        {
+            ErrorNombre = "";
+        }
+        return valido;
+    }
 
+    private bool revisarPlazasPuesto(PuestoModel puestoGuardar)
+    {
+        bool valido = true;
+        if (puestoGuardar.Plazas < 0.0m)
+        {
+            ErrorPlaza = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un número de plazas positivo.</p>";
+            valido = false;
+        } else {
+            ErrorPlaza = "";
+        }
+
+
+        return valido;
+    }
+
+    private bool revisarSalario(PuestoModel puestoGuardar)
+    {
+        bool valido = true;
+        if (puestoGuardar.SalarioBruto < 0.0m)
+        {
+            ErrorSalario = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un salario positivo.</p>";
+            valido = false;
+        } else {
+            ErrorSalario = "";
+        }
         return valido;
     }
 
