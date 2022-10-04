@@ -492,8 +492,8 @@ div a {
     background-color: white;
 }
 
-.error-gastoFijoRepetido {
-    font-size: 4px;
+.error {
+    font-size: 12px;
     color: red;
     width: fit-content;
     height: auto;
