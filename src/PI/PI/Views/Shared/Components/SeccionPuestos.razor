@@ -366,7 +366,7 @@
 
     public void agregarBeneficioNuevo()
     {
-        if (comodines[comodinActual].monto >= 0 && string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio) && comodines[comodinActual].plazasPorBeneficio <= puestoActivo.Plazas && comodines[comodinActual].plazasPorBeneficio >= 0)
+        if (comodines[comodinActual].monto >= 0 && !string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio) && comodines[comodinActual].plazasPorBeneficio <= puestoActivo.Plazas && comodines[comodinActual].plazasPorBeneficio >= 0)
         {
             MontoBeneficiosPositivo = true;
             NombreVacio = false;
