@@ -192,7 +192,11 @@ namespace PI.Handlers
             List<BeneficioModel> resultadoBeneficios = new List<BeneficioModel>();
 
             // consulta para extraer los beneficios
-            string consulta = "INSERT INTO BENEFICIO VALUES('" + b.nombrePuesto + "','" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "','" + b.nombreBeneficio + "'," + b.monto.ToString() + "," + b.plazasPorBeneficio.ToString() + ") SELECT * FROM BENEFICIO";
+            string consulta = "DECLARE @montoTemp varchar(20) SET @montoTemp = '"+ b.monto.ToString() 
+                + "' SET @montoTemp = REPLACE(@montoTemp, ',', '.') INSERT INTO BENEFICIO VALUES('" + b.nombrePuesto + "','" 
+                + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "','" 
+                + b.nombreBeneficio + "', dbo.convertTOdecimal (@montoTemp),"
+                + b.plazasPorBeneficio.ToString() + ") SELECT * FROM BENEFICIO";
             DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
 
             foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
