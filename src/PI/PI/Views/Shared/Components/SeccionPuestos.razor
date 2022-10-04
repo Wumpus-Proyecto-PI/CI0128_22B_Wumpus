@@ -22,12 +22,12 @@
                  @((MarkupString)ErrorNombre)
 
                 <div class="fila-form-configuracion">
-                <label>Salario</label> <input name="" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
+                <label>Salario</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
                 </div>
                 @((MarkupString)ErrorSalario)
 
                 <div class="fila-form-configuracion">
-                <label>Plazas</label> <input name="" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
                 </div>
                 @((MarkupString)ErrorPlaza)
                 </form>
