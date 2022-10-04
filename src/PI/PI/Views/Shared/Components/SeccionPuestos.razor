@@ -31,7 +31,9 @@
                 </div>
                 @((MarkupString)ErrorPlaza)
                 </form>
-                <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
+                @if (hayPuestoSeleccionado) {
+                    <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
+                }
             </div>
 
     </div>
@@ -113,11 +115,11 @@
                 </div>
                 <div id="container-input-monto-beneficio">
                     <label for="montoBeneficio">Monto:</label>
-                    <input id="input_monto_beneficio" name="montoBeneficio" type="number" @bind="comodines[comodinActual].monto">
+                    <input id="input_monto_beneficio" min="0" step="any" name="montoBeneficio" type="number" @bind="comodines[comodinActual].monto">
                 </div>
                 <div id="container-input-plazas-beneficio">
                     <label for="montoBeneficio">Plazas:</label>
-                    <input id="input_plazas_beneficio" name="plazasBeneficio" type="number" @bind="comodines[comodinActual].plazasPorBeneficio">
+                    <input id="input_plazas_beneficio" min="1" name="plazasBeneficio" type="number" @bind="comodines[comodinActual].plazasPorBeneficio">
                 </div>
                 <div id="seccion-guardar-beneficio">
                     <div id="boton-guardar-beneficio" @onclick="agregarBeneficioNuevo">
@@ -284,7 +286,7 @@
         if (!hayPuestoSeleccionado) {
             if (puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
             {
-                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del gasto fijo ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
         } else {
@@ -292,7 +294,7 @@
             puestos.Remove(puestoGuardar);
             if (puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
             {
-                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del gasto fijo ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
             puestos.Insert(index, puestoGuardar);
@@ -364,10 +366,10 @@
 
     public void agregarBeneficioNuevo()
     {
-        if (comodines[comodinActual].monto >= 0 && comodines[comodinActual].nombreBeneficio != "" && comodines[comodinActual].plazasPorBeneficio <= puestoActivo.Plazas && comodines[comodinActual].plazasPorBeneficio >= 0)
+        if (comodines[comodinActual].monto >= 0 && string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio) && comodines[comodinActual].plazasPorBeneficio <= puestoActivo.Plazas && comodines[comodinActual].plazasPorBeneficio >= 0)
         {
             MontoBeneficiosPositivo = true;
-            NombreVacio = true;
+            NombreVacio = false;
             PlazasBeneficiosMenoresAPuesto = true;
             PlazasBeneficiosPositivo = true;
             EstructuraOrgHandler h = new EstructuraOrgHandler();
@@ -384,7 +386,7 @@
             {
                 MontoBeneficiosPositivo = false;
             }
-            if (comodines[comodinActual].nombreBeneficio == "")
+            if (string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio))
             {
                 NombreVacio = true;
             }
@@ -397,7 +399,6 @@
                 PlazasBeneficiosPositivo = false;
             }
         }
-        
     }
 
 
