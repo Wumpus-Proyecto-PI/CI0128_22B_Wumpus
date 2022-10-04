@@ -89,9 +89,12 @@ body {
 
 #boton_negocios {
     padding: 0px;
-    font-size: larger;
     width: fit-content;
     height: fit-content;
+}
+
+#boton_negocios a {
+    font-size: 26px;
 }
 
 #nombre_seccion {
