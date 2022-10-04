@@ -54,7 +54,7 @@
     color: black;
     width: 3rem;
     height: 3rem;
-    box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.25);
+    /*box-shadow: 0.3rem 0.3rem 0.3rem rgba(0, 0, 0, 0.25);*/
 }
 
 .header-data {
@@ -70,6 +70,7 @@
 .imagenes-verde {
     width:4.5rem;
     height:4.5rem;
+    fill: green;
 }
 
 .titulo-cartas-abajo {
@@ -96,7 +97,7 @@ hr {
 .card-no-clickeable {
     background-color: lightgray;
     transition-duration: 0.4s;
-    box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);
+    /*box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);*/
     width: 18rem;
     border-radius: 22px;
 }
