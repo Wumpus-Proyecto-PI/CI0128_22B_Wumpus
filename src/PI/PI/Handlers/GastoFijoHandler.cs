@@ -64,7 +64,7 @@ namespace PI.Handlers
             string consulta = "EXECUTE insertarGastoFijo '"
                 + nombreAnterior + "', '"
                 + Nombre + "', '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") 
-                + "', " + monto + ","
+                + "', '" + monto + "',"
                 + getNextOrden() + ";";
 
             enviarConsulta(consulta);
@@ -90,21 +90,6 @@ namespace PI.Handlers
             }
 
             return totalMensual;
-        }
-
-        public decimal obtenerSeguroSocial (DateTime fechaAnalisis, decimal porcentajeSeguroSocial)
-        {
-            decimal totalSalarios = 0.0m;
-
-            string consulta = "SELECT dbo.obtGastoSeguroSocial ('" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '0.2') AS SeguroSocial";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-            if (!tablaResultado.Rows[0].IsNull("SalariosNeto"))
-            {
-                totalSalarios = Convert.ToDecimal(tablaResultado.Rows[0]["SalariosNeto"]);
-            }
-
-            return totalSalarios;
         }
 
         public void actualizarSalariosNeto(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)

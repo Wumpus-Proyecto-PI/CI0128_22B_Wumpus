@@ -51,10 +51,11 @@ namespace PI.Handlers
         public bool ActualizarPuesto(string nombrePuesto, PuestoModel puestoInsertar)
         {
             bool error = false;
-            string update = "UPDATE PUESTO SET "
+            string update = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '"+ puestoInsertar.SalarioBruto.ToString() 
+                + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.') UPDATE PUESTO SET "
                 + "nombre='" + puestoInsertar.Nombre + "', "
                 + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
-                + "salarioBruto='" + puestoInsertar.SalarioBruto.ToString() + "' "
+                + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp)"
                 + "WHERE "
                 + "nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";

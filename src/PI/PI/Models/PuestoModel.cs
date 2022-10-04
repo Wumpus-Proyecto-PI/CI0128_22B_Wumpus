@@ -6,7 +6,7 @@ namespace PI.Models
         public string Nombre { get; set; } = String.Empty;
 
         // numero de plazas que puede tener un puesto
-        public int Plazas { get; set; } = 0;
+        public int Plazas { get; set; } = 1;
 
         // salario neto que se gana en el puesto
         public decimal SalarioNeto { get; set; } = 0M;
