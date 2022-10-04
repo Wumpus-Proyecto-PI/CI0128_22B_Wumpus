@@ -220,7 +220,11 @@ namespace PI.Handlers
 
             // consulta para extraer los beneficios
             Console.WriteLine(b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            string consulta = "DELETE FROM BENEFICIO WHERE nombre ='" + b.nombreBeneficio + "' and fechaAnalisis ='" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' and nombrePuesto ='" + b.nombrePuesto + "' and monto =" + b.monto.ToString() + "and cantidadPlazas=" + b.plazasPorBeneficio.ToString();
+
+            string consulta = "DECLARE @montoTemp varchar(20) SET @montoTemp = '"+ b.monto.ToString() 
+                + "' SET @montoTemp = REPLACE(@montoTemp, ',', '.') DELETE FROM BENEFICIO WHERE nombre ='" + b.nombreBeneficio + "' and fechaAnalisis ='" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' and nombrePuesto ='" + b.nombrePuesto + "' and monto = dbo.convertTOdecimal(@montoTemp) and cantidadPlazas=" + b.plazasPorBeneficio.ToString();
+
+            //string consulta = "DELETE FROM BENEFICIO WHERE nombre ='" + b.nombreBeneficio + "' and fechaAnalisis ='" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' and nombrePuesto ='" + b.nombrePuesto + "' and monto =" + b.monto.ToString() + "and cantidadPlazas=" + b.plazasPorBeneficio.ToString();
             DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
 
             foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
