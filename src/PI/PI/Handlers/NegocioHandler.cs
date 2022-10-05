@@ -12,17 +12,22 @@ using PI.Controllers;
 
 namespace PI.Handlers
 {
+    // Handler de negocio
     public class NegocioHandler : Handler
     {
         public NegocioHandler() : base() { }
 
         // Crea una lista de los negocios existentes en la BD
+        // (Retorna la lista con los negocios de la base)
         public List<NegocioModel> ObtenerNegocios()
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
             AnalisisHandler analisisHandler = new AnalisisHandler();
+
             string consulta = "SELECT * FROM Negocio ORDER BY FechaCreacion DESC";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+            // Crea los modelos de negocio correspondientes segun la tabla obtenida de la base de datos
             foreach (DataRow columna in tablaResultado.Rows)
             {
                 DateTime fechaUltAnalisis = analisisHandler.UltimaFechaCreacion(Convert.ToString(columna["id"]));
@@ -41,7 +46,8 @@ namespace PI.Handlers
             return negocios;
         }
 
-        // Obtiene el siguiente ID para el negocio según el mayor ID existente actualmente +1.
+        // Obtiene el siguiente ID para el negocio según el mayor ID existente actualmente +1
+        // (Retorna un entero con el proximo ID de negocio)
         public int getNextID()
         {
             string consulta = "SELECT MAX(ID) AS ID FROM Negocio";
@@ -61,7 +67,8 @@ namespace PI.Handlers
             return result;
         }
 
-        // Inserta el nuevo negocio a la base de datos.
+        // Inserta el nuevo negocio a la base de datos
+        // (Retorna el negocio creado que fue ingresado | Parametros: nombre, estado del negocio, correo del usuario)
         public NegocioModel IngresarNegocio(string Nombre, string tipo, string correoUsuario) 
         {
             AnalisisHandler analisisHandler = new AnalisisHandler();
@@ -71,12 +78,15 @@ namespace PI.Handlers
             
             int nextID = getNextID();
             
+            // String con la consulta para insertar el negocio en la base de datos 
             string consulta = "INSERT INTO Negocio (ID,Nombre,correoUsuario,FechaCreacion) VALUES (" 
                 + nextID + ",'" + Nombre + "', '" + correoUsuario + "', '" + sqlFormattedDate + "');";
             enviarConsultaVoid(consulta);
 
+            // Le ingresa un analisis por defecto al negocio recien creado 
             analisisHandler.IngresarAnalisis(Convert.ToString(nextID), tipo);
 
+            // Crea un modelo para el negocio recien creado 
             NegocioModel negocioIngresado = new NegocioModel();
             negocioIngresado.Nombre = Nombre;
             negocioIngresado.CorreoUsuario = correoUsuario;
@@ -88,6 +98,7 @@ namespace PI.Handlers
         }
 
         // Elimina el negocio con el id indicado
+        // (Parametros: id del negocio que se desea eliminar)
         public void EliminarNegocio(string idNegocio) 
         { 
             string consulta = "DELETE FROM NEGOCIO WHERE id =" + idNegocio + "";

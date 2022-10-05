@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace PI.Controllers
 {
+    // Controlador del home. Este se usa el deafult de asp.net mvc
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

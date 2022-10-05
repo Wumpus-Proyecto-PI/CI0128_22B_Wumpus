@@ -1,5 +1,7 @@
 ﻿@using PI.Models
+<!-- Representa una carta/tarjeta de gasto fijo: nombre, monto anual y monto mensual -->
 
+<!-- Verifica si el nombre de gasto fijo pertenece a la estructura organizativa o no. Esto para asignarle la clase y en consecuencia, el estilo css correspondiente.-->
 @if (nombresEstOrg.Contains(gastoFijo.Nombre)) {
     tipoGasto = "gastoFijo gastoFijo-NoEditable";
 }
@@ -24,9 +26,15 @@
 
 
 @code {
+    // Recibe el objeto de gasto fijo para ser mostrado.
     [Parameter]
     public GastoFijoModel gastoFijo { get; set; }
 
+    // MarkupString que sirve para asignar una u otra clase dependiendo de si el gasto fijo es de la estructura organizativa o no. 
+    // Sección estOrg: NoEditable. 
+    // Sección gastoFijo: editable
     public string tipoGasto = "gastoFijo gastoFijo-editable";
+    // Posibles nombres de gasto fijo referentes a la estructura organizativa.
+    // TODO quitar los nombres que están de más.
     string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
 }

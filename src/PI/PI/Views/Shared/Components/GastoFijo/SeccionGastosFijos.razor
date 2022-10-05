@@ -2,125 +2,170 @@
 @using PI.Handlers
 @inject NavigationManager NavigationManager;
 
+<!-- Razor que representa la sección de gastos fijos -->
 
-<div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
-    <div id="titulo-contenido">
-        @*Aqui se agrega lo de las pestanas*@
-        @if (hayGastoFijoSeleccionado == false)
-        {
-            <h1>Nuevo gasto fijo</h1>
-        } else {
-            <h1>Editar gasto fijo</h1>
-        }
+<!-- Sección de edición (lado izquierdo) -->
+@*Comienzo ventana izquierda de edición e ingreso de gastos fijos*@
+    <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
 
-        @if (pestanyaConfiguracionActiva == true)
-        {
-            <div id="cuadro_configuracion">
-
-                <form id="form_configuracion">
-                    <div class="fila-form-configuracion">
-                        <label>Nombre</label> <input name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
-                    </div>
-                    @((MarkupString)CasoError_repetido)
-
-                    <div class="fila-form-configuracion">
-                        <label>Monto mensual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
-                    </div>
-                    @((MarkupString)CasoError_negativo)
-                </form>
-            </div>
-        }   
-    </div>
-    <div id="inferior-horizontal">
-        <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
-
-                @if (hoverGuardar == false) {
-                    <img src="img/estructuraOrg/guardarPuesto.png" alt="">
-                }
-                @hoverTextGuardar
-        </div>
-    </div>
-</div>
-
-<div class="altura-seccion" id="seccion-gastosFijos">
-    <div class="totales"> 
-        <div class="fila-form-configuracion">
-            <label class="total">Total mensual</label> <p> @((totalMensual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
-        </div>
-        <div class="fila-form-configuracion">
-           
-            <label class="total">Total anual </label> <p> @((totalMensual * 12).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
-        </div>
-
-    </div>
-    <div id="mostrar-gastosFijos">
-
-        @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
-        {
-            @* Verifica la diferencia entre un gasto editable y uno que no *@
-            @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
-            { 
-                <div class="gastoFijo-clickeable-eliminable" >
-                <div @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
-                    <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
-                </div>
-                    <img @onclick="() => eliminarGastoFijo(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
-            </div>
-            } else {
-                <div class="gastoFijo-noClickeable-noEliminable">
-                        <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
-                 </div>
-            }
-
-        }
-    </div>
-    <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
-        <a>
-            @if (hoverAgregar == false)
+        <div id="titulo-contenido">
+            @*TODO: quitar. Aqui se agrega lo de las pestanas*@
+            @*
+                Se revisa si hay un gasto fijo seleccionado o no
+                En caso de haber uno seleccionado, se está editando un gasto fijo
+                Caso contrario se está agregando uno nuevo
+            *@
+            @if (hayGastoFijoSeleccionado == false)
             {
-                <img src="img/estructuraOrg/addPuesto.png" alt="">
+                <h1>Nuevo gasto fijo</h1>
+            } else {
+                <h1>Editar gasto fijo</h1>
             }
-            @hoverTextAgregar
-            </a>
+            @*
+                Comienzo sección de ingreso de datos de un gasto fijo
+                Ya se edición o creación de puesto
+            *@
+            @if (pestanyaConfiguracionActiva == true)
+            {
+                <div id="cuadro_configuracion">
+
+                    <form id="form_configuracion">
+                        <div class="fila-form-configuracion">
+                            <label>Nombre</label> <input name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
+                        </div>
+                        @((MarkupString)CasoError_repetido)
+
+                        <div class="fila-form-configuracion">
+                            <label>Monto mensual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
+                        </div>
+                        @((MarkupString)CasoError_negativo)
+                    </form>
+                </div>
+            }   
+        </div>
+        @*
+            Fin sección de ingreso de datos de un gasto fijo
+            Ya se edición o creación de puesto
+        *@
+        <!-- Botón de guardar el gasto fijo-->
+        <div id="inferior-horizontal">
+            <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
+
+                    @if (hoverGuardar == false) {
+                        <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                    }
+                    @hoverTextGuardar
+            </div>
+        </div>
     </div>
-</div>
+@*Fin ventana izquierda de edición e ingreso de gastos fijos*@
+
+<!-- Sección gastos fijos creados (lado derecho) -->
+
+@*Comienzo de sección de totales*@
+    <div class="altura-seccion" id="seccion-gastosFijos">
+        <div class="totales"> 
+            <div class="fila-form-configuracion">
+                <label class="total">Total mensual</label> <p> @((totalMensual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+            </div>
+            <div class="fila-form-configuracion">
+           
+                <label class="total">Total anual </label> <p> @((totalMensual * 12).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+            </div>
+@*Fin de sección de totales*@
+
+        </div>
+        <div id="mostrar-gastosFijos">
+        @*Comienzo de sección de totales*@
+
+            <!-- Carga cada gasto fijo en la vista -->
+            @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
+            {
+            @*
+                Renderización de las tarjetas de los gastos fijos, son componentes razor aparte
+                Se muestran no clikeables las prestaciones sociales, seguro social y suma de beneficios
+            *@
+                @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
+                { 
+                    <div class="gastoFijo-clickeable-eliminable" >
+                    <div @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
+                        <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                    </div>
+                        <img @onclick="() => eliminarGastoFijo(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
+                </div>
+                } else {
+                    <div class="gastoFijo-noClickeable-noEliminable">
+                            <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                        </div>
+                }
+
+            }
+        </div>
+        <!-- Botón de agregar un nuevo gasto fijo-->
+        <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
+            <a>
+                @if (hoverAgregar == false)
+                {
+                    <img src="img/estructuraOrg/addPuesto.png" alt="">
+                }
+                @hoverTextAgregar
+                </a>
+        </div>
+    </div>
 
 
 @code {
+    // lista de gastos fijos  de la base de datos
     [Parameter]
     public List<GastoFijoModel> gastosFijos { get; set; }
 
+    // fecha del análisis al que pertenece la estructura organanizativa
     [Parameter]
     public DateTime fechaAnalasis { get; set; }
 
+    // total mensual de gastos fijos
     [Parameter]
     public decimal totalMensual { get; set; }
 
+    // booleano que indica si se está editanto un gasto fijo o agregando
     public bool hayGastoFijoSeleccionado = false;
+
+    // gasto fijo seleccionado actualmente, puede ser nuevo o un existente
     public GastoFijoModel gastoFijoActivo = new GastoFijoModel();
 
+    // handler con el cual comunicarse con la base de datos
     public GastoFijoHandler HandlerGastoFijo = new GastoFijoHandler();
 
+    // string que almacena el nombre del gasto fijo seleccionado antes de ser modificado para pdoer actualizarlo en la base de datos
     public string copiaNombreOriginal = "";
 
+    // placeholder indican que se debe ingresar en los campos
     public string placeHolderNombre = "Ingresar nombre";
     public string placeHolderMonto = "Ingresar monto";
 
+    // variables para agregar y quitar texto al hacer hover en botones de guardar y agregar
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
 
+    // booleanos para el control de los hover en botones guardar y agregar
     public bool hoverGuardar = false;
     public bool hoverAgregar = false;
 
+    // atributo obsoleto, se debe revisar y validar si se peude eliminar
     bool pestanyaConfiguracionActiva = true;
+
+    // strings que muestran los mensajes de error con respecto al nombre y los números negativos
     string CasoError_repetido = "";
     string CasoError_negativo = "";
 
+    // nombres de gastos fijos que no deben ser clickeables
     string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
 
+    // métodos para manevar la acción de hover de agregar y guardar gasto fijo.
     public void Hover(int action)
     {
-
+        // este metodo quita la imagen y agrega el texto correspondiente
+        // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
         if (action == 1) {
             hoverTextAgregar = "Agregar gasto fijo";
             hoverAgregar = true;
@@ -131,8 +176,12 @@
             hoverTextGuardar = "Guardar datos";
         }
     }
+
+    // método para controlar el cuando se quita el hover de los botones guardar y agregar
     public void HoverOut(int action)
     {
+        // este método agrega la imagen y quita el texto correspondiente
+        // recibe un int para diferenciar si es el quitar hover del botón de guardar (1) o de agregar (2)
         if (action == 1)
         {
             hoverTextAgregar = "";
@@ -143,59 +192,103 @@
         }
     }
 
+    // método para asignar el gasto fijo activo según el que se clickeó
+    // recibe el gasto fijo al que se le hizo click
     public void SeleccionarGastoFijo(GastoFijoModel gastoFijoSeleccionado)
     {
+        // se resetean variables e error
         CasoError_negativo = "";
         CasoError_repetido = "";
 
+        // se asigna el gasto fijo activo
         gastoFijoActivo = gastoFijoSeleccionado;
+
+        // se asugnan variables de vista
         placeHolderNombre = gastoFijoActivo.Nombre;
         placeHolderMonto = gastoFijoActivo.Monto.ToString();
+
+        // se copia el nombre por si se va a actualizar este nombre
         copiaNombreOriginal = gastoFijoActivo.Nombre;
+
+        // se indica que hay un puesto seleccionado
         hayGastoFijoSeleccionado = true;
 
     }
 
+    // método llamado por el botón de agregar
+    // este reseta la vista de la izquierda para poder ingresar los datos del nuevo gasto fijo
     public void AgregarNuevoGastoFijo() {
         CasoError_negativo = "";
         CasoError_repetido = "";
+
+        // se reseatean variables de control visual
         placeHolderNombre = "Ingresar nombre";
         placeHolderMonto = "Ingresar monto";
+
+        // se indica que no hay un puesto seleccionado
         hayGastoFijoSeleccionado = false;
+
+        // validar si es obsoleto este atributo
         pestanyaConfiguracionActiva = true;
+
+        // no hay un nombre por copiar porque es un gasto fijo nuevo
         copiaNombreOriginal = "";
+
+        // se crea un nuevo gasti fijo
         gastoFijoActivo = new GastoFijoModel();
     }
 
+    // método que permitir guardar en la base de datos un gasto fijo
+    // recibe el puesto a guadar
     public void GuardarDatosGastoFijo(GastoFijoModel gastoFijoGuardar) {
 
         if (gastosFijos.Exists(x => x.Nombre == gastoFijoGuardar.Nombre) && hayGastoFijoSeleccionado == false)
         {  // ya existe el gasto fijo
             CasoError_repetido = "<p class=\"error error-gastoFijo\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
         } else if (gastoFijoGuardar.Monto < 0) {
+            // el monto ingresado es negativo
             CasoError_negativo = "<p class=\"error error-gastoFijo\">Error: el monto es un número negativo.<br>ingrese un monto positivo.</p>";
         }
         else {
             CasoError_negativo = "";
+            // se asigna el pueso la fecha del análisis por si es un gasto fijo nuevo
             gastoFijoGuardar.FechaAnalisis = fechaAnalasis;
+
+            // se ingresa con el handler en la base de datos el puesto
             HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, gastoFijoGuardar.Nombre, gastoFijoGuardar.Monto.ToString(), gastoFijoGuardar.FechaAnalisis);
+
+            // se resetean variables de vista y de control
             if (hayGastoFijoSeleccionado == false)
             {
                 gastoFijoActivo = new GastoFijoModel();
             }
             copiaNombreOriginal = string.Empty;
             actualizarMontoMensual();
+
+            // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
+
+    // método para eliminar un gasto fijo de la base de datos
+    // recibe el gasto fijo que se desea eliminar
     public void eliminarGastoFijo(GastoFijoModel gastoFijoEliminar)
     {
+        // reseteo de variabels de error
         CasoError_negativo = "";
         CasoError_repetido = "";
+
+        // se utiliza el handler para eliminar el puesto
         HandlerGastoFijo.eliminarGastoFijo(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
+
         actualizarMontoMensual();
+
+        // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
+
+    // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total mensual es actualizado.
+    // TODO hacerlo para el anual en lugar del mensual.
     public void actualizarMontoMensual () {
         this.totalMensual = HandlerGastoFijo.obtenerTotalMensual(this.fechaAnalasis);
     }
