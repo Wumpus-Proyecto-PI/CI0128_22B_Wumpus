@@ -11,12 +11,15 @@ using PI.Models;
 using PI.Views.Shared.Components.GastoFijo;
 
 namespace PI.Handlers
-{
+{   
+    // Handler de GastoFijo, clase encargada de recuperar datos de las tablas en la base de datos
     public class GastoFijoHandler : Handler
     {
+        // Constructor de la clase
         public GastoFijoHandler(): base() { }
 
         // Crea una lista de los gastos fijos existentes en la BD
+        // Retorna la lista de los gastos fijos
         public List<GastoFijoModel> ObtenerGastosFijos(DateTime fechaAnalisis)
         {
             List<GastoFijoModel> gastosFijos = new List<GastoFijoModel>();
@@ -39,6 +42,9 @@ namespace PI.Handlers
             }
             return gastosFijos;
         }
+
+        // Recupera el último número de orden de los gastos fijos en la base de datos.
+        // Retorna el último número de orden + 1, el cual es el número de orden para el siguiente gasto fijo.
         public int getNextOrden()
         {
             string consulta = "SELECT MAX(orden) AS orden FROM Gasto_Fijo";
@@ -70,6 +76,7 @@ namespace PI.Handlers
             enviarConsulta(consulta);
         }
 
+        // Elimina un gasto fijo de la BD
         public void eliminarGastoFijo(string Nombre, DateTime fechaAnalisis)
         {
             // TODO arreglar el datetime para que est� asociado al an�lisis realmente.
@@ -78,6 +85,7 @@ namespace PI.Handlers
             enviarConsulta(consulta);
         }
 
+        // Obtiene y retorna la suma total mensual de los montos de gastos fijos
         public decimal obtenerTotalMensual(DateTime fechaAnalisis)
         {
             decimal totalMensual = 0.0m;
@@ -92,25 +100,34 @@ namespace PI.Handlers
             return totalMensual;
         }
 
+        // Crea o actualiza el gasto fijo de salarios netos
         public void actualizarSalariosNeto(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)
         {
+            // Envia consulta a la base de datos, donde se encuentra el procedimiento almacenado encargado de calcular los salarios netos.
             string consulta = "EXEC actualizarSalariosNeto '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "', '" + prestaciones.ToString() + "'";
             enviarConsulta(consulta);
         }
 
+        // Crea o actualiza el gasto fijo de seguro social
         public void actualizarSeguroSocial(DateTime fechaAnalisis, decimal seguroSocial)
         {
+            // Envia consulta a la base de datos, donde se encuentra el procedimiento almacenado encargado de calcular el monto de seguro social.
             string consulta = "EXEC actualizarGastoSeguroSocial '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + seguroSocial.ToString() + "'";
             enviarConsulta(consulta);
         }
+
+        // Crea o actualiza el gasto fijo de salarios netos
         public void actualizarPrestaciones(DateTime fechaAnalisis, decimal prestaciones)
         {
+            // Envia consulta a la base de datos, donde se encuentra el procedimiento almacenado encargado de calcular el monto de las prestaciones laborales.
             string consulta = "EXEC actualizarGastoPrestaciones @fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @porcentaje = '" + prestaciones.ToString() + "';";
             enviarConsulta(consulta);
         }
 
+        // Crea o actualiza el gasto fijo de salarios netos
         public void actualizarBeneficios(DateTime fechaAnalisis)
         {
+            // Envia consulta a la base de datos, donde se encuentra el procedimiento almacenado encargado de calcular el monto total de los beneficios.
             string consulta = "EXEC actualizarBeneficios '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }

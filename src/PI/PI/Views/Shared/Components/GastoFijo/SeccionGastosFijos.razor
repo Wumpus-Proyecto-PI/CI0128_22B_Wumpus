@@ -2,10 +2,12 @@
 @using PI.Handlers
 @inject NavigationManager NavigationManager;
 
+<!-- Razor que representa la sección de gastos fijos -->
 
+<!-- Sección de edición (lado izquierdo) -->
 <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
     <div id="titulo-contenido">
-        @*Aqui se agrega lo de las pestanas*@
+        @*TODO: quitar. Aqui se agrega lo de las pestanas*@
         @if (hayGastoFijoSeleccionado == false)
         {
             <h1>Nuevo gasto fijo</h1>
@@ -31,6 +33,7 @@
             </div>
         }   
     </div>
+    <!-- Botón de guardar el gasto fijo-->
     <div id="inferior-horizontal">
         <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
 
@@ -41,6 +44,8 @@
         </div>
     </div>
 </div>
+
+<!-- Sección gastos fijos creados (lado derecho) -->
 
 <div class="altura-seccion" id="seccion-gastosFijos">
     <div class="totales"> 
@@ -55,6 +60,7 @@
     </div>
     <div id="mostrar-gastosFijos">
 
+        <!-- Carga cada gasto fijo en la vista -->
         @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
         {
             @* Verifica la diferencia entre un gasto editable y uno que no *@
@@ -74,6 +80,7 @@
 
         }
     </div>
+    <!-- Botón de agregar un nuevo gasto fijo-->
     <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
         <a>
             @if (hoverAgregar == false)
@@ -118,6 +125,7 @@
 
     string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
 
+    // métodos para manevar la acción de hover de agregar y guardar gasto fijo.
     public void Hover(int action)
     {
 
@@ -173,6 +181,7 @@
         {  // ya existe el gasto fijo
             CasoError_repetido = "<p class=\"error error-gastoFijo\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
         } else if (gastoFijoGuardar.Monto < 0) {
+            // el monto ingresado es negativo
             CasoError_negativo = "<p class=\"error error-gastoFijo\">Error: el monto es un número negativo.<br>ingrese un monto positivo.</p>";
         }
         else {
@@ -196,6 +205,9 @@
         actualizarMontoMensual();
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
+
+    // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total mensual es actualizado.
+    // TODO hacerlo para el anual en lugar del mensual.
     public void actualizarMontoMensual () {
         this.totalMensual = HandlerGastoFijo.obtenerTotalMensual(this.fechaAnalasis);
     }
