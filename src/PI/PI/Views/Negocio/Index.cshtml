@@ -1,3 +1,4 @@
+<!-- models -->
 @model List<PI.Models.NegocioModel>;
 
 @{
@@ -7,54 +8,60 @@
 <!doctype html>
 <html>
 
+<!-- head -->
 <head>
-        <meta charset="UTF-8">
-        <title> Mis negocios </title>
-<!-- links -->
-        <link rel="stylesheet" href="~/css/negocio/Index.css" />
+    <meta charset="UTF-8">
+    <title> Mis negocios </title>
+
+    <!-- links -->
+    <link rel="stylesheet" href="~/css/negocio/Index.css" />
 </head>
 <!-- body -->
-    <body>
+<body>
+    
     <!-- agregar negocio card-->
-
-        <div class="card-container">
-            <a asp-controller="Negocio" asp-action="FormAgregarNegocio">
-                <div class="card card-agregar">
-                <img class="boton-agregar" src="~/img/estructuraOrg/addPuesto.png">
-                </div>
-            </a>
-    <!-- negocio cards-->
-            @foreach (var item in Model)
-            {
-                <div class="card-trash-container"> 
-                    <a class="link-tarjeta" asp-controller="Negocio" asp-action="direccionarAnalisis" asp-route-IDNegocio=@item.ID.ToString()>
-                        <div class="card card-negocio">
-                            <div  class="card-info">
-                                <div class="card-nombre"> 
-                                    <span> @item.Nombre </span></div>
-                                <div class="card-tipo">
-                                    @if (@item.TipoUltimoAnalisis == false)
-                                    {
-                                        <span id="tipoNegocio">Emprendimiento</span>
-                                    }else {
-                                        <span id="tipoNegocio">Ya iniciado</span>
-                                    }
-                                    <div class="inicial-nombre">
-                                        <span> @item.Nombre[0] </span></div>
-                                </div>
-                            <div class="card-analisis"> <span>Cantidad de an&aacutelisis: @item.Analisis.Count</span> </div>
-                            <div class="card-actualizacion"> <span>Fecha de creaci&oacuten: @item.FechaCreacion.ToString() </span> </div>
+    <div class="card-container">
+        <a asp-controller="Negocio" asp-action="FormAgregarNegocio">
+            <div class="card card-agregar">
+            <img class="boton-agregar" src="~/img/estructuraOrg/addPuesto.png">
+            </div>
+        </a>
+        <!-- negocio cards-->
+        @foreach (var item in Model)
+        {
+            <div class="card-trash-container"> 
+                <a class="link-tarjeta" asp-controller="Negocio" asp-action="direccionarAnalisis" asp-route-IDNegocio=@item.ID.ToString()>
+                    <div class="card card-negocio">
+                        <div  class="card-info">
+                            <!-- Nombre del negocio -->
+                            <div class="card-nombre"> 
+                                <span> @item.Nombre </span></div>
+                            <!-- Estado del negocio -->
+                            <div class="card-tipo">
+                                @if (@item.TipoUltimoAnalisis == false)
+                                {
+                                    <span id="tipoNegocio">Emprendimiento</span>
+                                }else {
+                                    <span id="tipoNegocio">Ya iniciado</span>
+                                }
+                                <div class="inicial-nombre">
+                                    <span> @item.Nombre[0] </span></div>
                             </div>
+                        <!-- Info del negocio -->
+                        <div class="card-analisis"> <span>Cantidad de an&aacutelisis: @item.Analisis.Count</span> </div>
+                        <div class="card-actualizacion"> <span>Fecha de creaci&oacuten: @item.FechaCreacion.ToString() </span> </div>
                         </div>
-                    </a>
-                    <div class="trash-container">
-                        <a asp-controller="Negocio" asp-action="eliminarNegocio_BD" asp-route-IDNegocio="@item.ID.ToString()">
-                            <div class="trash-can"> <img class="trash-img" src=img/puesto/trashCan.png> </div>
-                        </a>
                     </div>
+                <!-- Boton de borrar -->
+                </a>
+                <div class="trash-container">
+                    <a asp-controller="Negocio" asp-action="eliminarNegocio_BD" asp-route-IDNegocio="@item.ID.ToString()">
+                        <div class="trash-can"> <img class="trash-img" src=img/puesto/trashCan.png> </div>
+                    </a>
                 </div>
-            }
-        </div>
-    </body>
+            </div>
+        }
+    </div>
+</body>
 </html>
 
