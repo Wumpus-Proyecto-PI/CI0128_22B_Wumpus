@@ -14,11 +14,13 @@
     <link rel="stylesheet" href="~/PI.styles.css" asp-append-version="true" />
 </head>
 
+@*Encabezado de la pantalla del progreso*@
 <body>
     <div class="analisis-header row">
         <div class="col-md-6">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">@ViewData["NombreNegocio"]</p>
+                @*Verifica el estado del negocio para mostrarlo en pantalla*@
                 @if (Model.Configuracion.TipoNegocio == false)
                 {
                     <p class="mb-4">Estado: emprendimiento</p>
@@ -37,6 +39,7 @@
         </div>
     </div>
 
+    @*Sección de las cartas del progreso de análisis*@
     <div class="row mx-5 mt-4">
         <div class="row ml-5 mr-5 text-center">
             <div class="col-md-4 d-flex mb-3 justify-content-center">
@@ -58,6 +61,8 @@
                 string claseCarta = "card card-no-clickeable m-4";
                 string claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
             }
+
+            @*Verifica si la estructura organizativa tiene puestos, para desbloquear el siguiente paso (Gastos fijos)*@
             @if (AnalisisController.hayPuestos(Model))
             {
                 claseCarta = "card card-clickeable m-4";
@@ -94,6 +99,8 @@
                 claseCarta = "card card-no-clickeable m-4";
                 claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
             }
+
+            @*Verifica si hay gastos fijos, para desbloquear el siguiente paso (Gastos variables)*@
             @if (AnalisisController.contieneGastosFijos(Model))
             {
                 claseCarta = "card card-clickeable m-4";
@@ -156,6 +163,7 @@
 
         <hr />
 
+        @*Sección de las cartas de descargar análisis, comparar y visualizar*@
         <div class="row ml-5 mr-5 text-center">
             <div class="col-md-4 d-flex mb-3 justify-content-center">
                 <div class="card card-clickeable m-4">
