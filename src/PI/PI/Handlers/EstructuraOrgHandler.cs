@@ -142,6 +142,8 @@ namespace PI.Handlers
             return enviarConsulta(delete);
         }
 
+        // Método encargado de obtener de la base de datos, los beneficios correspondientes a un puesto.
+        // Tomando como parámetros tanto el nombre como la fecha de análisis de dicho puesto.
         private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, DateTime fechaAnalisis)
         {
             List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
@@ -165,11 +167,12 @@ namespace PI.Handlers
             return resultadoBeneficios;
         }
 
+        // Método encargado de agregar un beneficio a la base de datos. El modelo del Beneficio a agregar es pasado como parámetro.
         public List<BeneficioModel> AgregarBeneficio(BeneficioModel b)
         {
             List<BeneficioModel> resultadoBeneficios = new List<BeneficioModel>();
 
-            // consulta para extraer los beneficios
+            // consulta para extraer los beneficios y devolver la tabla de beneficios con dicho beneficio ya agregado
             string consulta = "DECLARE @montoTemp varchar(20) SET @montoTemp = '"+ b.monto.ToString() 
                 + "' SET @montoTemp = REPLACE(@montoTemp, ',', '.') INSERT INTO BENEFICIO VALUES('" + b.nombrePuesto + "','" 
                 + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "','" 
@@ -192,13 +195,13 @@ namespace PI.Handlers
             return resultadoBeneficios;
         }
 
+        // Método encargado de eliminar un beneficio de la base de datos, a partir de un Modelo de Beneficio, el cual es pasado por parámetro.
         public List<BeneficioModel> BorrarBeneficio(BeneficioModel b)
         {
             List<BeneficioModel> resultadoBeneficios = new List<BeneficioModel>();
 
-            // consulta para extraer los beneficios
             Console.WriteLine(b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-
+            // consulta para extraer los beneficios
             string consulta = "DECLARE @montoTemp varchar(20) SET @montoTemp = '"+ b.monto.ToString() 
                 + "' SET @montoTemp = REPLACE(@montoTemp, ',', '.') DELETE FROM BENEFICIO WHERE nombre ='" + b.nombreBeneficio + "' and fechaAnalisis ='" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' and nombrePuesto ='" + b.nombrePuesto + "' and monto = dbo.convertTOdecimal(@montoTemp) and cantidadPlazas=" + b.plazasPorBeneficio.ToString();
 
