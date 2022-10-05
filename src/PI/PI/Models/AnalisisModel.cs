@@ -4,7 +4,7 @@
     {
 
         // Atributos
-        public DateTime FechaCreacion { get; set; }
-        public ConfigAnalisisModel Configuracion { get; set; } = new ConfigAnalisisModel();
+        public DateTime FechaCreacion { get; set; } // representa la fecha unica de creacion del analisis
+        public ConfigAnalisisModel Configuracion { get; set; } = new ConfigAnalisisModel(); // configuracion del analisis (clase)
     }
 }

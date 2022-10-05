@@ -6,6 +6,7 @@ namespace PI.Handlers
 {
     public class AnalisisHandler : Handler
     {
+        // Handler de analisis
         public AnalisisHandler(): base() { }
 
         // Obtiene un analisis especifico
