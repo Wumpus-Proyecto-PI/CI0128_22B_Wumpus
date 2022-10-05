@@ -100,7 +100,7 @@
 @*Fin de seccion de puestos donde se ven los puestos en cajas con organigrama*@
 
 
-@*Comienzo de popup donde se editan los puestos*@
+@*Comienzo de popup donde se editan los beneficios*@
     @if (PopupVisible) {
         <div id="overlay" @onclick="cambiarVisibilidadPopup"></div>
         <div id="contenedor_beneficios">
@@ -288,7 +288,7 @@
     // recibe el puesto al que se le hizo click
     public void SeleccionarPuesto(PuestoModel puestoSeleccionado)
     {
-        // se asigna el peusto activo
+        // se asigna el puesto activo
         puestoActivo = puestoSeleccionado;
 
         // se asugnan variables de vista
@@ -319,10 +319,10 @@
         // se indica que no hay un puesto seleccionado
         hayPuestoSeleccionado = false;
 
-        // no hay un nombre por copiar porque es un ouesto nuevo
+        // no hay un nombre por copiar porque es un puesto nuevo
         copiaNombreOriginal = "";
 
-        // se crea un uevo puesto
+        // se crea un nuevo puesto
         puestoActivo = new PuestoModel();
 
         // se resetean variables de errores
@@ -339,7 +339,7 @@
         // se revisa que el nombre no este repetido y que no haya números negativo
         if (revisarNombre(puestoGuardar) && revisarSalario(puestoGuardar) && revisarPlazasPuesto(puestoGuardar))
         {
-            // se asigna el pueso la fecha del análisis por si es un peustop nuevo
+            // se asigna el pueso la fecha del análisis por si es un puesto nuevo
             puestoGuardar.FechaAnalisis = fechaAnalasis;
             // se ingresa con el handler en la base de datos el puesto
             HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
@@ -433,7 +433,7 @@
     // recibe el puesto que se desea eliminar
     public void eliminarPuesto(PuestoModel puestoEliminar)
     {
-        // se utiliza en handler para eliminar el puesto
+        // se utiliza el handler para eliminar el puesto
         HandlerPuesto.EliminarPuesto(puestoEliminar);
 
         // se recarga la página para que se vean los cambios
