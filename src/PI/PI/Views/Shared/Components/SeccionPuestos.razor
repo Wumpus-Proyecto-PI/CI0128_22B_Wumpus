@@ -102,10 +102,13 @@
 
 @*Comienzo de popup donde se editan los puestos*@
     @if (PopupVisible) {
+        @*Se agrega Overlay sobre la pantalla, para que el Popup sobresalga*@
         <div id="overlay" @onclick="cambiarVisibilidadPopup"></div>
         <div id="contenedor_beneficios">
             <h1 id="titulo_beneficios">Beneficios</h1>
+            @*Tabla donde se contienen los beneficios*@
             <table id=lista_beneficios>
+                @*En caso de que hayan beneficios que mostrar, se muestra la tabla*@
                 @if (puestoActivo.Beneficios.Count() > 0)
                 {
                     <tr>
@@ -115,12 +118,14 @@
                         <th style="border:none;" width="40px"></th>
                     </tr>
                 }
+                @*En caso de no haber beneficios, se le indica al usuario mediante una frase*@
                 else
                 {
                     <tr>
                         <th style="border:none; text-align:center; opacity:0.5;"> No hay beneficios que mostrar</th>
                     </tr>
                 }
+                @*Se muestran en una tabla, el nombre, el monto y la cantidad de plazas de los beneficios de el puesto seleccionado*@
                 @for (int i = 0; i < puestoActivo.Beneficios.Count(); i += 1)
                 {
                     int index = i;
@@ -129,34 +134,43 @@
                         <td> @puestoActivo.Beneficios[index].nombreBeneficio</td>
                         <td> @puestoActivo.Beneficios[index].monto</td>
                         <td> @puestoActivo.Beneficios[index].plazasPorBeneficio </td>
+                        @*Botón para borrar un beenficio*@
                         <td class="columna-borrar-beneficio"><div class="borrar-beneficio" @onclick="()=>borrarBeneficio(puestoActivo.Beneficios[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
                     </tr>
                 }
             </table>
+            @*Form para ingresar los datos de un nuevo beneficio*@
             @if (formVisible)
             {
+                @*Se agrega a los comodines un nuevo beneficio*@
                 comodines.Add(new BeneficioModel());
+
                 <h2>Nuevo beneficio</h2>
+                @*Sección de forms para ingresar los datos de un nuevo beneficio*@
                 <div id="tabla_form">
+                    @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo beneficio*@
                     <div id="container-input-nombre-beneficio">
                         <label for="nombreBeneficio">Nombre:</label>
                         <input id="input_nombre_beneficio" name="nombreBeneficio" @bind="comodines[comodinActual].nombreBeneficio">
                     </div>
+                    @*Sección donde se encuentra el form donde se ingresa el monto del nuevo beneficio*@
                     <div id="container-input-monto-beneficio">
                         <label for="montoBeneficio">Monto:</label>
                         <input id="input_monto_beneficio" min="0" step="any" name="montoBeneficio" type="number" @bind="comodines[comodinActual].monto">
                     </div>
+                    @*Sección donde se encuentra el form donde se ingres el monto del nuevo beneficio*@
                     <div id="container-input-plazas-beneficio">
                         <label for="montoBeneficio">Plazas:</label>
                         <input id="input_plazas_beneficio" min="1" name="plazasBeneficio" type="number" @bind="comodines[comodinActual].plazasPorBeneficio">
                     </div>
+                    @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
                     <div id="seccion-guardar-beneficio">
                         <div id="boton-guardar-beneficio" @onclick="agregarBeneficioNuevo">
                             <img src="img/estructuraOrg/guardarPuesto.png" alt="" width="30px" height="30px">
                         </div>
                     </div>
-
                 </div>
+                @*Sección de mensajes de error en caso de que se hayan ingresado datos erróneos en los forms del nuevo beneficio*@
                 @if (NombreVacio)
                 {
                     <p style="color:red; align-self:self-start; margin-left:10px;">ERROR: El nombre ingresado es vacío</p>
@@ -174,13 +188,16 @@
                     <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: La cantidad de plazas debe ser positiva</p>
                 }
             }
+            @*Sección de botones en la parte inferior del popup de los beneficios*@
             <div id="botones_beneficios">
+                @*En caso de que el form no sea visible, se muestra un botón de "+" que al presionarlo se muestran los formas para ingresar el nuevo beneficio*@
                 @if (!formVisible)
                 {
                     <div id="boton-agregar-beneficio">
                         <img src="img/estructuraOrg/addPuesto.png" alt="" width="30px" height="30px" @onclick="cambiarVisibilidadForm">
                     </div>
                 }
+                @*En casode que el form sea visible, se muestra un botón de "^" que al presionarlo, oculta la sección de los forms de los beneficios*@
                 else
                 {
                     <div id="boton-cerrar-form-beneficio">
@@ -188,6 +205,7 @@
                     </div>
                 }
             </div>
+            @*Botón de X en la parte superior derecha del popup que al presionarlo se cierra el popup*@
             <div id="salir-popup-beneficios">
                 <img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarVisibilidadPopup">
             </div>
@@ -441,31 +459,36 @@
     }
 
 
-    public BeneficioModel comodin = new BeneficioModel();
-
+    // Comodines utilizados den la sección de los beneficios
+    // Cada uno de ellos está "bindeado" al form que lo creó. 
+    // Se agregan a la lista de Beneficios del puestoActivo.
     public List<BeneficioModel> comodines = new List<BeneficioModel>();
 
+    // El índice del comodín sobre el cual se está operando en determinado momento
     int comodinActual = 0;
 
+    // Variable que indica si el form para ingresar un nuevo beneficio es nuevo o no
     public bool formVisible = false;
-
-    public string html = "";
-
+    
+    // Variable que indica si el número ingresado en el form de las plazas de un beneficio nuevo, es posisitivo.
     public bool PlazasBeneficiosPositivo { get; set; } = true;
 
+    // Variable que indica si el monto ingresado en el form del monto del beneficio, es positivo.
     public bool MontoBeneficiosPositivo { get; set; } = true;
 
+    // Variable que indica si el número de plazas ingresado en el form de las plazas de un beneficio, es menor a la cantidad de plazas del puestoActivo
     public bool PlazasBeneficiosMenoresAPuesto { get; set; } = true;
 
+    // Variable que indica si el nombre ingresado en el form del beneficio es vació o no
     public bool NombreVacio { get; set; } = false;
 
+    // Variable que indica si el beneficio que se es´tá tratando de agregar ya existe en la base de datos.
     public bool YaExisteBeneficio { get; set; }
 
-
-    Queue<Tuple<BeneficioModel, int>> cambiosBeneficios = new Queue<Tuple<BeneficioModel, int>>();
-
+    // Método que agrega un beneficio ingresado por medio de forms, a la base de datos.
     public void agregarBeneficioNuevo()
     {
+        // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
         if (comodines[comodinActual].monto >= 0 && !string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio) && comodines[comodinActual].plazasPorBeneficio <= puestoActivo.Plazas && comodines[comodinActual].plazasPorBeneficio >= 0)
         {
             MontoBeneficiosPositivo = true;
@@ -481,6 +504,7 @@
             comodines.Add(new BeneficioModel());
             comodinActual += 1;
         }
+        // En caso de que los datos ingresados en el form de los beneficios sean incorrectos, se verifica uno por uno para indicarlo en las variables correspondientes.
         else { 
             if (comodines[comodinActual].monto < 0)
             {
@@ -501,7 +525,7 @@
         }
     }
 
-
+    // Método que borra un beneficio de la base de datos.
     public void borrarBeneficio(BeneficioModel b)
     {
         b.fechaAnalisis = puestoActivo.FechaAnalisis;
@@ -512,6 +536,7 @@
 
     }
 
+    // Método que cambia el valor de la variable que indica la visibilidad del form de ingresar un nuevo beneficio.
     public void cambiarVisibilidadForm()
     {
         if (formVisible)
@@ -524,6 +549,7 @@
         }
     }
 
+    // Método que refresca la página actual.
     public void refrescarPagina()
     {
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
