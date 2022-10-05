@@ -8,6 +8,7 @@
 }
 
 <head>
+    @*refrencias de de css y otros*@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HTML template</title>
@@ -17,11 +18,12 @@
 </head>
 
 <div id="subtitulo">
+    @*Se asigna el nombre del negocio que se recibe del handler*@
     <div id="nombre_negocio">@ViewData["NombreNegocio"]</div><PuestoParcialView />
 </div>
 
 <div id="contenido-puestos-pestañas">   
-    
+    @*se llama al componente reazor dinamico que contiene lado del cliente de agregar puestos y beneficios*@
     <div style="width: 100%; display: flex;">
         @(
             await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model, fechaAnalasis = ViewBag.FechaAnalisis})
