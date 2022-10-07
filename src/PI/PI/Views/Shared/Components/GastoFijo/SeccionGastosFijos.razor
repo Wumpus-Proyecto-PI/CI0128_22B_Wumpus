@@ -49,7 +49,20 @@
         *@
         <!-- Botón de guardar el gasto fijo-->
         <div id="inferior-horizontal">
-            <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
+            @if (hayGastoFijoSeleccionado == true)
+            {
+                /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
+                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGastoFijo(gastoFijoActivo)">
+                    <a>
+                        @if (hoverEliminar == false)
+                        {
+                            <img src="img/generic/trashCan.png" alt="">
+                        }
+                        @hoverTextEliminar
+                    </a>
+                </div>
+            }
+            <div class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
 
                     @if (hoverGuardar == false) {
                         <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -87,13 +100,15 @@
                 Se muestran no clikeables las prestaciones sociales, seguro social y suma de beneficios
             *@
                 @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
-                { 
-                    <div class="gastoFijo-clickeable-eliminable" >
-                    <div @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
-                        <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                {
+                    <div class="gastoFijo-clickeable" @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
+                        <div >
+                            <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                        </div>
+                        <div class="gastoFijo-icono-editar">
+                            <img src=img/generic/editPhoto.png>
+                        </div>
                     </div>
-                        <img @onclick="() => eliminarGastoFijo(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
-                </div>
                 } else {
                     <div class="gastoFijo-noClickeable-noEliminable">
                             <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
@@ -103,7 +118,7 @@
             }
         </div>
         <!-- Botón de agregar un nuevo gasto fijo-->
-        <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
+        <div class="transition gastoFijo-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
             <a>
                 @if (hoverAgregar == false)
                 {
@@ -147,10 +162,12 @@
     // variables para agregar y quitar texto al hacer hover en botones de guardar y agregar
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
+    public string hoverTextEliminar = "";
 
     // booleanos para el control de los hover en botones guardar y agregar
     public bool hoverGuardar = false;
     public bool hoverAgregar = false;
+    public bool hoverEliminar = false;
 
     // atributo obsoleto, se debe revisar y validar si se peude eliminar
     bool pestanyaConfiguracionActiva = true;
@@ -175,6 +192,10 @@
         {
             hoverGuardar = true;
             hoverTextGuardar = "Guardar datos";
+        } else if (action == 3)
+        {
+            hoverEliminar = true;
+            hoverTextEliminar = "Eliminar puesto";
         }
     }
 
@@ -187,9 +208,15 @@
         {
             hoverTextAgregar = "";
             hoverAgregar = false;
-        } else {
+        }
+        else if (action == 2)
+        {
             hoverGuardar = false;
             hoverTextGuardar = "";
+        } else if (action == 3)
+        {
+            hoverEliminar = false;
+            hoverTextEliminar = "";
         }
     }
 
