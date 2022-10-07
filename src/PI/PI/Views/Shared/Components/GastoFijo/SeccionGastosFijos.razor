@@ -49,6 +49,19 @@
         *@
         <!-- Botón de guardar el gasto fijo-->
         <div id="inferior-horizontal">
+            @if (hayGastoFijoSeleccionado == true)
+            {
+                /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
+                <div id="eliminar-puesto" class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGastoFijo(gastoFijoActivo)">
+                    <a>
+                        @if (hoverEliminar == false)
+                        {
+                            <img src="img/generic/trashCan.png" alt="">
+                        }
+                        @hoverTextEliminar
+                    </a>
+                </div>
+            }
             <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
 
                     @if (hoverGuardar == false) {
@@ -146,10 +159,12 @@
     // variables para agregar y quitar texto al hacer hover en botones de guardar y agregar
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
+    public string hoverTextEliminar = "";
 
     // booleanos para el control de los hover en botones guardar y agregar
     public bool hoverGuardar = false;
     public bool hoverAgregar = false;
+    public bool hoverEliminar = false;
 
     // atributo obsoleto, se debe revisar y validar si se peude eliminar
     bool pestanyaConfiguracionActiva = true;
@@ -174,6 +189,10 @@
         {
             hoverGuardar = true;
             hoverTextGuardar = "Guardar datos";
+        } else if (action == 3)
+        {
+            hoverEliminar = true;
+            hoverTextEliminar = "Eliminar puesto";
         }
     }
 
@@ -186,9 +205,15 @@
         {
             hoverTextAgregar = "";
             hoverAgregar = false;
-        } else {
+        }
+        else if (action == 2)
+        {
             hoverGuardar = false;
             hoverTextGuardar = "";
+        } else if (action == 3)
+        {
+            hoverEliminar = false;
+            hoverTextEliminar = "";
         }
     }
 
