@@ -6,7 +6,7 @@
 
 <!-- Sección de edición (lado izquierdo) -->
 @*Comienzo ventana izquierda de edición e ingreso de gastos fijos*@
-    <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
+    <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoAnual">
 
         <div id="titulo-contenido">
             @*TODO: quitar. Aqui se agrega lo de las pestanas*@
@@ -36,7 +36,7 @@
                         @((MarkupString)CasoError_repetido)
 
                         <div class="fila-form-configuracion">
-                            <label>Monto mensual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
+                            <label>Monto anual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
                         </div>
                         @((MarkupString)CasoError_negativo)
                     </form>
@@ -79,11 +79,12 @@
     <div class="altura-seccion" id="seccion-gastosFijos">
         <div class="totales"> 
             <div class="fila-form-configuracion">
-                <label class="total">Total mensual</label> <p> @((totalMensual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+                <!-- Con N2 indica que quiere un número de 2 decimales siempre -->
+            <label class="total">Total mensual</label> <p> @((totalAnual / 12).ToString("N2")) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
             </div>
             <div class="fila-form-configuracion">
            
-                <label class="total">Total anual </label> <p> @((totalMensual * 12).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+                <label class="total">Total anual </label> <p> @((totalAnual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
             </div>
 @*Fin de sección de totales*@
 
@@ -138,7 +139,7 @@
 
     // total mensual de gastos fijos
     [Parameter]
-    public decimal totalMensual { get; set; }
+    public decimal totalAnual { get; set; }
 
     // booleano que indica si se está editanto un gasto fijo o agregando
     public bool hayGastoFijoSeleccionado = false;
@@ -174,7 +175,7 @@
     string CasoError_negativo = "";
 
     // nombres de gastos fijos que no deben ser clickeables
-    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
 
     // métodos para manevar la acción de hover de agregar y guardar gasto fijo.
     public void Hover(int action)
@@ -288,7 +289,7 @@
                 gastoFijoActivo = new GastoFijoModel();
             }
             copiaNombreOriginal = string.Empty;
-            actualizarMontoMensual();
+            actualizarMontoAnual();
 
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
@@ -306,15 +307,14 @@
         // se utiliza el handler para eliminar el puesto
         HandlerGastoFijo.eliminarGastoFijo(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
 
-        actualizarMontoMensual();
+        actualizarMontoAnual();
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
-    // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total mensual es actualizado.
-    // TODO hacerlo para el anual en lugar del mensual.
-    public void actualizarMontoMensual () {
-        this.totalMensual = HandlerGastoFijo.obtenerTotalMensual(this.fechaAnalasis);
+    // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total anual es actualizado.
+    public void actualizarMontoAnual () {
+        this.totalAnual = HandlerGastoFijo.obtenerTotalAnual(this.fechaAnalasis);
     }
 }

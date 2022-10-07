@@ -34,9 +34,8 @@ namespace PI.Controllers
             gastoFijoHandler.actualizarPrestaciones(fechaConversion, prestaciones);
             gastoFijoHandler.actualizarBeneficios(fechaConversion);
 
-            // Actualiza la sumatoria de los gastos fijos. (mensual)
-            // TODO que sea un total anual.
-            ViewBag.totalMensual = gastoFijoHandler.obtenerTotalMensual(fechaConversion);
+            // Actualiza la sumatoria de los gastos fijos. (anual)
+            ViewBag.totalAnual = gastoFijoHandler.obtenerTotalAnual(fechaConversion);
             ViewData["NombreNegocio"] = gastoFijoHandler.obtenerNombreNegocio(fechaConversion);
 
             List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaConversion);
