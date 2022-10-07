@@ -11,7 +11,7 @@
     </div>
     <div class="bottom-puesto">
         <div class="puesto-caracteristica puesto-salario-bruto">
-            <p>@puesto.SalarioBruto.ToString()</p>
+            <p>@((puesto.SalarioBruto * puesto.Plazas).ToString())</p>
             <img class="divisa-img" src="/img/generic/coin-icon.svg">
         </div>
         <div>

@@ -28,20 +28,20 @@
                 <form id="form_configuracion">
                     @*Input del nombre del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                    <label>Nombre del puesto</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
                     </div>
 
                      @((MarkupString)ErrorNombre) @*Mensaje de error*@
 
                     @*Input del salario del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Salario</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
+                    <label>Salario</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
                     </div>
                     @((MarkupString)ErrorSalario) @*Mensaje de error*@
 
                     @*Input de las plazas del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                    <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas">
                     </div>
                     @((MarkupString)ErrorPlaza) @*Mensaje de error*@
                     </form>
@@ -257,8 +257,6 @@
 
     // placeholder indican que se debe ingresar en los campos
     public string placeHolderNombre = "Ingresar nombre";
-    public string placeHolderSalario = "Ingresar salario";
-    public string placeHolderPlazas = "Ingresar plazas";
 
     // variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
     public string hoverTextAgregar = "";
@@ -335,8 +333,6 @@
 
         // se asugnan variables de vista
         placeHolderNombre = puestoActivo.Nombre;
-        placeHolderSalario = puestoActivo.SalarioBruto.ToString();
-        placeHolderPlazas = puestoActivo.Plazas.ToString();
         
         // se copia el nombre por si se va a actualizar este nombre
         copiaNombreOriginal = puestoActivo.Nombre;
@@ -355,8 +351,6 @@
     public void AgregarNuevoPuesto() {
         // se reseatean variables de control visual
         placeHolderNombre = "Ingresar nombre";
-        placeHolderSalario = "Ingresar salario";
-        placeHolderPlazas = "Ingresar plazas";
 
         // se indica que no hay un puesto seleccionado
         hayPuestoSeleccionado = false;
