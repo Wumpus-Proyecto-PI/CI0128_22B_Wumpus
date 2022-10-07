@@ -11,15 +11,13 @@
     </div>
     <div class="bottom-gastoFijo">
         <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
-            <p>Mensual: @gastoFijo.Monto.ToString()</p>
-            <img class="divisa-img" src="/img/generic/coin-icon.svg">
+            <p>Mensual: @((gastoFijo.Monto / 12).ToString("N2"))</p>
         </div>
     </div>
 
     <div class="bottom-gastoFijo">
         <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
-            <p>Anual: @((gastoFijo.Monto*12).ToString())</p>
-            <img class="divisa-img" src="/img/generic/coin-icon.svg">
+            <p>Anual: @((gastoFijo.Monto).ToString())</p>
         </div>
     </div>
 </div>
@@ -35,6 +33,5 @@
     // Sección gastoFijo: editable
     public string tipoGasto = "gastoFijo gastoFijo-editable";
     // Posibles nombres de gasto fijo referentes a la estructura organizativa.
-    // TODO quitar los nombres que están de más.
-    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
 }

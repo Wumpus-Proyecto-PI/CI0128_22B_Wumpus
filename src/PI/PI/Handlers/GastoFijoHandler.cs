@@ -86,18 +86,18 @@ namespace PI.Handlers
         }
 
         // Obtiene y retorna la suma total mensual de los montos de gastos fijos
-        public decimal obtenerTotalMensual(DateTime fechaAnalisis)
+        public decimal obtenerTotalAnual(DateTime fechaAnalisis)
         {
-            decimal totalMensual = 0.0m;
+            decimal totalAnual = 0.0m;
 
             string consulta = "EXEC obtSumGastosFijos '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (!tablaResultado.Rows[0].IsNull("totalMensual"))
+            if (!tablaResultado.Rows[0].IsNull("totalAnual"))
             {
-                totalMensual = Convert.ToDecimal(tablaResultado.Rows[0]["totalMensual"]);
+                totalAnual = Convert.ToDecimal(tablaResultado.Rows[0]["totalAnual"]);
             }
 
-            return totalMensual;
+            return totalAnual;
         }
 
         // Crea o actualiza el gasto fijo de salarios netos
