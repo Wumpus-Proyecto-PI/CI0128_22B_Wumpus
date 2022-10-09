@@ -1,4 +1,5 @@
 ﻿@using PI.Models
+@using System.Globalization
 <!-- Representa una carta/tarjeta de gasto fijo: nombre, monto anual y monto mensual -->
 
 <!-- Verifica si el nombre de gasto fijo pertenece a la estructura organizativa o no. Esto para asignarle la clase y en consecuencia, el estilo css correspondiente.-->
@@ -11,13 +12,13 @@
     </div>
     <div class="bottom-gastoFijo">
         <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
-            <p>Mensual: @((gastoFijo.Monto / 12).ToString("N2"))</p>
+            <p>Mensual: @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (gastoFijo.Monto / 12)))</p>
         </div>
     </div>
 
     <div class="bottom-gastoFijo">
         <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
-            <p>Anual: @((gastoFijo.Monto).ToString())</p>
+            <p>Anual: @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (gastoFijo.Monto)))</p>
         </div>
     </div>
 </div>

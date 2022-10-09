@@ -1,5 +1,6 @@
 ﻿@using PI.Models
 @using PI.Handlers
+@using System.Globalization
 @inject NavigationManager NavigationManager;
 
 <!-- Razor que representa la sección de gastos fijos -->
@@ -80,11 +81,14 @@
         <div class="totales"> 
             <div class="fila-form-configuracion">
                 <!-- Con N2 indica que quiere un número de 2 decimales siempre -->
-            <label class="total">Total mensual</label> <p> @((totalAnual / 12).ToString("N2")) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+            <label class="total">Total mensual</label> <p>
+                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (totalAnual / 12))) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
             </div>
             <div class="fila-form-configuracion">
            
-                <label class="total">Total anual </label> <p> @((totalAnual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+                <label class="total">Total anual </label> <p>
+                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", totalAnual)) <img class="divisa-img" src="/img/generic/coin-icon.svg">
+            </p>
             </div>
 @*Fin de sección de totales*@
 
