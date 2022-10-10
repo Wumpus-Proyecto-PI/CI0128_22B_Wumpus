@@ -35,7 +35,7 @@
 
                     @*Input del salario del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Salario</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
+                    <label>Salario Mensual</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
                     </div>
                     @((MarkupString)ErrorSalario) @*Mensaje de error*@
 
@@ -128,7 +128,7 @@
                 {
                     <tr>
                         <th style="border:none;">Nombre</th>
-                        <th style="border:none;">Monto</th>
+                        <th style="border:none;">Monto mensual</th>
                         <th style="border:none;"> Plazas </th>
                         <th style="border:none;" width="40px"></th>
                     </tr>
@@ -170,7 +170,7 @@
                     </div>
                     @*Sección donde se encuentra el form donde se ingresa el monto del nuevo beneficio*@
                     <div id="container-input-monto-beneficio">
-                        <label for="montoBeneficio">Monto:</label>
+                        <label for="montoBeneficio">Monto mensual:</label>
                         <input id="input_monto_beneficio" min="0" step="any" name="montoBeneficio" type="number" @bind="comodines[comodinActual].monto">
                     </div>
                     @*Sección donde se encuentra el form donde se ingres el monto del nuevo beneficio*@
