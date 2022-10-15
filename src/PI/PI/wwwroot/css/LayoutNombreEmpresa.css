@@ -1,0 +1,63 @@
+﻿
+.subtitulo-nombre-negocio {
+    width: 554px;
+    height: 62px;
+    background-color: #005DB9;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content:space-around;
+    border-radius: 0px 20px 20px 0px;
+    box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+.subtitulo-nombre-negocio img, .subtitulo-nombre-negocio a {
+    height: 35px;
+    width: fit-content;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+}
+
+.boton-volver {
+    margin-left: 20px;
+}
+
+.subtitulo-nombre-negocio p {
+    padding: 0px;
+    margin: 0px;
+    font-size: xx-large;
+    width: 100%;
+    text-align: center;
+}
+
+.hovertext {
+    position: relative;
+}
+
+.hovertext:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    opacity: 0;
+    width: 140px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 0;
+    transition: opacity 0.2s ease-in-out;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 110%;
+    font-size: 15px;
+}
+
+.hovertext:hover:before {
+    opacity: 1;
+    visibility: visible;
+}
