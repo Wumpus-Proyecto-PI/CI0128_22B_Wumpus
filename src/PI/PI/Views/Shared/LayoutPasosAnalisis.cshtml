@@ -31,13 +31,6 @@
             }
 
             <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
-            
-            @if (Convert.ToString(ViewData["TituloPaso"]) != "Progreso del análisis" && Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios")
-            {
-                <div id="boton_negocios">
-                    <a asp-controller="Analisis" asp-action="Index" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")>Volver al análisis</a>
-                </div>
-            }
         </div>
     </header>
     <div class="container">
