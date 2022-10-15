@@ -14,13 +14,12 @@
 
 </head>
 
-<div id="subtitulo">
-    <div id="nombre_negocio">@ViewData["NombreNegocio"]</div>
+@Html.Partial("LayoutNombreEmpresa")
+
+<!-- Invoca al razor SecionGastosFijos. Le envía la lista, la fecha y el totalAnual.-->
+<div style="width: 100%; display: flex;">
+    @(
+        await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo.SeccionGastosFijos>(RenderMode.ServerPrerendered, new { gastosFijos = Model, fechaAnalasis = ViewBag.fechaAnalisis, totalAnual = ViewBag.totalAnual})
+        )
 </div>
-    <!-- Invoca al razor SecionGastosFijos. Le envía la lista, la fecha y el totalAnual.-->
-    <div style="width: 100%; display: flex;">
-        @(
-            await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoFijo.SeccionGastosFijos>(RenderMode.ServerPrerendered, new { gastosFijos = Model, fechaAnalasis = ViewBag.fechaAnalisis, totalAnual = ViewBag.totalAnual})
-            )
-    </div>
 
