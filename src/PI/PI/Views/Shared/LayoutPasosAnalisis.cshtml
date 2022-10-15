@@ -20,14 +20,11 @@
                 <a asp-controller="Mensajes" asp-action="BajoConstruccion" ><img src="~/img/user.png" alt="Usuario"></a>
             </div>
 
-            @if (@ViewBag.fechaAnalisis != null)
+            @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios" && @ViewBag.fechaAnalisis != null)
             {
-                @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios")
-                {
-                    <div id="boton_ajustes">
-                        <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
-                    </div>
-                }
+                <div id="boton_ajustes">
+                    <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
+                </div>
             }
 
             <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
