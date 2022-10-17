@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<ProductoModel>
+@{
     Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
 }
 
@@ -11,5 +12,5 @@
 
 
 @(
-        await Html.RenderComponentAsync<PI.Views.Shared.Components.Rentabilidad.TablaRentabilidad>(RenderMode.ServerPrerendered)
-        )
+        await Html.RenderComponentAsync<PI.Views.Shared.Components.Rentabilidad.TablaRentabilidad>(RenderMode.ServerPrerendered, new { productos = Model, fechaAnalasis = ViewBag.fechaAnalisis})
+    )
