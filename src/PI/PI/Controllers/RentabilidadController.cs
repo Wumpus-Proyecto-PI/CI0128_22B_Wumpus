@@ -19,7 +19,7 @@ namespace PI.Controllers
             List<ProductoModel> productos = new List<ProductoModel>();
             productos.Add(new ProductoModel
             {
-                nombre = "Empanadas de carne",
+                nombre = "Empanadas",
                 porcentajeVentas = "33%",
                 precio = "250"
             });

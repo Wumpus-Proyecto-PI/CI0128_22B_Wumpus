@@ -11,31 +11,43 @@
         <h2>Analisis de rentabilidad</h2>
         <ul class="responsive-table">
             <li class="table-header">
-                <div class="col col-1">Nombre</div>
-                <div class="col col-2">% Ventas</div>
-                <div class="col col-3">Precio</div>
-                <div class="col col-4">Margen</div>
-                <div class="col col-5">Punto Eq</div>
-                <div class="col col-6">Meta</div>
+                <div class="col col-1">
+                    <p class="datos-calculados">Nombre de producto</p>
+                </div>
+                <div class="col col-1">
+                    <p class="datos-calculados">Porcentaje de Ventas</p>
+                </div>
+                <div class="col col-1">
+                    <p class="datos-calculados">Precio</p>
+                </div>
+                <div class="col col-1">
+                    <p class="datos-calculados">Margen</p>
+                </div>
+                <div class="col col-1">
+                    <p class="datos-calculados">Punto Equilibrio</p>
+                </div>
+                <div class="col col-1">
+                    <p class="datos-calculados">Meta de ventas</p>
+                </div>
             </li>
 
             <li class="table-row-totales">
-                <div class="col col-1 mt-2" data-label="Nombre">
+                <div class="col col-1" data-label="Nombre">
                     TOTALES
                 </div>
-                <div class="col col-2 mt-2" data-label="% Ventas">
+                <div class="col col-1" data-label="% Ventas">
                     100%
                 </div>
-                <div class="col col-3 mt-2" data-label="Precio">
+                <div class="col col-1" data-label="Precio">
                     -
                 </div>
-                <div class="col col-4 mt-2" data-label="Margen">
+                <div class="col col-1" data-label="Margen">
                     -
                 </div>
-                <div class="col col-5 mt-2" data-label="Punto Eq">
+                <div class="col col-1" data-label="Punto Eq">
                     9,220.00
                 </div>
-                <div class="col col-6 mt-2" data-label="Meta">
+                <div class="col col-1" data-label="Meta">
                     234
                 </div>
             </li>
@@ -43,23 +55,25 @@
             @foreach (var productoActual in productos)
             {
                     <li class="table-row">
-                        <div class="col col-1 mt-2" data-label="Nombre">
-                            <p class="datos-calculados">@productoActual.nombre</p>
+                    <div class="col col-1" data-label="Nombre">
+                        <p class="datos-calculados">@productoActual.nombre</p>
                         </div>
-                        <div class="col col-2" data-label="% Ventas">
-                            <input class="effect-1 text-center pb-2" id="porcentajeVentas" type="text" placeholder="Ingresar" onblur="actualizarPorcentaje()">
-                        @*                    <span class="focus-border"></span>*@
+                        <div class="col col-1" data-label="% Ventas">
+                                @*<input class="effect-1 text-center pb-2" id="porcentajeVentas" type="text" placeholder="Ingresar" onblur="actualizarPorcentaje()">*@
+                            @*                    <span class="focus-border"></span>*@
+                            <p class="input-table">@productoActual.porcentajeVentas</p>
                         </div>
-                        <div class="col col-3" data-label="Precio">
-                            <input class="effect-1 text-center pb-2" type="text" placeholder="Ingresar">
+                        <div class="col col-1" data-label="Precio">
+                            @*<input class="effect-1 text-center pb-2" type="text" placeholder="Ingresar">*@
+                            <p class="input-table">@productoActual.precio</p>
                         </div>
-                        <div class="col col-4" data-label="Margen">
+                    <div class="col col-1" data-label="Margen">
                             <p class="datos-calculados" @bind="porcentajeVentas">10,100.00</p>
                         </div>
-                        <div class="col col-5 mt-2" data-label="Punto Eq">
+                    <div class="col col-1" data-label="Punto Eq">
                             <p class="datos-calculados"></p>
                         </div>
-                        <div class="col col-6 mt-2" data-label="Meta">
+                        <div class="col col-1" data-label="Meta">
                             <p class="datos-calculados">10,100.00</p>
                         </div>
                     </li>
