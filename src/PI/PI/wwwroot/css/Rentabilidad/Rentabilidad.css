@@ -1,0 +1,121 @@
+﻿/*body {
+    font-family: lato,sans-serif
+}
+*/
+.container {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+h2 {
+    font-size: 26px;
+    margin: 20px 0;
+    text-align: center
+}
+
+small {
+    font-size: .5em
+}
+
+li {
+    border-radius: 20px;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px
+}
+
+.table-header {
+    background-color: #C7EEFF;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-weight:bold;
+}
+
+.table-row {
+    background-color: #fff;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-size: 15px;
+}
+
+.table-row-totales {
+    background-color: #F6F6F6;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-size: 15px;
+}
+
+.datos-calculados {
+    margin:unset;
+    margin-top: 0.7rem;
+}
+
+.col-1 {
+    flex-basis: 10%;
+}
+
+.col-2 {
+    flex-basis: 10%;
+}
+
+.col-3, .col-4, .col-5, .col-6 {
+    flex-basis: 10%
+}
+
+.effect-1 {
+    border: 0;
+    padding: 7px 0;
+    border-bottom: 1px solid #ccc;
+    width: 8rem;
+}
+
+:focus {
+    outline: none;
+}
+
+/*.effect-1 ~ .focus-border {
+    position: absolute;
+        bottom:0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #3399FF;
+    transition: 0.4s;
+}*/
+
+/*.effect-1:focus ~ .focus-border {
+    width: 50%;
+    transition: 0.4s;
+}
+*/
+@media all and (max-width:767px) {
+    .container {
+        text-align:start;
+    }
+
+    .table-header {
+        display: none
+    }
+
+    li {
+        display: block
+    }
+
+    .col {
+        flex-basis: 100%;
+        display: flex;
+        padding: 10px 0
+    }
+
+        .col:before {
+            color: #6C7A89;
+            padding-right: 10px;
+            content: attr(data-label);
+            flex-basis: 50%;
+            text-align: right
+        }
+}
