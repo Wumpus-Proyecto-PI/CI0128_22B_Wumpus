@@ -1,0 +1,34 @@
+﻿@*<a class="d-flex justify-content-center" asp-controller="Analisis" asp-action="CrearAnalisis" asp-route-IDNegocio=@idNegocio asp-route-estadoNegocio="Emprendimiento" @onclick="cambiarEstadoPopup">*@
+
+<div class="card card-agregar" @onclick="cambiarEstadoPopup">
+		<img class="boton-agregar" src=img/generic/add.png>
+</div>
+	@*</a>*@
+@if(PopupVisible == true) {
+	<div class="bg-body position-absolute" @onclick="cambiarEstadoPopup"></div>
+	<section class="card position-absolute popup">
+		<div class="card-body">
+			<h5 class="card-title">Seleccione el estado de su negocio para este análisis</h5>
+			<form d-flex justify-content-center align-items-center>
+				<input type="radio" id="no-iniciado" value="No iniciado" @onclick=@(() => asignarEstado ("Emprendimiento"))>
+				<label for="no-iniciado">No iniciado</label>
+				<input type="radio" value="En marcha" @onclick=@(() => asignarEstado ("En marcha"))>
+				<label for="no-iniciado">En marcha</label>
+				<input type="button" value="Aceptar">
+			</form>
+		</div>
+	</section>
+}
+@code {
+	[Parameter]
+	public int idNegocio { get; set; }
+	public bool PopupVisible { get; set; } = false;
+	public string EstadoNegocio { get; set; }
+
+	public void cambiarEstadoPopup() {
+		PopupVisible = !PopupVisible;
+	}
+	public void asignarEstado(string estadoNegocio) {
+		EstadoNegocio = estadoNegocio;
+	}
+}
