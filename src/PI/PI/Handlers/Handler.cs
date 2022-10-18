@@ -131,7 +131,7 @@ namespace PI.Handlers
         public string obtenerNombreNegocio(int IDNegocio)
         {
             // consulta sql 
-            string consulta = "SELECT negocio.nombre from dbo.negocio where negocio.ID = " + IDNegocio + ";";
+            string consulta = "EXEC obtNombreNegocioPorID @IDNegocio = " + IDNegocio + ";";
 
             // string a retornar con el nombre del negocio
             string nombreNegocio = "";
