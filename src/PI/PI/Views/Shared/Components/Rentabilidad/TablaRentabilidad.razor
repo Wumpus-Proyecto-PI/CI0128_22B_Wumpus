@@ -1,11 +1,6 @@
 ﻿@using PI.Models
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-</head>
 
-<body>
     <div id="container-forms-top">
         <form class="d-flex flex-row align-items-center justify-content-start">
             <div class="form-row">
@@ -69,13 +64,10 @@
                         <p class="datos-calculados">@productoActual.nombre</p>
                         </div>
                         <div class="col col-1" data-label="% Ventas">
-                                @*<input class="effect-1 text-center pb-2" id="porcentajeVentas" type="text" placeholder="Ingresar" onblur="actualizarPorcentaje()">*@
-                            @*                    <span class="focus-border"></span>*@
-                            <p class="input-table">@productoActual.porcentajeVentas</p>
+                                <input class="effect-1 text-center pb-2" type="text" placeholder="Ingresar" @bind="productoActual.porcentajeVentas ">
                         </div>
                         <div class="col col-1" data-label="Precio">
-                            @*<input class="effect-1 text-center pb-2" type="text" placeholder="Ingresar">*@
-                            <p class="input-table">@productoActual.precio</p>
+                            <input class="effect-1 text-center pb-2" type="text" placeholder="Ingresar">
                         </div>
                     <div class="col col-1" data-label="Margen">
                             <p class="datos-calculados" @bind="porcentajeVentas">10,100.00</p>
@@ -84,13 +76,12 @@
                             <p class="datos-calculados"></p>
                         </div>
                         <div class="col col-1" data-label="Meta">
-                            <p class="datos-calculados">10,100.00</p>
+                            <p class="datos-calculados">@productoActual.porcentajeVentas</p>
                         </div>
                     </li>
             }
         </ul>
     </div>
-</body>
 
 @code {
 
@@ -103,5 +94,4 @@
     public string porcentajeVentas = "20";
 
     public string placeHolderVentas = "Porcentaje";
-
 }

@@ -58,13 +58,13 @@ li {
     font-size: 15px;
 }
 
-.table-row:hover {
+/*.table-row:hover {
     transition-duration: 0.2s;
-    transform: scale(1.02);
+    transform: scale(1.02);*/
     /* box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); */
-    cursor: pointer;
+    /*cursor: pointer;
     background-color: #F6F6F6;
-}
+}*/
 
 .input-table {
     border-bottom: solid;
