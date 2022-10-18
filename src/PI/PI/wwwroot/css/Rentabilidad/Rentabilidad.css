@@ -2,6 +2,16 @@
     font-family: lato,sans-serif
 }
 */
+#container-forms-top {
+    margin-top: 3%;
+    margin-bottom:1%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    width:100%;
+    height:fit-content;
+
+}
 
 .container {
     max-width: 1400px;
@@ -19,6 +29,10 @@ h2 {
 
 small {
     font-size: .5em
+}
+
+ul {
+    padding-left:0px;
 }
 
 li {
