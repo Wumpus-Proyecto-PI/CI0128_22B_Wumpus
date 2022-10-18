@@ -1,0 +1,24 @@
+﻿@model List<GastoVariableModel>
+@*
+    Html para el manejo de gastos variables
+*@
+@{
+    Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+}
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTML template</title>
+    <link rel="stylesheet" href="~/css/GastoVariable/GastoVariable.css">
+
+</head>
+
+@Html.Partial("LayoutNombreEmpresa")
+
+<!-- Invoca al razor SecionGastosFijos. Le envía la lista, la fecha y el totalAnual.-->
+<div style="width: 100%; display: flex;">
+    @(
+        await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoVariable.SeccionGastosVariables>(RenderMode.ServerPrerendered, new { gastosVariables = Model, fechaAnalasis = ViewBag.fechaAnalisis })
+        )
+</div>

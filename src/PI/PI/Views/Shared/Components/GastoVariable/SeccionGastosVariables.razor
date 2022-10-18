@@ -1,0 +1,578 @@
+﻿@using PI.Models
+@using PI.Handlers
+@inject NavigationManager NavigationManager;
+
+<div class="altura-seccion" id="seccion-pestañas">
+    @*Comienzo ventana izquierda de edición e ingreso de puestos*@
+    <div id="titulo-contenido">
+
+        @*
+        Se revisa si hay puesto seleccionado o no
+        En caso de haber uno seleccionado, se está editando un puesto
+        Caso contrario se está agregando uno nuevo
+        *@
+        @if (hayGastoSeleccionado == false)
+        {
+            <h1>Nuevo puesto</h1>
+        }
+        else
+        {
+            <h1>Editar puesto</h1>
+        }
+
+
+        @*
+        Comienzo sección de ingreso de datos de un puesto
+        Ya se edición o creación de puesto
+        *@
+        <div id="cuadro_configuracion">
+
+            <form id="form_configuracion">
+                @*Input del nombre del puesto*@
+                <div class="fila-form-configuracion">
+                    <label>Nombre del puesto</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                </div>
+
+                @((MarkupString)ErrorNombre) @*Mensaje de error*@
+
+                @*Input del salario del puesto*@
+                <div class="fila-form-configuracion">
+                    <label>Salario Mensual</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
+                </div>
+                @((MarkupString)ErrorLote) @*Mensaje de error*@
+
+                @*Input de las plazas del puesto*@
+                <div class="fila-form-configuracion">
+                    <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas">
+                </div>
+                @((MarkupString)ErrorPlaza) @*Mensaje de error*@
+            </form>
+
+            @*Se muestra edición de beneficios si se está editando un puesto*@
+            @if (hayPuestoSeleccionado)
+            {
+                <button id="boton-beneficios" @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
+            }
+        </div>
+        @*
+        Comienzo sección de ingreso de datos de un puesto
+        *@
+
+
+        @*Botón de guardado*@
+    </div>
+    <div id="inferior-horizontal">
+        @if (hayPuestoSeleccionado == true)
+        {
+            /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
+            <div id="eliminar-puesto" class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarPuesto(puestoActivo)">
+                <a>
+                    @if (hoverEliminar == false)
+                    {
+                        <img src="img/generic/trashCan.png" alt="">
+                    }
+                    @hoverTextEliminar
+                </a>
+            </div>
+        }
+        <div class="est-org-boton " @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
+            <a>
+                @if (hoverGuardar == false)
+                {
+                    <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                }
+                @hoverTextGuardar
+            </a>
+        </div>
+    </div>
+    @*Fin ventana izquierda de edición e ingreso de puestos*@
+</div>
+
+@*Comienzo de seccion de puestos donde se ven los puestos en cajas con organigrama*@
+<div class="altura-seccion" id="seccion-puestos">
+    <div id="mostrar-puestos">
+
+        @*Renderización de las tarjetas de los puestos, son componentes razor aparte*@
+        @foreach (PuestoModel puestoActual in puestos)
+        {
+            <div class="puesto-clickeable" @onclick="() => SeleccionarPuesto(puestoActual)">
+                <div>
+                    <PuestoParcialView puesto=puestoActual></PuestoParcialView>
+                </div>
+                <div class="puesto-icono-editar">
+                    <img src=img/generic/editPhoto.png>
+                </div>
+            </div>
+        }
+    </div>
+
+    @*Botón de agregar un puesto*@
+    <div class="transition est-org-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+        <a>
+            @if (hoverAgregar == false)
+            {
+                <img src="img/estructuraOrg/addPuesto.png" alt="">
+            }
+            @hoverTextAgregar
+        </a>
+    </div>
+</div>
+@*Fin de seccion de puestos donde se ven los puestos en cajas con organigrama*@
+
+
+@*Comienzo de popup donde se editan los beneficios*@
+@if (PopupVisible)
+{
+    @*Se agrega Overlay sobre la pantalla, para que el Popup sobresalga*@
+    <div id="overlay" @onclick="cambiarVisibilidadPopup"></div>
+    <div id="contenedor_beneficios">
+        <h1 id="titulo_beneficios">Beneficios</h1>
+        @*Tabla donde se contienen los beneficios*@
+        <table id=lista_beneficios>
+            @*En caso de que hayan beneficios que mostrar, se muestra la tabla*@
+            @if (puestoActivo.Beneficios.Count() > 0)
+            {
+                <tr>
+                    <th style="border:none;">Nombre</th>
+                    <th style="border:none;">Monto mensual</th>
+                    <th style="border:none;"> Plazas </th>
+                    <th style="border:none;" width="40px"></th>
+                </tr>
+            }
+            @*En caso de no haber beneficios, se le indica al usuario mediante una frase*@
+            else
+            {
+                <tr>
+                    <th style="border:none; text-align:center; opacity:0.5;"> No hay beneficios que mostrar</th>
+                </tr>
+            }
+            @*Se muestran en una tabla, el nombre, el monto y la cantidad de plazas de los beneficios de el puesto seleccionado*@
+            @for (int i = 0; i < puestoActivo.Beneficios.Count(); i += 1)
+            {
+                int index = i;
+
+                <tr class="filas_tabla_beneficio">
+                    <td> @puestoActivo.Beneficios[index].nombreBeneficio</td>
+                    <td> @puestoActivo.Beneficios[index].monto</td>
+                    <td> @puestoActivo.Beneficios[index].plazasPorBeneficio </td>
+                    @*Botón para borrar un beenficio*@
+                    <td class="columna-borrar-beneficio"><div class="borrar-beneficio" @onclick="()=>borrarBeneficio(puestoActivo.Beneficios[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
+                </tr>
+            }
+        </table>
+        @*Form para ingresar los datos de un nuevo beneficio*@
+        @if (formVisible)
+        {
+            @*Se agrega a los comodines un nuevo beneficio*@
+            comodines.Add(new BeneficioModel());
+
+            <h2>Nuevo beneficio</h2>
+            @*Sección de forms para ingresar los datos de un nuevo beneficio*@
+            <div id="tabla_form">
+                @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo beneficio*@
+                <div id="container-input-nombre-beneficio">
+                    <label for="nombreBeneficio">Nombre:</label>
+                    <input id="input_nombre_beneficio" name="nombreBeneficio" @bind="comodines[comodinActual].nombreBeneficio">
+                </div>
+                @*Sección donde se encuentra el form donde se ingresa el monto del nuevo beneficio*@
+                <div id="container-input-monto-beneficio">
+                    <label for="montoBeneficio">Monto mensual:</label>
+                    <input id="input_monto_beneficio" min="0" step="any" name="montoBeneficio" type="number" @bind="comodines[comodinActual].monto">
+                </div>
+                @*Sección donde se encuentra el form donde se ingres el monto del nuevo beneficio*@
+                <div id="container-input-plazas-beneficio">
+                    <label for="montoBeneficio">Plazas:</label>
+                    <input id="input_plazas_beneficio" min="1" name="plazasBeneficio" type="number" @bind="comodines[comodinActual].plazasPorBeneficio">
+                </div>
+                @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
+                <div id="seccion-guardar-beneficio">
+                    <div id="boton-guardar-beneficio" @onclick="agregarBeneficioNuevo">
+                        <img src="img/estructuraOrg/guardarPuesto.png" alt="" width="30px" height="30px">
+                    </div>
+                </div>
+            </div>
+            @*Sección de mensajes de error en caso de que se hayan ingresado datos erróneos en los forms del nuevo beneficio*@
+            @if (NombreVacio)
+            {
+                <p style="color:red; align-self:self-start; margin-left:10px;">ERROR: El nombre ingresado es vacío</p>
+            }
+            @if (!MontoBeneficiosPositivo)
+            {
+                <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: El monto ingresado debe ser positivo</p>
+            }
+            @if (!PlazasBeneficiosMenoresAPuesto)
+            {
+                <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: Las plazas ingresadas son mayores a las plazas del puesto correspondiente</p>
+            }
+            else if (!PlazasBeneficiosPositivo)
+            {
+                <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: La cantidad de plazas debe ser positiva</p>
+            }
+        }
+        @*Sección de botones en la parte inferior del popup de los beneficios*@
+        <div id="botones_beneficios">
+            @*En caso de que el form no sea visible, se muestra un botón de "+" que al presionarlo se muestran los formas para ingresar el nuevo beneficio*@
+            @if (!formVisible)
+            {
+                <div id="boton-agregar-beneficio">
+                    <img src="img/estructuraOrg/addPuesto.png" alt="" width="30px" height="30px" @onclick="cambiarVisibilidadForm">
+                </div>
+            }
+            @*En casode que el form sea visible, se muestra un botón de "^" que al presionarlo, oculta la sección de los forms de los beneficios*@
+            else
+            {
+                <div id="boton-cerrar-form-beneficio">
+                    <img src="img/estructuraOrg/up-arrow.png" alt="" width="30px" height="30px" @onclick="cambiarVisibilidadForm">
+                </div>
+            }
+        </div>
+        @*Botón de X en la parte superior derecha del popup que al presionarlo se cierra el popup*@
+        <div id="salir-popup-beneficios">
+            <img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarVisibilidadPopup">
+        </div>
+    </div>
+}
+@*Fin de popup donde se editan los puestos*@
+
+
+
+@code {
+    // lista de gastos variables de la base de datos
+    [Parameter]
+    public List<GastoVariableModel> gastosVariables { get; set; }
+
+    // fecha del análisis al que pertenecen los gastos variables 
+    [Parameter]
+    public DateTime fechaAnalasis { get; set; }
+
+    // booleano que indica si se está editanto un puesto o agregando
+    public bool hayGastoSeleccionado = false;
+
+    // puesto seleccionado actualmente, puede ser nuevo o un existente
+    public GastoVariableModel gastoActivo = new GastoVariableModel();
+
+    // bool que indica si se debe mostrar el popup de beneficios
+    public bool PopupVisible { get; set; } = false;
+
+    // handler con el cual comunicarse con la base de datos
+    public GastoVariableHandler HandlerGasto = new GastoVariableHandler();
+
+
+    // string que almacena el nombre de un puesto antes de ser modificado para pdoer actualizarlo en la base de datos
+    public string copiaNombreOriginal = "";
+
+    // placeholder indican que se debe ingresar en los campos
+    public string placeHolderNombre = "Ingresar nombre";
+
+    // variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
+    public string hoverTextAgregar = "";
+    public string hoverTextGuardar = "";
+    public string hoverTextEliminar = "";
+
+    // booleanos para el control de los hover en botones guardar y agregar
+    public bool hoverGuardar = false;
+    public bool hoverAgregar = false;
+    public bool hoverEliminar = false;
+
+    // strings que muestran los mensajes de error con respecto al nombre y los números negativos
+    public string ErrorNombre = "";
+    public string ErrorLote = "";
+
+    // método para controlar el hover de los botones guardar y agregar
+    public void Hover(int action)
+    {
+        // este metodo quita la imagen y agrega el texto correspondiente
+        // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
+        if (action == 1)
+        {
+            hoverTextAgregar = "Agregar Puesto";
+            hoverAgregar = true;
+        }
+        else if (action == 2)
+        {
+            hoverGuardar = true;
+            hoverTextGuardar = "Guardar datos";
+        }
+        else if (action == 3)
+        {
+            hoverEliminar = true;
+            hoverTextEliminar = "Eliminar puesto";
+        }
+    }
+
+    // método para controlar el cuando se quita el hover de los botones guardar y agregar
+    public void HoverOut(int action)
+    {
+        // este metodo agrega la imagen y quita el texto correspondiente
+        // recibe un int para diferenciar si es el quitar hover del botón de guardar (1) o de agregar (2)
+        if (action == 1)
+        {
+            hoverTextAgregar = "";
+            hoverAgregar = false;
+        }
+        else if (action == 2)
+        {
+            hoverGuardar = false;
+            hoverTextGuardar = "";
+        }
+        else if (action == 3)
+        {
+            hoverEliminar = false;
+            hoverTextEliminar = "";
+        }
+    }
+
+    // método para activar y descativar el popup de los beneficios
+    public void cambiarVisibilidadPopup()
+    {
+        if (PopupVisible)
+        {
+            PopupVisible = false;
+        }
+        else
+        {
+            PopupVisible = true;
+        }
+    }
+
+    // método para asignar el puesto activo según el que se clickeó
+    // recibe el puesto al que se le hizo click
+    public void SeleccionarGastoVariable(GastoVariableModel gastoSeleccionado)
+    {
+        // se asigna el puesto activo
+        gastoActivo = gastoSeleccionado;
+
+        // se asugnan variables de vista
+        placeHolderNombre = gastoActivo.Nombre;
+
+        // se copia el nombre por si se va a actualizar este nombre
+        copiaNombreOriginal = gastoActivo.Nombre;
+
+        // se indica que hay un puesto seleccionado
+        hayGastoSeleccionado = true;
+
+        // se resetean variables e error
+        ErrorNombre = "";
+        ErrorLote = "";
+    }
+
+    // método llamado por el botón de agregar
+    // este reseta la vista de la izquierda para poder ingresar los datos del nuevo puesto
+    public void AgregarNuevoGasto()
+    {
+        // se reseatean variables de control visual
+        placeHolderNombre = "Ingresar nombre";
+
+        // se indica que no hay un puesto seleccionado
+        hayGastoSeleccionado = false;
+
+        // no hay un nombre por copiar porque es un puesto nuevo
+        copiaNombreOriginal = "";
+
+        // se crea un nuevo puesto
+        gastoActivo = new GastoVariableModel();
+
+        // se resetean variables de errores
+        ErrorNombre = "";
+        ErrorLote = "";
+    }
+
+
+    // método que permitir guardar en la base de datos un puesto
+    // recibe el puesto a guadar
+    public void GuardarDatosGasto(GastoVariableModel gastoGuardar)
+    {
+
+        // se revisa que el nombre no este repetido y que no haya números negativo
+        if (revisarNombre(gastoGuardar) && revisarLote(gastoGuardar))
+        {
+            // se asigna el pueso la fecha del análisis por si es un puesto nuevo
+            gastoGuardar.FechaAnalisis = fechaAnalasis;
+            // se ingresa con el handler en la base de datos el puesto
+            HandlerGasto.InsertarGasto(copiaNombreOriginal, gastoGuardar);
+
+            // se resetean variables de vista y de control
+            if (hayGastoSeleccionado == false)
+            {
+                gastoActivo = new GastoVariableModel();
+            }
+            ErrorNombre = "";
+            ErrorLote = "";
+
+            // se recarga la página para que se vean los cambios
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        }
+    }
+
+    // método para revisar si el nombre está repetido y que no esté vacío
+    private bool revisarNombre(GastoVariableModel gastoGuardar)
+    {
+        bool valido = true;
+        // se revisa que no esté vacío
+        if (string.IsNullOrWhiteSpace(gastoGuardar.Nombre))
+        {
+            ErrorNombre = "<p class=\"puesto-error-nombrevacio\">Error: ingrese un nombre para el puesto.</p>";
+            valido = false;
+        }
+
+        if (!hayGastoSeleccionado)
+        {
+            // si es un puesto nuevo solo revisamos que no esté en la lista
+            if (gastosVariables.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
+            {
+                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                valido = false;
+            }
+        }
+        else
+        {
+            int index = gastosVariables.IndexOf(gastoGuardar);
+            // si se seleccionó un puesto, debemos sacarlo de la lista y luego revisar si está repetido
+            gastosVariables.Remove(gastoGuardar);
+            if (gastosVariables.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
+            {
+                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                valido = false;
+            }
+            // resinertamos el peusto en la misma posición donde estaba
+            gastosVariables.Insert(index, gastoGuardar);
+        }
+
+        // hacemos reseteo en variable de error del nombre
+        if (valido)
+        {
+            ErrorNombre = "";
+        }
+        return valido;
+    }
+
+    // método que revisa si el número de plazas es válido
+    // recibe el puesto que se está editando
+    private bool revisarLote(GastoVariableModel gastoGuardar)
+    {
+        bool valido = true;
+        // se revisa que no sea negativo
+        if (gastoGuardar.Lote < 0.0m)
+        {
+            ErrorLote = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un número de plazas positivo.</p>";
+            valido = false;
+        }
+        else
+        {
+            ErrorLote = "";
+        }
+        return valido;
+    }
+
+    // método para eliminar un puesto de la base de datos
+    // recibe el puesto que se desea eliminar
+    public void eliminarGasto(GastoVariableModel gastoEliminar)
+    {
+        // se utiliza el handler para eliminar el puesto
+        HandlerGasto.EliminarGastoVariable(gastoEliminar);
+
+        // se recarga la página para que se vean los cambios
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
+
+    // Comodines utilizados den la sección de los beneficios
+    // Cada uno de ellos está "bindeado" al form que lo creó.
+    // Se agregan a la lista de Beneficios del puestoActivo.
+    public List<ComponenteModel> componentes = new List<ComponenteModel>();
+
+    // El índice del comodín sobre el cual se está operando en determinado momento
+    int comodinActual = 0;
+
+    // Variable que indica si el form para ingresar un nuevo beneficio es nuevo o no
+    public bool formVisible = false;
+
+    // Variable que indica si el número ingresado en el form de las plazas de un beneficio nuevo, es posisitivo.
+    public bool PlazasBeneficiosPositivo { get; set; } = true;
+
+    // Variable que indica si el monto ingresado en el form del monto del beneficio, es positivo.
+    public bool MontoBeneficiosPositivo { get; set; } = true;
+
+    // Variable que indica si el número de plazas ingresado en el form de las plazas de un beneficio, es menor a la cantidad de plazas del puestoActivo
+    public bool PlazasBeneficiosMenoresAPuesto { get; set; } = true;
+
+    // Variable que indica si el nombre ingresado en el form del beneficio es vació o no
+    public bool NombreVacio { get; set; } = false;
+
+    // Variable que indica si el beneficio que se es´tá tratando de agregar ya existe en la base de datos.
+    public bool YaExisteBeneficio { get; set; }
+
+    // Método que agrega un beneficio ingresado por medio de forms, a la base de datos.
+    public void agregarBeneficioNuevo()
+    {
+        // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
+        if (comodines[comodinActual].monto >= 0 && !string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio) && comodines[comodinActual].plazasPorBeneficio <= puestoActivo.Plazas && comodines[comodinActual].plazasPorBeneficio >= 0)
+        {
+            MontoBeneficiosPositivo = true;
+            NombreVacio = false;
+            PlazasBeneficiosMenoresAPuesto = true;
+            PlazasBeneficiosPositivo = true;
+            EstructuraOrgHandler h = new EstructuraOrgHandler();
+            comodines[comodinActual].fechaAnalisis = fechaAnalasis;
+            comodines[comodinActual].nombrePuesto = puestoActivo.Nombre;
+            formVisible = false;
+            puestoActivo.Beneficios.Add(comodines[comodinActual]);
+            h.AgregarBeneficio(comodines[comodinActual]);
+            comodines.Add(new BeneficioModel());
+            comodinActual += 1;
+        }
+        // En caso de que los datos ingresados en el form de los beneficios sean incorrectos, se verifica uno por uno para indicarlo en las variables correspondientes.
+        else
+        {
+            if (comodines[comodinActual].monto < 0)
+            {
+                MontoBeneficiosPositivo = false;
+            }
+            if (string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio))
+            {
+                NombreVacio = true;
+            }
+            if (comodines[comodinActual].plazasPorBeneficio > puestoActivo.Plazas)
+            {
+                PlazasBeneficiosMenoresAPuesto = false;
+            }
+            if (comodines[comodinActual].plazasPorBeneficio < 0)
+            {
+                PlazasBeneficiosPositivo = false;
+            }
+        }
+    }
+
+    // Método que borra un beneficio de la base de datos.
+    public void borrarBeneficio(BeneficioModel b)
+    {
+        b.fechaAnalisis = puestoActivo.FechaAnalisis;
+        b.nombrePuesto = puestoActivo.Nombre;
+        EstructuraOrgHandler h = new EstructuraOrgHandler();
+        puestoActivo.Beneficios.Remove(b);
+        h.BorrarBeneficio(b);
+
+    }
+
+    // Método que cambia el valor de la variable que indica la visibilidad del form de ingresar un nuevo beneficio.
+    public void cambiarVisibilidadForm()
+    {
+        if (formVisible)
+        {
+            formVisible = false;
+        }
+        else
+        {
+            formVisible = true;
+        }
+    }
+
+    // Método que refresca la página actual.
+    public void refrescarPagina()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
+
+
+}
