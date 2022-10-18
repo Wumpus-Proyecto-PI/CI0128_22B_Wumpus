@@ -127,5 +127,32 @@ namespace PI.Handlers
 
             return nombreNegocio;
         }
+
+        public string obtenerNombreNegocio(int IDNegocio)
+        {
+            // consulta sql 
+            string consulta = "SELECT negocio.nombre from dbo.negocio where negocio.ID = " + IDNegocio + ";";
+
+            // string a retornar con el nombre del negocio
+            string nombreNegocio = "";
+
+            // se realiza la consulta
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+
+            // Se revisa si la consulta retorno algo
+            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+            {
+                // si tiene algo la tabla resultado, se asigna el nombre del negocio
+                nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+            }
+            else
+            {
+                // existe el caso de que un negocio no tenga nombre en nuestro producto
+                nombreNegocio = "Sin nombre";
+            }
+
+            return nombreNegocio;
+        }
     }
 }

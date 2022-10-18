@@ -24,7 +24,7 @@ namespace PI.Handlers
             AnalisisModel analisisResultado = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
-                Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
 
             return analisisResultado;
@@ -45,7 +45,7 @@ namespace PI.Handlers
             AnalisisModel analisisMasReciente = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
-                Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
             
             return analisisMasReciente;
@@ -53,7 +53,7 @@ namespace PI.Handlers
 
         // Obtiene los analisis de un negocio
         // (Retorna una lista con los analisis del negocio | Parametros: id del negocio)
-        public List<AnalisisModel> ObtenerAnalisis(string IDNegocio)
+        public List<AnalisisModel> ObtenerAnalisis(int IDNegocio)
         {
             List<AnalisisModel> analisisDelNegocio = new List<AnalisisModel>();
             
@@ -70,7 +70,7 @@ namespace PI.Handlers
                 new AnalisisModel
                 {
                     FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
-                    Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual}
+                    Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual}
                 }
                 );
             }
@@ -85,9 +85,10 @@ namespace PI.Handlers
             string consulta = "SELECT Max(A.fechaCreacion) as UltimoAnalisis from ANALISIS as A inner join Negocio as N " +
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
+            Console.WriteLine(Convert.ToString(tablaResultado.Rows[0]["UltimoAnalisis"]));
 
             DateTime fecha = (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
-
+            Console.WriteLine(fecha);
             return fecha;
         }
 
@@ -114,7 +115,7 @@ namespace PI.Handlers
         // Agrega un analisis al negocio indicado
         // (Parametros: id del negocio al que se le quiere ingresar un analisis, tipo del analisis que se va a ingresar)
 
-        public void IngresarAnalisis(string idNegocio, string tipo)
+        public DateTime IngresarAnalisis(int idNegocio, string tipo)
         {
             DateTime myDateTime = DateTime.Now;
             string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -125,6 +126,7 @@ namespace PI.Handlers
 
             // Crea una config por defecto asociada al analisis
             CrearConfigPorDefecto(sqlFormattedDate, tipo);
+            return myDateTime;
         }
 
         // Ingresa una configuracion con la fecha del analisis indicada
@@ -155,7 +157,7 @@ namespace PI.Handlers
             ConfigAnalisisModel resultado = new ConfigAnalisisModel
             {
                 fechaAnalisis = Convert.ToDateTime(tablaResultado.Rows[0]["fechaAnalisis"]),
-                TipoNegocio = Convert.ToBoolean(tablaResultado.Rows[0]["tipoNegocio"]),
+                EstadoNegocio = Convert.ToBoolean(tablaResultado.Rows[0]["tipoNegocio"]),
                 PorcentajePL = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajePL"]),
                 PorcentajeSS = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajeSS"])
             };
