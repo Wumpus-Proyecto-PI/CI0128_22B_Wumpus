@@ -13,6 +13,23 @@ namespace PI.Controllers
     // Controlador del analisis
     public class AnalisisController : Controller
     {
+        // Retorna la vista con todos los análisis creados
+        public IActionResult MisAnalisis(int IDNegocio)
+        {
+            ViewData["TituloPaso"] = "Mis análisis";
+            ViewBag.noCrearBoton = true;
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(IDNegocio);
+            ViewBag.idNegocio = IDNegocio;
+            return View(analisisHandler.ObtenerAnalisis(IDNegocio));
+        }
+        public IActionResult CrearAnalisis(int IDNegocio, string estadoNegocio)
+        {
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(IDNegocio, estadoNegocio);
+
+            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+        }
         // Devuelve la vista principal del analisis especifico
         // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
         public IActionResult Index(string fechaAnalisis)
