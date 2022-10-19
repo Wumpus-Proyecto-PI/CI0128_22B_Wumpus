@@ -20,7 +20,7 @@
     string getIdNegocio()
     {
         AnalisisHandler analisisHandler = new AnalisisHandler();
-        return analisisHandler.obtenerNombreNegocio(Model.FechaCreacion).ToString();
+        return analisisHandler.obtenerNegocioDeAnalisis(Model.FechaCreacion).ID.ToString();
     }
 }
 
