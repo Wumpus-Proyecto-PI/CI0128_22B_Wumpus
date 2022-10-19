@@ -85,10 +85,9 @@ namespace PI.Handlers
             string consulta = "SELECT Max(A.fechaCreacion) as UltimoAnalisis from ANALISIS as A inner join Negocio as N " +
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            Console.WriteLine(Convert.ToString(tablaResultado.Rows[0]["UltimoAnalisis"]));
 
             DateTime fecha = (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
-            Console.WriteLine(fecha);
+ 
             return fecha;
         }
 

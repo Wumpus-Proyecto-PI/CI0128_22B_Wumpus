@@ -4,12 +4,13 @@
 
 <!-- Representa una carta/tarjeta de análisis: fecha, tiempo, estado del negocio y estado del análisis -->
 
-<div class="card-clickleable d-flex justify-content-center align-items-center">
-    <div class="card card-analisis mt-4 text-center justify-content-center align-items-center position-relative" @onclick="irAlAnálisis">
+<div class="card-clickleable d-flex justify-content-center align-items-center my-2">
+    <div class="card card-analisis text-center justify-content-center align-items-center position-relative" @onclick="irAlAnálisis">
     @*    <span class="p-0 badge position-absolute d-flex justify-content-center align-items-center">
         </span>*@
             <div class="class-body">
-            <h5 class="card-title fw-bold pt-3 mb-0">@(analisis.FechaCreacion.ToString("MM/dd/yyyy"))</h5>
+            <h5 class="card-title fw-bold pt-3 mb-0">@(analisis.FechaCreacion.ToString("dd/MMM/yyyy",  new CultureInfo("es-Es")))
+            </h5>
             <h6 class="card-title pb-2 mt-0 ">@(analisis.FechaCreacion.ToString("hh:mm:ss tt"))</h6>
             <span class="card-text fw-bold pt-4 mt-2">Estado del negocio: <br> </span>
             <!-- Muestra si el estado del NEGOCIO en el momento del análisis es iniciado o no-->

@@ -23,15 +23,16 @@
 	<div>
 		@Html.Partial("LayoutNombreEmpresa")
 	</div>
-		<section class="container container-lg seccion-cardAnalisis d-flex flex-row justify-content-center align-items-center">
-		@(
-			await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.AgregarAnalisis>(RenderMode.ServerPrerendered, new { idNegocio = @ViewBag.idNegocio })
-		)
-				
-				@foreach(AnalisisModel analisisActual in Model) {
-					@(
-						await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.CardAnalisis>(RenderMode.ServerPrerendered, new { analisis = analisisActual})
-					)
+		<section class="container container-lg seccion-cardAnalisis d-flex flex-row justify-content-center align-items-center flex-wrap">
+			@* Permite crear nuevos análisis *@
+			@(
+				await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.AgregarAnalisis>(RenderMode.ServerPrerendered, new { idNegocio = @ViewBag.idNegocio })
+			)
+			@* Invoca la creación de una tarjeta por cada análisis del negocio *@
+			@foreach(AnalisisModel analisisActual in Model) {
+				@(
+					await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.CardAnalisis>(RenderMode.ServerPrerendered, new { analisis = analisisActual})
+				)
 			}
 		</section>
 	</body>
