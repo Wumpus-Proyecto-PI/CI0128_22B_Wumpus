@@ -40,6 +40,8 @@ namespace PI.Controllers
             AnalisisModel analisisActual = handler.ObtenerUnAnalisis(fechaCreacionAnalisis);
             ViewData["NombreNegocio"] = handler.obtenerNombreNegocio(fechaCreacionAnalisis);
             ViewData["TituloPaso"] = "Progreso del análisis";
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
             // var tipoAnalisis = handler.ObtenerTipoAnalisis();
             return View(analisisActual);
