@@ -23,6 +23,7 @@ namespace PI.Controllers
         // Retorna la vista con todos los análisis creados
         public IActionResult MisAnalisis(int IDNegocio)
         {
+            ViewData["Title"] = "Mis análisis";
             ViewData["TituloPaso"] = "Mis análisis";
             ViewBag.noCrearBoton = true;
             AnalisisHandler analisisHandler = new AnalisisHandler();
