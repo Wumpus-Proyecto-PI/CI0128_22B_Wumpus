@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PI.Handlers;
 using PI.Models;
 
 namespace PI.Controllers
@@ -9,35 +10,9 @@ namespace PI.Controllers
         {
             DateTime fechaConversion = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
             ViewBag.fechaAnalisis = fechaConversion;
-            ViewBag.porcentajeVentas = "23";
-            var productos = GetListOfProducts();
+            ProductoHandler productoHandler = new ProductoHandler();
+            List<ProductoModel> productos = productoHandler.obtenerProductos(fechaConversion);
             return View(productos);
-        }
-
-        private List<ProductoModel> GetListOfProducts()
-        {
-            List<ProductoModel> productos = new List<ProductoModel>();
-            productos.Add(new ProductoModel
-            {
-                nombre = "Empanadas",
-                porcentajeVentas = "33%",
-                precio = "250"
-            });
-
-            productos.Add(new ProductoModel
-            {
-                nombre = "Empanadas de pollo",
-                porcentajeVentas = "33%",
-                precio = "250"
-            });
-
-            productos.Add(new ProductoModel
-            {
-                nombre = "Empanadas de queso",
-                porcentajeVentas = "33%",
-                precio = "250"
-            });
-            return productos;
         }
     }
 }

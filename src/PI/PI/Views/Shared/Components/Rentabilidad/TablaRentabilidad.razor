@@ -1,4 +1,5 @@
-﻿@using PI.Models
+﻿@using PI.Handlers
+@using PI.Models
 
 
     <div id="container-forms-top">
@@ -61,22 +62,22 @@
             {
                     <li class="table-row">
                     <div class="col col-1" data-label="Nombre">
-                        <p class="datos-calculados">@productoActual.nombre</p>
+                        <p class="datos-calculados">@productoActual.Nombre</p>
                         </div>
                         <div class="col col-1" data-label="% Ventas">
-                                <input class="effect-1 text-center pb-2" type="text" placeholder="Ingresar" @bind="productoActual.porcentajeVentas ">
+                                <input class="effect-1 text-center pb-2" type="number" placeholder="Ingresar" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
                         </div>
                         <div class="col col-1" data-label="Precio">
                             <input class="effect-1 text-center pb-2" type="text" placeholder="Ingresar">
                         </div>
                     <div class="col col-1" data-label="Margen">
-                            <p class="datos-calculados" @bind="porcentajeVentas">10,100.00</p>
+                            <p class="datos-calculados">@porcentajeVentasMargen</p>
                         </div>
                     <div class="col col-1" data-label="Punto Eq">
                             <p class="datos-calculados"></p>
                         </div>
                         <div class="col col-1" data-label="Meta">
-                            <p class="datos-calculados">@productoActual.porcentajeVentas</p>
+                    <p class="datos-calculados">@productoActual.PorcentajeVentas.ToString()</p>
                         </div>
                     </li>
             }
@@ -91,7 +92,13 @@
     [Parameter]
     public DateTime fechaAnalasis { get; set; }
 
-    public string porcentajeVentas = "20";
+    public ProductoHandler productoHandler = new ProductoHandler();
 
-    public string placeHolderVentas = "Porcentaje";
+    public string porcentajeVentasMargen = "20";
+
+    public void actualizarPorcentajeVentas(ProductoModel producto) {
+        porcentajeVentasMargen = producto.PorcentajeVentas.ToString();
+
+        //productoHandler.actualizarPorcentajeVentas(producto, fechaAnalasis);
+    }
 }
