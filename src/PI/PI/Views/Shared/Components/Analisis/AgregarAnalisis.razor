@@ -1,0 +1,68 @@
+﻿@inject NavigationManager NavigationManager;
+@using Handlers;
+
+@*Carta de agregar y popup de agregar que redirecciona hacia el progreso del análisis creado*@
+
+<div class="card card-agregar" @onclick="cambiarEstadoPopup">
+		<img class="boton-agregar" src=img/generic/add.png>
+</div>
+
+@if(PopupVisible == true) {
+	@* Background oscuro cuando abre popup *@
+	<div class="overlay position-absolute" @onclick="cambiarEstadoPopup"></div>
+
+	@* Tarjeta del popup *@
+	<section class="card card-popup position-fixed popup d-flex justify-content-center align-items-center">
+		<div class="card-body d-flex flex-column justify-content-center">
+			<h2 class="card-title text-center mt-4 fw-bold">Nuevo análisis</h2>
+			<h5 class="card-title text-center mt-3">Estado del negocio</h5>
+
+			<div class="d-flex flex-column justify-content-center align-items-center">
+				@* Radio buttons. Elección del estado del negocio *@
+				<div class="boxRadio d-flex flex-column">
+					<div class="d-flex flex-nowrap align-items-center mx-2">
+						<input type="radio" id="no-iniciado" required checked value="EstadoNegocio" name="EstadoNegocio" @onclick=@(() => asignarEstado ("Emprendimiento"))>
+						<label for="no-iniciado">No iniciado</label>
+					</div>
+
+					<div class="d-flex flex-nowrap align-items-center mx-2">
+					<input type="radio" id="en-marcha" required value="EstadoNegocio" name="EstadoNegocio" @onclick=@(() => asignarEstado ("En marcha"))>
+					<label for="en-marcha">En marcha</label>
+					</div>
+				</div>
+				@* Botones aceptar y cancelar *@
+				<div class="d-flex my-3">
+					<button class="btn btn-primary" @onclick="crearAnalisis">Aceptar </button>
+					<button class="btn btn-secondary" @onclick="cambiarEstadoPopup">Cancelar </button>
+				</div>
+			</div>
+			@* Permite cerrar al popup *@
+			<div id="salir-popup">
+				<img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarEstadoPopup">
+			</div>
+		</div>
+	</section>
+}
+
+@code {
+	[Parameter]
+	public int idNegocio { get; set; }
+	public bool PopupVisible { get; set; } = false;
+	public string? EstadoNegocio { get; set; }
+
+	// Cambia el popup de visible a invisible y viceversa
+	public void cambiarEstadoPopup() {
+		PopupVisible = !PopupVisible;
+	}
+	// Asigna el estado del negocio
+	public void asignarEstado(string estadoNegocio) {
+		EstadoNegocio = estadoNegocio;
+	}
+	// Método que redirige al análisis correspondiente.
+	public void crearAnalisis() {
+		AnalisisHandler analisisHandler = new AnalisisHandler();
+		DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(idNegocio, EstadoNegocio);
+		string url = "Analisis?fechaAnalisis=" + fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
+		NavigationManager.NavigateTo(url, true);
+	}
+}

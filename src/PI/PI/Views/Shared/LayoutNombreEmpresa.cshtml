@@ -11,11 +11,14 @@
 
 
 <section class="subtitulo-nombre-negocio">
+    @* Crea el botón de volver al progreso análisis *@
+    @if (ViewBag.noCrearBoton == null) { @*No nulo en caso que sea llamado desde "MisAnalisis*@
     <div class="boton-volver">
         <a asp-controller="Analisis" asp-action="Index" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") class="hovertext" data-hover="Volver al análisis">
             <img src="~/img/generic/flecha-comparador.png" alt="Botón para volver">
         </a>
     </div>
+    }
     @*Se asigna el nombre del negocio que se recibe del handler*@
     <p>@ViewData["NombreNegocio"]</p>
 </section>
