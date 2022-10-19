@@ -389,7 +389,6 @@ SELECT SUM(GASTO_FIJO.monto) totalMensual
 FROM GASTO_FIJO WHERE GASTO_FIJO.fechaAnalisis = @fechaAnalisis
 END
 
-
 -- Function 1
 GO
 /****** Object:  UserDefinedFunction [dbo].[convertTOdecimal]    Script Date: 10/3/2022 7:28:11 PM ******/
@@ -488,4 +487,15 @@ BEGIN
 	DECLARE @Result DEC(18,3)
 	SELECT @Result = dbo.obtSumSalarios (@fechaAnalisis) - dbo.obtGastoSeguroSocial(@fechaAnalisis,@seguroSocial) - dbo.obtGastoPrestaciones(@fechaAnalisis,@prestaciones)
 	RETURN @Result
+END
+
+
+-- Procedure - permite obtener un negocio a partir de la fecha de un análisis
+GO 
+CREATE PROCEDURE ObtenerNegocioDeAnalisis (@fechaAnalisis DATETIME)
+AS
+BEGIN
+    SELECT N.id, N.nombre, N.correoUsuario, N.FechaCreacion 
+    FROM NEGOCIO AS N JOIN ANALISIS AS A ON N.id = A.idNegocio
+    WHERE A.fechaCreacion = @fechaAnalisis
 END
