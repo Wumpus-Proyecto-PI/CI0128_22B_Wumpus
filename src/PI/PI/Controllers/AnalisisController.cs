@@ -25,7 +25,7 @@ namespace PI.Controllers
         {
             ViewData["Title"] = "Mis análisis";
             ViewData["TituloPaso"] = "Mis análisis";
-            ViewBag.noCrearBoton = true;
+            ViewBag.BotonRetorno = "Mis negocios";
             AnalisisHandler analisisHandler = new AnalisisHandler();
             ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(IDNegocio);
             ViewBag.idNegocio = IDNegocio;
