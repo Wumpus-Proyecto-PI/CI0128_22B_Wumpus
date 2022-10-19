@@ -2,8 +2,10 @@
 {
     public class ProductoModel
     {
-        public string nombre { get; set; }
-        public string porcentajeVentas { get; set; }
-        public string precio { get; set; }
+        public string Nombre { get; set; }
+        public DateTime FechaAnalisis { get; set; }
+        public int Lote { get; set; }
+        public decimal PorcentajeVentas { get; set; }
+        public decimal Precio { get; set; }
     }
 }
