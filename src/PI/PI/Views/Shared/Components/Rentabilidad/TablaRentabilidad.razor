@@ -6,11 +6,12 @@
         <form class="d-flex flex-row align-items-center justify-content-start">
             <div class="form-row">
                 <div class="col col-xs-5">
-                    <input type="number" class="form-control" placeholder="Meta de ganancia">
+                    <input type="number" class="form-control" placeholder=@gananciaMensual @bind="gananciaMensual">
                 </div>
                 <div class="col col-xs-5">
                     <input type="text" class="form-control" placeholder="Last name" readonly>
                 </div>
+            <button type="button" class="btn btn-primary" @onclick="actualizarGananciaMensual">Primary</button>
             </div>
         </form>
     </div>
@@ -94,10 +95,18 @@
 
     public ProductoHandler productoHandler = new ProductoHandler();
 
+    public decimal gananciaMensual = 0;
+
+    public void actualizarGananciaMensual () {
+        AnalisisHandler handler = new AnalisisHandler();
+        handler.ActualizarGananciaMensual(gananciaMensual, fechaAnalasis);
+    }
+
     public string porcentajeVentasMargen = "20";
 
     public void actualizarPorcentajeVentas(ProductoModel producto) 
     {
+        Console.WriteLine("Hola soy gay");
         productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
     }
 

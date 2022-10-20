@@ -175,5 +175,16 @@ namespace PI.Handlers
                 + ",@procentajePL=" + configuracionNueva.PorcentajePL.ToString();
             enviarConsultaVoid(actualizar);
         }
+
+        public bool ActualizarGananciaMensual(decimal monto, DateTime fechaAnalisis) {
+            Console.WriteLine(fechaAnalisis);
+            var consulta = @"EXEC ActualizarGananciaMensual @ganancia = " + monto + ", @fecha = " + "'" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            var cmdParaConsulta = new SqlCommand(consulta, conexion);
+
+            conexion.Open();
+            bool exito = cmdParaConsulta.ExecuteNonQuery() >= 1;
+            conexion.Close();
+            return exito;
+        }
     }
 }
