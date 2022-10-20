@@ -8,7 +8,7 @@
     <div id="mostrar-gastosVar">
 
         @*Renderización de las tarjetas de los gastos variables, son componentes razor aparte*@
-        @foreach (GastoVariableModel gastoActual in gastosVariables)
+        @foreach (ProductoModel gastoActual in productos)
         {
             <div class="puesto-clickeable" @onclick="() => SeleccionarGastoVariable(gastoActual)">
                 <div>
@@ -219,7 +219,7 @@
 @code {
     // lista de gastos variables de la base de datos
     [Parameter]
-    public List<GastoVariableModel> gastosVariables { get; set; }
+    public List<ProductoModel> productos { get; set; }
 
     // fecha del análisis al que pertenecen los gastos variables 
     [Parameter]
@@ -229,13 +229,13 @@
     public bool hayGastoSeleccionado = false;
 
     // puesto seleccionado actualmente, puede ser nuevo o un existente
-    public GastoVariableModel gastoActivo = new GastoVariableModel();
+    public ProductoModel gastoActivo = new ProductoModel();
 
     // bool que indica si se debe mostrar el popup de beneficios
     public bool PopupVisible { get; set; } = false;
 
     // handler con el cual comunicarse con la base de datos
-    public GastoVariableHandler HandlerGasto = new GastoVariableHandler();
+    public ProductoHandler HandlerGasto = new ProductoHandler();
 
 
     // string que almacena el nombre de un puesto antes de ser modificado para pdoer actualizarlo en la base de datos
@@ -317,7 +317,7 @@
 
     // método para asignar el puesto activo según el que se clickeó
     // recibe el puesto al que se le hizo click
-    public void SeleccionarGastoVariable(GastoVariableModel gastoSeleccionado)
+    public void SeleccionarGastoVariable(ProductoModel gastoSeleccionado)
     {
         // se asigna el puesto activo
         gastoActivo = gastoSeleccionado;
@@ -350,7 +350,7 @@
         copiaNombreOriginal = "";
 
         // se crea un nuevo puesto
-        gastoActivo = new GastoVariableModel();
+        gastoActivo = new ProductoModel();
 
         // se resetean variables de errores
         ErrorNombre = "";
@@ -360,7 +360,7 @@
 
     // método que permitir guardar en la base de datos un gasto variable
     // recibe el gasto variable a guardar
-    public void GuardarDatosGasto(GastoVariableModel gastoGuardar)
+    public void GuardarDatosGasto(ProductoModel gastoGuardar)
     {
 
         // se revisa que el nombre no este repetido y que no haya números negativo
@@ -369,12 +369,12 @@
             // se asigna el pueso la fecha del análisis por si es un gasto variable nuevo
             gastoGuardar.FechaAnalisis = fechaAnalisis;
             // se ingresa con el handler en la base de datos el gasto variable
-            HandlerGasto.InsertarGastoVariable(copiaNombreOriginal, gastoGuardar);
+            HandlerGasto.InsertarProducto(copiaNombreOriginal, gastoGuardar);
 
             // se resetean variables de vista y de control
             if (hayGastoSeleccionado == false)
             {
-                gastoActivo = new GastoVariableModel();
+                gastoActivo = new ProductoModel();
             }
             ErrorNombre = "";
             ErrorLote = "";
@@ -385,7 +385,7 @@
     }
 
     // método para revisar si el nombre está repetido y que no esté vacío
-    private bool revisarNombre(GastoVariableModel gastoGuardar)
+    private bool revisarNombre(ProductoModel gastoGuardar)
     {
         bool valido = true;
         // se revisa que no esté vacío
@@ -398,7 +398,7 @@
         if (!hayGastoSeleccionado)
         {
             // si es un puesto nuevo solo revisamos que no esté en la lista
-            if (gastosVariables.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
+            if (productos.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
             {
                 ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
@@ -406,16 +406,16 @@
         }
         else
         {
-            int index = gastosVariables.IndexOf(gastoGuardar);
+            int index = productos.IndexOf(gastoGuardar);
             // si se seleccionó un puesto, debemos sacarlo de la lista y luego revisar si está repetido
-            gastosVariables.Remove(gastoGuardar);
-            if (gastosVariables.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
+            productos.Remove(gastoGuardar);
+            if (productos.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
             {
                 ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
             // resinertamos el peusto en la misma posición donde estaba
-            gastosVariables.Insert(index, gastoGuardar);
+            productos.Insert(index, gastoGuardar);
         }
 
         // hacemos reseteo en variable de error del nombre
@@ -428,7 +428,7 @@
 
     // método que revisa si el número de plazas es válido
     // recibe el puesto que se está editando
-    private bool revisarLote(GastoVariableModel gastoGuardar)
+    private bool revisarLote(ProductoModel gastoGuardar)
     {
         bool valido = true;
         // se revisa que no sea negativo
@@ -446,10 +446,10 @@
 
     // método para eliminar un puesto de la base de datos
     // recibe el puesto que se desea eliminar
-    public void eliminarGasto(GastoVariableModel gastoEliminar)
+    public void eliminarGasto(ProductoModel gastoEliminar)
     {
         // se utiliza el handler para eliminar el puesto
-        HandlerGasto.EliminarGastoVariable(gastoEliminar);
+        HandlerGasto.EliminarProducto(gastoEliminar);
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);

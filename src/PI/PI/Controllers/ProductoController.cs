@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PI.Controllers
 {
-    public class GastosVariablesController : Controller
+    public class ProductoController : Controller
     {
         // GET: GastosVariables
         public ActionResult Index()

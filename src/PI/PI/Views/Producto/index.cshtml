@@ -1,4 +1,4 @@
-﻿@model List<GastoVariableModel>
+﻿@model List<ProductoModel>
 @*
     Html para el manejo de gastos variables
 *@
@@ -19,6 +19,6 @@
 <!-- Invoca al razor SecionGastosFijos. Le envía la lista, la fecha y el totalAnual.-->
 <div style="width: 100%; display: flex;">
     @(
-        await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoVariable.SeccionGastosVariables>(RenderMode.ServerPrerendered, new { gastosVariables = Model, fechaAnalasis = ViewBag.fechaAnalisis })
+        await Html.RenderComponentAsync<PI.Views.Shared.Components.GastoVariable.SeccionGastosVariables>(RenderMode.ServerPrerendered, new { productos = Model, fechaAnalisis = ViewBag.fechaAnalisis })
         )
 </div>

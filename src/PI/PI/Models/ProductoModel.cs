@@ -1,6 +1,6 @@
 ﻿namespace PI.Models
 {
-    public class GastoVariableModel
+    public class ProductoModel
     {
         // Nombre del producto/gasto variable 
         public string Nombre { get; set; }
