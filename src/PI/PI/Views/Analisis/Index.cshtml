@@ -1,6 +1,6 @@
 ﻿@model AnalisisModel
 @using PI.Controllers
-
+@using PI.Handlers
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -12,16 +12,33 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/LayoutNombreEmpresa.css" />
+
 </head>
+
+@{
+    string getIdNegocio()
+    {
+        AnalisisHandler analisisHandler = new AnalisisHandler();
+        return analisisHandler.obtenerNegocioDeAnalisis(Model.FechaCreacion).ID.ToString();
+    }
+}
 
 @*Encabezado de la pantalla del progreso*@
 <body>
+    <div class="container">
+
     <div class="analisis-header row">
-        <div class="col-md-6">
+        <div class="col-md-1 boton-volver d-flex justify-content-start align-items-center align-content-center">
+            <a asp-controller="Analisis" asp-action="MisAnalisis" asp-route-IDNegocio="@getIdNegocio()" class="hovertext" data-hover="Volver a mis análisis">
+                <img src="img/generic/flecha-comparador.png" alt="Botón para volver">
+            </a>
+        </div>
+        <div class="col-md-5">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">@ViewData["NombreNegocio"]</p>
                 @*Verifica el estado del negocio para mostrarlo en pantalla*@
-                @if (Model.Configuracion.TipoNegocio == false)
+                @if (Model.Configuracion.EstadoNegocio == false)
                 {
                     <p class="mb-4">Estado: emprendimiento</p>
                 }
@@ -31,7 +48,7 @@
                 }
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">Fecha de creaci&oacuten</p>
                 <p class="mb-4">@Model.FechaCreacion</p>
@@ -204,4 +221,6 @@
             </div>
         </div>
     </div>
+        </div>
+
 </body>

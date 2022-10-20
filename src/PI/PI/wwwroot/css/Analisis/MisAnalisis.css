@@ -1,0 +1,153 @@
+﻿
+/* Tarjetas */
+
+.card {
+    border: solid 1px;
+    border-color: lightgray;
+    background-color: white;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+    width: 198px;
+    height: 198px;
+    border-radius: 20px;
+    transition-duration: 0.5s;
+    margin-inline: 30px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.card-popup {
+    height: 270px;
+    min-width: 356px
+}
+.card-agregar img {
+    width: 50px;
+    height: 50px;
+}
+
+.card-agregar {
+    justify-content: center;
+    align-items: center;
+    width: 198px;
+    height: 198px;
+}
+
+.card-agregar:hover {
+    background-color: #E2F2FF;
+    cursor: pointer;
+    transition-duration: 0.3s;
+    transform: scale(1.03);
+}
+
+.card-analisis {
+    margin-top: 10px;
+}
+
+.card-footer {
+    color:white;
+}
+
+.footer-en-curso {
+    background-color: #93D500;
+}
+
+.footer-finalizado {
+    background-color: rgb(94, 94, 94);
+}
+
+.edit-icon img {
+    width: 20px;
+    height: 20px;
+}
+
+.edit-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin-left: -45px;
+    background-color: #fff;
+    z-index: 1;
+    transition-duration: 0.5s;
+}
+
+.card-clickleable:hover .edit-icon {
+    background-color: #E2F2FF;
+    cursor: pointer;
+}
+
+.card-clickleable:hover .card-analisis {
+    background-color: #E2F2FF;
+    cursor: pointer;
+}
+.card-clickleable:hover {
+    transition-duration: 0.3s;
+    transform: scale(1.03);
+}
+
+/*Popup*/
+
+.popup {
+    z-index: 10;
+    width: 25%;
+    top: 35%;
+}
+.overlay {
+    z-index: 5;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    cursor: pointer;
+    background-color: black;
+    opacity: 0.5;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+    /**/
+    overflow: hidden;
+
+}
+
+/* Box radiod */
+.boxRadio {
+    display: block;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+    width: fit-content;
+    height: fit-content;
+}
+
+/*Botón aceptar*/
+.btn {
+   margin: 10px;
+}
+
+input {
+    margin-right: 5px;
+    cursor: pointer;
+}
+label {
+    cursor: pointer;
+}
+
+/*salir del popup*/
+#salir-popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    border-radius: 50%;
+    top: 3%;
+    left: 90%;
+}
+
+#salir-popup:hover {
+    background-color: #FFC8C8;
+    transform: scale(1.1);
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}

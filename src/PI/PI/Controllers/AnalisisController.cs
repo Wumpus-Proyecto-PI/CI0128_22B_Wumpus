@@ -13,6 +13,24 @@ namespace PI.Controllers
     // Controlador del analisis
     public class AnalisisController : Controller
     {
+        public IActionResult CrearAnalisis(int IDNegocio, string estadoNegocio)
+        {
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(IDNegocio, estadoNegocio);
+
+            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+        }
+        // Retorna la vista con todos los análisis creados
+        public IActionResult MisAnalisis(int IDNegocio)
+        {
+            ViewData["Title"] = "Mis análisis";
+            ViewData["TituloPaso"] = "Mis análisis";
+            ViewBag.BotonRetorno = "Mis negocios";
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(IDNegocio);
+            ViewBag.idNegocio = IDNegocio;
+            return View(analisisHandler.ObtenerAnalisis(IDNegocio));
+        }
         // Devuelve la vista principal del analisis especifico
         // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
         public IActionResult Index(string fechaAnalisis)
@@ -22,6 +40,8 @@ namespace PI.Controllers
             AnalisisModel analisisActual = handler.ObtenerUnAnalisis(fechaCreacionAnalisis);
             ViewData["NombreNegocio"] = handler.obtenerNombreNegocio(fechaCreacionAnalisis);
             ViewData["TituloPaso"] = "Progreso del análisis";
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
             // var tipoAnalisis = handler.ObtenerTipoAnalisis();
             return View(analisisActual);

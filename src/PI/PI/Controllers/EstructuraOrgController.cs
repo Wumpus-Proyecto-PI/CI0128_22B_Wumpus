@@ -13,8 +13,14 @@ namespace PI.Controllers
         // Retorna una vista cshtml con un componente razor que permite la creación de puestos y de beneficios desde el lado del cliente
         public IActionResult Index(string fecha)
         {
+            // para que se muestre el boton de volver al analisis
+            ViewBag.BotonRetorno = "Progreso";
+
             // asignamos el título del paso en el que se está en el layout
             ViewData["TituloPaso"] = "Estructura organizativa";
+
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
 
             // creamos instancia del handler de la estrutura organizativa para cargar los puestos
             EstructuraOrgHandler estructura = new EstructuraOrgHandler();
