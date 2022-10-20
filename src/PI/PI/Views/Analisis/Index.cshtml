@@ -1,6 +1,6 @@
 ﻿@model AnalisisModel
 @using PI.Controllers
-
+@using PI.Handlers
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -12,14 +12,29 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/LayoutNombreEmpresa.css" />
+
 </head>
+
+@{
+    string getIdNegocio()
+    {
+        AnalisisHandler analisisHandler = new AnalisisHandler();
+        return analisisHandler.obtenerNegocioDeAnalisis(Model.FechaCreacion).ID.ToString();
+    }
+}
 
 @*Encabezado de la pantalla del progreso*@
 <body>
     <div class="container">
 
     <div class="analisis-header row">
-        <div class="col-md-6">
+        <div class="col-md-1 boton-volver d-flex justify-content-start align-items-center align-content-center">
+            <a asp-controller="Analisis" asp-action="MisAnalisis" asp-route-IDNegocio="@getIdNegocio()" class="hovertext" data-hover="Volver a mis análisis">
+                <img src="img/generic/flecha-comparador.png" alt="Botón para volver">
+            </a>
+        </div>
+        <div class="col-md-5">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">@ViewData["NombreNegocio"]</p>
                 @*Verifica el estado del negocio para mostrarlo en pantalla*@
@@ -33,7 +48,7 @@
                 }
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">Fecha de creaci&oacuten</p>
                 <p class="mb-4">@Model.FechaCreacion</p>
@@ -124,7 +139,8 @@
 
         <div class="row ml-5 mr-5 text-center">
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card card-no-clickeable m-4">
+                <div class="card card-clickeable m-4">
+                    <a asp-area="" asp-controller="Rentabilidad" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                     <div class="m-2">
                         <img src="Images/undraw_site_stats_re_ejgy.svg" class="card-img-top" alt="">
                         <div class="card-body">
@@ -133,6 +149,7 @@
                         </div>
                         <span class="circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">4</span>
                     </div>
+                    </a>
                 </div>
             </div>
 

@@ -25,6 +25,7 @@ namespace PI.Controllers
         // Retorna el formulario para ingresar el nombre y estado del negocio.
         public IActionResult FormAgregarNegocio()
         {
+            ViewData["Title"] = "Nuevo negocio";
             return View();
         }
 
