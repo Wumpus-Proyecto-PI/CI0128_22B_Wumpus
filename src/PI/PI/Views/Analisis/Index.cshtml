@@ -16,12 +16,14 @@
 
 @*Encabezado de la pantalla del progreso*@
 <body>
+    <div class="container">
+
     <div class="analisis-header row">
         <div class="col-md-6">
             <div class="text-white text-center mt-3">
                 <p class="texto-header mb-0 fw-bold">@ViewData["NombreNegocio"]</p>
                 @*Verifica el estado del negocio para mostrarlo en pantalla*@
-                @if (Model.Configuracion.TipoNegocio == false)
+                @if (Model.Configuracion.EstadoNegocio == false)
                 {
                     <p class="mb-4">Estado: emprendimiento</p>
                 }
@@ -202,4 +204,6 @@
             </div>
         </div>
     </div>
+        </div>
+
 </body>
