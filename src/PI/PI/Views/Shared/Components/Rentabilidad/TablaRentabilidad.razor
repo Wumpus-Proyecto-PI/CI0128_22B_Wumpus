@@ -40,7 +40,7 @@
 
             <li class="table-row-totales">
                 <div class="col col-1" data-label="Nombre">
-                    TOTALES
+                    <p class="datos-calculados texto-nombres">Totales</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
                     100%
@@ -63,14 +63,16 @@
             {
                     <li class="table-row">
                     <div class="col col-1" data-label="Nombre">
-                        <p class="datos-calculados">@productoActual.Nombre</p>
-                        </div>
-                        <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
-                        </div>
-                        <div class="col col-1" data-label="Precio">
-                                <input class="effect-1 text-center" type="number" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
-                        </div>
+                        <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
+                    </div>
+                    <div class="col col-1" data-label="% Ventas">
+                        <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
+                        <span class="focus-border"></span>
+                    </div>
+                    <div class="col col-1" data-label="Precio">
+                        <input class="effect-1 text-center" type="number" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
+                        <span class="focus-border"></span>
+                    </div>
                     <div class="col col-1" data-label="Margen">
                             <p class="datos-calculados">@porcentajeVentasMargen</p>
                         </div>

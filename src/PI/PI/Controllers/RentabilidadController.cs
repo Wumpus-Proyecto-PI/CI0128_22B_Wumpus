@@ -12,6 +12,11 @@ namespace PI.Controllers
             ViewBag.fechaAnalisis = fechaConversion;
             ProductoHandler productoHandler = new ProductoHandler();
             List<ProductoModel> productos = productoHandler.obtenerProductos(fechaConversion);
+
+            ViewData["TituloPaso"] = "Análisis de rentabilidad";
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
+
             return View(productos);
         }
     }
