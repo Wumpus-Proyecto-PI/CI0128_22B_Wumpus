@@ -18,7 +18,7 @@
         public decimal Cantidad { get; set; }
 
         // Representa si el componente se calcula en porcentaje o en unidad normal
-        public decimal Unidad { get; set; }
+        public bool Unidad { get; set; }
 
     }
 }
