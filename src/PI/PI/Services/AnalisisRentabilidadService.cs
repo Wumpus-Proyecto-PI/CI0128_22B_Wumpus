@@ -28,11 +28,20 @@ namespace PI.Services
         // Parameter: gastosFijosMensuales totales del negocio
         // Parameetr: gananciaMensual meta indicada por el usuario
         // Parameetr: margenPonderado calculado con la funcion @calcularMargen
-        // Return: las unidades meta que a vender
+        // Return: las unidades meta a vender de un producto para cumplir la meta de ganancia mensual
         public int calcularMetaVentasUnidades(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderado)
         {
-            decimal resultado = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado
+            decimal resultado = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
             return Convert.ToInt32(resultado);
+        }
+
+        // método para calcular la meta de ventas de un producto en unidades
+        // Parameter: precio  del producto
+        // Parameter: metaVentasUnidad que se calcula con el metodo @calcularMetaVentasUnidades
+        // Return: la meta a vender en moneda de un producto para cumplir la meta de ganancia mensual
+        public decimal calcularMetaVentasUnidades(decimal precio, int metaVentasUnidad)
+        {
+            return precio * metaVentasUnidad;
         }
     }
 }
