@@ -24,7 +24,8 @@ namespace PI.Handlers
             AnalisisModel analisisResultado = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
-                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual },
+                gananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"])
             };
 
             return analisisResultado;
@@ -45,7 +46,8 @@ namespace PI.Handlers
             AnalisisModel analisisMasReciente = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
-                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual },
+                gananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"])
             };
             
             return analisisMasReciente;
@@ -58,7 +60,7 @@ namespace PI.Handlers
             List<AnalisisModel> analisisDelNegocio = new List<AnalisisModel>();
             
             // string que tiene la consulta para obtener la lista de analisis de un negocio indicado
-            string consulta = "SELECT IDNegocio, A.fechaCreacion from ANALISIS as A inner join Negocio as N " +
+            string consulta = "SELECT IDNegocio, A.fechaCreacion, A.gananciaMensual from ANALISIS as A inner join Negocio as N " +
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
@@ -70,7 +72,8 @@ namespace PI.Handlers
                 new AnalisisModel
                 {
                     FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
-                    Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual}
+                    Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual},
+                    gananciaMensual = Convert.ToDecimal(columna["gananciaMensual"])
                 }
                 );
             }
