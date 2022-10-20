@@ -139,7 +139,8 @@
 
         <div class="row ml-5 mr-5 text-center">
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card card-no-clickeable m-4">
+                <div class="card card-clickeable m-4">
+                    <a asp-area="" asp-controller="Rentabilidad" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                     <div class="m-2">
                         <img src="Images/undraw_site_stats_re_ejgy.svg" class="card-img-top" alt="">
                         <div class="card-body">
@@ -148,6 +149,7 @@
                         </div>
                         <span class="circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">4</span>
                     </div>
+                    </a>
                 </div>
             </div>
 
