@@ -45,5 +45,14 @@ namespace PI.Handlers
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
+
+        // Método que actualiza el precio de un producto en la base de datos
+        public void actualizarPrecio(ProductoModel producto, DateTime fechaAnalisis)
+        {
+            string consulta = "UPDATE PRODUCTO " +
+                              "SET precio = " + producto.Precio.ToString() +
+                              " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsulta(consulta);
+        }
     }
 }
