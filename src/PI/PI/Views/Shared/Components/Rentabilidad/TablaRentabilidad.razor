@@ -68,7 +68,7 @@
                     <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
                         </div>
                         <div class="col col-1" data-label="Precio">
-                                <input class="effect-1 text-center" type="number" @bind="productoActual.Precio" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
+                                <input class="effect-1 text-center" type="number" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
                         </div>
                     <div class="col col-1" data-label="Margen">
                             <p class="datos-calculados">@porcentajeVentasMargen</p>
@@ -96,9 +96,13 @@
 
     public string porcentajeVentasMargen = "20";
 
-    public void actualizarPorcentajeVentas(ProductoModel producto) {
-        porcentajeVentasMargen = producto.PorcentajeVentas.ToString();
-
+    public void actualizarPorcentajeVentas(ProductoModel producto) 
+    {
         productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
+    }
+
+    public void actualizarPrecio(ProductoModel producto)
+    {
+        productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
     }
 }
