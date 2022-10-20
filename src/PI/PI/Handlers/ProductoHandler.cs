@@ -7,6 +7,8 @@ namespace PI.Handlers
     {
         public ProductoHandler() : base() { }
 
+        // Método que obtiene los productos de un analisis
+        // Devuele una lista de ProductoModel
         public List<ProductoModel> obtenerProductos(DateTime fechaAnalisis)
         {
             List<ProductoModel> productos = new List<ProductoModel>();
@@ -33,6 +35,15 @@ namespace PI.Handlers
                 productos.Add(nuevoProducto);
             }
             return productos;
+        }
+
+        // Método que actualiza el porcentaje de ventas de un producto en la base de datos
+        public void actualizarPorcentajeVentas(ProductoModel producto, DateTime fechaAnalisis)
+        {
+            string consulta = "UPDATE PRODUCTO " +
+                              "SET porcentajeDeVentas = " + producto.PorcentajeVentas.ToString() +
+                              " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsulta(consulta);
         }
     }
 }
