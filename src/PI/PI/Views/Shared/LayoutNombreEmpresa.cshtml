@@ -12,12 +12,27 @@
 
 <section class="subtitulo-nombre-negocio">
     @* Crea el botón de volver al progreso análisis *@
-    @if (ViewBag.noCrearBoton == null) { @*No nulo en caso que sea llamado desde "MisAnalisis*@
-    <div class="boton-volver">
-        <a asp-controller="Analisis" asp-action="Index" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") class="hovertext" data-hover="Volver al análisis">
-            <img src="~/img/generic/flecha-comparador.png" alt="Botón para volver">
-        </a>
-    </div>
+    @{
+        @*Boton de reotrno cambia segun la pantalla en la que se encuentra el usuario*@
+        switch (ViewBag.BotonRetorno)
+        {
+            case "Mis negocios":
+                <div class="boton-volver">
+                    <a asp-controller="Negocio" asp-action="Index" class="hovertext" data-hover="Volver a @ViewBag.BotonRetorno">
+                        <img src="~/img/generic/flecha-comparador.png" alt="Botón para volver">
+                    </a>
+                </div>
+                break;
+            case "Progreso":
+                <div class="boton-volver">
+                    <a asp-controller="Analisis" asp-action="Index" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") class="hovertext" data-hover="Volver al progreso del análisis">
+                        <img src="~/img/generic/flecha-comparador.png" alt="Botón para volver">
+                    </a>
+                </div>
+            break;
+            default:
+                break;  // Always break each case
+        }
     }
     @*Se asigna el nombre del negocio que se recibe del handler*@
     <p>@ViewData["NombreNegocio"]</p>

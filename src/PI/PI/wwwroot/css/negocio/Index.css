@@ -20,11 +20,23 @@
     margin: 20px;
     margin-left: 50px;
     z-index: 0;
+    transition-duration: 0.2s;
 }
 
 .card-trash-container:hover {
     transition: box-shadow .2s;
     transform: scale(1.03);
+    cursor: pointer;
+    transition-duration: 0.5s;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 20px;
+}
+
+.card-trash-container:hover .trash-container {
+    transition: box-shadow .2s;
+    transform: scale(1.03);
+    transition-duration: 0.5s;
     cursor: pointer;
     width: fit-content;
     height: fit-content;
@@ -59,8 +71,6 @@
 }
 
 .card:hover {
-    transition-duration: 0.3s;
-    transform: scale(1.03);
     background-color: #E2F2FF;
     cursor: pointer;
 }
