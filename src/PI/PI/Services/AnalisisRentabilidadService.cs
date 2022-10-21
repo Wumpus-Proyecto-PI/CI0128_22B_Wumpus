@@ -43,5 +43,28 @@ namespace PI.Services
         {
             return precio * metaVentasUnidad;
         }
+
+        public static decimal CalcularGastosFijos(List<GastoFijoModel> gastosFijos, List<PuestoModel> puestos) { 
+            decimal resultado = 0;
+            PuestoModel puestoActual;
+            for (int index = 0; index < gastosFijos.Count; index += 1) {
+                if (gastosFijos[index].Nombre != "Beneficios de empleados" && gastosFijos[index].Nombre != "Salarios netos") {
+                    resultado += gastosFijos.ElementAt(index).Monto;
+                }
+            }
+            for (int index = 0; index < puestos.Count; index += 1)
+            {
+                puestoActual = puestos[index];
+                resultado += (puestoActual.Plazas * puestoActual.SalarioBruto) * 12;
+
+                for (int indexBeneficios = 0; indexBeneficios < puestoActual.Beneficios.Count
+                     ; indexBeneficios += 1) 
+                {
+                    resultado += (puestoActual.Beneficios[indexBeneficios].monto
+                          * puestoActual.Beneficios[indexBeneficios].plazasPorBeneficio) * 12;
+                }
+            }
+            return resultado;
+        }
     }
 }

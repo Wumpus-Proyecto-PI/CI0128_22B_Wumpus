@@ -13,5 +13,6 @@
 
 
 @(
-        await Html.RenderComponentAsync<PI.Views.Shared.Components.Rentabilidad.TablaRentabilidad>(RenderMode.ServerPrerendered, new { productos = Model,  analisis = ViewBag.AnalisisActual})
+        await Html.RenderComponentAsync<PI.Views.Shared.Components.Rentabilidad.TablaRentabilidad>(RenderMode.ServerPrerendered, new { productos = Model
+            ,  analisis = ViewBag.AnalisisActual, montoGastosFijos = ViewBag.MontoGastosFijos})
     )

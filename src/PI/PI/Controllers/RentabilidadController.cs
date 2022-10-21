@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PI.Handlers;
 using PI.Models;
+using PI.Services;
 
 namespace PI.Controllers
 {
@@ -16,6 +17,13 @@ namespace PI.Controllers
             List<ProductoModel> productos = productoHandler.obtenerProductos(fechaConversion);
             AnalisisModel model = analisisHandler.ObtenerUnAnalisis(ViewBag.fechaAnalisis);
             ViewBag.AnalisisActual = model;
+
+            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
+
+            ViewBag.MontoGastosFijos = AnalisisRentabilidadService.CalcularGastosFijos(
+                gastoFijoHandler.ObtenerGastosFijos(ViewBag.fechaAnalisis), estructuraOrgHandler.ObtenerListaDePuestos(ViewBag.fechaAnalisis));
+
             ViewData["TituloPaso"] = "Análisis de rentabilidad";
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];

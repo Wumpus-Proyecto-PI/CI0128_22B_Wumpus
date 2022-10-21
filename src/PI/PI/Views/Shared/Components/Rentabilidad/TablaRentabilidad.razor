@@ -2,20 +2,22 @@
 @using PI.Models
 
 
-    <div id="container-forms-top">
+    <div class="container text-center mt-5">
+
+            <div id="container-forms-top">
         <form class="d-flex flex-row align-items-center justify-content-start">
             <div class="form-row">
                 <div class="col col-xs-5">
                     <input type="number" class="form-control" placeholder=@analisis.gananciaMensual @bind="analisis.gananciaMensual">
                 </div>
                 <div class="col col-xs-5">
-                    <input type="text" class="form-control" placeholder="Last name" readonly>
+                    <input type="text" class="form-control" placeholder=@montoGastosFijos readonly>
                 </div>
-            <button type="button" class="btn btn-primary" @onclick="actualizarGananciaMensual">Primary</button>
+            <button type="button" class="btn btn-primary" @onclick="actualizarGananciaMensual">Guardar</button>
             </div>
         </form>
     </div>
-    <div class="container text-center mt-5">
+
         <ul class="responsive-table">
             <li class="table-header">
                 <div class="col col-1">
@@ -93,6 +95,9 @@
 
     [Parameter]
     public AnalisisModel analisis { get; set; }
+
+    [Parameter]
+    public decimal montoGastosFijos { get; set; }
 
 
     public ProductoHandler productoHandler = new ProductoHandler();
