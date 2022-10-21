@@ -18,7 +18,7 @@
         public decimal Precio { get; set; }
 
         // Lista de componentes asociados al producto 
-        public List<ComponenteModel> Componentes { get; set; }
+        public List<ComponenteModel> Componentes { get; set; } = new List<ComponenteModel>();
 
     }
 }
