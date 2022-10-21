@@ -65,7 +65,7 @@
                         <p class="datos-calculados">@productoActual.Nombre</p>
                         </div>
                         <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
+                    <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
                         </div>
                         <div class="col col-1" data-label="Precio">
                                 <input class="effect-1 text-center" type="number" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
@@ -77,7 +77,7 @@
                             <p class="datos-calculados"></p>
                         </div>
                         <div class="col col-1" data-label="Meta">
-                    <p class="datos-calculados">@productoActual.PorcentajeVentas.ToString()</p>
+                    <p class="datos-calculados">@productoActual.PorcentajeDeVentas.ToString()</p>
                         </div>
                     </li>
             }

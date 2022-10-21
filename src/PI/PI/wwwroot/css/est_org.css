@@ -11,8 +11,6 @@
     height: 100%;
 }
 
-
-
 #tabla_form {
     display: flex;
     width: 100%;
@@ -76,13 +74,14 @@
     width: 40px;
     height: 40px;
 }
-    #boton-guardar-beneficio:hover {
-        transform: scale(1.1);
-        background-color: #E2F2FF;
-        border-color: #E2F2FF;
-        transition-duration: 0.4s;
-        cursor:pointer;
-    }
+
+#boton-guardar-beneficio:hover {
+    transform: scale(1.1);
+    background-color: #E2F2FF;
+    border-color: #E2F2FF;
+    transition-duration: 0.4s;
+    cursor:pointer;
+}
 
 
 #container-input-nombre-beneficio {
@@ -122,10 +121,6 @@
     border-radius: 10px;
 }
 
-
-
-
-
 .dato_tabla_beneficios {
     width: 33.33%;
     text-align: left;
@@ -164,13 +159,13 @@ td {
     left: 95%;
 }
 
-    #salir-popup-beneficios:hover {
-        background-color: #FFC8C8;
-        transform: scale(1.1);
-        border-color: #FFC8C8;
-        transition-duration: 0.4s;
-        cursor:pointer;
-    }
+#salir-popup-beneficios:hover {
+    background-color: #FFC8C8;
+    transform: scale(1.1);
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+    cursor:pointer;
+}
 
 #lista_beneficios {
     width: 100%;
@@ -191,14 +186,14 @@ td {
     align-items: center;
 }
 
-    .borrar-beneficio:hover {
-        background-color: #FFC8C8;
-        transform: scale(1.1);
-        background-color: #FFC8C8;
-        border-color: #FFC8C8;
-        transition-duration: 0.4s;
-        cursor:pointer;
-    }
+.borrar-beneficio:hover {
+    background-color: #FFC8C8;
+    transform: scale(1.1);
+    background-color: #FFC8C8;
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+    cursor:pointer;
+}
 
 #botones_beneficios {
     width:100%;
@@ -245,13 +240,14 @@ td {
     border-color: #ccc;
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
 }
-    #boton-cerrar-form-beneficio:hover {
-        background-color: #E2F2FF;
-        transform: scale(1.1);
-        border-color: #E2F2FF;
-        transition-duration: 0.4s;
-        cursor:pointer;
-    }
+
+#boton-cerrar-form-beneficio:hover {
+    background-color: #E2F2FF;
+    transform: scale(1.1);
+    border-color: #E2F2FF;
+    transition-duration: 0.4s;
+    cursor:pointer;
+}
 
 #contenedor_beneficios {
     

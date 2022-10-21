@@ -125,6 +125,7 @@
             }
             <div class="col-md-4 d-flex mb-3 justify-content-center">
                 <div class="@claseCarta">
+                    <a asp-area="" asp-controller="Producto" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                     <div class="m-2">
                         <img src="Images/undraw_product_teardown_re_m1pc.svg" class="card-img-top" alt="">
                         <div class="card-body">
@@ -133,6 +134,7 @@
                         </div>
                         <span class="@claseCirculo">3</span>
                     </div>
+                    </a>
                 </div>
             </div>
         </div>
