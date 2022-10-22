@@ -24,6 +24,7 @@ namespace PI.Handlers
             AnalisisModel analisisResultado = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
+                estadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
                 Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
 
@@ -45,6 +46,7 @@ namespace PI.Handlers
             AnalisisModel analisisMasReciente = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
+                estadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
                 Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
             
@@ -58,7 +60,7 @@ namespace PI.Handlers
             List<AnalisisModel> analisisDelNegocio = new List<AnalisisModel>();
             
             // string que tiene la consulta para obtener la lista de analisis de un negocio indicado
-            string consulta = "SELECT IDNegocio, A.fechaCreacion from ANALISIS as A inner join Negocio as N " +
+            string consulta = "SELECT IDNegocio, A.fechaCreacion, A.estadoAnalisis from ANALISIS as A inner join Negocio as N " +
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
@@ -70,7 +72,8 @@ namespace PI.Handlers
                 new AnalisisModel
                 {
                     FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
-                    Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual}
+                    estadoAnalisis = Convert.ToInt32(columna["estadoAnalisis"]),
+                    Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
                 }
                 );
             }

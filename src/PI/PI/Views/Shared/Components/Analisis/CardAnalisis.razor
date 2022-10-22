@@ -1,7 +1,6 @@
 ﻿@using PI.Models
 @using System.Globalization
 @inject NavigationManager NavigationManager;
-
 <!-- Representa una carta/tarjeta de análisis: fecha, tiempo, estado del negocio y estado del análisis -->
 
 <div class="card-clickleable d-flex justify-content-center align-items-center my-2">
@@ -22,7 +21,8 @@
     
         </div>
         <!-- Muestra si el ANÁLISIS está finalizado o sigue en curso -->
-        @if (analisis.Finalizado) {
+        @if (analisis.estadoAnalisis == FINALIZADO)
+        {
             <div class="card-footer footer-finalizado mt-3 px-2 w-100">
                 <span class="fw-bold analisis-finalizado text-center"> Finalizado </span>
             </div>
@@ -43,6 +43,9 @@
     // Recibe el objeto del análisis para ser mostrado.
     [Parameter]
     public AnalisisModel? analisis { get; set; }
+    
+    const int FINALIZADO = 0;
+
 
     // método que redirige al progreso del análisis correspondiente.
     public void irAlAnálisis() {
