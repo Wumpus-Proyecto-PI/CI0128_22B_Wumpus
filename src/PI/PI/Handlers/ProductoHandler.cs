@@ -11,8 +11,8 @@ namespace PI.Handlers
         public int InsertarProducto(string nombreProducto, ProductoModel producto)
         {
             int filasAfectadas = 0;
-            string consulta = "EXEC InsertarProdcuto @nombreProducto='" + producto.Nombre.ToString() + "'@nombreAnterior='" + nombreProducto + "'@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
-                "@lote='" + producto.Lote.ToString() + "'@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "'@precio='" + producto.Precio.ToString() + "'";
+            string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
+                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "'";
 
             filasAfectadas = enviarConsulta(consulta);
             return filasAfectadas;
@@ -21,7 +21,7 @@ namespace PI.Handlers
         public int EliminarProducto(ProductoModel producto)
         {
             int filasAfectadas = 0;
-            string consulta = "EXEC EliminarProducto @nombreProducto='" + producto.Nombre.ToString() + "'@fechaAnalisis='" 
+            string consulta = "EXEC EliminarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@fechaAnalisis='" 
                 + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"'";
 
             filasAfectadas = enviarConsulta(consulta);
