@@ -21,17 +21,19 @@
         }
     </div>
     @*Botón de agregar un gasto variable*@
-    <div class="transition gasto-boton"     
-        @onmouseover="() => Hover(1)" 
-        @onmouseout="() => HoverOut(1)"
-        @onclick="AgregarNuevoGasto">
-        <a>
-            @if (hoverAgregar == false)
-            {
-                <img src="img/estructuraOrg/addPuesto.png" alt="">
-            }
-            @hoverTextAgregar
-        </a>
+    <div class="boton-container">
+        <div class="transition gasto-boton"     
+            @onmouseover="() => Hover(1)" 
+            @onmouseout="() => HoverOut(1)"
+            @onclick="AgregarNuevoGasto">
+            <a>
+                @if (hoverAgregar == false)
+                {
+                    <img src="img/estructuraOrg/addPuesto.png" alt="">
+                }
+                @hoverTextAgregar
+            </a>
+        </div>
     </div>
 </div>
 @*Fin de seccion de gastos variables*@
@@ -59,21 +61,37 @@
                 <h1>Editar costo variable</h1>
             }
 
-            @*Seccion de los botones para eliminar o guardar el gasto variable*@
-            <div id="superior-horizontal">
-            @if (hayGastoSeleccionado == true)
-            {
-                /*Mostramos el boton de elimnar solo si se selccionó un gasto*/
-                <div id="eliminar-gasto" class="gasto-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGasto(productoActivo)">
-                    <a>
-                        @if (hoverEliminar == false)
-                        {
-                            <img src="img/generic/trashCan.png" alt="">
-                        }
-                        @hoverTextEliminar
-                    </a>
+            @*Form para ingresar los datos referentes al gasto fijo*@
+            <div class="contenedor-datos-gasto">
+                <div class="entrada-datos">
+                    @*Form para agregar el nombre del gasto variable*@
+                    <label for="nombre-producto">Nombre del producto:</label>
+                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre">
+                    @((MarkupString)ErrorNombre) @*Mensaje de error*@
                 </div>
-            }
+                <div class="entrada-datos">
+                    @*Form para agregar el nombre del gasto variable*@
+                    <label for="lote-producto">Lote del producto:</label>
+                    <input id="lote-producto" type="text" @bind="productoActivo.Lote">
+                    @((MarkupString)ErrorLote) @*Mensaje de error*@
+                </div>
+            </div>
+
+            @*Seccion de los botones para eliminar o guardar el gasto variable*@
+            <div id="inferior-horizontal">
+                @if (hayGastoSeleccionado == true)
+                {
+                    /*Mostramos el boton de elimnar solo si se selccionó un gasto*/
+                    <div id="eliminar-gasto" class="gasto-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGasto(productoActivo)">
+                        <a>
+                            @if (hoverEliminar == false)
+                            {
+                                <img src="img/generic/trashCan.png" alt="">
+                            }
+                            @hoverTextEliminar
+                        </a>
+                    </div>
+                }
                 <div id="guardar-boton" class="gasto-boton " @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGasto(productoActivo)">
                     <a>
                         @if (hoverGuardar == false)
@@ -84,24 +102,6 @@
                     </a>
                 </div>
             </div>
-
-            @*Form para ingresar los datos referentes al gasto fijo*@
-  
-            <form id="form-gasto-variable">
-                <div id="contenedor-datos-gasto">
-                    @*Form para agregar el nombre del gasto variable*@
-                    <label for="nombre-producto">Nombre del producto:</label>
-                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre">
-                    @((MarkupString)ErrorNombre) @*Mensaje de error*@
-
-                    @*Form para agregar el nombre del gasto variable*@
-                    <label for="lote-producto">Lote del producto:</label>
-                    <input id="lote-producto" type="text" @bind="productoActivo.Lote">
-                    @((MarkupString)ErrorLote) @*Mensaje de error*@
-                </div>
-            </form>
-
-        
         </div>
 
         @*Seccion de ingreso y edicion de componentes*@
@@ -154,25 +154,25 @@
                     @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo componente*@
                     <div id="container-input-nombre-componente">
                         <label for="nombreComponente">Nombre:</label>
-                        <input id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].Nombre">
+                        <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].Nombre">
                     </div>
                     @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
                     <div id="container-input-unidad-componente">
                         <label for="unidadComponente">Unidad:</label>
-                        <select id="unidadComponente" name="unidadComponente">
+                        <select class="input-componente" id="unidadComponente" name="unidadComponente">
                             <option selected value="0">Unitario</option>
                             <option value="1">Porcentaje</option>
                         </select> 
                     </div>
                     @*Sección donde se encuentra el form donde se ingresa la cantidad del nuevo componente*@
                     <div id="container-input-cantidad-componente">
-                        <label for="cantidadComponente">Plazas:</label>
-                        <input id="cantidadComponente" min="1" name="cantidadComponente" type="number" @bind="componentes[componenteActual].Cantidad">
+                        <label for="cantidadComponente">Cantidad:</label>
+                        <input class="input-componente" id="cantidadComponente" min="1" name="cantidadComponente" type="number" @bind="componentes[componenteActual].Cantidad">
                     </div>
                     @*Sección donde se encuentra el form donde se ingresa la costo del nuevo componente*@
                     <div id="container-input-costo-componente">
-                        <label for="costoComponente">Plazas:</label>
-                        <input id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Costo">
+                        <label for="costoComponente">Costo:</label>
+                        <input class="input-componente" id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Costo">
                     </div>
                     @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
                     <div id="seccion-guardar-componente">
