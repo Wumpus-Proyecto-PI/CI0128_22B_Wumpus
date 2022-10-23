@@ -66,5 +66,10 @@ namespace PI.Services
             }
             return resultado;
         }
+
+        public static decimal CalcularMetaEnMoneda(decimal precio, int metaEnUnidades) { 
+            return Convert.ToDecimal(precio*metaEnUnidades);
+        }
+
     }
 }
