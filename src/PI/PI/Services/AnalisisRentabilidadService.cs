@@ -68,7 +68,11 @@ namespace PI.Services
         }
 
         public static decimal CalcularMetaEnMoneda(decimal precio, int metaEnUnidades) { 
-            return Convert.ToDecimal(precio*metaEnUnidades);
+            return precio*metaEnUnidades;
+        }
+
+        public static decimal CalcularPuntoEquilibrio(decimal gastosFijos, decimal precio, decimal costoVariable) {
+            return gastosFijos / (precio - costoVariable);
         }
 
     }
