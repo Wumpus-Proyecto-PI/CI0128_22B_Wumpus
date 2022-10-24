@@ -31,7 +31,14 @@ namespace PI.Services
         // Return: las unidades meta a vender de un producto para cumplir la meta de ganancia mensual
         public static int CalcularMetaVentasUnidades(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderado)
         {
-            decimal resultado = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
+            decimal resultado = 0;
+            try
+            {
+                resultado = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
+            } catch
+            {
+                resultado = 0;
+            }
             return Convert.ToInt32(resultado);
         }
 
