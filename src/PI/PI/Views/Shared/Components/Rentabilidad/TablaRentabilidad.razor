@@ -1,5 +1,6 @@
 ﻿@using PI.Handlers
 @using PI.Models
+@using PI.Services
 
 
     <div class="container text-center mt-5">
@@ -79,7 +80,7 @@
                     <p class="datos-calculados">@porcentajeVentasMargen</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados"></p>
+                    <p class="datos-calculados">""</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     <p class="datos-calculados">@productoActual.PorcentajeVentas.ToString()</p>
@@ -98,6 +99,8 @@
 
     [Parameter]
     public decimal montoGastosFijos { get; set; }
+
+    public decimal puntoEquilibrio { get; set; }
 
 
     public ProductoHandler productoHandler = new ProductoHandler();
