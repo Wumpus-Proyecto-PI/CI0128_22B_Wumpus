@@ -24,8 +24,9 @@ namespace PI.Handlers
             AnalisisModel analisisResultado = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
+                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual },
+                gananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"])
                 estadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
-                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
 
             return analisisResultado;
@@ -46,6 +47,7 @@ namespace PI.Handlers
             AnalisisModel analisisMasReciente = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
+                gananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"])=======
                 estadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
                 Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
@@ -60,7 +62,8 @@ namespace PI.Handlers
             List<AnalisisModel> analisisDelNegocio = new List<AnalisisModel>();
             
             // string que tiene la consulta para obtener la lista de analisis de un negocio indicado
-            string consulta = "SELECT IDNegocio, A.fechaCreacion, A.estadoAnalisis from ANALISIS as A inner join Negocio as N " +
+            string consulta = "SELECT IDNegocio, A.fechaCreacion, A.gananciaMensual from ANALISIS as A inner join Negocio as N " +
+
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
@@ -72,6 +75,7 @@ namespace PI.Handlers
                 new AnalisisModel
                 {
                     FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
+                    gananciaMensual = Convert.ToDecimal(columna["gananciaMensual"])
                     estadoAnalisis = Convert.ToInt32(columna["estadoAnalisis"]),
                     Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
                 }
@@ -177,6 +181,17 @@ namespace PI.Handlers
                 + configuracionNueva.PorcentajeSS.ToString()
                 + ",@procentajePL=" + configuracionNueva.PorcentajePL.ToString();
             enviarConsultaVoid(actualizar);
+        }
+
+        public bool ActualizarGananciaMensual(decimal monto, DateTime fechaAnalisis) {
+            Console.WriteLine(fechaAnalisis);
+            var consulta = @"EXEC ActualizarGananciaMensual @ganancia = " + monto + ", @fecha = " + "'" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            var cmdParaConsulta = new SqlCommand(consulta, conexion);
+
+            conexion.Open();
+            bool exito = cmdParaConsulta.ExecuteNonQuery() >= 1;
+            conexion.Close();
+            return exito;
         }
     }
 }

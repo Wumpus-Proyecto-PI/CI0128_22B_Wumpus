@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data.SqlClient;
+using System.Data;
+using PI.Models;
 
 namespace PI.Handlers
 {
-    public class AnalisisRentabilidadHandler : Controller
+    public class AnalisisRentabilidadHandler : Handler
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        // Handler de analisis
+        public AnalisisRentabilidadHandler() : base() { }
+
+
     }
 }
+
