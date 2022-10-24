@@ -81,6 +81,14 @@ li {
 
 .datos-calculados {
     margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.datos-header {
+    margin: 0;
     position: relative;
     top: 50%;
     left: 50%;
@@ -106,7 +114,7 @@ li {
 
 .effect-1 ~ .focus-border {
     position: absolute;
-    bottom:0;
+    bottom: 0;
     left: 50%;
     width: 0;
     height: 2px;
