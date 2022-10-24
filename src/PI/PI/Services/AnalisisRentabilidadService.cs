@@ -75,5 +75,7 @@ namespace PI.Services
             return gastosFijos / (precio - costoVariable);
         }
 
+
+
     }
 }
