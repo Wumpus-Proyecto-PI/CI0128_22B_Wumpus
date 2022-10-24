@@ -270,19 +270,27 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE   procedure [dbo].[insertarConfiguracionAnalisis](
+CREATE or alter procedure [dbo].[insertarConfiguracionAnalisis](
 	@fechaAnalisis datetime,
 	@procentajeSS decimal(5,2),
-	@procentajePL decimal(5,2),
-	@moneda varchar(20) = null,
-	@tipoCambio varchar(20) = null
+	@procentajePL decimal(5,2)
 )
 as 
 begin 
 
-	update CONFIGURACION 
-	set porcentajeSS= @procentajeSS, porcentajePL = @procentajePL , moneda = @moneda, tipoCambio = @tipoCambio
-	where CONFIGURACION.fechaAnalisis=@fechaAnalisis
+    if @procentajeSS >= 0 
+    begin 
+	    update CONFIGURACION 
+	    set porcentajeSS= @procentajeSS
+	    where CONFIGURACION.fechaAnalisis=@fechaAnalisis
+    end
+
+    if @procentajePL >= 0 
+    begin 
+        update CONFIGURACION 
+	    set porcentajePL = @procentajePL
+	    where CONFIGURACION.fechaAnalisis=@fechaAnalisis
+    end
 end
 
 -- Procedure 8
