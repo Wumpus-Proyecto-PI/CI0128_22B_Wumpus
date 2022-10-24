@@ -7,7 +7,7 @@
 *@
 
 <div class="gastoVar gastoVar-editar">
-    <div class="top-gatoVar">
+    <div class="top-gastoVar">
         <div class="gastoVar-nombre"><h1>@*@gastoVariable.Nombre*@ Nombre Gasto</h1></div>
     </div>
     <div class="bottom-gastoVar">
@@ -24,10 +24,8 @@
         </div>
         <div>
             <div class="gastoVar-caracteristica gastoVar-lote">
-                @*
-                <p>@gastoVariable.Lote.ToString()</p>
-                *@
-                <p>10</p>
+                <p>@producto.Lote.ToString()</p>
+                <br/>
             </div>
         </div>
         <div>
@@ -35,7 +33,7 @@
                 @*
                 <p>@gastoVariable.Lote.ToString()</p>
                 *@
-                <p>10</p>
+                <p>@producto.Componentes.Count().ToString()</p>
             </div>
         </div>
     </div>
