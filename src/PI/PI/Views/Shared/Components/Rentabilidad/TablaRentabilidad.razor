@@ -84,7 +84,7 @@
                 </div>
                 <div class="col col-1" data-label="Margen">
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
-                    <p class="datos-calculados">@calcularMargen(productoActual.Precio, 100)</p>
+                    <p class="datos-calculados">@calcularMargen(productoActual)</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
                     <p class="datos-calculados">""</p>
@@ -94,11 +94,11 @@
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     @if (@opcionSwitchBool)
                     {
-                        <p class="datos-calculados">@(calcularMetaUnidades(productoActual, 100))</p>
+                        <p class="datos-calculados">@(calcularMetaUnidades(productoActual))</p>
                     }
                     else
                     {
-                        <p class="datos-calculados">@(calcularMetaMoneda(productoActual, 100))</p>
+                        <p class="datos-calculados">@(calcularMetaMoneda(productoActual))</p>
                     }
                 </div>
             </li>
@@ -154,23 +154,23 @@
         productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
     }
 
-    public decimal calcularMargen(decimal precio, decimal costoVariable) {
+    public decimal calcularMargen(ProductoModel productoActual) {
 
-        return AnalisisRentabilidadService.CalcularMargen(precio, costoVariable);
+        return AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
     }
 
-    public int calcularMetaUnidades(ProductoModel productoActual, decimal costoVariable)
+    public int calcularMetaUnidades(ProductoModel productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, costoVariable);
+        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeVentas, margen);
 
         return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
     }
 
-    public decimal calcularMetaMoneda(ProductoModel productoActual, decimal costoVariable)
+    public decimal calcularMetaMoneda(ProductoModel productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, costoVariable);
+        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeVentas, margen);
 
@@ -185,7 +185,7 @@
         foreach (ProductoModel productActual in productos)
         {
             // TODO: se debe enviar el costo variable total del producto en lugar de 100
-            total += this.calcularMetaUnidades(productActual, 100);
+            total += this.calcularMetaUnidades(productActual);
         }
         return total;
     }
@@ -197,7 +197,7 @@
         foreach (ProductoModel productActual in productos)
         {
             // TODO: se debe enviar el costo variable total del producto en lugar de 100
-            total += this.calcularMetaMoneda(productActual, 100);
+            total += this.calcularMetaMoneda(productActual);
         }
         return total;
     }
