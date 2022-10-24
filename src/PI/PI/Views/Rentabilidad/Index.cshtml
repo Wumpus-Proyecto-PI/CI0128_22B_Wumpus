@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
+@Html.Partial("LayoutNombreEmpresa")
+
 
 @(
         await Html.RenderComponentAsync<PI.Views.Shared.Components.Rentabilidad.TablaRentabilidad>(RenderMode.ServerPrerendered, new { productos = Model
