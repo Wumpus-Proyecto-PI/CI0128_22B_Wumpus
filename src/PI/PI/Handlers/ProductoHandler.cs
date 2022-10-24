@@ -12,7 +12,7 @@ namespace PI.Handlers
         {
             int filasAfectadas = 0;
             string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
-                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "'";
+                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "',@costoVariable='" + producto.CostoVariable.ToString() + "'";
 
             filasAfectadas = enviarConsulta(consulta);
             return filasAfectadas;
