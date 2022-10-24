@@ -35,11 +35,11 @@ namespace PI.Services
             return Convert.ToInt32(resultado);
         }
 
-        // método para calcular la meta de ventas de un producto en unidades
+        // método para calcular la meta de ventas de un producto en moneda
         // Parameter: precio  del producto
         // Parameter: metaVentasUnidad que se calcula con el metodo @calcularMetaVentasUnidades
         // Return: la meta a vender en moneda de un producto para cumplir la meta de ganancia mensual
-        public static decimal CalcularMetaVentasUnidades(decimal precio, int metaVentasUnidad)
+        public static decimal CalcularMetaVentasMoneda(decimal precio, int metaVentasUnidad)
         {
             return precio * metaVentasUnidad;
         }
@@ -65,10 +65,6 @@ namespace PI.Services
                 }
             }
             return resultado;
-        }
-
-        public static decimal CalcularMetaEnMoneda(decimal precio, int metaEnUnidades) { 
-            return precio*metaEnUnidades;
         }
 
         public static decimal CalcularPuntoEquilibrio(decimal gastosFijos, decimal precio, decimal costoVariable) {
