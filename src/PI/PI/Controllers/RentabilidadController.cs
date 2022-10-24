@@ -23,6 +23,12 @@ namespace PI.Controllers
 
             ViewBag.MontoGastosFijos = AnalisisRentabilidadService.CalcularGastosFijos(
                 gastoFijoHandler.ObtenerGastosFijos(ViewBag.fechaAnalisis), estructuraOrgHandler.ObtenerListaDePuestos(ViewBag.fechaAnalisis));
+            // para que se muestre el boton de volver al analisis
+            ViewBag.BotonRetorno = "Progreso";
+
+            // asignamos el nombre del negocio en la vista
+            // este se extrae de la base de datos con la fecha del análisis
+            ViewData["NombreNegocio"] = gastoFijoHandler.obtenerNombreNegocio(fechaConversion);
 
             ViewData["TituloPaso"] = "Análisis de rentabilidad";
             // se asigna el titulo en la pestaña del cliente
