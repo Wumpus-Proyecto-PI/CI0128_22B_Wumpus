@@ -20,7 +20,7 @@
         </form>
         <div class="switch-container">
                 <span class="switch-text">@opcionSwitch</span>
-            <input type="checkbox" class="switch_1" @onclick="switchPuntoEQ">
+            <input type="checkbox" class="switch_1" @onclick="switchMetaVentas">
         </div>
     </div>
     <ul class="responsive-table">
@@ -62,8 +62,11 @@
                     9,220.00
                 </div>
                 <div class="col col-1" data-label="Meta">
-                    <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
-                    <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
+                    @if (@opcionSwitchBool) {
+                        <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
+                    } else {
+                        <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
+                    }
                 </div>
             </li>
 
@@ -90,8 +93,14 @@
                 <div class="col col-1" data-label="Meta">
                     @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@ 
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
-                    <p class="datos-calculados">@(calcularMetaUnidades(productoActual, 100))</p>
-                    <p class="datos-calculados">@(calcularMetaMoneda(productoActual, 100))</p>
+                    @if (@opcionSwitchBool)
+                    {
+                        <p class="datos-calculados">@(calcularMetaUnidades(productoActual, 100))</p>
+                    }
+                    else
+                    {
+                        <p class="datos-calculados">@(calcularMetaMoneda(productoActual, 100))</p>
+                    }
                 </div>
             </li>
         }
@@ -108,14 +117,21 @@
     [Parameter]
     public decimal montoGastosFijos { get; set; }
 
+    public bool opcionSwitchBool = true;
+
     public string opcionSwitch = "Meta en unidades";
 
-    public void switchPuntoEQ() {
-        if (opcionSwitch.Equals("Meta en dolares")) {
+    public string opcionUnidades = "Meta en unidades";
+    public string opcionMoneda = "Meta en moneda";
+
+    public void switchMetaVentas() {
+        if (!opcionSwitchBool) {
             opcionSwitch = "Meta en unidades";
+            opcionSwitchBool = true;
         }
         else {
-            opcionSwitch = "Meta en dolares";
+            opcionSwitch = "Meta en moneda";
+            opcionSwitchBool = false;
         }
     }
 
