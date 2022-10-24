@@ -8,18 +8,11 @@
 
 <div class="gastoVar gastoVar-editar">
     <div class="top-gastoVar">
-        <div class="gastoVar-nombre"><h1>@*@gastoVariable.Nombre*@ Nombre Gasto</h1></div>
+        <div class="gastoVar-nombre"><h1>@producto.Nombre.ToString()</h1></div>
     </div>
     <div class="bottom-gastoVar">
         <div class="gastoVar-caracteristica gastoVar-costo-total">
-            <p>
-                @*
-                @(
-                    String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (puesto.SalarioBruto * puesto.Plazas))
-                    )
-                *@
-                100,000.00
-            </p>
+            <p>@producto.CostoVariable.ToString()</p>
             <img class="divisa-img" src="/img/generic/coin-icon.svg">
         </div>
         <div>
@@ -31,29 +24,12 @@
         <div>
             <div class="gastoVar-caracteristica gastoVar-cantidad-componentes">
                 @*
-                <p>@gastoVariable.Lote.ToString()</p>
                 *@
                 <p>@producto.Componentes.Count().ToString()</p>
             </div>
         </div>
     </div>
-    @*
-    <div style=" display:flex; align-items:center; justify-content:center;">
-        @if (puesto.Beneficios.Count > 0)
-        {
-            <p style="margin-right:5px; font-size:large;">
-                @(
-                    puesto.Beneficios.Count
-                    )
-            </p>
-            <img src="img/estructuraOrg/incentive.png" width="30px" height="30px">
-        }
-        else
-        {
-            <h3 style="opacity:0.5;"> No tiene beneficios </h3>
-        }
-    </div>
-    *@
+ 
 </div>
 
 
