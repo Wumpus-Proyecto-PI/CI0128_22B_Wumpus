@@ -5,7 +5,7 @@
 
     <div class="container text-center mt-5">
 
-            <div id="container-forms-top">
+    <div id="container-forms-top">
         <form class="d-flex flex-row align-items-center justify-content-start">
             <div class="form-row">
                 <div class="col col-xs-5">
@@ -14,32 +14,36 @@
                 <div class="col col-xs-5">
                     <input type="text" class="form-control" placeholder=@montoGastosFijos readonly>
                 </div>
-            <button type="button" class="btn btn-primary" @onclick="actualizarGananciaMensual">Guardar</button>
+                <button type="button" class="btn btn-primary" @onclick="actualizarGananciaMensual">Guardar</button>
+               
             </div>
         </form>
+        <div class="switch-container">
+                <span class="switch-text">@opcionSwitch</span>
+            <input type="checkbox" class="switch_1" @onclick="switchMetaVentas">
+        </div>
     </div>
-
-        <ul class="responsive-table">
-            <li class="table-header">
-                <div class="col col-1">
-                    <p class="datos-calculados">Nombre de producto</p>
-                </div>
-                <div class="col col-1">
-                    <p class="datos-calculados">Porcentaje de Ventas</p>
-                </div>
-                <div class="col col-1">
-                    <p class="datos-calculados">Precio</p>
-                </div>
-                <div class="col col-1">
-                    <p class="datos-calculados">Margen</p>
-                </div>
-                <div class="col col-1">
-                    <p class="datos-calculados">Punto Equilibrio</p>
-                </div>
-                <div class="col col-1">
-                    <p class="datos-calculados">Meta de ventas</p>
-                </div>
-            </li>
+    <ul class="responsive-table">
+        <li class="table-header">
+            <div class="col col-1">
+                <p class="datos-calculados">Nombre de producto</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">Porcentaje de Ventas</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">Precio</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">Margen</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">Punto Equilibrio</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">Meta de ventas</p>
+            </div>
+        </li>
 
             <li class="table-row-totales">
                 <div class="col col-1" data-label="Nombre">
@@ -58,12 +62,16 @@
                     9,220.00
                 </div>
                 <div class="col col-1" data-label="Meta">
-                    234
+                    @if (@opcionSwitchBool) {
+                        <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
+                    } else {
+                        <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
+                    }
                 </div>
             </li>
 
-            @foreach (var productoActual in productos)
-            {
+        @foreach (var productoActual in productos)
+        {
             <li class="table-row">
                 <div class="col col-1" data-label="Nombre">
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
@@ -77,13 +85,23 @@
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
-                    <p class="datos-calculados">@porcentajeVentasMargen</p>
+                    @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
+                    <p class="datos-calculados">@calcularMargen(productoActual.Precio, 100)</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
                     <p class="datos-calculados">""</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
-                    <p class="datos-calculados">@productoActual.PorcentajeVentas.ToString()</p>
+                    @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@ 
+                    @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
+                    @if (@opcionSwitchBool)
+                    {
+                        <p class="datos-calculados">@(calcularMetaUnidades(productoActual, 100))</p>
+                    }
+                    else
+                    {
+                        <p class="datos-calculados">@(calcularMetaMoneda(productoActual, 100))</p>
+                    }
                 </div>
             </li>
         }
@@ -100,17 +118,33 @@
     [Parameter]
     public decimal montoGastosFijos { get; set; }
 
+    public bool opcionSwitchBool = true;
+
+    public string opcionSwitch = "Meta en unidades";
+
+    public string opcionUnidades = "Meta en unidades";
+    public string opcionMoneda = "Meta en moneda";
+
+    public void switchMetaVentas() {
+        if (!opcionSwitchBool) {
+            opcionSwitch = "Meta en unidades";
+            opcionSwitchBool = true;
+        }
+        else {
+            opcionSwitch = "Meta en moneda";
+            opcionSwitchBool = false;
+        }
+    }
     public decimal puntoEquilibrio { get; set; }
 
 
     public ProductoHandler productoHandler = new ProductoHandler();
 
-    public void actualizarGananciaMensual () {
+    public void actualizarGananciaMensual()
+    {
         AnalisisHandler handler = new AnalisisHandler();
         handler.ActualizarGananciaMensual(analisis.gananciaMensual, analisis.FechaCreacion);
     }
-
-    public string porcentajeVentasMargen = "20";
 
     public void actualizarPorcentajeVentas(ProductoModel producto) 
     {
@@ -120,5 +154,53 @@
     public void actualizarPrecio(ProductoModel producto)
     {
         productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
+    }
+
+    public decimal calcularMargen(decimal precio, decimal costoVariable) {
+
+        return AnalisisRentabilidadService.CalcularMargen(precio, costoVariable);
+    }
+
+    public int calcularMetaUnidades(ProductoModel productoActual, decimal costoVariable)
+    {
+        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, costoVariable);
+
+        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeVentas, margen);
+
+        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+    }
+
+    public decimal calcularMetaMoneda(ProductoModel productoActual, decimal costoVariable)
+    {
+        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, costoVariable);
+
+        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeVentas, margen);
+
+        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+
+        return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
+    }
+
+    public int actualizarTotalMetaUnidades() {
+        int total = 0;
+
+        foreach (ProductoModel productActual in productos)
+        {
+            // TODO: se debe enviar el costo variable total del producto en lugar de 100
+            total += this.calcularMetaUnidades(productActual, 100);
+        }
+        return total;
+    }
+
+    public decimal actualizarTotalMetaMoneda()
+    {
+        decimal total = 0.0m;
+
+        foreach (ProductoModel productActual in productos)
+        {
+            // TODO: se debe enviar el costo variable total del producto en lugar de 100
+            total += this.calcularMetaMoneda(productActual, 100);
+        }
+        return total;
     }
 }
