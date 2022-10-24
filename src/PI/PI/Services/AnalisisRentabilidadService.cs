@@ -9,7 +9,7 @@ namespace PI.Services
         // Parameter: precio  del producto
         // Parameter: costoVariable total del producto
         // Return: el valor del margen del producto
-        public decimal CalcularMargen(decimal precio, decimal costoVariable)
+        public static decimal CalcularMargen(decimal precio, decimal costoVariable)
         {
             return precio - costoVariable;
         }
@@ -18,7 +18,7 @@ namespace PI.Services
         // Parameter: porcentajeVentas  del producto
         // Parameter: margen del producto
         // Return: el valor del margen ponderado del producto
-        public decimal CalcularMargenPonderado(decimal porcentajeVentas, decimal margen)
+        public static decimal CalcularMargenPonderado(decimal porcentajeVentas, decimal margen)
         {
             return porcentajeVentas * margen;
         }
@@ -29,7 +29,7 @@ namespace PI.Services
         // Parameetr: gananciaMensual meta indicada por el usuario
         // Parameetr: margenPonderado calculado con la funcion @calcularMargen
         // Return: las unidades meta a vender de un producto para cumplir la meta de ganancia mensual
-        public int CalcularMetaVentasUnidades(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderado)
+        public static int CalcularMetaVentasUnidades(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderado)
         {
             decimal resultado = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
             return Convert.ToInt32(resultado);
@@ -39,7 +39,7 @@ namespace PI.Services
         // Parameter: precio  del producto
         // Parameter: metaVentasUnidad que se calcula con el metodo @calcularMetaVentasUnidades
         // Return: la meta a vender en moneda de un producto para cumplir la meta de ganancia mensual
-        public decimal CalcularMetaVentasUnidades(decimal precio, int metaVentasUnidad)
+        public static decimal CalcularMetaVentasUnidades(decimal precio, int metaVentasUnidad)
         {
             return precio * metaVentasUnidad;
         }
