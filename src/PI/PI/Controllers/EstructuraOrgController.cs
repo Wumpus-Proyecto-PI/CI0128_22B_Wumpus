@@ -2,6 +2,7 @@
 using PI.Handlers;
 using PI.Models;
 using System.Dynamic;
+using PI.Services;
 
 namespace PI.Controllers
 {
@@ -36,6 +37,7 @@ namespace PI.Controllers
 
             // cargamos una lista con todos los puestos que existen en la base de datos
             List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
+
             return View(puestos);
         }
     }

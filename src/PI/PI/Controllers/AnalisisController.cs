@@ -43,6 +43,7 @@ namespace PI.Controllers
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
+            ViewBag.gananciaMensual = analisisActual.gananciaMensual;
             // var tipoAnalisis = handler.ObtenerTipoAnalisis();
             return View(analisisActual);
         }

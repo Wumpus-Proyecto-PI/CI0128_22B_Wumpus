@@ -17,7 +17,7 @@
 
 .boton-volver img, .boton-volver a {
     height: 35px;
-    width: fit-content;
+    width: 35px;
     padding: 0px;
     margin: 0px;
     display: block;
@@ -33,31 +33,4 @@
     font-size: xx-large;
     width: 100%;
     text-align: center;
-}
-
-.hovertext {
-    position: relative;
-}
-
-.hovertext:before {
-    content: attr(data-hover);
-    visibility: hidden;
-    opacity: 0;
-    width: 140px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px 0;
-    transition: opacity 0.2s ease-in-out;
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    top: 110%;
-    font-size: 15px;
-}
-
-.hovertext:hover:before {
-    opacity: 1;
-    visibility: visible;
 }
