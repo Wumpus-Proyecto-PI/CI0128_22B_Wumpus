@@ -1,11 +1,13 @@
 ﻿.gastoVar {
+    display: flex;
+    flex-direction: column;
     border: solid;
     border-color: white;
     border-width: 4px;
     background-color: white;
     min-height: fit-content;
     max-width: fit-content;
-    min-width: 230px;
+    min-width: 250px;
     border-radius: 20px;
     margin: 10px;
     padding: 10px;
@@ -31,16 +33,16 @@
 
 .bottom-gastoVar {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
+    align-items: flex-start;
     margin: 0px 0px 0px 0px;
     align-content: center;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .gastoVar-nombre h1 {
     display: flex;
-    margin: 0px;
+    margin-top: 5px;
     font-size: 25px;
     flex-wrap: wrap;
 }
@@ -48,4 +50,26 @@
 .divisa-img {
     width: 30px;
     height: auto;
+    margin-left: 8px;
+}
+
+p {
+    font-size: 18px;
+    margin: 0px;
+}
+
+.gastoVar-caracteristica {
+    text-align: left;
+    margin: 5px 0px 5px 0px;
+    font-size: 25px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.gastoVar-costo-total {
+    display: flex;
+    flex-direction: row;
 }
