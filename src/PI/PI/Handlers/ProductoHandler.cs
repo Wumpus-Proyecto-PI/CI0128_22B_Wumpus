@@ -32,6 +32,10 @@ namespace PI.Handlers
                 {
                     nuevoProducto.Precio = Convert.ToDecimal(columna["precio"]);
                 }
+                if (columna["costoVariable"] != DBNull.Value)
+                {
+                    nuevoProducto.CostoVariable = Convert.ToDecimal(columna["costoVariable"]);
+                }
                 productos.Add(nuevoProducto);
             }
             return productos;

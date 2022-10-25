@@ -7,5 +7,7 @@
         public int Lote { get; set; }
         public decimal PorcentajeVentas { get; set; }
         public decimal Precio { get; set; }
+
+        public decimal CostoVariable { get; set; }
     }
 }
