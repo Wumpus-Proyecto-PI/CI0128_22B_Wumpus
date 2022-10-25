@@ -12,21 +12,17 @@
     </div>
     <div class="bottom-gastoVar">
         <div class="gastoVar-caracteristica gastoVar-costo-total">
-            <p>@producto.CostoVariable.ToString()</p>
+            <p>Costo variable: @producto.CostoVariable.ToString()</p>
             <img class="divisa-img" src="/img/generic/coin-icon.svg">
         </div>
-        <div>
-            <div class="gastoVar-caracteristica gastoVar-lote">
-                <p>@producto.Lote.ToString()</p>
-                <br/>
-            </div>
+        
+        <div class="gastoVar-caracteristica gastoVar-lote">
+            <p>Lote: @producto.Lote.ToString()</p>
+            <br/>
         </div>
-        <div>
-            <div class="gastoVar-caracteristica gastoVar-cantidad-componentes">
-                @*
-                *@
-                <p>@producto.Componentes.Count().ToString()</p>
-            </div>
+        <!--Seccion con total de componentes-->
+        <div class="gastoVar-caracteristica gastoVar-cantidad-componentes">
+            <p>Cantidad de componentes: @producto.Componentes.Count().ToString()</p>
         </div>
     </div>
  
