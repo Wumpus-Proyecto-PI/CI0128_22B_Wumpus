@@ -45,5 +45,20 @@ namespace PI.Handlers
 
             enviarConsultaVoid(consulta);
         }
+
+        // Retorna la sumatoria de los montos de los gastos iniciales del análisis pasado por parámetro.
+        public decimal obtenerTotal (string fechaAnalisis)
+        {
+            decimal total = 0.0m;
+
+            string consulta = $"EXEC ObtenerSumInversionInicial @fechaAnalisis = '{fechaAnalisis}' ";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("total"))
+            {
+                total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
+            }
+
+            return total;
+        }
     }
 }

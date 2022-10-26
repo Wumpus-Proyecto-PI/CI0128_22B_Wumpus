@@ -19,6 +19,7 @@ namespace PI.Controllers
 
             InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
             ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
+            ViewBag.montoTotal = inversionInicialHandler.obtenerTotal(fechaAnalisis);
             
             return View(inversionInicialHandler.ObtenerGastosIniciales(fechaAnalisis));
         }
