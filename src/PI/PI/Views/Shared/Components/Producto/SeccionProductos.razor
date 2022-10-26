@@ -63,16 +63,16 @@
                 <div class="entrada-datos">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="nombre-producto">Nombre del producto:</label>
-                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre">
-                    @((MarkupString)ErrorNombre) @*Mensaje de error*@
+                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre">    
                 </div>
                 <div class="entrada-datos">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="lote-producto">Lote del producto:</label>
                     <input id="lote-producto" type="text" @bind="productoActivo.Lote">
-                    @((MarkupString)ErrorLote) @*Mensaje de error*@
-                </div>
+                </div>      
             </div>
+            @((MarkupString)ErrorNombre) @*Mensaje de error*@
+            @((MarkupString)ErrorLote) @*Mensaje de error*@
 
             @*Seccion de los botones para eliminar o guardar el gasto variable*@
             <div id="inferior-horizontal">
@@ -161,7 +161,7 @@
                     @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
                     <div id="container-input-unidad-componente">
                         <label for="unidadComponente">Unidad:</label>
-                        <select class="input-unidad" id="unidadComponente" name="unidadComponente">
+                        <select class="input-unidad" id="unidadComponente" name="unidadComponente" @bind="componentes[componenteActual].Unidad">
                             <option selected value="0">Unitario</option>
                             <option value="1">Porcentaje</option>
                         </select> 
@@ -186,15 +186,15 @@
                 @*Sección de mensajes de error en caso de que se hayan ingresado datos erróneos en los forms del nuevo beneficio*@
                 @if (NombreVacio)
                 {
-                    <p style="color:red; align-self:self-start; margin-left:10px;">ERROR: El nombre ingresado es vacío</p>
+                    <p style="color:red; align-self:center; margin-bottom:10px;">ERROR: El nombre ingresado es vacío</p>
                 }
                 @if (!CantidadPositiva)
                 {
-                    <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: La cantidad ingresada debe ser positivo</p>
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: La cantidad ingresada debe ser positivo</p>
                 }
                 @if (!CostoPositivo)
                 {
-                    <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: El costo debe de ser positivo</p>
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El costo debe de ser positivo</p>
                 }
             }
             @*Sección de botones en la parte inferior del popup de los componente*@
@@ -241,6 +241,8 @@
 
     // handler con el cual comunicarse con la base de datos
     public ProductoHandler HandlerGasto = new ProductoHandler();
+
+    public ComponenteHandler HandlerComponente = new ComponenteHandler();
 
 
     // string que almacena el nombre de un producto antes de ser modificado para pdoer actualizarlo en la base de datos
@@ -312,7 +314,8 @@
     {
         if (PopupVisible)
         {
-            PopupVisible = false;
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            PopupVisible = false;     
         }
         else
         {
@@ -375,10 +378,19 @@
         // se revisa que el nombre no este repetido y que no haya números negativo
         if (revisarNombre(gastoGuardar) && revisarLote(gastoGuardar))
         {
-            // se asigna el pueso la fecha del análisis por si es un gasto variable nuevo
+
+            // se asigna la fecha del análisis por si es un gasto variable nuevo
             gastoGuardar.FechaAnalisis = fechaAnalisis;
             // se ingresa con el handler en la base de datos el gasto variable
             HandlerGasto.InsertarProducto(copiaNombreOriginal, gastoGuardar);
+
+            // Se ingresan los componentes del producto que se va a guardar
+            foreach (ComponenteModel componente in componentesNuevos)
+            {
+                HandlerComponente.AgregarComponente(componente);
+            }
+
+
 
             // se resetean variables de vista y de control
             if (hayGastoSeleccionado == false)
@@ -400,16 +412,15 @@
         // se revisa que no esté vacío
         if (string.IsNullOrWhiteSpace(gastoGuardar.Nombre))
         {
-            ErrorNombre = "<p class=\"puesto-error-nombrevacio\">Error: ingrese un nombre para el producto.</p>";
+            ErrorNombre = "<p class=\"error-espacio-vacio\">Error: ingrese un nombre para el producto.</p>";
             valido = false;
         }
-
-        if (!hayGastoSeleccionado)
+        else if (!hayGastoSeleccionado)
         {
             // si es un producto nuevo solo revisamos que no esté en la lista
             if (productos.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
             {
-                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                ErrorNombre = "<p class=\"error-espacio-vacio\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
         }
@@ -420,7 +431,7 @@
             productos.Remove(gastoGuardar);
             if (productos.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
             {
-                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                ErrorNombre = "<p class=\"error-espacio-vacio\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
             // resinertamos el peusto en la misma posición donde estaba
@@ -443,7 +454,7 @@
         // se revisa que no sea negativo
         if (gastoGuardar.Lote < 0.0m)
         {
-            ErrorLote = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un número de lote positivo.</p>";
+            ErrorLote = "<p class=\"error-espacio-vacio\"> Error: Ingrese un número de lote positivo.</p>";
             valido = false;
         }
         else
@@ -470,6 +481,8 @@
     // Se agregan a la lista de componentes del gastoActivo.
     public List<ComponenteModel> componentes = new List<ComponenteModel>();
 
+    public List<ComponenteModel> componentesNuevos = new List<ComponenteModel>();
+
     // El índice del comodín sobre el cual se está operando en determinado momento
     int componenteActual = 0;
 
@@ -493,20 +506,18 @@
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
         bool costoPositivo = componentes[componenteActual].Costo >= 0;
 
-
+        NombreVacio = !(hayNombre);
+        CantidadPositiva = cantidadPositiva;
+        CostoPositivo = costoPositivo;
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
         if (hayNombre && cantidadPositiva && costoPositivo)
         {
-            NombreVacio = false;
-            CantidadPositiva = true;
-            CostoPositivo = true; 
-
-            ComponenteHandler handler = new ComponenteHandler();
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
             formVisible = false;
+            componentesNuevos.Add(componentes[componenteActual]);
             productoActivo.Componentes.Add(componentes[componenteActual]);
-            handler.AgregarComponente(componentes[componenteActual]);
+           
             componentes.Add(new ComponenteModel());
             componenteActual += 1; 
         }
