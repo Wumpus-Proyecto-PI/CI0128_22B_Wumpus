@@ -208,3 +208,62 @@ label {
 .msg-error {
     color: red;
 }
+
+/*Total*/
+
+.fila-total {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 10px 0px 10px 0px;
+}
+
+.fila-total label {
+    border: solid;
+    border-radius: 20px 0px 0px 20px;
+    border-width: 1px;
+    font-size: 25px;
+    width: 180px;
+    text-align: center;
+    background-color: #E2E2E2;
+}
+
+.fila-total p {
+    border: solid;
+    border-radius: 0px 20px 20px 0px;
+    border-width: 1px;
+    font-size: 25px;
+    width: 200px;
+    text-align: center;
+    background-color: #E2E2E2;
+    margin: 0px;
+}
+
+.total {
+    /*para no poder cliclear*/
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /*para no poder cliclear*/
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-block-end: solid 1px;
+    width: 100%;
+}
+
+    .total p {
+        margin: 0px 20px 0px 0px;
+        width: fit-content;
+        padding-inline: 50px;
+    }
+
+    .total label {
+        background-color: white;
+    }

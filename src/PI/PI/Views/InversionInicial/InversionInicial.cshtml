@@ -27,7 +27,7 @@
 	</div>
 	<div class="w-100 d-flex">
 		@(
-			await Html.RenderComponentAsync<PI.Views.Shared.Components.InversionInicial.SeccionInversionInicial>(RenderMode.ServerPrerendered, new { GastosIniciales = Model, fechaAnalisis = fechaAnalisis })
+			await Html.RenderComponentAsync<PI.Views.Shared.Components.InversionInicial.SeccionInversionInicial>(RenderMode.ServerPrerendered, new { GastosIniciales = Model, fechaAnalisis = fechaAnalisis, montoTotal = ViewBag.montoTotal})
 			)
 	</div>
 </body>

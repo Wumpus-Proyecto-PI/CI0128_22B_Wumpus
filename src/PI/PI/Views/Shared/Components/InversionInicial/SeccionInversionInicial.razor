@@ -1,11 +1,23 @@
 ﻿@using PI.Models;
 @using PI.Handlers;
+@using System.Globalization
 @inject NavigationManager NavigationManager;
 
 <!-- Representa la sección de la inversión inicial -->
 
 <div id="seccion-gastosVar"> <!-- Contenedor de tarjetas -->
     <h2 class="fw-bold mt-3">Gastos iniciales</h2>
+
+    <!-- Sección del monto total -->
+    <div class="total">
+        <div class="fila-total">
+            <label>Total</label> 
+            <p>
+                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", montoTotal))
+            </p>
+        </div>
+    </div>
+
     <div class="container-fluid d-flex flex-wrap justify-content-center p-1">
 	    <!-- Crea las tarjetas -->
         @foreach (GastoInicialModel gastoInicial in GastosIniciales)
@@ -118,8 +130,13 @@
     [Parameter]
     public string fechaAnalisis { get; set; }
 
+    [Parameter]
+    public decimal montoTotal { get; set; }
+
     // Gasto inicial que es accedido/clickeado.
     public GastoInicialModel? GastoInicialActivo = null;
+
+    InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
 
     // Strings que muestran los mensajes de error con respecto al nombre y monto
     public string ErrorNombre = "";
@@ -146,11 +163,17 @@
 
     // Cambia el popup de visible a invisible y viceversa
     public void cambiarEstadoPopup(){
+        ActualizarMontoTotal();
         PopupVisible = !PopupVisible;
         if (PopupVisible == false) {
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
+    }
+
+    // Actualiza el monto total de los gastos iniciales.
+    public decimal ActualizarMontoTotal() {
+        return inversionInicialHandler.obtenerTotal(fechaAnalisis);
     }
     // Asigna al atributo gastoActivo el gasto que ha sido clickeado.
     public void AsignarGastoActivo(GastoInicialModel GastoSeleccionado)
@@ -173,7 +196,6 @@
     // Invoca la inserción a la base de datos del gasto activo.
     public void guardarGastoInicial() {
         if (SonDatosValidos()) {
-            InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
             // Elimina el gasto de la base, de ser uno existente.
             if (GastoEsSeleccionado) {
                 inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
@@ -216,7 +238,6 @@
 
     // Invoca la eliminación a la base de datos del gasto activo.
     public void EliminarGastoInicial() {
-        InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
         inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
