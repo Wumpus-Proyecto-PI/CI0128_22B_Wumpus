@@ -159,10 +159,11 @@
             @*Verifica si el negocio aún no ha iniciado*@
             @{
 
-                bool NO_INICIADO = false; 
+                bool NO_INICIADO = false;
+                AnalisisController analisisController = new AnalisisController();
             }
 
-            @if (Model.Configuracion.EstadoNegocio == NO_INICIADO)
+            @if (Model.Configuracion.EstadoNegocio == NO_INICIADO && analisisController.ExisteMetaDeVentas(Model.FechaCreacion))
             {
                 <div class="card card-clickeable m-4">
                     <a asp-area="" asp-controller="InversionInicial" asp-action="InversionInicial" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
