@@ -246,6 +246,7 @@ AS
 DELETE FROM BENEFICIO WHERE nombre=@nombre and nombrePuesto=@nombrePuesto and fechaAnalisis=@fechaAnalisis and monto=@monto and cantidadPlazas=@plazas
 
 -- Procedure 6
+-- Creado por Fabian Orozco Chaves | B95690
 GO
 /****** Object:  StoredProcedure [dbo].[eliminarGastoFijo]    Script Date: 10/3/2022 7:23:13 PM ******/
 SET ANSI_NULLS ON
@@ -502,7 +503,7 @@ BEGIN
 END
 
 
--- Procedure - permite obtener un negocio a partir de la fecha de un análisis
+-- Procedure 14 - permite obtener un negocio a partir de la fecha de un análisis
 -- Daniel Escobar Giraldo | C02748
 GO 
 CREATE PROCEDURE ObtenerNegocioDeAnalisis (@fechaAnalisis DATETIME)
@@ -512,3 +513,43 @@ BEGIN
     FROM NEGOCIO AS N JOIN ANALISIS AS A ON N.id = A.idNegocio
     WHERE A.fechaCreacion = @fechaAnalisis
 END
+
+-- Procedure 15
+-- Creado por Fabian Orozco Chaves | B95690
+go
+GO
+/****** Object:  StoredProcedure [dbo].[obtNombreNegocioPorID]    Script Date: 10/26/2022 1:56:21 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[obtNombreNegocioPorID] (@IDNegocio INT) as
+begin
+	SELECT negocio.nombre from dbo.negocio where negocio.ID = @IDNegocio
+end
+
+-- Procedure 16
+-- Creado por Fabian Orozco Chaves | B95690
+go
+create procedure ObtenerGastosIniciales ( @fechaAnalisis datetime ) as
+begin
+	SELECT * FROM INVERSION_INICIAL WHERE fechaAnalisis=@fechaAnalisis order by nombre ASC
+end
+
+-- Procedure 17
+-- Creado por Fabian Orozco Chaves | B95690
+go
+create or alter procedure IngresarGastoInicial ( @fechaAnalisis datetime, @nombre varchar(30), @valor decimal(18,2)) as
+begin
+	SET @valor = REPLACE(@valor, ',', '.')
+	insert into INVERSION_INICIAL values (@fechaAnalisis, @nombre, dbo.convertTOdecimal(@valor))
+end
+
+
+-- Procedure 18
+-- Creado por Fabian Orozco Chaves | B95690
+go 
+create procedure EliminarGastoInicial (@fechaAnalisis datetime, @nombre varchar(30)) as
+begin
+	Delete from INVERSION_INICIAL where nombre=@nombre and fechaAnalisis=@fechaAnalisis
+end
