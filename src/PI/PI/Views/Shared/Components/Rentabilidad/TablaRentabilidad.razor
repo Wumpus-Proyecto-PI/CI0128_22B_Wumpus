@@ -75,7 +75,7 @@
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
+                    <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
@@ -163,18 +163,18 @@
     {
         decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
 
-        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeVentas, margen);
+        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
     }
 
     public decimal calcularMetaMoneda(ProductoModel productoActual)
     {
         decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
 
-        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeVentas, margen);
+        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
 
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }

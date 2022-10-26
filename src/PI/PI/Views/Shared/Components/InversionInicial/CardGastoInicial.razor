@@ -1,0 +1,26 @@
+﻿@using PI.Models
+@using System.Globalization
+@inject NavigationManager NavigationManager;
+
+<!-- Representa una carta/tarjeta de gasto inicial: nombre y monto -->
+
+<!-- Contenedor de la tarjeta y el botón de editar -->
+<div class="card-clickleable d-flex justify-content-center align-items-center m-3 flex-nowrap">
+
+    <!-- Tarjeta -->
+    <div class="card card-gastoInicial text-center justify-content-center align-items-center position-relative">
+        <h2 class="card-title text-center my-2 fw-bold">@GastoInicial.Nombre</h2>
+        <h5 class="card-text text-center mt-1 mb-2">Costo: @GastoInicial.Monto</h5>
+    </div>
+
+    <!-- Ícono de editar -->
+    <div class="icono-editar d-flex justify-content-center align-items-center">
+        <img src=img/generic/editPhoto.png>
+    </div>
+</div>
+
+@code {
+	// Recibe el objeto del gasto inicial para ser mostrado.
+    [Parameter]
+    public GastoInicialModel? GastoInicial { get; set; }
+}

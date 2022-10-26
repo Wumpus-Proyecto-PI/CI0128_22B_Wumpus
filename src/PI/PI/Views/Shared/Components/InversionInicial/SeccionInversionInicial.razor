@@ -1,0 +1,180 @@
+﻿@using PI.Models;
+@using PI.Handlers;
+
+<div id="seccion-gastosVar">
+    <h2 class="fw-bold mt-3">Gastos iniciales</h2>
+    <div class="container-fluid d-flex flex-wrap justify-content-center p-1">
+	    @foreach (GastoInicialModel gastoInicial in GastosIniciales)
+	    {
+            <div class="gasto-clickeable" @onclick="() => AsignarGastoActivo(gastoInicial)">
+			    <div>
+				    <CardGastoInicial GastoInicial=gastoInicial></CardGastoInicial>
+			    </div>
+		    </div>
+	    }
+    </div>
+    @*Botón de agregar un gasto inicial*@
+	<div class="boton-container">
+        <div class="transition gasto-boton"     
+            @onmouseover="() => Hover(1)" 
+            @onmouseout="() => HoverOut(1)"
+            @onclick="AgregarNuevoGasto">
+            <a>
+                @if (hoverAgregar == false)
+                {
+                    <img src="img/estructuraOrg/addPuesto.png" alt="">
+                }
+                @hoverTextAgregar
+            </a>
+        </div>
+    </div>
+</div>
+@if (PopupVisible == true)
+{
+    @* Background oscuro cuando abre popup *@
+    <div class="overlay position-absolute" @onclick="cambiarEstadoPopup"></div>
+
+    @* Tarjeta del popup *@
+    <section class="card card-popup position-fixed d-flex justify-content-center align-items-center align-self-auto position-absolute p-3">
+		<div class="card-body d-flex flex-column justify-content-center">
+            @if (GastoInicialActivo.Nombre is null) {
+                <h2 class="card-title text-center mt-4 fw-bold">Crear gasto inicial</h2>
+            } else {
+                <h2 class="card-title text-center mt-4 fw-bold">Editar gasto inicial</h2>
+            }
+
+			<div class="d-flex flex-column justify-content-center align-items-center">
+				@* Form *@
+                <div class="entrada-datos d-flex flex-column">
+                    <div class="d-flex">
+                        @*Form para agregar el nombre del gasto variable*@
+                        <label for="nombre-gasto">Nombre:</label>
+                        <input id="nombre-gasto" type="text" @bind="GastoInicialActivo.Nombre" placeholder="Nombre del gasto" maxlength="29">
+                        @((MarkupString)ErrorNombre) @*Mensaje de error*@
+                    </div>
+
+                    <div class="d-flex m-2">
+                    @*Form para agregar el nombre del gasto variable*@
+                    <label for="monto-gasto">Monto:</label>
+                    <input id="monto-gasto" type="number" step="any" min="0" @bind="GastoInicialActivo.Monto" placeholder="Monto del gasto">
+                    </div>
+                </div>
+				@* Botones aceptar y cancelar *@
+				<div class="d-flex my-3">
+                    <button class="btn btn-primary" @onclick="guardarGastoInicial">Aceptar </button>
+					<button class="btn btn-secondary" @onclick="cambiarEstadoPopup">Cancelar </button>
+				</div>
+			</div>
+			@* Permite cerrar al popup *@
+			<div id="salir-popup">
+				<img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarEstadoPopup">
+			</div>
+		</div>
+	</section>
+ }
+
+
+@code {
+    [Parameter]
+    public List<GastoInicialModel>? GastosIniciales { get; set; }
+
+    // fecha del análisis al que pertenecen los gastos iniciales
+    [Parameter]
+    public string fechaAnalisis { get; set; }
+
+    // gasto inicial que es accedido
+    public GastoInicialModel? GastoInicialActivo = null;
+
+    // strings que muestran los mensajes de error con respecto al nombre
+    public string ErrorNombre = "";
+
+    // nombre anterior del modelo
+    public string NombreAnterior = "";
+
+    // variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
+    public string hoverTextAgregar = "";
+    public string hoverTextGuardar = "";
+    public string hoverTextEliminar = "";
+
+    // booleanos para el control de los hover en botones guardar y agregar
+    public bool hoverGuardar = false;
+    public bool hoverAgregar = false;
+    public bool hoverEliminar = false;
+
+    // bool que indica si se debe mostrar el popup de componente
+    public bool PopupVisible { get; set; } = false;
+
+    // Cambia el popup de visible a invisible y viceversa
+    public void cambiarEstadoPopup(){
+        PopupVisible = !PopupVisible;
+    }
+    // asigna al gastoActivo el gasto actual del foreach
+    public void AsignarGastoActivo(GastoInicialModel GastoInicial)
+    {
+        GastoInicialActivo = GastoInicial;
+        NombreAnterior = GastoInicial.Nombre;
+        cambiarEstadoPopup();
+    }
+
+    public void AgregarNuevoGasto()
+    {
+        cambiarEstadoPopup();
+        GastoInicialActivo = new GastoInicialModel();
+    }
+
+    public void guardarGastoInicial() {
+        InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
+        if (GastosIniciales.Exists(x => x.Nombre == GastoInicialActivo.Nombre)) {
+            inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
+        } else {
+            GastosIniciales.Add(GastoInicialActivo);
+        }
+        inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, GastoInicialActivo);
+        cambiarEstadoPopup();
+
+        
+    }
+    // método para controlar el hover de los botones guardar y agregar
+    public void Hover(int action)
+    {
+        // este metodo quita la imagen y agrega el texto correspondiente
+        // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
+        if (action == 1)
+        {
+            hoverTextAgregar = "Agregar gasto inicial";
+            hoverAgregar = true;
+        }
+        else if (action == 2)
+        {
+            hoverGuardar = true;
+            hoverTextGuardar = "Guardar datos";
+        }
+        else if (action == 3)
+        {
+            hoverEliminar = true;
+            hoverTextEliminar = "Eliminar gasto inicial";
+        }
+    }
+
+    // método para controlar el cuando se quita el hover de los botones guardar y agregar
+    public void HoverOut(int action)
+    {
+        // este metodo agrega la imagen y quita el texto correspondiente
+        // recibe un int para diferenciar si es el quitar hover del botón de guardar (1) o de agregar (2)
+        if (action == 1)
+        {
+            hoverTextAgregar = "";
+            hoverAgregar = false;
+        }
+        else if (action == 2)
+        {
+            hoverGuardar = false;
+            hoverTextGuardar = "";
+        }
+        else if (action == 3)
+        {
+            hoverEliminar = false;
+            hoverTextEliminar = "";
+        }
+    }
+}
