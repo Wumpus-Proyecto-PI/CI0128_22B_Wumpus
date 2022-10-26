@@ -84,7 +84,7 @@
                 claseCarta = "card card-clickeable m-4";
                 claseCirculo = "circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
             }
-            <div class="col-md-4 d-flex mb-3 justify-content-center">
+                <div class="col-md-4 d-flex mb-3 justify-content-center">
                 <div class="@claseCarta">
                     @if (AnalisisController.hayPuestos(Model))
                     {
@@ -124,6 +124,7 @@
             }
             <div class="col-md-4 d-flex mb-3 justify-content-center">
                 <div class="@claseCarta">
+                    <a asp-area="" asp-controller="Producto" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                     <div class="m-2">
                         <img src="Images/undraw_product_teardown_re_m1pc.svg" class="card-img-top" alt="">
                         <div class="card-body">
@@ -132,6 +133,7 @@
                         </div>
                         <span class="@claseCirculo">3</span>
                     </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -152,8 +154,33 @@
                 </div>
             </div>
 
+
             <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="card card-no-clickeable m-4">
+            @*Verifica si el negocio aún no ha iniciado*@
+            @{
+
+                bool NO_INICIADO = false;
+                AnalisisController analisisController = new AnalisisController();
+            }
+
+            @if (Model.Configuracion.EstadoNegocio == NO_INICIADO && analisisController.ExisteMetaDeVentas(Model.FechaCreacion))
+            {
+                <div class="card card-clickeable m-4">
+                    <a asp-area="" asp-controller="InversionInicial" asp-action="InversionInicial" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
+                    <div class="m-2">
+                        <img src="Images/undraw_savings_re_eq4w.svg" class="card-img-top" alt="">
+                            <div class="card-body">
+                            <div class="titulo-carta">Inversión inicial</div>
+                            <p class="texto-carta card-text">Ingresa los gastos iniciales que son necesarios para comenzar el emprendimiento.</p>
+                            </div>
+                            <span class="circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">5</span>
+                    </div>
+                    </a>
+                </div>
+
+            } else {
+                <div class="card card-no-clickeable m-4" title="Esta sección está disponible sólo para negocios no iniciados">
+
                     <div class="m-2">
                         <img src="Images/undraw_savings_re_eq4w.svg" class="card-img-top" alt="">
                         <div class="card-body">
@@ -163,6 +190,7 @@
                         <span class="circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">5</span>
                     </div>
                 </div>
+            }
             </div>
 
             <div class="col-md-4 d-flex mb-3 justify-content-center">
