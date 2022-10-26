@@ -35,6 +35,8 @@ namespace PI.Handlers
         {
             List<ProductoModel> productos = new List<ProductoModel>();
 
+            ComponenteHandler componenteHandler = new ComponenteHandler();
+
             string consulta = "EXEC ObtenerProductos @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
 
             DataTable tablaResultado = CrearTablaConsulta(consulta);
@@ -45,6 +47,7 @@ namespace PI.Handlers
                     Nombre = Convert.ToString(columna["nombre"]),
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Lote = Convert.ToInt32(columna["lote"]),
+                    Componentes = componenteHandler.ObtenerComponentes(Convert.ToString(columna["nombre"]), Convert.ToDateTime(columna["fechaAnalisis"]))
                 };
                 if (columna["porcentajeDeVentas"] != DBNull.Value)
                 {
