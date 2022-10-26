@@ -131,7 +131,12 @@
 
                     <tr class="filas-tabla-componente">
                         <td> @productoActivo.Componentes[index].Nombre</td>
-                        <td> @productoActivo.Componentes[index].Unidad</td>
+                        @if (@productoActivo.Componentes[index].Unidad == 0) {
+                            <td>Unitario</td>
+                        }
+                        else {
+                            <td>Porcentaje</td>
+                        }
                         <td> @productoActivo.Componentes[index].Cantidad</td>
                         <td> @productoActivo.Componentes[index].Costo </td>
                         @*Botón para borrar un beenficio*@
@@ -265,7 +270,7 @@
         // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
         if (action == 1)
         {
-            hoverTextAgregar = "Agregar gasto variable";
+            hoverTextAgregar = "Agregar producto";
             hoverAgregar = true;
         }
         else if (action == 2)
@@ -276,7 +281,7 @@
         else if (action == 3)
         {
             hoverEliminar = true;
-            hoverTextEliminar = "Eliminar gasto variable";
+            hoverTextEliminar = "Eliminar producto";
         }
     }
 
