@@ -553,3 +553,11 @@ create procedure EliminarGastoInicial (@fechaAnalisis datetime, @nombre varchar(
 begin
 	Delete from INVERSION_INICIAL where nombre=@nombre and fechaAnalisis=@fechaAnalisis
 end
+
+-- Procedure 20
+-- Creado por Fabian Orozco Chaves | B95690
+go
+create or alter procedure ObtenerSumInversionInicial ( @fechaAnalisis Datetime) as
+begin
+	Select SUM(valor) total from INVERSION_INICIAL where fechaAnalisis = @fechaAnalisis
+end
