@@ -1,5 +1,6 @@
 ﻿@using PI.Models;
 @using PI.Handlers;
+@inject NavigationManager NavigationManager;
 
 <div id="seccion-gastosVar">
     <h2 class="fw-bold mt-3">Gastos iniciales</h2>
@@ -15,7 +16,7 @@
     </div>
     @*Botón de agregar un gasto inicial*@
 	<div class="boton-container">
-        <div class="transition gasto-boton"     
+        <div class="boton-agregar"     
             @onmouseover="() => Hover(1)" 
             @onmouseout="() => HoverOut(1)"
             @onclick="AgregarNuevoGasto">
@@ -37,10 +38,11 @@
     @* Tarjeta del popup *@
     <section class="card card-popup position-fixed d-flex justify-content-center align-items-center align-self-auto position-absolute p-3">
 		<div class="card-body d-flex flex-column justify-content-center">
-            @if (GastoInicialActivo.Nombre is null) {
-                <h2 class="card-title text-center mt-4 fw-bold">Crear gasto inicial</h2>
+            @if (GastoEsSeleccionado)
+            {
+                <h2 class="card-title text-center pt-4 fw-bold">Editar gasto inicial</h2>
             } else {
-                <h2 class="card-title text-center mt-4 fw-bold">Editar gasto inicial</h2>
+                <h2 class="card-title text-center pt-4 fw-bold">Crear gasto inicial</h2>
             }
 
 			<div class="d-flex flex-column justify-content-center align-items-center">
@@ -50,19 +52,49 @@
                         @*Form para agregar el nombre del gasto variable*@
                         <label for="nombre-gasto">Nombre:</label>
                         <input id="nombre-gasto" type="text" @bind="GastoInicialActivo.Nombre" placeholder="Nombre del gasto" maxlength="29">
-                        @((MarkupString)ErrorNombre) @*Mensaje de error*@
                     </div>
+                    <span class="msg-error">
+                        @((MarkupString)ErrorNombre) @*Mensaje de error*@
+                    </span>
 
                     <div class="d-flex m-2">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="monto-gasto">Monto:</label>
-                    <input id="monto-gasto" type="number" step="any" min="0" @bind="GastoInicialActivo.Monto" placeholder="Monto del gasto">
+                        <input id="monto-gasto" type="number" step="any" min="0" @bind="GastoInicialActivo.Monto" placeholder="Monto del gasto">
                     </div>
+                    <span class="msg-error">
+                        @((MarkupString)ErrorMonto) @*Mensaje de error*@
+                    </span>
                 </div>
-				@* Botones aceptar y cancelar *@
-				<div class="d-flex my-3">
-                    <button class="btn btn-primary" @onclick="guardarGastoInicial">Aceptar </button>
-					<button class="btn btn-secondary" @onclick="cambiarEstadoPopup">Cancelar </button>
+				@* Botones aceptar y borrar *@
+				<div class="d-flex my-2">
+
+                    @*Botón borrar*@
+                    @if (GastoEsSeleccionado)
+                    {
+                        <div id="boton-eliminar" class="boton-guardar-eliminar" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="EliminarGastoInicial">
+                            <a>
+                                @if (hoverEliminar == false)
+                                {
+                                    <img src="img/generic/trashCan.png" alt="">
+                                }
+                                @hoverTextEliminar
+                            </a>
+                        </div>
+
+                    }
+                    @*Botón guardar*@
+
+                    <div class="boton-guardar-eliminar" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="guardarGastoInicial">
+                        <a>
+                            @if (hoverGuardar == false)
+                            {
+                                <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                            }
+                            @hoverTextGuardar
+                        </a>
+                    </div>
+
 				</div>
 			</div>
 			@* Permite cerrar al popup *@
@@ -88,8 +120,14 @@
     // strings que muestran los mensajes de error con respecto al nombre
     public string ErrorNombre = "";
 
+    // strings que muestran los mensajes de error con respecto al monto
+    public string ErrorMonto = "";
+
     // nombre anterior del modelo
     public string NombreAnterior = "";
+
+    // indica si se está editando o creando un gasto
+    public bool GastoEsSeleccionado = false;
 
     // variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
     public string hoverTextAgregar = "";
@@ -107,12 +145,19 @@
     // Cambia el popup de visible a invisible y viceversa
     public void cambiarEstadoPopup(){
         PopupVisible = !PopupVisible;
+        if (PopupVisible == false) {
+            // se recarga la página para que se vean los cambios
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        }
     }
     // asigna al gastoActivo el gasto actual del foreach
     public void AsignarGastoActivo(GastoInicialModel GastoInicial)
     {
         GastoInicialActivo = GastoInicial;
         NombreAnterior = GastoInicial.Nombre;
+        GastoEsSeleccionado = true;
+        ErrorNombre = "";
+        ErrorMonto = "";
         cambiarEstadoPopup();
     }
 
@@ -123,16 +168,53 @@
     }
 
     public void guardarGastoInicial() {
-        InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
-        if (GastosIniciales.Exists(x => x.Nombre == GastoInicialActivo.Nombre)) {
-            inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
-        } else {
-            GastosIniciales.Add(GastoInicialActivo);
+        if (SonDatosValidos()) {
+            InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
+            if (GastoEsSeleccionado) {
+                inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
+            }
+            inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, GastoInicialActivo);
+            GastoEsSeleccionado = false;
+            // se recarga la página para que se vean los cambios
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
-        inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, GastoInicialActivo);
-        cambiarEstadoPopup();
+    }
+    public bool SonDatosValidos() {
+        bool resultado = true;
+        ErrorNombre = "";
+        ErrorMonto = "";
+        // está editando
+        if (GastoEsSeleccionado) {
+            int frecuenciaDelNombre = GastosIniciales.FindAll(x => x.Nombre.ToLower() == GastoInicialActivo.Nombre.ToLower()).Count();
+            Console.WriteLine(frecuenciaDelNombre);
+            
+            if (frecuenciaDelNombre > 1) {
+                ErrorNombre = "Error al guardar. Ya existe un gasto inicial con ese nombre";
+                resultado = false;
+            }
+            // está creando y el nombre ya está en la lista
+        } else if (GastosIniciales.Exists(x => x.Nombre == GastoInicialActivo.Nombre)) {
+            ErrorNombre = "Error: ya existe un gasto inicial con ese nombre";
+            resultado = false;
+        }
 
-        
+        Console.WriteLine(GastoInicialActivo.Monto);
+        Console.WriteLine("length " + Convert.ToString(GastoInicialActivo.Monto).Length);
+        // valida el número
+        if (GastoInicialActivo.Monto < 0 || Convert.ToString(GastoInicialActivo.Monto).Length > 18)
+        {
+            resultado = false;
+            ErrorMonto = "Error: el monto debe ser un número positivo y tener 18 dígitos como máximo";
+        }
+
+        return resultado;
+    }
+
+    public void EliminarGastoInicial() {
+        InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
+        inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
+        // se recarga la página para que se vean los cambios
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
     // método para controlar el hover de los botones guardar y agregar
     public void Hover(int action)
