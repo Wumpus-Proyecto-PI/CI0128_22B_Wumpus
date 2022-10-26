@@ -10,7 +10,7 @@
     <!-- Tarjeta -->
     <div class="card card-gastoInicial text-center justify-content-center align-items-center position-relative">
         <h2 class="card-title text-center my-2 fw-bold">@GastoInicial.Nombre</h2>
-        <h5 class="card-text text-center mt-1 mb-2">Costo: @GastoInicial.Monto</h5>
+        <h5 class="card-text text-center mt-1 mb-2">Costo: @(String.Format(CultureInfo.InvariantCulture,"{0:#,##0.00}",GastoInicial.Monto))</h5>
     </div>
 
     <!-- Ícono de editar -->
