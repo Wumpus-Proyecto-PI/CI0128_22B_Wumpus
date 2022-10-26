@@ -2,10 +2,13 @@
 @using PI.Handlers;
 @inject NavigationManager NavigationManager;
 
-<div id="seccion-gastosVar">
+<!-- Representa la sección de la inversión inicial -->
+
+<div id="seccion-gastosVar"> <!-- Contenedor de tarjetas -->
     <h2 class="fw-bold mt-3">Gastos iniciales</h2>
     <div class="container-fluid d-flex flex-wrap justify-content-center p-1">
-	    @foreach (GastoInicialModel gastoInicial in GastosIniciales)
+	    <!-- Crea las tarjetas -->
+        @foreach (GastoInicialModel gastoInicial in GastosIniciales)
 	    {
             <div class="gasto-clickeable" @onclick="() => AsignarGastoActivo(gastoInicial)">
 			    <div>
@@ -66,7 +69,7 @@
                         @((MarkupString)ErrorMonto) @*Mensaje de error*@
                     </span>
                 </div>
-				@* Botones aceptar y borrar *@
+				@* Botones guardar y borrar *@
 				<div class="d-flex my-2">
 
                     @*Botón borrar*@
@@ -97,7 +100,7 @@
 
 				</div>
 			</div>
-			@* Permite cerrar al popup *@
+			@* Permite cerrar al popup con una "x" *@
 			<div id="salir-popup">
 				<img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarEstadoPopup">
 			</div>
@@ -107,34 +110,33 @@
 
 
 @code {
+    // Gastos iniciales del análisis.
     [Parameter]
     public List<GastoInicialModel>? GastosIniciales { get; set; }
 
-    // fecha del análisis al que pertenecen los gastos iniciales
+    // Fecha del análisis al que pertenecen los gastos iniciales
     [Parameter]
     public string fechaAnalisis { get; set; }
 
-    // gasto inicial que es accedido
+    // Gasto inicial que es accedido/clickeado.
     public GastoInicialModel? GastoInicialActivo = null;
 
-    // strings que muestran los mensajes de error con respecto al nombre
+    // Strings que muestran los mensajes de error con respecto al nombre y monto
     public string ErrorNombre = "";
-
-    // strings que muestran los mensajes de error con respecto al monto
     public string ErrorMonto = "";
 
-    // nombre anterior del modelo
+    // Nombre anterior del modelo (sirve para borrado en la BD)
     public string NombreAnterior = "";
 
-    // indica si se está editando o creando un gasto
+    // Indica si se está editando o creando un gasto
     public bool GastoEsSeleccionado = false;
 
-    // variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
+    // Variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
     public string hoverTextEliminar = "";
 
-    // booleanos para el control de los hover en botones guardar y agregar
+    // Booleanos para el control de los hover en botones guardar y agregar
     public bool hoverGuardar = false;
     public bool hoverAgregar = false;
     public bool hoverEliminar = false;
@@ -150,57 +152,59 @@
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
-    // asigna al gastoActivo el gasto actual del foreach
-    public void AsignarGastoActivo(GastoInicialModel GastoInicial)
+    // Asigna al atributo gastoActivo el gasto que ha sido clickeado.
+    public void AsignarGastoActivo(GastoInicialModel GastoSeleccionado)
     {
-        GastoInicialActivo = GastoInicial;
-        NombreAnterior = GastoInicial.Nombre;
+        GastoInicialActivo = GastoSeleccionado;
+        NombreAnterior = GastoSeleccionado.Nombre;
         GastoEsSeleccionado = true;
         ErrorNombre = "";
         ErrorMonto = "";
         cambiarEstadoPopup();
     }
 
+    // Se invoca cuando clickean el botón de agregar. Crea un nuevo modelo y abre el popup.
     public void AgregarNuevoGasto()
     {
         cambiarEstadoPopup();
         GastoInicialActivo = new GastoInicialModel();
     }
 
+    // Invoca la inserción a la base de datos del gasto activo.
     public void guardarGastoInicial() {
         if (SonDatosValidos()) {
             InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
+            // Elimina el gasto de la base, de ser uno existente.
             if (GastoEsSeleccionado) {
                 inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
             }
             inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, GastoInicialActivo);
+            
             GastoEsSeleccionado = false;
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
+
+    // Realiza la validación de los datos ingresados por el usuario.
     public bool SonDatosValidos() {
         bool resultado = true;
         ErrorNombre = "";
         ErrorMonto = "";
-        // está editando
+        // Caso en que se esté editando un gasto existente.
         if (GastoEsSeleccionado) {
-            int frecuenciaDelNombre = GastosIniciales.FindAll(x => x.Nombre.ToLower() == GastoInicialActivo.Nombre.ToLower()).Count();
-            Console.WriteLine(frecuenciaDelNombre);
-            
+            int frecuenciaDelNombre = GastosIniciales.FindAll(x => x.Nombre.ToLower() == GastoInicialActivo.Nombre.ToLower()).Count();            
             if (frecuenciaDelNombre > 1) {
                 ErrorNombre = "Error al guardar. Ya existe un gasto inicial con ese nombre";
                 resultado = false;
             }
-            // está creando y el nombre ya está en la lista
+        // Caso en que está creando y el nombre ya está en la lista
         } else if (GastosIniciales.Exists(x => x.Nombre == GastoInicialActivo.Nombre)) {
             ErrorNombre = "Error: ya existe un gasto inicial con ese nombre";
             resultado = false;
         }
 
-        Console.WriteLine(GastoInicialActivo.Monto);
-        Console.WriteLine("length " + Convert.ToString(GastoInicialActivo.Monto).Length);
-        // valida el número
+        // Valida el número
         if (GastoInicialActivo.Monto < 0 || Convert.ToString(GastoInicialActivo.Monto).Length > 18)
         {
             resultado = false;
@@ -210,6 +214,7 @@
         return resultado;
     }
 
+    // Invoca la eliminación a la base de datos del gasto activo.
     public void EliminarGastoInicial() {
         InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
         inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);

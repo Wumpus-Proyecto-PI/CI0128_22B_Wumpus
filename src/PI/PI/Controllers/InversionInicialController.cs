@@ -6,6 +6,7 @@ namespace PI.Controllers
 {
     public class InversionInicialController : Controller
     {
+        // Retorna una lista de gastos iniciales que pertenecen al análisis con la fecha pasada por parámetro.
         public IActionResult InversionInicial(string fechaAnalisis)
         {
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
