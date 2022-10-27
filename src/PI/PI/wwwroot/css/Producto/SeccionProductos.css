@@ -149,7 +149,9 @@
 
 .popup-top {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
+    position: fixed;
+    top: 0px;
 }
 
 .salir-popup {
@@ -160,8 +162,8 @@
     height: 30px;
     position: absolute;
     border-radius: 40px;
-    top: 2%;
-    left: 96%;
+    top: 10px;
+    left: 635px;
 }
 
 .salir-popup:hover {
@@ -173,9 +175,8 @@
 }
 
 #inferior-horizontal {
-    margin-top: 30px;
     margin-bottom: 20px;
-    display:flex;
+    display: flex;
     flex-direction: row;
 }
 
@@ -186,7 +187,7 @@
     justify-content: center;
     align-content: center;
     width: 1000px;
-    height: 300px;
+    height: 250px;
     border-bottom: 1px solid rgb(117, 115, 115);
 }
 
@@ -205,7 +206,7 @@
     align-items: center;
     justify-content: space-between;
     align-content: center;
-    margin-top: 40px;
+    margin-top:60px;
 }
 
 .contenedor-datos-gasto label {
@@ -229,6 +230,14 @@
     text-align: center;
 }
 
+.form-componentes {
+    width: 100%;
+    border-radius: 15px;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 19%);
+}
+
 #contenedor-componentes {
     display: flex;
     flex-direction: column;
@@ -236,13 +245,13 @@
     justify-content: center;
     align-content: center;
     width: 1000px;
+    border-bottom: 1px solid rgb(117, 115, 115);
 }
 
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    margin-bottom: 30px;
 }
 
 td, th {
@@ -252,7 +261,9 @@ td, th {
 }
 
 th {
-    font-size: x-large;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
 }
 
 td {
@@ -365,6 +376,7 @@ td {
     justify-content: center;
     align-items: center;
     height: 100%;
+    margin-left: 15px;
 }
 
 #boton-guardar-componente {
@@ -376,8 +388,9 @@ td {
     border-radius: 10px;
     border-color: #ccc;
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
-    width: 40px;
-    height: 40px;
+    width: fit-content;
+    padding: 5px;
+    background-color: white;
 }
 
 #boton-guardar-componente:hover {
@@ -386,6 +399,10 @@ td {
     border-color: #E2F2FF;
     transition-duration: 0.4s;
     cursor: pointer;
+}
+
+.aceptar {
+    font-size: 15px;
 }
 
 #botones-componentes {
@@ -397,8 +414,7 @@ td {
 
 #boton-agregar-componente {
     display: flex;
-    width: 50px;
-    height: 50px;
+    width: fit-content;
     align-items: center;
     justify-content: center;
     border: solid;
@@ -406,6 +422,8 @@ td {
     border-radius: 10px;
     border-color: #ccc;
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin-top: 5px; 
+    padding: 5px;
 }
 
 #boton-agregar-componente:hover {
@@ -418,8 +436,7 @@ td {
 
 #boton-cerrar-form-componente {
     display: flex;
-    width: 40px;
-    height: 40px;
+    width: fit-content;
     align-items: center;
     justify-content: center;
     border: solid;
@@ -427,6 +444,9 @@ td {
     border-radius: 10px;
     border-color: #ccc;
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin-top: -15px;
+    padding: 5px;
+    background-color: white;
 }
 
 #boton-cerrar-form-componente:hover {
