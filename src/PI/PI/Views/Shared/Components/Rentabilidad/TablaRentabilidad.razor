@@ -9,13 +9,11 @@
         <form class="d-flex flex-row align-items-center justify-content-start">
             <div class="form-row">
                 <div class="col col-xs-5">
-                    <input type="number" class="form-control" placeholder=@analisis.gananciaMensual @bind="analisis.gananciaMensual">
+                    <input type="number" class="form-control" placeholder=@analisis.gananciaMensual @bind="analisis.gananciaMensual" @onfocusout = "actualizarGananciaMensual">
                 </div>
                 <div class="col col-xs-5">
                     <input type="text" class="form-control" placeholder=@montoGastosFijos readonly>
-                </div>
-                <button type="button" class="btn btn-primary" @onclick="actualizarGananciaMensual">Guardar</button>
-               
+                </div>      
             </div>
         </form>
         <div class="switch-container">
@@ -85,10 +83,11 @@
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
+                    @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     <p class="datos-calculados">@calcularMargen(productoActual.Precio, 100)</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados"></p>
+                    <p class="datos-calculados">""</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@ 
@@ -134,6 +133,8 @@
             opcionSwitchBool = false;
         }
     }
+    public decimal puntoEquilibrio { get; set; }
+
 
     public ProductoHandler productoHandler = new ProductoHandler();
 
