@@ -7,6 +7,7 @@ using PI.Handlers;
 using PI.Controllers;
 using PI.Models;
 using System.Globalization;
+using PI.Services;
 
 namespace PI.Controllers
 {
@@ -27,9 +28,10 @@ namespace PI.Controllers
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
             ViewBag.gananciaMensual = analisisActual.gananciaMensual;
 
-            ViewBag.pasoDisponibleMaximo = DeterminarPasoDisponibles(analisisActual);
+            PasosProgresoControl controlDePasos = new();
 
-            // var tipoAnalisis = handler.ObtenerTipoAnalisis();
+            ViewBag.pasoDisponibleMaximo = controlDePasos.DeterminarPasoActivoMaximo(analisisActual);
+
             return View(analisisActual);
         }
 
