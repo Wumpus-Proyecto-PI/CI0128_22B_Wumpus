@@ -204,6 +204,7 @@
 
     public decimal calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
     {
-        return AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable);
+        decimal result = AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable); 
+        return Math.Round(result,2);
     }
 }
