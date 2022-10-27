@@ -48,7 +48,7 @@
                     <p class="datos-calculados texto-nombres">Totales</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    100%
+                    @getPorcentajeVentasTotal() %
                 </div>
                 <div class="col col-1" data-label="Precio">
                     -
@@ -75,7 +75,7 @@
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
+                    <input class="effect-1 text-center" type="number" min="0" max="@getPorcentajeVentasDisponible(productoActual)" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
@@ -146,7 +146,26 @@
 
     public void actualizarPorcentajeVentas(ProductoModel producto) 
     {
-        productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
+        decimal porcentajeActual = producto.PorcentajeVentas;
+        decimal disponible = getPorcentajeVentasDisponible(producto);
+
+        if (porcentajeActual >= 0 && porcentajeActual <= disponible)
+        {
+            productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
+
+        } else {
+            producto.PorcentajeVentas = productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
+        }
+    }
+
+    public decimal getPorcentajeVentasTotal() 
+    {
+        return productoHandler.obtenerPorcentajeVentasTotal(analisis.FechaCreacion);
+    }
+
+    public decimal getPorcentajeVentasDisponible(ProductoModel producto)
+    {
+        return 100 - getPorcentajeVentasTotal() + productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
     }
 
     public void actualizarPrecio(ProductoModel producto)
