@@ -57,16 +57,16 @@
                     -
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    9,220.00
+                    <p>@calcularPuntoEquilibrioTotal(montoGastosFijos,productos)</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @if (@opcionSwitchBool) {
-                        <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
-                    } else {
-                        <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
-                    }
-                </div>
-            </li>
+                    <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
+                } else {
+                    <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
+                }
+            </div>
+        </li>
 
         @foreach (var productoActual in productos)
         {
@@ -118,6 +118,8 @@
 
     public bool opcionSwitchBool = true;
 
+    public int puntoEquilibrioTotal { get; set; }
+
     public string opcionSwitch = "Meta en unidades";
 
     public string opcionUnidades = "Meta en unidades";
@@ -144,7 +146,7 @@
         handler.ActualizarGananciaMensual(analisis.gananciaMensual, analisis.FechaCreacion);
     }
 
-    public void actualizarPorcentajeVentas(ProductoModel producto) 
+    public void actualizarPorcentajeVentas(ProductoModel producto)
     {
         productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
     }
@@ -204,7 +206,18 @@
 
     public int calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
     {
-        int result =  Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable));; 
+        int result = Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable));
         return result;
+    }
+
+    public int calcularPuntoEquilibrioTotal(decimal gastosFijos, List<ProductoModel> productos)
+    {
+        int result = 0;
+        for (int i = 0; i < productos.Count; i += 1)
+        {
+            result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, productos[i].CostoVariable);
+        }
+        return result;
+
     }
 }
