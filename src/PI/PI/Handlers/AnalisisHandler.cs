@@ -64,7 +64,7 @@ namespace PI.Handlers
             // string que tiene la consulta para obtener la lista de analisis de un negocio indicado
             string consulta = "SELECT IDNegocio, A.fechaCreacion, A.gananciaMensual, A.estadoAnalisis from ANALISIS as A inner join Negocio as N " +
 
-                "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
+                "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + " ORDER BY A.fechaCreacion desc";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
             {

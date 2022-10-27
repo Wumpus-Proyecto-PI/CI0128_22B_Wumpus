@@ -7,11 +7,35 @@ namespace PI.Handlers
     {
         public ProductoHandler() : base() { }
 
+
+        public int InsertarProducto(string nombreProducto, ProductoModel producto)
+        {
+            int filasAfectadas = 0;
+            string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
+                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "',@costoVariable='" + producto.CostoVariable.ToString() + "'";
+
+            filasAfectadas = enviarConsulta(consulta);
+            return filasAfectadas;
+        }
+
+        public int EliminarProducto(ProductoModel producto)
+        {
+            int filasAfectadas = 0;
+            string consulta = "EXEC EliminarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@fechaAnalisis='" 
+                + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"'";
+
+            filasAfectadas = enviarConsulta(consulta);
+
+            return filasAfectadas;
+        }
+
         // Método que obtiene los productos de un analisis
         // Devuele una lista de ProductoModel
         public List<ProductoModel> obtenerProductos(DateTime fechaAnalisis)
         {
             List<ProductoModel> productos = new List<ProductoModel>();
+
+            ComponenteHandler componenteHandler = new ComponenteHandler();
 
             string consulta = "EXEC ObtenerProductos @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
 
@@ -23,10 +47,11 @@ namespace PI.Handlers
                     Nombre = Convert.ToString(columna["nombre"]),
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Lote = Convert.ToInt32(columna["lote"]),
+                    Componentes = componenteHandler.ObtenerComponentes(Convert.ToString(columna["nombre"]), Convert.ToDateTime(columna["fechaAnalisis"]))
                 };
                 if (columna["porcentajeDeVentas"] != DBNull.Value)
                 {
-                    nuevoProducto.PorcentajeVentas = Convert.ToDecimal(columna["porcentajeDeVentas"]);
+                    nuevoProducto.PorcentajeDeVentas = Convert.ToDecimal(columna["porcentajeDeVentas"]);
                 }
                 if (columna["precio"] != DBNull.Value)
                 {
@@ -45,7 +70,7 @@ namespace PI.Handlers
         public void actualizarPorcentajeVentas(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
-                              "SET porcentajeDeVentas = " + producto.PorcentajeVentas.ToString() +
+                              "SET porcentajeDeVentas = " + producto.PorcentajeDeVentas.ToString() +
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
