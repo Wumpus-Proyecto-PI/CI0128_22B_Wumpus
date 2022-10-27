@@ -138,5 +138,16 @@ namespace PI.Controllers
             }
             return resultado;
         }
+
+        public static bool contieneGastosVariables(AnalisisModel analisis)
+        {
+            bool resultado = false;
+            ProductoHandler productoHandler = new ProductoHandler();
+            if (productoHandler.obtenerProductos(analisis.FechaCreacion).Count > 0)
+            {
+                resultado = true;
+            }
+            return resultado;
+        }
     }
 }
