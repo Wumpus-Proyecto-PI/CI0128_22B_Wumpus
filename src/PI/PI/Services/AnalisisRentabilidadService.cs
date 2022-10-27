@@ -75,7 +75,7 @@ namespace PI.Services
         }
 
         public static decimal CalcularPuntoEquilibrio(decimal gastosFijos, decimal precio, decimal costoVariable) {
-            return gastosFijos / (precio - costoVariable);
+            return Math.Ceiling(gastosFijos / (precio - costoVariable));
         }
 
 

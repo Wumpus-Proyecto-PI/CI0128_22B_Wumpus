@@ -202,9 +202,9 @@
         return total;
     }
 
-    public decimal calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
+    public int calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
     {
-        decimal result = AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable); 
-        return Math.Round(result,2);
+        int result =  Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable));; 
+        return result;
     }
 }
