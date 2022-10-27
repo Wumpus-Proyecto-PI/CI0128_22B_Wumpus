@@ -52,7 +52,7 @@ namespace PI.Handlers
                 }
                 if (columna["cantidad"] != DBNull.Value)
                 {
-                    componente.Costo = Convert.ToDecimal(columna["cantidad"]);
+                    componente.Cantidad = Convert.ToDecimal(columna["cantidad"]);
                 }
                 componentes.Add(componente);
 
