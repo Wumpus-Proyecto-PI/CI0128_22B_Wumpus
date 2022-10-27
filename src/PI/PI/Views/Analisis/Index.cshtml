@@ -11,6 +11,8 @@
         AnalisisHandler analisisHandler = new AnalisisHandler();
         return analisisHandler.obtenerNegocioDeAnalisis(Model.FechaCreacion).ID.ToString();
     }
+    string claseCarta = "card card-no-clickeable m-4";
+    string claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
 }
 
 <head>
@@ -70,32 +72,20 @@
                 </div>
             
                 @{
-                    string claseCarta = "card card-no-clickeable m-4";
-                    string claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+                    claseCarta = "card card-no-clickeable m-4";
+                    claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
                 }
-
-            @*Verifica si la estructura organizativa tiene puestos, para desbloquear el siguiente paso (Gastos fijos)*@
-            @if (AnalisisController.hayPuestos(Model))
-            {
-                claseCarta = "card card-clickeable m-4";
-                claseCirculo = "circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
-            }
+                @*Verifica si la estructura organizativa tiene puestos, para desbloquear el siguiente paso (Gastos fijos)*@
+                @if (AnalisisController.hayPuestos(Model))
+                {
+                    claseCarta = "card card-clickeable m-4";
+                    claseCirculo = "circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+                }
                 <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="@claseCarta">
-                    @if (AnalisisController.hayPuestos(Model))
-                    {
-                    <a asp-area="" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
-                    <div class="m-2">
-                        <img src="Images/undraw_payments_re_77x0.svg" class="card-img-top" alt="">
-                        <div class="card-body">
-                            <div class="titulo-carta">Gastos Fijos</div>
-                            <p class="texto-carta card-text">Añade los gastos fijos de tu negocio.</p>
-                        </div>
-                        <span class="@claseCirculo">2</span>
-                    </div>
-                    </a>
-                    }
-                    else {
+                    <div class="@claseCarta">
+                        @if (AnalisisController.hayPuestos(Model))
+                        {
+                        <a asp-area="" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                         <div class="m-2">
                             <img src="Images/undraw_payments_re_77x0.svg" class="card-img-top" alt="">
                             <div class="card-body">
@@ -104,39 +94,58 @@
                             </div>
                             <span class="@claseCirculo">2</span>
                         </div>
-                    }
+                        </a>
+                        }
+                        else {
+                            <div class="m-2">
+                                <img src="Images/undraw_payments_re_77x0.svg" class="card-img-top" alt="">
+                                <div class="card-body">
+                                    <div class="titulo-carta">Gastos Fijos</div>
+                                    <p class="texto-carta card-text">Añade los gastos fijos de tu negocio.</p>
+                                </div>
+                                <span class="@claseCirculo">2</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @{
+                    claseCarta = "card card-no-clickeable m-4";
+                    claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+                }
+                @*Verifica si hay gastos fijos, para desbloquear el siguiente paso (Gastos variables)*@
+                @if (AnalisisController.contieneGastosFijos(Model))
+                {
+                    claseCarta = "card card-clickeable m-4";
+                    claseCirculo = "circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
+                }
+                <div class="col-md-4 d-flex mb-3 justify-content-center">
+                    <div class="@claseCarta">
+                        <a asp-area="" asp-controller="Producto" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
+                        <div class="m-2">
+                            <img src="Images/undraw_product_teardown_re_m1pc.svg" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <div class="titulo-carta">Gastos variables</div>
+                                <p class="texto-carta card-text">Añade los productos, servicios y componentes de tu negocio.</p>
+                            </div>
+                            <span class="@claseCirculo">3</span>
+                        </div>
+                        </a>
+                    </div>
                 </div>
             </div>
             @{
                 claseCarta = "card card-no-clickeable m-4";
                 claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
             }
-
             @*Verifica si hay gastos fijos, para desbloquear el siguiente paso (Gastos variables)*@
-            @if (AnalisisController.contieneGastosFijos(Model))
+            @if (AnalisisController.contieneGastosVariables(Model))
             {
                 claseCarta = "card card-clickeable m-4";
                 claseCirculo = "circulo-num position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
             }
-            <div class="col-md-4 d-flex mb-3 justify-content-center">
-                <div class="@claseCarta">
-                    <a asp-area="" asp-controller="Producto" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
-                    <div class="m-2">
-                        <img src="Images/undraw_product_teardown_re_m1pc.svg" class="card-img-top" alt="">
-                        <div class="card-body">
-                            <div class="titulo-carta">Gastos variables</div>
-                            <p class="texto-carta card-text">Añade los productos, servicios y componentes de tu negocio.</p>
-                        </div>
-                        <span class="@claseCirculo">3</span>
-                    </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
             <div class="row ml-5 mr-5 text-center">
                 <div class="col-md-4 d-flex mb-3 justify-content-center">
-                    <div class="card card-clickeable m-4">
+                    <div class="@claseCarta">
                         <a asp-area="" asp-controller="Rentabilidad" asp-action="Index" asp-route-fecha="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                         <div class="m-2">
                             <img src="Images/undraw_site_stats_re_ejgy.svg" class="card-img-top" alt="">
@@ -144,7 +153,7 @@
                                 <div class="titulo-carta">Análisis de rentabilidad</div>
                                 <p class="texto-carta card-text">Ingresa tu meta de ganancias mensual y calcula la meta de ventas.</p>
                             </div>
-                            <span class="circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle">4</span>
+                                <span class="@claseCirculo">4</span>
                         </div>
                         </a>
                     </div>
