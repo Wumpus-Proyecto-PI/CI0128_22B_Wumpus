@@ -28,7 +28,9 @@ namespace PI.Services
             this.NumeroPaso = 2;
         }
 
-
+        // Indica si el analisis posee puestos
+        // (Retorna un bool que indica si hay puestos o no | Parametros: modelo del analisis que se desea verificar)
+        // Se encarga de verificar si existen puestos dentro de un análisis.
         override protected bool determinarPasoAtivo(AnalisisModel analisis)
         {
             bool resultado = false;
@@ -54,7 +56,9 @@ namespace PI.Services
             this.NumeroPaso = 3;
         }
 
-
+        // Indica si el analisis posee gastos fijos
+        // (Retorna un bool que indica si hay gastos fijos o no | Parametros: modelo del analisis que se desea verificar)
+        // Determina si un análisis contiene gastos fijos.
         override protected bool determinarPasoAtivo(AnalisisModel analisis)
         {
             bool resultado = false;
@@ -97,6 +101,34 @@ namespace PI.Services
             if (productoHandler.obtenerProductos(analisis.FechaCreacion).Count > 0)
             {
                 resultado = true;
+            }
+            return resultado;
+        }
+    }
+
+    public class InversionInicialControl : PasosProgresoControl
+    {
+        public InversionInicialControl()
+        {
+            this.NumeroPaso = 4;
+        }
+
+        // método que verifica si es posible que exista una meta de ventas en el análisis de rentabilidad.
+        // detalle: sirve para determinar si la tarjeta de la inversión inicial se debe habilitar.
+        // se asume que si un producto tiene valores en algunos de sus atributos, la meta de ventas ha sido calculada.
+        override protected bool determinarPasoAtivo(AnalisisModel analisis)
+        {
+            bool resultado = false;
+            ProductoHandler productoHandler = new ProductoHandler();
+            List<ProductoModel> productos = productoHandler.obtenerProductos(fechaAnalisis);
+            for (int actual = 0; actual < productos.Count && resultado == false; ++actual)
+            {
+                if (productos[actual].Precio > 0
+                    && productos[actual].CostoVariable > 0
+                    && productos[actual].PorcentajeDeVentas > 0)
+                {
+                    resultado = true;
+                }
             }
             return resultado;
         }
