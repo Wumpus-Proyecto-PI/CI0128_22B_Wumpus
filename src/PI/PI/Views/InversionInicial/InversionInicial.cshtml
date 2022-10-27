@@ -1,0 +1,34 @@
+﻿@model List<GastoInicialModel>
+@using Microsoft.AspNetCore.Components
+@using PI.Models
+@using PI.Handlers
+@using System.Globalization
+@inject NavigationManager NavigationManager;
+
+@* Vista de los gastos iniciales de un negocio aún no iniciado *@
+
+@{
+	Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+	String fechaAnalisis = ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
+}
+
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/InversionInicial/CardGastoInicial.css" />
+	<link rel="stylesheet" href="~/css/InversionInicial/SeccionInversionInicial.css" />
+</head>
+
+<body>
+	<div>
+		@Html.Partial("LayoutNombreEmpresa")
+	</div>
+	<div class="w-100 d-flex">
+		@(
+			await Html.RenderComponentAsync<PI.Views.Shared.Components.InversionInicial.SeccionInversionInicial>(RenderMode.ServerPrerendered, new { GastosIniciales = Model, fechaAnalisis = fechaAnalisis, montoTotal = ViewBag.montoTotal})
+			)
+	</div>
+</body>
+</html>
