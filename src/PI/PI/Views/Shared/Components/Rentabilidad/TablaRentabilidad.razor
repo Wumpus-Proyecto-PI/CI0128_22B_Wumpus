@@ -75,7 +75,7 @@
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="number" min="0" max="@getPorcentajeVentasDisponible(productoActual)" @bind="productoActual.PorcentajeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
+                    <input class="effect-1 text-center" type="number" min="0" max="@getPorcentajeVentasDisponible(productoActual)" @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
@@ -146,7 +146,7 @@
 
     public void actualizarPorcentajeVentas(ProductoModel producto) 
     {
-        decimal porcentajeActual = producto.PorcentajeVentas;
+        decimal porcentajeActual = producto.PorcentajeDeVentas;
         decimal disponible = getPorcentajeVentasDisponible(producto);
 
         if (porcentajeActual >= 0 && porcentajeActual <= disponible)
@@ -154,7 +154,7 @@
             productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
 
         } else {
-            producto.PorcentajeVentas = productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
+            producto.PorcentajeDeVentas = productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
         }
     }
 
