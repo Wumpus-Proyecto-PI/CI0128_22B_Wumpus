@@ -6,16 +6,16 @@
     <div class="container text-center mt-5">
 
     <div id="container-forms-top">
-        <form class="d-flex flex-row align-items-center justify-content-start">
-            <div class="form-row">
-                <div class="col col-xs-5">
-                    <input type="number" class="form-control" placeholder=@analisis.gananciaMensual @bind="analisis.gananciaMensual" @onfocusout = "actualizarGananciaMensual">
-                </div>
-                <div class="col col-xs-5">
-                    <input type="text" class="form-control" placeholder=@montoGastosFijos readonly>
-                </div>      
+        <div id="form-parametros-rentabilidad">
+            <div class="pill-form">
+               <div><h5>Ganancia mensual</h5></div>
+                <input id="form-ganancia-mensual" type="number" class="form-control" placeholder=@analisis.gananciaMensual @bind="analisis.gananciaMensual" @onfocusout = "actualizarGananciaMensual">
             </div>
-        </form>
+            <div class="pill-form">
+                <div><h5>Gastos fijos</h5></div>
+                <input id="form-gastos-fijos-totales" type="text" class="form-control" placeholder=@montoGastosFijos readonly>
+            </div>
+        </div>
         <div class="switch-container">
                 <span class="switch-text">@opcionSwitch</span>
             <input type="checkbox" class="switch_1" @onclick="switchMetaVentas">
@@ -57,16 +57,16 @@
                     -
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    9,220.00
+                    <p>@calcularPuntoEquilibrioTotal(montoGastosFijos,productos)</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @if (@opcionSwitchBool) {
-                        <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
-                    } else {
-                        <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
-                    }
-                </div>
-            </li>
+                    <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
+                } else {
+                    <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
+                }
+            </div>
+        </li>
 
         @foreach (var productoActual in productos)
         {
@@ -118,6 +118,8 @@
 
     public bool opcionSwitchBool = true;
 
+    public int puntoEquilibrioTotal { get; set; }
+
     public string opcionSwitch = "Meta en unidades";
 
     public string opcionUnidades = "Meta en unidades";
@@ -144,7 +146,7 @@
         handler.ActualizarGananciaMensual(analisis.gananciaMensual, analisis.FechaCreacion);
     }
 
-    public void actualizarPorcentajeVentas(ProductoModel producto) 
+    public void actualizarPorcentajeVentas(ProductoModel producto)
     {
         decimal porcentajeActual = producto.PorcentajeDeVentas;
         decimal disponible = getPorcentajeVentasDisponible(producto);
@@ -221,9 +223,20 @@
         return total;
     }
 
-    public decimal calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
+    public int calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
     {
-        decimal result = AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable); 
-        return Math.Round(result,2);
+        int result = Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable));
+        return result;
+    }
+
+    public int calcularPuntoEquilibrioTotal(decimal gastosFijos, List<ProductoModel> productos)
+    {
+        int result = 0;
+        for (int i = 0; i < productos.Count; i += 1)
+        {
+            result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, productos[i].CostoVariable);
+        }
+        return result;
+
     }
 }
