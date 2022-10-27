@@ -147,6 +147,31 @@
     block-size: fit-content;
 }
 
+.popup-top {
+    display: flex;
+    flex-direction:row;
+}
+
+.salir-popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    border-radius: 40px;
+    top: 2%;
+    left: 96%;
+}
+
+.salir-popup:hover {
+    background-color: #FFC8C8;
+    transform: scale(1.1);
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
 #inferior-horizontal {
     margin-top: 30px;
     margin-bottom: 20px;
@@ -412,7 +437,7 @@ td {
     cursor:pointer;
 }
 
-.error-espacio-vacio {
+.mensaje-error {
     margin-top: 30px;
     margin-bottom: -30px;
     color: red;
