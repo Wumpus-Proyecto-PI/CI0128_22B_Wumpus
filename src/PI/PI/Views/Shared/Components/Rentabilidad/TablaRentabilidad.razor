@@ -87,7 +87,7 @@
                     <p class="datos-calculados">@calcularMargen(productoActual)</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">""</p>
+                    <p class="datos-calculados">@calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable)</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@ 
