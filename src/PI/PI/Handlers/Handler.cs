@@ -127,5 +127,56 @@ namespace PI.Handlers
 
             return nombreNegocio;
         }
+
+        public NegocioModel obtenerNegocioDeAnalisis(DateTime fechaAnalisis)
+        {
+            // consulta sql 
+            string consulta = "EXEC ObtenerNegocioDeAnalisis '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+
+            // NegocioModel a retornar
+            NegocioModel negocioObtenido = new NegocioModel(); 
+
+            // se realiza la consulta
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+            // Se revisa si la consulta retorno algo
+            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+            {
+                // si tiene algo la tabla resultado, se asigna el nombre del negocio
+                negocioObtenido.Nombre = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+                negocioObtenido.CorreoUsuario = Convert.ToString(tablaResultado.Rows[0]["correoUsuario"]);
+                negocioObtenido.ID = Convert.ToInt32(tablaResultado.Rows[0]["id"]);
+                negocioObtenido.FechaCreacion = DateOnly.FromDateTime((DateTime) tablaResultado.Rows[0]["FechaCreacion"]);
+            }
+
+            return negocioObtenido;
+        }
+
+        public string obtenerNombreNegocio(int IDNegocio)
+        {
+            // consulta sql 
+            string consulta = "EXEC obtNombreNegocioPorID @IDNegocio = " + IDNegocio + ";";
+
+            // string a retornar con el nombre del negocio
+            string nombreNegocio = "";
+
+            // se realiza la consulta
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+
+
+            // Se revisa si la consulta retorno algo
+            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+            {
+                // si tiene algo la tabla resultado, se asigna el nombre del negocio
+                nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+            }
+            else
+            {
+                // existe el caso de que un negocio no tenga nombre en nuestro producto
+                nombreNegocio = "Sin nombre";
+            }
+
+            return nombreNegocio;
+        }
     }
 }

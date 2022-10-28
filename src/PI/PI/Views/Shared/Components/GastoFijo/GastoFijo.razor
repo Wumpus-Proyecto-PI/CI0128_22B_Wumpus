@@ -1,9 +1,16 @@
 ﻿@using PI.Models
+@using System.Globalization
 <!-- Representa una carta/tarjeta de gasto fijo: nombre, monto anual y monto mensual -->
 
 <!-- Verifica si el nombre de gasto fijo pertenece a la estructura organizativa o no. Esto para asignarle la clase y en consecuencia, el estilo css correspondiente.-->
+@{
+    montoMensual = gastoFijo.Monto / 12;
+    montoAnual = gastoFijo.Monto;
+}
 @if (nombresEstOrg.Contains(gastoFijo.Nombre)) {
     tipoGasto = "gastoFijo gastoFijo-NoEditable";
+    montoAnual = gastoFijo.Monto * 12;
+    montoMensual = gastoFijo.Monto;
 }
 <div class=@((MarkupString)tipoGasto)>
     <div class="top-gastoFijo">
@@ -11,15 +18,13 @@
     </div>
     <div class="bottom-gastoFijo">
         <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
-            <p>Mensual: @gastoFijo.Monto.ToString()</p>
-            <img class="divisa-img" src="/img/generic/coin-icon.svg">
+            <p>Mensual: @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", montoMensual))</p>
         </div>
     </div>
 
     <div class="bottom-gastoFijo">
         <div class="gastoFijo-caracteristica gastoFijo-salario-bruto">
-            <p>Anual: @((gastoFijo.Monto*12).ToString())</p>
-            <img class="divisa-img" src="/img/generic/coin-icon.svg">
+            <p>Anual: @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", montoAnual))</p>
         </div>
     </div>
 </div>
@@ -35,6 +40,8 @@
     // Sección gastoFijo: editable
     public string tipoGasto = "gastoFijo gastoFijo-editable";
     // Posibles nombres de gasto fijo referentes a la estructura organizativa.
-    // TODO quitar los nombres que están de más.
-    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
+
+    decimal montoMensual { get; set; }
+    decimal montoAnual { get; set; }
 }

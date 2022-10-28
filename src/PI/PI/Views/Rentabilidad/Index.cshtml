@@ -1,0 +1,21 @@
+﻿@model List<ProductoModel>
+@{
+    Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+}
+
+<head>
+    <title>Análisis de rentabilidad</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/css/Rentabilidad/Rentabilidad.css">
+    <link rel="stylesheet" href="~/css/Rentabilidad/SwitchButton.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+@Html.Partial("LayoutNombreEmpresa")
+
+
+@(
+        await Html.RenderComponentAsync<PI.Views.Shared.Components.Rentabilidad.TablaRentabilidad>(RenderMode.ServerPrerendered, new { productos = Model
+            ,  analisis = ViewBag.AnalisisActual, montoGastosFijos = ViewBag.MontoGastosFijos})
+    )

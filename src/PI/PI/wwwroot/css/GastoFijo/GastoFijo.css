@@ -248,91 +248,6 @@ div a {
 }
 
 
-#agregar-gastoFijo img {
-    width: 35px;
-    padding: 5px;
-}
-
-#agregar-gastoFijo {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    height: fit-content;
-    width: fit-content;
-    border: solid;
-    border-width: 2px;
-    border-radius: 10px;
-    border-color: #ccc;
-    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
-    margin: 25px;
-    transition-duration: 0.3s;
-}
-
-#agregar-gastoFijo:hover {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    height: 49px;
-    width: fit-content;
-    border: solid;
-    border-color: transparent;
-    border-radius: 10px;
-    margin: 25px;
-    padding-inline: 5px;
-    font-size: 20px;
-    cursor: pointer;
-    transition-duration: 0.8s;
-    background-color: #E2F2FF;
-}
-
-#guardar-gastoFijo img {
-    width: 35px;
-    padding: 5px;
-}
-
-
-#guardar-gastoFijo {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    height: fit-content;
-    width: fit-content;
-    border: solid;
-    border-width: 2px;
-    border-radius: 10px;
-    border-color: #ccc;
-    margin: 20px;
-    transition-duration: 0.3s;
-    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
-
-}
-
-#guardar-gastoFijo:hover {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    height: 49px;
-    width: fit-content;
-    border: solid;
-    border-color: transparent;
-    border-width: 2px;
-    border-radius: 10px;
-    margin: 20px;
-    padding-inline: 5px;
-    font-size: 20px;
-    cursor: pointer;
-    background-color: #E2F2FF;
-    transition-duration: 0.8s;
-}
-
 #mostrar-gastosFijos {
     display: flex;
     flex-direction: row;
@@ -406,7 +321,7 @@ div a {
 }
 
 
-.gastoFijo-clickeable-eliminable {
+.gastoFijo-clickeable {
     display: flex;
     display: flex;
     flex-wrap: wrap;
@@ -420,7 +335,7 @@ div a {
     transition-duration: 0.2s;
 }
 
-.gastoFijo-clickeable-eliminable:hover {
+.gastoFijo-clickeable:hover {
     color: black;
     cursor: pointer;
     transform: scale(1.03);
@@ -446,25 +361,19 @@ div a {
     transform: scale(1.02);
     transition-duration: 0.2s;
 }
-.gastoFijo-icono-eliminar {
-    width: 35px;
-    padding: 1px;
-    margin-left: -33px;
-    border: solid;
-    border-width: 3px;
-    border-color: lightgray;
-    border-radius: 20px;
-    background-color: white;
-    transition-duration: 0.2s;
+
+.gastoFijo-clickeable:hover .gastoFijo-icono-editar {
+    color: black;
+    cursor: pointer;
+    background-color: #E2F2FF;
 }
 
-    .gastoFijo-icono-eliminar:hover {
-        transform: scale(1.1);
-        background-color: #FFC8C8;
-        border-color: #FFC8C8;
-        transition-duration: 0.2s;
-    }
-
+.gastoFijo-clickeable:hover .gastoFijo-editable {
+    color: black;
+    cursor: pointer;
+    background-color: #E2F2FF;
+    border-color: #E2F2FF;
+}
 
 .totales {
     /*para no poder cliclear*/
@@ -497,4 +406,66 @@ div a {
     color: red;
     width: fit-content;
     height: auto;
+}
+
+.gastoFijo-boton {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #ccc;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin: 25px;
+    transition-duration: 0.3s;
+}
+
+.gastoFijo-boton:hover {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 49px;
+    width: fit-content;
+    border: solid;
+    border-color: transparent;
+    border-radius: 10px;
+    margin: 25px;
+    padding-inline: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition-duration: 0.8s;
+    background-color: #E2F2FF;
+}
+
+.gastoFijo-boton img {
+    width: 35px;
+    padding: 5px;
+}
+
+.gastoFijo-icono-editar img {
+    width: 30px;
+    padding: 5px
+}
+
+#eliminar-gastoFijo:hover {
+    background-color: #FFC8C8;
+}
+
+.gastoFijo-icono-editar {
+    width: fit-content;
+    height: fit-content;
+    margin-left: -32px;
+    border: solid;
+    border-width: 2px;
+    border-color: lightgray;
+    border-radius: 20px;
+    background-color: white;
+    transition-duration: 0.4s;
 }

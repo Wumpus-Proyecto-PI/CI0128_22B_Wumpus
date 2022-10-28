@@ -28,20 +28,20 @@
                 <form id="form_configuracion">
                     @*Input del nombre del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Nombre</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                    <label>Nombre del puesto</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
                     </div>
 
                      @((MarkupString)ErrorNombre) @*Mensaje de error*@
 
                     @*Input del salario del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Salario</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto" placeholder="@placeHolderSalario">
+                    <label>Salario Mensual</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
                     </div>
                     @((MarkupString)ErrorSalario) @*Mensaje de error*@
 
                     @*Input de las plazas del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas" placeholder="@placeHolderPlazas">
+                    <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas">
                     </div>
                     @((MarkupString)ErrorPlaza) @*Mensaje de error*@
                     </form>
@@ -59,12 +59,25 @@
         @*Botón de guardado*@
         </div>
         <div id="inferior-horizontal">
-            <div id="guardar-puesto" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
-                <a asp-controller="EstructuraOrg" asp-action="Index">
+            @if (hayPuestoSeleccionado == true) {
+                /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
+                <div id="eliminar-puesto"class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarPuesto(puestoActivo)">
+                    <a>
+                        @if (hoverEliminar == false)
+                        {
+                            <img src="img/generic/trashCan.png" alt="">
+                        }
+                        @hoverTextEliminar
+                    </a>
+                </div>
+            }
+            <div  class="est-org-boton " @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
+                <a>
                     @if (hoverGuardar == false) {
                         <img src="img/estructuraOrg/guardarPuesto.png" alt="">
                     }
-                    @hoverTextGuardar</a>
+                    @hoverTextGuardar
+                </a>
             </div>
         </div>
     @*Fin ventana izquierda de edición e ingreso de puestos*@
@@ -77,17 +90,19 @@
             @*Renderización de las tarjetas de los puestos, son componentes razor aparte*@
             @foreach (PuestoModel puestoActual in puestos)
             {
-                <div class="puesto-clickeable-eliminable" >
-                    <div @onclick="() => SeleccionarPuesto(puestoActual)">
-                        <PuestoParcialView puesto=puestoActual></PuestoParcialView>
-                    </div>
-                    <img @onclick="() => eliminarPuesto(puestoActual)" class="puesto-icono-eliminar" src=img/generic/trashCan.png>
+                <div class="puesto-clickeable" @onclick="() => SeleccionarPuesto(puestoActual)" >
+                        <div >
+                            <PuestoParcialView puesto=puestoActual></PuestoParcialView>
+                        </div>
+                        <div class ="puesto-icono-editar">
+                            <img src=img/generic/editPhoto.png>
+                        </div>
                 </div>
             }
         </div>
 
         @*Botón de agregar un puesto*@
-        <div id="agregar-puesto" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+        <div class="transition est-org-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
             <a>
                 @if (hoverAgregar == false)
                 {
@@ -113,7 +128,7 @@
                 {
                     <tr>
                         <th style="border:none;">Nombre</th>
-                        <th style="border:none;">Monto</th>
+                        <th style="border:none;">Monto mensual</th>
                         <th style="border:none;"> Plazas </th>
                         <th style="border:none;" width="40px"></th>
                     </tr>
@@ -155,7 +170,7 @@
                     </div>
                     @*Sección donde se encuentra el form donde se ingresa el monto del nuevo beneficio*@
                     <div id="container-input-monto-beneficio">
-                        <label for="montoBeneficio">Monto:</label>
+                        <label for="montoBeneficio">Monto mensual:</label>
                         <input id="input_monto_beneficio" min="0" step="any" name="montoBeneficio" type="number" @bind="comodines[comodinActual].monto">
                     </div>
                     @*Sección donde se encuentra el form donde se ingres el monto del nuevo beneficio*@
@@ -223,7 +238,7 @@
     // fecha del análisis al que pertenece la estructura organanizativa
     [Parameter]
     public DateTime fechaAnalasis { get; set; }
-    
+
     // booleano que indica si se está editanto un puesto o agregando
     public bool hayPuestoSeleccionado = false;
 
@@ -242,22 +257,22 @@
 
     // placeholder indican que se debe ingresar en los campos
     public string placeHolderNombre = "Ingresar nombre";
-    public string placeHolderSalario = "Ingresar salario";
-    public string placeHolderPlazas = "Ingresar plazas";
 
-    // variables para agregar y quitar texto al hacer hover en botones de guardar y agregar
+    // variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
+    public string hoverTextEliminar = "";
 
     // booleanos para el control de los hover en botones guardar y agregar
     public bool hoverGuardar = false;
     public bool hoverAgregar = false;
+    public bool hoverEliminar = false;
 
     // strings que muestran los mensajes de error con respecto al nombre y los números negativos
     public string ErrorNombre = "";
     public string ErrorSalario = "";
     public string ErrorPlaza = "";
-    
+
     // método para controlar el hover de los botones guardar y agregar
     public void Hover(int action)
     {
@@ -271,6 +286,9 @@
         {
             hoverGuardar = true;
             hoverTextGuardar = "Guardar datos";
+        } else if (action == 3) {
+            hoverEliminar = true;
+            hoverTextEliminar = "Eliminar puesto";
         }
     }
 
@@ -283,9 +301,13 @@
         {
             hoverTextAgregar = "";
             hoverAgregar = false;
-        } else {
+        } else if (action == 2) {
             hoverGuardar = false;
             hoverTextGuardar = "";
+        } else if (action == 3)
+        {
+            hoverEliminar = false;
+            hoverTextEliminar = "";
         }
     }
 
@@ -311,8 +333,6 @@
 
         // se asugnan variables de vista
         placeHolderNombre = puestoActivo.Nombre;
-        placeHolderSalario = puestoActivo.SalarioBruto.ToString();
-        placeHolderPlazas = puestoActivo.Plazas.ToString();
         
         // se copia el nombre por si se va a actualizar este nombre
         copiaNombreOriginal = puestoActivo.Nombre;
@@ -331,8 +351,6 @@
     public void AgregarNuevoPuesto() {
         // se reseatean variables de control visual
         placeHolderNombre = "Ingresar nombre";
-        placeHolderSalario = "Ingresar salario";
-        placeHolderPlazas = "Ingresar plazas";
 
         // se indica que no hay un puesto seleccionado
         hayPuestoSeleccionado = false;

@@ -1,0 +1,37 @@
+﻿@using PI.Models
+@using System.Globalization 
+
+@*
+    Componente que representa tarjeta de un solo gasto variable
+    Este tiene el costo total, lote y la cantidad de componentes
+*@
+<div class="gasto-clickeable">
+    <div class="gastoVar gastoVar-editar">
+        <div class="top-gastoVar">
+            <div class="gastoVar-nombre"><h1>@producto.Nombre.ToString()</h1></div>
+        </div>
+        <div class="bottom-gastoVar">
+            <div class="gastoVar-caracteristica gastoVar-costo-total">
+                <p>Costo variable: @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@producto.CostoVariable)))</p>
+                <img class="divisa-img" src="/img/generic/coin-icon.svg">
+            </div>
+        
+            <div class="gastoVar-caracteristica gastoVar-lote">
+                <p>Lote: @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@producto.Lote))) </p>
+                <br/>
+            </div>
+            <!--Seccion con total de componentes-->
+            <div class="gastoVar-caracteristica gastoVar-cantidad-componentes">
+                <p>Cantidad de componentes:  @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@producto.Componentes.Count())))</p>
+            </div>
+        </div>
+    </div>
+    <div class="gasto-icono-editar">
+        <img src=img/generic/editPhoto.png>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ProductoModel producto { get; set; }
+}

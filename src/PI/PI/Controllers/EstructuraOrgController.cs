@@ -2,6 +2,7 @@
 using PI.Handlers;
 using PI.Models;
 using System.Dynamic;
+using PI.Services;
 
 namespace PI.Controllers
 {
@@ -13,8 +14,14 @@ namespace PI.Controllers
         // Retorna una vista cshtml con un componente razor que permite la creación de puestos y de beneficios desde el lado del cliente
         public IActionResult Index(string fecha)
         {
+            // para que se muestre el boton de volver al analisis
+            ViewBag.BotonRetorno = "Progreso";
+
             // asignamos el título del paso en el que se está en el layout
             ViewData["TituloPaso"] = "Estructura organizativa";
+
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
 
             // creamos instancia del handler de la estrutura organizativa para cargar los puestos
             EstructuraOrgHandler estructura = new EstructuraOrgHandler();
@@ -30,6 +37,7 @@ namespace PI.Controllers
 
             // cargamos una lista con todos los puestos que existen en la base de datos
             List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
+
             return View(puestos);
         }
     }

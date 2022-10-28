@@ -7,12 +7,37 @@ using PI.Handlers;
 using PI.Controllers;
 using PI.Models;
 using System.Globalization;
+using PI.Services;
 
 namespace PI.Controllers
 {
     // Controlador del analisis
     public class AnalisisController : Controller
     {
+        public IActionResult CrearAnalisis(int idNegocio, string estadoNegocio)
+        {
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(idNegocio, estadoNegocio);
+
+            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+        }
+
+        // Recibe el id del negocio del que se quiere obtener los análisis creados.
+        // Retorna una lista de análisis creados que pertenen al negocio.
+        public IActionResult MisAnalisis(int idNegocio)
+        {
+            // Título de la pestaña en el navegador.
+            ViewData["Title"] = "Mis análisis";
+            // Título del paso en el que se está en el layout
+            ViewData["TituloPaso"] = ViewData["Title"];
+            // Muestra el botón de regreso que lleva a la vista de los negocios.
+            ViewBag.BotonRetorno = "Mis negocios";
+
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(idNegocio);
+            ViewBag.idNegocio = idNegocio;
+            return View(analisisHandler.ObtenerAnalisis(idNegocio));
+        }
         // Devuelve la vista principal del analisis especifico
         // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
         public IActionResult Index(string fechaAnalisis)
@@ -22,26 +47,17 @@ namespace PI.Controllers
             AnalisisModel analisisActual = handler.ObtenerUnAnalisis(fechaCreacionAnalisis);
             ViewData["NombreNegocio"] = handler.obtenerNombreNegocio(fechaCreacionAnalisis);
             ViewData["TituloPaso"] = "Progreso del análisis";
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-            // var tipoAnalisis = handler.ObtenerTipoAnalisis();
+            ViewBag.gananciaMensual = analisisActual.GananciaMensual;
+            PasosProgresoControl controlDePasos = new();
+
+            ViewBag.pasoDisponibleMaximo = controlDePasos.EstaActivoMaximo(analisisActual);
+
             return View(analisisActual);
         }
 
-        // Indica si el analisis posee puestos
-        // (Retorna un bool que indica si hay puestos o no | Parametros: modelo del analisis que se desea verificar)
-        // Se encarga de verificar si existen puestos dentro de un análisis.
-        public static bool hayPuestos(AnalisisModel analisis) {
-            bool resultado = false;
-            // Se crea instancia del handler
-            EstructuraOrgHandler estHandler = new EstructuraOrgHandler();
-            // Se obtiene de la base de datos los diferentes puestos del Análisis.
-            List<PuestoModel> puestos = estHandler.ObtenerListaDePuestos(analisis.FechaCreacion);
-            // Se determina si la cantidad de puestos que posee es mayor a 0
-            if (puestos.Count > 0) {
-                resultado = true;
-            }
-            return resultado;
-        }
 
         // Indica si el analisis posee gastos fijos
         // (Retorna un bool que indica si hay gastos fijos o no | Parametros: modelo del analisis que se desea verificar)
@@ -65,7 +81,7 @@ namespace PI.Controllers
 
         // Devuelve la vista de la configuracion de un analisis especifico 
         // (Retorna la vista de la configuracion | Parametros: la fecha del analisis cuya configuracion se quiere revisar)
-        public IActionResult ConfiguracionAnalisis (string fechaAnalisis)
+        public IActionResult ConfiguracionAnalisis(string fechaAnalisis)
         {
             ViewBag.FechaAnalisis = fechaAnalisis;
             AnalisisHandler analisisHandler = new AnalisisHandler();

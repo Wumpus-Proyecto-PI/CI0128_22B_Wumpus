@@ -1,0 +1,36 @@
+﻿@model List<AnalisisModel>
+@using Microsoft.AspNetCore.Components
+@using PI.Models
+@inject NavigationManager NavigationManager;
+
+@* Vista de los análisis que pertenecen a un negocio *@
+@{
+	Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
+}
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="~/css/Analisis/MisAnalisis.css" />
+	</head>
+
+	<body>
+	<div>
+		@Html.Partial("LayoutNombreEmpresa")
+	</div>
+		<section class="container container-lg seccion-cardAnalisis d-flex flex-row justify-content-center align-items-center flex-wrap">
+			@* Permite crear nuevos análisis *@
+			@(
+				await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.AgregarAnalisis>(RenderMode.ServerPrerendered, new { idNegocio = @ViewBag.idNegocio })
+			)
+			@* Invoca la creación de una tarjeta por cada análisis del negocio *@
+			@foreach(AnalisisModel analisisActual in Model) {
+				@(
+					await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.CardAnalisis>(RenderMode.ServerPrerendered, new { analisis = analisisActual})
+				)
+			}
+		</section>
+	</body>
+</html>

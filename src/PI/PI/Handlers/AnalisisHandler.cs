@@ -24,7 +24,9 @@ namespace PI.Handlers
             AnalisisModel analisisResultado = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
-                Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual },
+                GananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"]),
+                EstadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
             };
 
             return analisisResultado;
@@ -45,7 +47,9 @@ namespace PI.Handlers
             AnalisisModel analisisMasReciente = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
-                Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                GananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"]),
+                EstadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
+                Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
             
             return analisisMasReciente;
@@ -53,13 +57,14 @@ namespace PI.Handlers
 
         // Obtiene los analisis de un negocio
         // (Retorna una lista con los analisis del negocio | Parametros: id del negocio)
-        public List<AnalisisModel> ObtenerAnalisis(string IDNegocio)
+        public List<AnalisisModel> ObtenerAnalisis(int IDNegocio)
         {
             List<AnalisisModel> analisisDelNegocio = new List<AnalisisModel>();
             
             // string que tiene la consulta para obtener la lista de analisis de un negocio indicado
-            string consulta = "SELECT IDNegocio, A.fechaCreacion from ANALISIS as A inner join Negocio as N " +
-                "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
+            string consulta = "SELECT IDNegocio, A.fechaCreacion, A.gananciaMensual, A.estadoAnalisis from ANALISIS as A inner join Negocio as N " +
+
+                "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + " ORDER BY A.fechaCreacion desc";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             foreach (DataRow columna in tablaResultado.Rows)
             {
@@ -70,7 +75,9 @@ namespace PI.Handlers
                 new AnalisisModel
                 {
                     FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
-                    Configuracion = { TipoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual}
+                    GananciaMensual = Convert.ToDecimal(columna["gananciaMensual"]),
+                    EstadoAnalisis = Convert.ToInt32(columna["estadoAnalisis"]),
+                    Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
                 }
                 );
             }
@@ -87,7 +94,7 @@ namespace PI.Handlers
             DataTable tablaResultado = CrearTablaConsulta(consulta);
 
             DateTime fecha = (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
-
+ 
             return fecha;
         }
 
@@ -114,7 +121,7 @@ namespace PI.Handlers
         // Agrega un analisis al negocio indicado
         // (Parametros: id del negocio al que se le quiere ingresar un analisis, tipo del analisis que se va a ingresar)
 
-        public void IngresarAnalisis(string idNegocio, string tipo)
+        public DateTime IngresarAnalisis(int idNegocio, string tipo)
         {
             DateTime myDateTime = DateTime.Now;
             string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -125,6 +132,7 @@ namespace PI.Handlers
 
             // Crea una config por defecto asociada al analisis
             CrearConfigPorDefecto(sqlFormattedDate, tipo);
+            return myDateTime;
         }
 
         // Ingresa una configuracion con la fecha del analisis indicada
@@ -155,7 +163,7 @@ namespace PI.Handlers
             ConfigAnalisisModel resultado = new ConfigAnalisisModel
             {
                 fechaAnalisis = Convert.ToDateTime(tablaResultado.Rows[0]["fechaAnalisis"]),
-                TipoNegocio = Convert.ToBoolean(tablaResultado.Rows[0]["tipoNegocio"]),
+                EstadoNegocio = Convert.ToBoolean(tablaResultado.Rows[0]["tipoNegocio"]),
                 PorcentajePL = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajePL"]),
                 PorcentajeSS = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajeSS"])
             };
@@ -173,6 +181,17 @@ namespace PI.Handlers
                 + configuracionNueva.PorcentajeSS.ToString()
                 + ",@procentajePL=" + configuracionNueva.PorcentajePL.ToString();
             enviarConsultaVoid(actualizar);
+        }
+
+        public bool ActualizarGananciaMensual(decimal monto, DateTime fechaAnalisis) {
+            Console.WriteLine(fechaAnalisis);
+            var consulta = @"EXEC ActualizarGananciaMensual @ganancia = " + monto + ", @fecha = " + "'" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            var cmdParaConsulta = new SqlCommand(consulta, conexion);
+
+            conexion.Open();
+            bool exito = cmdParaConsulta.ExecuteNonQuery() >= 1;
+            conexion.Close();
+            return exito;
         }
     }
 }

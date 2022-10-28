@@ -14,8 +14,14 @@ namespace PI.Controllers
         // Retorna una lista de gastos fijos que pertenecen al análisis con la fecha pasada por parámetro.
         public IActionResult GastoFijo(string fecha)
         {
+            // para que se muestre el boton de volver al analisis
+            ViewBag.BotonRetorno = "Progreso";
 
             ViewData["TituloPaso"] = "Gastos fijos";
+            
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
+            
             DateTime fechaConversion = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
             ViewBag.fechaAnalisis = fechaConversion;
 
@@ -34,9 +40,8 @@ namespace PI.Controllers
             gastoFijoHandler.actualizarPrestaciones(fechaConversion, prestaciones);
             gastoFijoHandler.actualizarBeneficios(fechaConversion);
 
-            // Actualiza la sumatoria de los gastos fijos. (mensual)
-            // TODO que sea un total anual.
-            ViewBag.totalMensual = gastoFijoHandler.obtenerTotalMensual(fechaConversion);
+            // Actualiza la sumatoria de los gastos fijos. (anual)
+            ViewBag.totalAnual = gastoFijoHandler.obtenerTotalAnual(fechaConversion);
             ViewData["NombreNegocio"] = gastoFijoHandler.obtenerNombreNegocio(fechaConversion);
 
             List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaConversion);

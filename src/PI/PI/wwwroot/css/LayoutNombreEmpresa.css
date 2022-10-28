@@ -1,0 +1,37 @@
+﻿
+.subtitulo-nombre-negocio {
+    width: 554px;
+    height: 62px;
+    background-color: #005DB9;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 0px 20px 20px 0px;
+    box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+    margin-bottom: 40px;
+    margin-top: 40px;
+    font-family: sans-serif;
+}
+
+.boton-volver img, .boton-volver a {
+    height: 35px;
+    width: 35px;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+}
+
+.boton-volver {
+    margin-left: 20px;
+}
+
+.subtitulo-nombre-negocio p {
+    padding: 0px;
+    margin: 0px;
+    font-size: xx-large;
+    width: 100%;
+    text-align: center;
+}

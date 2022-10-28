@@ -1,0 +1,57 @@
+﻿@using PI.Models
+@using System.Globalization
+@inject NavigationManager NavigationManager;
+<!-- Representa una carta/tarjeta de análisis: fecha, tiempo, estado del negocio y estado del análisis -->
+
+<div class="card-clickleable d-flex justify-content-center align-items-center my-2">
+    <div class="card card-analisis text-center justify-content-center align-items-center position-relative" @onclick="irAlAnálisis">
+    @*    <span class="p-0 badge position-absolute d-flex justify-content-center align-items-center">
+        </span>*@
+            <div class="class-body">
+            <h5 class="card-title fw-bold pt-3 mb-0">@(analisis.FechaCreacion.ToString("dd/MMM/yyyy",  new CultureInfo("es-Es")))
+            </h5>
+            <h6 class="card-title pb-2 mt-0 ">@(analisis.FechaCreacion.ToString("hh:mm:ss tt"))</h6>
+            <span class="card-text fw-bold pt-4 mt-2">Estado del negocio: <br> </span>
+            <!-- Muestra si el estado del NEGOCIO en el momento del análisis es iniciado o no-->
+            @{bool NO_INICIADO = false;}
+             @if (@analisis.Configuracion.EstadoNegocio == NO_INICIADO)
+            {
+                <span class="card-text pb-2">No iniciado</span>
+            } else {
+                <span class="card-text pb-2">En marcha</span>
+            }
+    
+        </div>
+        <!-- Muestra si el ANÁLISIS está finalizado o sigue en curso -->
+        @if (analisis.EstadoAnalisis == FINALIZADO)
+        {
+            <div class="card-footer footer-finalizado mt-3 px-2 w-100">
+                <span class="fw-bold analisis-finalizado text-center"> Análisis finalizado </span>
+            </div>
+        } else {
+            <div class="card-footer footer-en-curso mt-3 px-2 w-100">
+                <span class="fw-bold analisis-en-curso text-center"> Análisis en curso </span>
+            </div>
+        }
+    </div>
+    <!-- Botón de editar -->
+    <div class="edit-icon d-flex justify-content-center align-items-center">
+        <img src=/img/generic/editPhoto.png alt="Icono de editar">
+    </div>
+</div>
+
+
+@code {
+    // Recibe el objeto del análisis para ser mostrado.
+    [Parameter]
+    public AnalisisModel? analisis { get; set; }
+    
+    const int FINALIZADO = 0;
+
+
+    // método que redirige al progreso del análisis correspondiente.
+    public void irAlAnálisis() {
+        string url = "Analisis?fechaAnalisis=" + analisis.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        NavigationManager.NavigateTo(url, true);
+    }
+}

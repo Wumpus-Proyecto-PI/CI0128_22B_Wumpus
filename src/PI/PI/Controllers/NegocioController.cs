@@ -25,6 +25,7 @@ namespace PI.Controllers
         // Retorna el formulario para ingresar el nombre y estado del negocio.
         public IActionResult FormAgregarNegocio()
         {
+            ViewData["Title"] = "Nuevo negocio";
             return View();
         }
 
@@ -36,15 +37,11 @@ namespace PI.Controllers
             correoUsuario = "gabrielperezorozco@testing.com";
             // Inserta el negocio en la base de datos.
             NegocioHandler handler = new NegocioHandler();
-            NegocioModel negocioIngresado =  handler.IngresarNegocio(nombreNegocio, tipoNegocio, correoUsuario);
-
-            // TODO crear análisis cuando el usuario lo indique y no desde este método.
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-            DateTime ultimoFechaAnalisis = analisisHandler.UltimaFechaCreacion(negocioIngresado.ID.ToString());
+            NegocioModel negocioIngresado = handler.IngresarNegocio(nombreNegocio, tipoNegocio, correoUsuario);
 
             // Redirecciona al analisis por defecto
             // TODO redireccionar a la página de análisis creados (que contiene las opciones de visualizar, descargar, comparar, crear y crear copia)
-            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = ultimoFechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+            return RedirectToAction("MisAnalisis", "Analisis", new { IDNegocio = negocioIngresado.ID});
         }
 
         // Elimina el negocio indicado por parámetro (mediante el ID) de la base de datos

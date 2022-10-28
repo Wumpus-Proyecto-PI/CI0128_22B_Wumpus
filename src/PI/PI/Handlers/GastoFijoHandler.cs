@@ -40,6 +40,8 @@ namespace PI.Handlers
                 }
                 );
             }
+            // Acomoda en las primeras 4 posiciones los gastos de las estorg
+            acomodarGastosFijos(gastosFijos);
             return gastosFijos;
         }
 
@@ -86,18 +88,18 @@ namespace PI.Handlers
         }
 
         // Obtiene y retorna la suma total mensual de los montos de gastos fijos
-        public decimal obtenerTotalMensual(DateTime fechaAnalisis)
+        public decimal obtenerTotalAnual(DateTime fechaAnalisis)
         {
-            decimal totalMensual = 0.0m;
+            decimal totalAnual = 0.0m;
 
             string consulta = "EXEC obtSumGastosFijos '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (!tablaResultado.Rows[0].IsNull("totalMensual"))
+            if (!tablaResultado.Rows[0].IsNull("totalAnual"))
             {
-                totalMensual = Convert.ToDecimal(tablaResultado.Rows[0]["totalMensual"]);
+                totalAnual = Convert.ToDecimal(tablaResultado.Rows[0]["totalAnual"]);
             }
 
-            return totalMensual;
+            return totalAnual;
         }
 
         // Crea o actualiza el gasto fijo de salarios netos
@@ -130,6 +132,37 @@ namespace PI.Handlers
             // Envia consulta a la base de datos, donde se encuentra el procedimiento almacenado encargado de calcular el monto total de los beneficios.
             string consulta = "EXEC actualizarBeneficios '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
+        }
+
+        // Reordena la lista de gastos fijos para que los de la estructura siempre esten al comienzo 
+        public void acomodarGastosFijos(List<GastoFijoModel> gastosFijos)
+        {
+            GastoFijoModel Beneficios = gastosFijos.Find(x => x.Nombre == "Beneficios de empleados");
+            GastoFijoModel Prestaciones = gastosFijos.Find(x => x.Nombre == "Prestaciones laborales");
+            GastoFijoModel Salarios = gastosFijos.Find(x => x.Nombre == "Salarios netos");
+            GastoFijoModel Seguridad = gastosFijos.Find(x => x.Nombre == "Seguridad social");
+
+            gastosFijos.Remove(Beneficios);
+            gastosFijos.Remove(Prestaciones);
+            gastosFijos.Remove(Salarios);
+            gastosFijos.Remove(Seguridad);
+            
+            if (Beneficios != null)
+            {
+                gastosFijos.Insert(0, Beneficios);
+            }
+            if (Prestaciones != null)
+            {
+                gastosFijos.Insert(1, Prestaciones);
+            }
+            if (Salarios != null)
+            {
+                gastosFijos.Insert(2, Salarios);
+            }
+            if (Seguridad != null)
+            {
+                gastosFijos.Insert(3, Seguridad);
+            }
         }
     }
 }
