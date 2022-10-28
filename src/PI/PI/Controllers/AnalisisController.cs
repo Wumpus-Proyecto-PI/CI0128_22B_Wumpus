@@ -7,12 +7,35 @@ using PI.Handlers;
 using PI.Controllers;
 using PI.Models;
 using System.Globalization;
+using PI.Services;
 
 namespace PI.Controllers
 {
     // Controlador del analisis
     public class AnalisisController : Controller
     {
+        // Devuelve la vista principal del analisis especifico
+        // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
+        public IActionResult Index(string fechaAnalisis)
+        {
+            AnalisisHandler handler = new AnalisisHandler();
+            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+            AnalisisModel analisisActual = handler.ObtenerUnAnalisis(fechaCreacionAnalisis);
+            ViewData["NombreNegocio"] = handler.obtenerNombreNegocio(fechaCreacionAnalisis);
+            ViewData["TituloPaso"] = "Progreso del análisis";
+            // se asigna el titulo en la pestaña del cliente
+            ViewData["Title"] = ViewData["TituloPaso"];
+            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
+            ViewBag.gananciaMensual = analisisActual.gananciaMensual;
+
+            PasosProgresoControl controlDePasos = new();
+
+            ViewBag.pasoDisponibleMaximo = controlDePasos.DeterminarPasoActivoMaximo(analisisActual);
+
+            return View(analisisActual);
+        }
+
+
         public IActionResult CrearAnalisis(int IDNegocio, string estadoNegocio)
         {
             AnalisisHandler analisisHandler = new AnalisisHandler();
@@ -31,62 +54,10 @@ namespace PI.Controllers
             ViewBag.idNegocio = IDNegocio;
             return View(analisisHandler.ObtenerAnalisis(IDNegocio));
         }
-        // Devuelve la vista principal del analisis especifico
-        // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
-        public IActionResult Index(string fechaAnalisis)
-        {
-            AnalisisHandler handler = new AnalisisHandler();
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-            AnalisisModel analisisActual = handler.ObtenerUnAnalisis(fechaCreacionAnalisis);
-            ViewData["NombreNegocio"] = handler.obtenerNombreNegocio(fechaCreacionAnalisis);
-            ViewData["TituloPaso"] = "Progreso del análisis";
-            // se asigna el titulo en la pestaña del cliente
-            ViewData["Title"] = ViewData["TituloPaso"];
-            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-            ViewBag.gananciaMensual = analisisActual.gananciaMensual;
-            // var tipoAnalisis = handler.ObtenerTipoAnalisis();
-            return View(analisisActual);
-        }
-
-        // Indica si el analisis posee puestos
-        // (Retorna un bool que indica si hay puestos o no | Parametros: modelo del analisis que se desea verificar)
-        // Se encarga de verificar si existen puestos dentro de un análisis.
-        public static bool hayPuestos(AnalisisModel analisis) {
-            bool resultado = false;
-            // Se crea instancia del handler
-            EstructuraOrgHandler estHandler = new EstructuraOrgHandler();
-            // Se obtiene de la base de datos los diferentes puestos del Análisis.
-            List<PuestoModel> puestos = estHandler.ObtenerListaDePuestos(analisis.FechaCreacion);
-            // Se determina si la cantidad de puestos que posee es mayor a 0
-            if (puestos.Count > 0) {
-                resultado = true;
-            }
-            return resultado;
-        }
-
-        // Indica si el analisis posee gastos fijos
-        // (Retorna un bool que indica si hay gastos fijos o no | Parametros: modelo del analisis que se desea verificar)
-        // Determina si un análisis contiene gastos fijos.
-        public static bool contieneGastosFijos(AnalisisModel analisis) {
-            bool resultado = false;
-            // Se crea instancia del handler
-            GastoFijoHandler gastosHandler = new GastoFijoHandler();
-            // Mediante el handler, se obtiene de la base de datos la cantidad de gastos fijos que contiene un análisis.
-            List<GastoFijoModel> gastosFijos = gastosHandler.ObtenerGastosFijos(analisis.FechaCreacion);
-            // Por cada uno de los gastos fijos obtenidos, se verifica si corresponde a uno de los gastos fijos por defecto de los análisis.
-            // Si alguno de los gastos fijos obtenidos es diferente a todos ellos, se determina que si se le han agregado gastos fijos al análisis.
-            for (int i = 0; i<gastosFijos.Count(); i += 1) {
-                if (gastosFijos[i].Nombre != "Seguridad social" && gastosFijos[i].Nombre != "Prestaciones laborales" && gastosFijos[i].Nombre != "Beneficios de empleados" && gastosFijos[i].Nombre != "Salarios netos") {
-                    resultado = true;
-                    break;
-                }
-            }
-            return resultado;
-        }
 
         // Devuelve la vista de la configuracion de un analisis especifico 
         // (Retorna la vista de la configuracion | Parametros: la fecha del analisis cuya configuracion se quiere revisar)
-        public IActionResult ConfiguracionAnalisis (string fechaAnalisis)
+        public IActionResult ConfiguracionAnalisis(string fechaAnalisis)
         {
             ViewBag.FechaAnalisis = fechaAnalisis;
             AnalisisHandler analisisHandler = new AnalisisHandler();
@@ -117,26 +88,6 @@ namespace PI.Controllers
             // Actualiza la configuracion del analisis
             analisisHandler.ActualizarConfiguracionAnalisis(configAnalisis);
             return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
-        }
-
-        // método que verifica si es posible que exista una meta de ventas en el análisis de rentabilidad.
-        // detalle: sirve para determinar si la tarjeta de la inversión inicial se debe habilitar.
-        // se asume que si un producto tiene valores en algunos de sus atributos, la meta de ventas ha sido calculada.
-        public bool ExisteMetaDeVentas (DateTime fechaAnalisis)
-        {
-            bool resultado = false;
-            ProductoHandler productoHandler = new ProductoHandler();
-            List<ProductoModel> productos = productoHandler.obtenerProductos(fechaAnalisis);
-            for (int actual = 0; actual < productos.Count && resultado == false; ++actual)
-            {
-                if (productos[actual].Precio > 0 
-                    && productos[actual].CostoVariable > 0
-                    && productos[actual].PorcentajeDeVentas > 0)
-                {
-                    resultado = true;
-                }
-            }
-            return resultado;
         }
     }
 }
