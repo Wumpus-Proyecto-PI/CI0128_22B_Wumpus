@@ -13,23 +13,29 @@ namespace PI.Controllers
     // Controlador del analisis
     public class AnalisisController : Controller
     {
-        public IActionResult CrearAnalisis(int IDNegocio, string estadoNegocio)
+        public IActionResult CrearAnalisis(int idNegocio, string estadoNegocio)
         {
             AnalisisHandler analisisHandler = new AnalisisHandler();
-            DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(IDNegocio, estadoNegocio);
+            DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(idNegocio, estadoNegocio);
 
             return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
         }
-        // Retorna la vista con todos los análisis creados
-        public IActionResult MisAnalisis(int IDNegocio)
+
+        // Recibe el id del negocio del que se quiere obtener los análisis creados.
+        // Retorna una lista de análisis creados que pertenen al negocio.
+        public IActionResult MisAnalisis(int idNegocio)
         {
+            // Título de la pestaña en el navegador.
             ViewData["Title"] = "Mis análisis";
-            ViewData["TituloPaso"] = "Mis análisis";
+            // Título del paso en el que se está en el layout
+            ViewData["TituloPaso"] = ViewData["Title"];
+            // Muestra el botón de regreso que lleva a la vista de los negocios.
             ViewBag.BotonRetorno = "Mis negocios";
+
             AnalisisHandler analisisHandler = new AnalisisHandler();
-            ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(IDNegocio);
-            ViewBag.idNegocio = IDNegocio;
-            return View(analisisHandler.ObtenerAnalisis(IDNegocio));
+            ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(idNegocio);
+            ViewBag.idNegocio = idNegocio;
+            return View(analisisHandler.ObtenerAnalisis(idNegocio));
         }
         // Devuelve la vista principal del analisis especifico
         // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
@@ -43,7 +49,7 @@ namespace PI.Controllers
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-            ViewBag.gananciaMensual = analisisActual.gananciaMensual;
+            ViewBag.gananciaMensual = analisisActual.GananciaMensual;
             // var tipoAnalisis = handler.ObtenerTipoAnalisis();
             return View(analisisActual);
         }
