@@ -14,6 +14,30 @@ namespace PI.Controllers
     // Controlador del analisis
     public class AnalisisController : Controller
     {
+        public IActionResult CrearAnalisis(int idNegocio, string estadoNegocio)
+        {
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(idNegocio, estadoNegocio);
+
+            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+        }
+
+        // Recibe el id del negocio del que se quiere obtener los análisis creados.
+        // Retorna una lista de análisis creados que pertenen al negocio.
+        public IActionResult MisAnalisis(int idNegocio)
+        {
+            // Título de la pestaña en el navegador.
+            ViewData["Title"] = "Mis análisis";
+            // Título del paso en el que se está en el layout
+            ViewData["TituloPaso"] = ViewData["Title"];
+            // Muestra el botón de regreso que lleva a la vista de los negocios.
+            ViewBag.BotonRetorno = "Mis negocios";
+
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+            ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(idNegocio);
+            ViewBag.idNegocio = idNegocio;
+            return View(analisisHandler.ObtenerAnalisis(idNegocio));
+        }
         // Devuelve la vista principal del analisis especifico
         // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
         public IActionResult Index(string fechaAnalisis)
@@ -26,8 +50,7 @@ namespace PI.Controllers
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-            ViewBag.gananciaMensual = analisisActual.gananciaMensual;
-
+            ViewBag.gananciaMensual = analisisActual.GananciaMensual;
             PasosProgresoControl controlDePasos = new();
 
             ViewBag.pasoDisponibleMaximo = controlDePasos.DeterminarPasoActivoMaximo(analisisActual);
@@ -36,23 +59,24 @@ namespace PI.Controllers
         }
 
 
-        public IActionResult CrearAnalisis(int IDNegocio, string estadoNegocio)
-        {
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-            DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(IDNegocio, estadoNegocio);
-
-            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
-        }
-        // Retorna la vista con todos los análisis creados
-        public IActionResult MisAnalisis(int IDNegocio)
-        {
-            ViewData["Title"] = "Mis análisis";
-            ViewData["TituloPaso"] = "Mis análisis";
-            ViewBag.BotonRetorno = "Mis negocios";
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-            ViewData["NombreNegocio"] = analisisHandler.obtenerNombreNegocio(IDNegocio);
-            ViewBag.idNegocio = IDNegocio;
-            return View(analisisHandler.ObtenerAnalisis(IDNegocio));
+        // Indica si el analisis posee gastos fijos
+        // (Retorna un bool que indica si hay gastos fijos o no | Parametros: modelo del analisis que se desea verificar)
+        // Determina si un análisis contiene gastos fijos.
+        public static bool contieneGastosFijos(AnalisisModel analisis) {
+            bool resultado = false;
+            // Se crea instancia del handler
+            GastoFijoHandler gastosHandler = new GastoFijoHandler();
+            // Mediante el handler, se obtiene de la base de datos la cantidad de gastos fijos que contiene un análisis.
+            List<GastoFijoModel> gastosFijos = gastosHandler.ObtenerGastosFijos(analisis.FechaCreacion);
+            // Por cada uno de los gastos fijos obtenidos, se verifica si corresponde a uno de los gastos fijos por defecto de los análisis.
+            // Si alguno de los gastos fijos obtenidos es diferente a todos ellos, se determina que si se le han agregado gastos fijos al análisis.
+            for (int i = 0; i<gastosFijos.Count(); i += 1) {
+                if (gastosFijos[i].Nombre != "Seguridad social" && gastosFijos[i].Nombre != "Prestaciones laborales" && gastosFijos[i].Nombre != "Beneficios de empleados" && gastosFijos[i].Nombre != "Salarios netos") {
+                    resultado = true;
+                    break;
+                }
+            }
+            return resultado;
         }
 
         // Devuelve la vista de la configuracion de un analisis especifico 
