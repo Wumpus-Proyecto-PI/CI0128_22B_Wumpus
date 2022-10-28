@@ -1,21 +1,22 @@
 ﻿@using PI.Handlers
 @using PI.Models
 @using PI.Services
+@using System.Globalization
 
 
     <div class="container text-center mt-5">
 
     <div id="container-forms-top">
-        <form class="d-flex flex-row align-items-center justify-content-start">
-            <div class="form-row">
-                <div class="col col-xs-5">
-                    <input type="number" class="form-control" placeholder=@analisis.GananciaMensual @bind="analisis.GananciaMensual" @onfocusout = "actualizarGananciaMensual">
-                </div>
-                <div class="col col-xs-5">
-                    <input type="text" class="form-control" placeholder=@montoGastosFijos readonly>
-                </div>      
+        <div id="form-parametros-rentabilidad">
+            <div class="pill-form">
+               <div><h5>Ganancia mensual</h5></div>
+                <input id="form-ganancia-mensual" type="text" class="form-control" @bind="analisis.gananciaMensual" @onfocusout = "actualizarGananciaMensual">
             </div>
-        </form>
+            <div class="pill-form">
+                <div><h5>Gastos fijos</h5></div>
+                <input id="form-gastos-fijos-totales" type="text" class="form-control" placeholder=@IOManager.ToFormatoEstadistico(montoGastosFijos)  readonly>
+            </div>
+        </div>
         <div class="switch-container">
                 <span class="switch-text">@opcionSwitch</span>
             <input type="checkbox" class="switch_1" @onclick="switchMetaVentas">
@@ -57,16 +58,16 @@
                     -
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    9,220.00
+                    <p>@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @if (@opcionSwitchBool) {
-                        <p class="datos-calculados">@actualizarTotalMetaUnidades()</p>
-                    } else {
-                        <p class="datos-calculados">@actualizarTotalMetaMoneda()</p>
-                    }
-                </div>
-            </li>
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaUnidades())</p>
+                } else {
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaMoneda())</p>
+                }
+            </div>
+        </li>
 
         @foreach (var productoActual in productos)
         {
@@ -84,21 +85,21 @@
                 </div>
                 <div class="col col-1" data-label="Margen">
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
-                    <p class="datos-calculados">@calcularMargen(productoActual)</p>
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularMargen(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">@calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable)</p>
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@ 
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     @if (@opcionSwitchBool)
                     {
-                        <p class="datos-calculados">@(calcularMetaUnidades(productoActual))</p>
+                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaUnidades(productoActual)))</p>
                     }
                     else
                     {
-                        <p class="datos-calculados">@(calcularMetaMoneda(productoActual))</p>
+                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaMoneda(productoActual)))</p>
                     }
                 </div>
             </li>
@@ -117,6 +118,8 @@
     public decimal montoGastosFijos { get; set; }
 
     public bool opcionSwitchBool = true;
+
+    public int puntoEquilibrioTotal { get; set; }
 
     public string opcionSwitch = "Meta en unidades";
 
@@ -144,7 +147,7 @@
         handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
     }
 
-    public void actualizarPorcentajeVentas(ProductoModel producto) 
+    public void actualizarPorcentajeVentas(ProductoModel producto)
     {
         productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
     }
@@ -202,9 +205,20 @@
         return total;
     }
 
-    public decimal calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
+    public int calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
     {
-        decimal result = AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable); 
-        return Math.Round(result,2);
+        int result = Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable));
+        return result;
     }
+
+    public int calcularPuntoEquilibrioTotal(decimal gastosFijos, List<ProductoModel> productos)
+    {
+        int result = 0;
+        for (int i = 0; i < productos.Count; i += 1)
+        {
+            result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, productos[i].CostoVariable);
+        }
+        return result;
+    }
+
 }
