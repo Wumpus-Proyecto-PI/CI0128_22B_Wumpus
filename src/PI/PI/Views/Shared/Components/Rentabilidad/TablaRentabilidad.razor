@@ -80,7 +80,7 @@
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
-                    <input class="effect-1 text-center" type="number" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
+                    <input class="effect-1 text-center" type="number" min="0" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
@@ -173,7 +173,12 @@
 
     public void actualizarPrecio(ProductoModel producto)
     {
-        productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
+        decimal precioActual = producto.Precio;
+        if (precioActual >= 0) {
+            productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
+        } else {
+            producto.Precio = 0;
+        }
     }
 
     public decimal calcularMargen(ProductoModel productoActual) {
