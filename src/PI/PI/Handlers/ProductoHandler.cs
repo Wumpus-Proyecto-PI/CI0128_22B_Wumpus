@@ -83,5 +83,31 @@ namespace PI.Handlers
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
+
+        public decimal obtenerPorcentajeVentas(DateTime fechaAnalisis, string nombreProducto)
+        {
+            decimal porcentaje = 0;
+            string consulta = "EXEC ObtenerPorcentajeVentas @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @nombreProducto='" + nombreProducto + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("porcentajeDeVentas"))
+            {
+                porcentaje = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajeDeVentas"]);
+            }
+
+            return porcentaje;
+        }
+
+        public decimal obtenerPorcentajeVentasTotal(DateTime fechaAnalisis)
+        {
+            decimal total = 0;
+            string consulta = "EXEC ObtenerPorcentajeDeVentasTotal @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("totalPorcentajeVentas"))
+            {
+                total = Convert.ToDecimal(tablaResultado.Rows[0]["totalPorcentajeVentas"]);
+            }
+
+            return total;
+        }
     }
 }

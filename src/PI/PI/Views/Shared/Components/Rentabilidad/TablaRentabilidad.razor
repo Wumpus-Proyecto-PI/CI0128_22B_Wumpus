@@ -10,7 +10,7 @@
         <div id="form-parametros-rentabilidad">
             <div class="pill-form">
                <div><h5>Ganancia mensual</h5></div>
-                <input id="form-ganancia-mensual" type="text" class="form-control" @bind="analisis.gananciaMensual" @onfocusout = "actualizarGananciaMensual">
+                <input id="form-ganancia-mensual" type="text" class="form-control" @bind="analisis.GananciaMensual" @onfocusout = "actualizarGananciaMensual">
             </div>
             <div class="pill-form">
                 <div><h5>Gastos fijos</h5></div>
@@ -25,22 +25,22 @@
     <ul class="responsive-table">
         <li class="table-header">
             <div class="col col-1">
-                <p class="datos-calculados">Nombre de producto</p>
+                <p class="datos-header">Nombre de producto</p>
             </div>
             <div class="col col-1">
-                <p class="datos-calculados">Porcentaje de Ventas</p>
+                <p class="datos-header">Porcentaje de Ventas</p>
             </div>
             <div class="col col-1">
-                <p class="datos-calculados">Precio</p>
+                <p class="datos-header">Precio</p>
             </div>
             <div class="col col-1">
-                <p class="datos-calculados">Margen</p>
+                <p class="datos-header">Margen</p>
             </div>
             <div class="col col-1">
-                <p class="datos-calculados">Punto Equilibrio</p>
+                <p class="datos-header">Punto Equilibrio</p>
             </div>
             <div class="col col-1">
-                <p class="datos-calculados">Meta de ventas</p>
+                <p class="datos-header">Meta de ventas</p>
             </div>
         </li>
 
@@ -49,7 +49,7 @@
                     <p class="datos-calculados texto-nombres">Totales</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    100%
+                    <p class="datos-calculados">@getPorcentajeVentasTotal() %</p>
                 </div>
                 <div class="col col-1" data-label="Precio">
                     -
@@ -58,7 +58,7 @@
                     -
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p>@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @if (@opcionSwitchBool) {
@@ -76,11 +76,11 @@
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="number" @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">
+                    <input class="effect-1 text-center" type="number" min="0" max="@getPorcentajeVentasDisponible(productoActual)" @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
-                    <input class="effect-1 text-center" type="number" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
+                    <input class="effect-1 text-center" type="number" min="0" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
@@ -149,12 +149,36 @@
 
     public void actualizarPorcentajeVentas(ProductoModel producto)
     {
-        productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
+        decimal porcentajeActual = producto.PorcentajeDeVentas;
+        decimal disponible = getPorcentajeVentasDisponible(producto);
+
+        if (porcentajeActual >= 0 && porcentajeActual <= disponible)
+        {
+            productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
+
+        } else {
+            producto.PorcentajeDeVentas = productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
+        }
+    }
+
+    public decimal getPorcentajeVentasTotal() 
+    {
+        return productoHandler.obtenerPorcentajeVentasTotal(analisis.FechaCreacion);
+    }
+
+    public decimal getPorcentajeVentasDisponible(ProductoModel producto)
+    {
+        return 100 - getPorcentajeVentasTotal() + productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
     }
 
     public void actualizarPrecio(ProductoModel producto)
     {
-        productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
+        decimal precioActual = producto.Precio;
+        if (precioActual >= 0) {
+            productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
+        } else {
+            producto.Precio = 0;
+        }
     }
 
     public decimal calcularMargen(ProductoModel productoActual) {
