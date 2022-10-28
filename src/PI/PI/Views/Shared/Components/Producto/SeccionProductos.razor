@@ -69,12 +69,12 @@
                 <div class="entrada-datos">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="nombre-producto">Nombre del producto:</label>
-                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre">    
+                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre" maxlength="30">    
                 </div>
                 <div class="entrada-datos">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="lote-producto">Lote del producto:</label>
-                    <input id="lote-producto" type="text" min="1" @bind="productoActivo.Lote">
+                    <input id="lote-producto" type="number" min="1" @bind="productoActivo.Lote">
                 </div>      
             </div>
             @((MarkupString)ErrorNombre) @*Mensaje de error*@
@@ -148,7 +148,7 @@
                         @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo componente*@
                         <div id="container-input-nombre-componente">
                             <label for="nombreComponente">Nombre:</label>
-                            <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].Nombre">
+                            <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].Nombre" maxlength="30">
                         </div>
                         @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
                         <div id="container-input-unidad-componente">
@@ -161,12 +161,12 @@
                         @*Sección donde se encuentra el form donde se ingresa la cantidad del nuevo componente*@
                         <div id="container-input-cantidad-componente">
                             <label for="cantidadComponente">Cantidad:</label>
-                            <input class="input-componente" id="cantidadComponente" min="1" name="cantidadComponente" type="number" @bind="componentes[componenteActual].Cantidad">
+                            <input class="input-componente" id="cantidadComponente" min="1" name="cantidadComponente" type="number" @bind="componentes[componenteActual].Cantidad" step="any">
                         </div>
                         @*Sección donde se encuentra el form donde se ingresa la costo del nuevo componente*@
                         <div id="container-input-costo-componente">
                             <label for="costoComponente">Costo:</label>
-                            <input class="input-componente" id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Costo">
+                            <input class="input-componente" id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Costo" step="any">
                         </div>
                         @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
                         <div id="seccion-guardar-componente">
