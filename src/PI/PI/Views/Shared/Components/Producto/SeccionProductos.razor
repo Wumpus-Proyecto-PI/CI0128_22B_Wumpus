@@ -189,6 +189,10 @@
                 {
                     <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El costo debe de ser positivo</p>
                 }
+                @if (NombreRepetido)
+                {
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El nombre ingresado ya existe</p>
+                }
             }
             @*Sección de botones en la parte inferior del popup de los componente*@
             <div id="botones-componentes">
@@ -215,7 +219,7 @@
             @if (hayGastoSeleccionado == true)
             {
                 /*Mostramos el boton de elimnar solo si se selccionó un gasto*/
-                <div id="eliminar-gasto" class="gasto-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGasto(productoActivo)">
+                <div id="eliminar-gasto" class="gasto-boton-componente" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGasto(productoActivo)">
                     <a>
                         @if (hoverEliminar == false)
                         {
@@ -225,7 +229,7 @@
                     </a>
                 </div>
             }
-            <div id="guardar-boton" class="gasto-boton " @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGasto(productoActivo)">
+            <div id="guardar-boton" class="gasto-boton-componente" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGasto(productoActivo)">
                 <a>
                     @if (hoverGuardar == false)
                     {
@@ -530,7 +534,9 @@
 
     public bool CantidadPositiva { get; set; } = true;
 
-    public bool CostoPositivo { get; set;  } = true; 
+    public bool CostoPositivo { get; set;  } = true;
+
+    public bool NombreRepetido { get; set; } = false;
 
     // Variable que indica si el componente que se esta tratando de agregar ya existe en la base de datos.
     public bool YaExisteComponente { get; set; }
@@ -540,6 +546,7 @@
     {
 
         bool hayNombre = !(string.IsNullOrWhiteSpace(componentes[componenteActual].Nombre));
+        bool nombreNoExiste = RevisarNombreRepetido(componentes[componenteActual]);
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
         bool costoPositivo = componentes[componenteActual].Costo >= 0;
 
@@ -547,7 +554,7 @@
         CantidadPositiva = cantidadPositiva;
         CostoPositivo = costoPositivo;
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
-        if (hayNombre && cantidadPositiva && costoPositivo)
+        if (hayNombre && cantidadPositiva && costoPositivo && nombreNoExiste)
         {
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
@@ -573,7 +580,22 @@
             {
                 CostoPositivo = false;
             }
+            if (!nombreNoExiste) {
+                NombreRepetido = true;
+            }
         }
+    }
+
+    public bool RevisarNombreRepetido(ComponenteModel componente) {
+        
+        bool valido = true; 
+        
+        if (productoActivo.Componentes.Exists(x => x.Nombre.ToLower() == componente.Nombre.ToLower()))
+        {
+            valido = false;
+        }
+
+        return valido; 
     }
 
     // Revisa la unidad del componente que se pasa por parametro
