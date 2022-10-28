@@ -1,5 +1,6 @@
 ﻿@using PI.Models
 @using PI.Handlers
+@using System.Globalization
 @inject NavigationManager NavigationManager;
 
 
@@ -119,8 +120,8 @@
                         else {
                             <td>Porcentaje</td>
                         }
-                        <td> @productoActivo.Componentes[index].Cantidad.ToString()</td>
-                        <td> @productoActivo.Componentes[index].Costo </td>
+                        <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad / 12)))</td>
+                        <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Costo / 12)))</td>
                         @*Botón para borrar un beenficio*@
                         <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>borrarComponente(productoActivo.Componentes[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
                     </tr>
