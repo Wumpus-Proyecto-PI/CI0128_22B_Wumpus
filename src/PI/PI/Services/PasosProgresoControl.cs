@@ -39,8 +39,10 @@ namespace PI.Services
                 pasoActivoMaximo = pasoMaximoAccesible.NumeroPaso - 1;
             } else
             {
-                // si es nulo el resultado de la busqueda indicamos que el maximo paso accesible es el primero
-                pasoActivoMaximo = 1;
+                // si es nulo el resultado de la busqueda indicamos que el maximo paso accesible es el ultimo paso que haya en la lista
+                // esto porque si se obtuvo nulo es que no hubo nigun paso no activo en las lista, por lo tanto todos esta activos
+                // le sumamos 1 porque en la lita de pasos no se incluye el paso default que es la estrutura organizativa
+                pasoActivoMaximo = PasosControles.Count + 1;
             }
 
             return pasoActivoMaximo;
