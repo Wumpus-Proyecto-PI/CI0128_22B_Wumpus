@@ -158,12 +158,13 @@ namespace PI.Services
         override protected bool EstaActivo(AnalisisModel analisis)
         {
             bool resultado = false;
+
             ProductoHandler productoHandler = new ProductoHandler();
             List<ProductoModel> productos = productoHandler.obtenerProductos(analisis.FechaCreacion);
+
             for (int actual = 0; actual < productos.Count && resultado == false; ++actual)
             {
                 if (productos[actual].Precio > 0
-                    && productos[actual].CostoVariable > 0
                     && productos[actual].PorcentajeDeVentas > 0)
                 {
                     resultado = true;
