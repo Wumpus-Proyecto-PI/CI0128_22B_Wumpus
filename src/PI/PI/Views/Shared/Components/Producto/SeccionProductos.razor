@@ -121,14 +121,7 @@
                         }
                         else {
                             <td>Porcentaje</td>
-                            @if (hayGastoSeleccionado == false)
-                            {
-                                <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad)))%</td>
-                            }
-                            else
-                            {
-                                <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad * 100)))%</td>
-                            }  
+                            <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad)))%</td>                       
                         }
                         <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Costo)))</td>
                         @*Botón para borrar un beenficio*@
@@ -537,6 +530,8 @@
     public bool CostoPositivo { get; set;  } = true;
 
     public bool NombreRepetido { get; set; } = false;
+
+    public bool EsNuevo { get; set; } = false;
 
     // Variable que indica si el componente que se esta tratando de agregar ya existe en la base de datos.
     public bool YaExisteComponente { get; set; }

@@ -52,7 +52,14 @@ namespace PI.Handlers
                 }
                 if (columna["cantidad"] != DBNull.Value)
                 {
-                    componente.Cantidad = Convert.ToDecimal(columna["cantidad"]);
+                    if (componente.Unidad == 1) { 
+                        componente.Cantidad = Convert.ToDecimal(columna["cantidad"]) * 100;
+                
+                    }
+                    else
+                    {
+                        componente.Cantidad = Convert.ToDecimal(columna["cantidad"]);
+                    }
                 }
                 componentes.Add(componente);
 
