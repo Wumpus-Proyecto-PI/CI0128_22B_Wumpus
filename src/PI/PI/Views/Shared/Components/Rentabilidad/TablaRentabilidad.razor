@@ -144,7 +144,7 @@
     public void actualizarGananciaMensual()
     {
         AnalisisHandler handler = new AnalisisHandler();
-        handler.ActualizarGananciaMensual(analisis.gananciaMensual, analisis.FechaCreacion);
+        handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
     }
 
     public void actualizarPorcentajeVentas(ProductoModel producto)
@@ -187,7 +187,7 @@
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
     }
 
     public decimal calcularMetaMoneda(ProductoModel productoActual)
@@ -196,7 +196,7 @@
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
 
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }
