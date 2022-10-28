@@ -165,7 +165,7 @@
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
+        return AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
     }
 
     public decimal calcularMetaMoneda(ProductoModel productoActual)
@@ -174,7 +174,7 @@
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
+        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
 
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }
