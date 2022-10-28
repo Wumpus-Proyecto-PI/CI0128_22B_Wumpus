@@ -37,7 +37,7 @@ namespace PI.Handlers
                     Nombre = Convert.ToString(columna["nombre"]),
                     ID = Convert.ToInt32(columna["id"]),
                     CorreoUsuario = Convert.ToString(columna["correoUsuario"]),
-                    Analisis = analisisHandler.ObtenerAnalisis(Convert.ToInt32(columna["id"])),
+                    Analisis = analisisHandler.ObtenerAnalisis(Convert.ToString(columna["id"])),
                     FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]),
                     TipoUltimoAnalisis = analisisHandler.ObtenerTipoAnalisis(fechaUltAnalisis)
                 }
@@ -84,7 +84,7 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
 
             // Le ingresa un analisis por defecto al negocio recien creado 
-            analisisHandler.IngresarAnalisis(Convert.ToInt32(nextID), tipo);
+            analisisHandler.IngresarAnalisis(Convert.ToString(nextID), tipo);
 
             // Crea un modelo para el negocio recien creado 
             NegocioModel negocioIngresado = new NegocioModel();

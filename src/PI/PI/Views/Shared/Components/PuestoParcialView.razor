@@ -1,5 +1,4 @@
 ﻿@using PI.Models
-@using System.Globalization
 
 @*
     Componente que representa tarejeta de un solo puesto
@@ -12,9 +11,7 @@
     </div>
     <div class="bottom-puesto">
         <div class="puesto-caracteristica puesto-salario-bruto">
-            <p>@(
-                    String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (puesto.SalarioBruto * puesto.Plazas))
-                )</p>
+            <p>@puesto.SalarioBruto.ToString()</p>
             <img class="divisa-img" src="/img/generic/coin-icon.svg">
         </div>
         <div>
@@ -24,18 +21,7 @@
             </div>
         </div>
     </div>
-        <div style=" display:flex; align-items:center; justify-content:center;">
-            @if (puesto.Beneficios.Count > 0) {
-                <p style="margin-right:5px; font-size:large;">@(
-                    puesto.Beneficios.Count
-                )</p>
-                <img src="img/estructuraOrg/incentive.png" width="30px" height="30px">
-            }
-            else
-            {
-                <h3 style="opacity:0.5;"> No tiene beneficios </h3>
-            }
-        </div>
+
 </div>
 
 @code {

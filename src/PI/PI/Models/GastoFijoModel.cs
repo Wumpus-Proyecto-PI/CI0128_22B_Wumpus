@@ -6,7 +6,8 @@
         // Nombre del gasto fijo. Debe ser único dentro del contexto de un análisis.
         public string Nombre { get; set; } = String.Empty;
 
-        // Monto anual (cantidad monetaria) del gasto fijo.
+        // Monto mensual (cantidad monetaria) del gasto fijo.
+        // TODO cambiar a monto anual.
         public decimal Monto { get; set; } = 0M;
         
         // Fecha del análisis a la que pertenece el gasto fijo.

@@ -11,6 +11,8 @@
     height: 100%;
 }
 
+
+
 #tabla_form {
     display: flex;
     width: 100%;
@@ -74,14 +76,13 @@
     width: 40px;
     height: 40px;
 }
-
-#boton-guardar-beneficio:hover {
-    transform: scale(1.1);
-    background-color: #E2F2FF;
-    border-color: #E2F2FF;
-    transition-duration: 0.4s;
-    cursor:pointer;
-}
+    #boton-guardar-beneficio:hover {
+        transform: scale(1.1);
+        background-color: #E2F2FF;
+        border-color: #E2F2FF;
+        transition-duration: 0.4s;
+        cursor:pointer;
+    }
 
 
 #container-input-nombre-beneficio {
@@ -90,7 +91,7 @@
     align-items:center;
     justify-content:center;
     height: 100%;
-    width: 40%;
+    width: 55%;
     font-size: large;
     margin-left: 10px;
     margin-right: 10px;
@@ -102,7 +103,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    width: 26%;
+    width: 18%;
     font-size: large;
     margin-left: 10px;
     margin-right: 10px;
@@ -114,12 +115,16 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    width: 25%;
+    width: 18%;
     font-size: large;
     margin-left: 10px;
     margin-right: 10px;
     border-radius: 10px;
 }
+
+
+
+
 
 .dato_tabla_beneficios {
     width: 33.33%;
@@ -159,13 +164,13 @@ td {
     left: 95%;
 }
 
-#salir-popup-beneficios:hover {
-    background-color: #FFC8C8;
-    transform: scale(1.1);
-    border-color: #FFC8C8;
-    transition-duration: 0.4s;
-    cursor:pointer;
-}
+    #salir-popup-beneficios:hover {
+        background-color: #FFC8C8;
+        transform: scale(1.1);
+        border-color: #FFC8C8;
+        transition-duration: 0.4s;
+        cursor:pointer;
+    }
 
 #lista_beneficios {
     width: 100%;
@@ -186,14 +191,14 @@ td {
     align-items: center;
 }
 
-.borrar-beneficio:hover {
-    background-color: #FFC8C8;
-    transform: scale(1.1);
-    background-color: #FFC8C8;
-    border-color: #FFC8C8;
-    transition-duration: 0.4s;
-    cursor:pointer;
-}
+    .borrar-beneficio:hover {
+        background-color: #FFC8C8;
+        transform: scale(1.1);
+        background-color: #FFC8C8;
+        border-color: #FFC8C8;
+        transition-duration: 0.4s;
+        cursor:pointer;
+    }
 
 #botones_beneficios {
     width:100%;
@@ -220,13 +225,13 @@ td {
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
 }
 
-#boton-agregar-beneficio:hover {
-    background-color: #E2F2FF;
-    transform: scale(1.1);
-    border-color: #E2F2FF;
-    transition-duration: 0.4s;
-    cursor:pointer;
-}
+    #boton-agregar-beneficio:hover {
+        background-color: #E2F2FF;
+        transform: scale(1.1);
+        border-color: #E2F2FF;
+        transition-duration: 0.4s;
+        cursor:pointer;
+    }
 
 #boton-cerrar-form-beneficio {
     display: flex;
@@ -240,14 +245,13 @@ td {
     border-color: #ccc;
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
 }
-
-#boton-cerrar-form-beneficio:hover {
-    background-color: #E2F2FF;
-    transform: scale(1.1);
-    border-color: #E2F2FF;
-    transition-duration: 0.4s;
-    cursor:pointer;
-}
+    #boton-cerrar-form-beneficio:hover {
+        background-color: #E2F2FF;
+        transform: scale(1.1);
+        border-color: #E2F2FF;
+        transition-duration: 0.4s;
+        cursor:pointer;
+    }
 
 #contenedor_beneficios {
     
@@ -269,6 +273,24 @@ td {
     block-size:fit-content;
 }
 
+#subtitulo {
+    width: 554px;
+    height: 62px;
+    background-color: #005DB9;
+    color: white;
+    display: flex;
+    border-radius: 0px 20px 20px 0px;
+    box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+#nombre_negocio {
+    padding-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: xx-large;
+}
 
 #pestañas {
     margin-left: 85px;
@@ -367,6 +389,11 @@ div a {
 }
 
 
+#agregar-puesto img {
+    width: 35px;
+    padding: 5px;
+}
+
 .seccion-botones-beneficios {
     width:33.3333%;
     display:flex;
@@ -382,19 +409,14 @@ div a {
     height: 50px;
     border-radius:10px;
 }
-#boton-beneficios:hover {
-    background-color: #E2F2FF;
-    transform: scale(1.1);
-    border-color: #E2F2FF;
-    transition-duration: 0.4s;
-    cursor:pointer;
-}
-
-#eliminar-puesto:hover {
-    background-color: #FFC8C8;
-}
-
-.est-org-boton {
+    #boton-beneficios:hover {
+        background-color: #E2F2FF;
+        transform: scale(1.1);
+        border-color: #E2F2FF;
+        transition-duration: 0.4s;
+        cursor:pointer;
+    }
+#agregar-puesto {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -411,7 +433,7 @@ div a {
     transition-duration: 0.3s;
 }
 
-.est-org-boton:hover {
+#agregar-puesto:hover {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -430,9 +452,47 @@ div a {
     background-color: #E2F2FF;
 }
 
-.est-org-boton img{
+#guardar-puesto img {
     width: 35px;
     padding: 5px;
+}
+
+
+#guardar-puesto {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #ccc;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin: 25px;
+    transition-duration: 0.3s;
+}
+
+
+#guardar-puesto:hover {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 49px;
+    width: fit-content;
+    border: solid;
+    border-color: transparent;
+    border-radius: 10px;
+    margin: 25px;
+    padding-inline: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition-duration: 0.8s;
+    background-color: #E2F2FF;
 }
 
 #mostrar-puestos {
@@ -465,26 +525,26 @@ div a {
     margin: 10px 0px 10px 0px;
 }
 
-.fila-form-configuracion label {
-    border: solid;
-    border-radius: 20px 0px 0px 20px;
-    padding: 5px 10px 5px 10px;
-    border-width: 1px;
-    font-size: 25px;
-    width: 225px;
-    text-align: center;
-    background-color: #E2E2E2;
-}
+    .fila-form-configuracion label {
+        border: solid;
+        border-radius: 20px 0px 0px 20px;
+        padding: 5px 10px 5px 10px;
+        border-width: 1px;
+        font-size: 25px;
+        width: 100px;
+        text-align: center;
+        background-color: #E2E2E2;
+    }
 
-.fila-form-configuracion input {
-    border: solid;
-    border-radius: 0px 20px 20px 0px;
-    padding: 5px 10px 5px 10px;
-    border-width: 1px;
-    font-size: 25px;
-    width: 200px;
-    text-align: center;
-}
+    .fila-form-configuracion input {
+        border: solid;
+        border-radius: 0px 20px 20px 0px;
+        padding: 5px 10px 5px 10px;
+        border-width: 1px;
+        font-size: 25px;
+        width: 200px;
+        text-align: center;
+    }
 
 #inferior-horizontal {
     display: flex;
@@ -495,7 +555,7 @@ div a {
 }
 
 
-.puesto-clickeable {
+.puesto-clickeable-eliminable {
     display: flex;
     display: flex;
     flex-wrap: wrap;
@@ -509,40 +569,30 @@ div a {
     transition-duration: 0.4s;
 }
 
-.puesto-clickeable:hover {
-    color: black;
-    cursor: pointer;
-    transform: scale(1.03);
-    transition-duration: 0.2s;
-}
+    .puesto-clickeable-eliminable:hover {
+        color: black;
+        cursor: pointer;
+        transform: scale(1.03);
+        transition-duration: 0.2s;
+        /*box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.19);*/
+    }
 
-.puesto-icono-editar {
-    width: fit-content;
-    height: fit-content;
-    margin-left: -32px;
+.puesto-icono-eliminar {
+    width: 35px;
+    padding: 1px;
+    margin-left: -33px;
     border: solid;
-    border-width: 2px;
+    border-width: 3px;
     border-color: lightgray;
     border-radius: 20px;
     background-color: white;
     transition-duration: 0.4s;
 }
 
-.puesto-clickeable:hover .puesto-icono-editar {
-    color: black;
-    cursor: pointer;
-    background-color: #E2F2FF;
-}
-
-.puesto-clickeable:hover .puesto-editar {
-    color: black;
-    cursor: pointer;
-    background-color: #E2F2FF;
-    border-color: #E2F2FF;
-}
-
-
-.puesto-icono-editar img {
-    width: 30px;
-    padding: 5px;
-}
+    .puesto-icono-eliminar:hover {
+        transform: scale(1.1);
+        background-color: #FFC8C8;
+        border-color: #FFC8C8;
+        transition-duration: 0.4s;
+        cursor:pointer;
+    }
