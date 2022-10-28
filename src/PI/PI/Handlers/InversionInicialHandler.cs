@@ -7,10 +7,12 @@ namespace PI.Handlers
     // Handler de inversión inicial, clase encargada de recuperar y consultar datos de las tablas en la base de datos.
     public class InversionInicialHandler : Handler
     {
-        // Crea una lista de los gastos fijos existentes en la BD y la retorna.
+        // // Recibe la fecha del análisis del que se quiere obtener los gastos iniciales.
+        // Crea una lista de los gastos iniciales existentes en la BD
+        // Retorna la lista de los gastos iniciales.
         public List<GastoInicialModel> ObtenerGastosIniciales(string fechaAnalisis)
         {
-            List<GastoInicialModel> GastosIniciales = new List<GastoInicialModel>();
+            List<GastoInicialModel> gastosIniciales = new List<GastoInicialModel>();
 
             string consulta = $"EXEC ObtenerGastosIniciales @fechaAnalisis = '{fechaAnalisis}'";
 
@@ -18,7 +20,7 @@ namespace PI.Handlers
 
             foreach (DataRow row in tablaResultado.Rows)
             {
-                GastosIniciales.Add(
+                gastosIniciales.Add(
                     new GastoInicialModel
                     {
                         Nombre = Convert.ToString(row["nombre"]),
@@ -27,18 +29,18 @@ namespace PI.Handlers
                     }
                 );
             }
-            return GastosIniciales;
+            return gastosIniciales;
         }
 
-        // Inserta en la base de datos, el modelo de gasto inicial en el análisis pasado por parámetro.
-        public void IngresarGastoInicial(string fechaAnalisis, GastoInicialModel GastoInicial)
+        // Recibe la fecha del análisis al que se quiere insertar el gasto inicial y lo inserta en la base de datos
+        public void IngresarGastoInicial(string fechaAnalisis, GastoInicialModel gastoInicial)
         {
-            string consulta = $"EXEC IngresarGastoInicial @fechaAnalisis = '{fechaAnalisis}', @nombre = '{GastoInicial.Nombre}', @valor = {GastoInicial.Monto}";
+            string consulta = $"EXEC IngresarGastoInicial @fechaAnalisis = '{fechaAnalisis}', @nombre = '{gastoInicial.Nombre}', @valor = {gastoInicial.Monto}";
 
             enviarConsultaVoid(consulta);
         }
 
-        // Elimina de la base de datos, el gasto inicial que coincida con el nombre pasada por parámetro en el análisis respectivo.
+        // Recibe la fecha del análisis del que se quiere eliminar el gasto inicial y lo elimina en la base de datos el gasto inicial que coincida con el nombre pasada por parámetro.
         public void EliminarGastoInicial(string fechaAnalisis, string nombreGastoInicial)
         {
             string consulta = $"EXEC EliminarGastoInicial @nombre= '{nombreGastoInicial}', @fechaAnalisis='{fechaAnalisis}'";
@@ -46,14 +48,14 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
-        // Retorna la sumatoria de los montos de los gastos iniciales del análisis pasado por parámetro.
-        public decimal obtenerTotal (string fechaAnalisis)
+        // Recibe la fecha del análisis del que se quiere obtener la sumatoria de los montos de los gastos iniciales del análisis pasado por parámetro.
+        public decimal ObtenerMontoTotal (string fechaAnalisis)
         {
             decimal total = 0.0m;
 
             string consulta = $"EXEC ObtenerSumInversionInicial @fechaAnalisis = '{fechaAnalisis}' ";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (!tablaResultado.Rows[0].IsNull("total"))
+            if (tablaResultado.Rows[0].IsNull("total") == false)
             {
                 total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
             }

@@ -25,8 +25,8 @@ namespace PI.Handlers
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
                 Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual },
-                gananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"]),
-                estadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
+                GananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"]),
+                EstadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
             };
 
             return analisisResultado;
@@ -47,8 +47,8 @@ namespace PI.Handlers
             AnalisisModel analisisMasReciente = new AnalisisModel
             {
                 FechaCreacion = Convert.ToDateTime(tablaResultado.Rows[0]["fechaCreacion"]),
-                gananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"]),
-                estadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
+                GananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"]),
+                EstadoAnalisis = Convert.ToInt32(tablaResultado.Rows[0]["estadoAnalisis"]),
                 Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
             };
             
@@ -75,8 +75,8 @@ namespace PI.Handlers
                 new AnalisisModel
                 {
                     FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
-                    gananciaMensual = Convert.ToDecimal(columna["gananciaMensual"]),
-                    estadoAnalisis = Convert.ToInt32(columna["estadoAnalisis"]),
+                    GananciaMensual = Convert.ToDecimal(columna["gananciaMensual"]),
+                    EstadoAnalisis = Convert.ToInt32(columna["estadoAnalisis"]),
                     Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
                 }
                 );
