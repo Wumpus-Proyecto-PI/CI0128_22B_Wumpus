@@ -7,6 +7,7 @@ using PI.Handlers;
 using PI.Controllers;
 using PI.Models;
 using System.Globalization;
+using PI.Services;
 
 namespace PI.Controllers
 {
@@ -50,25 +51,13 @@ namespace PI.Controllers
             ViewData["Title"] = ViewData["TituloPaso"];
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
             ViewBag.gananciaMensual = analisisActual.GananciaMensual;
-            // var tipoAnalisis = handler.ObtenerTipoAnalisis();
+            PasosProgresoControl controlDePasos = new();
+
+            ViewBag.pasoDisponibleMaximo = controlDePasos.DeterminarPasoActivoMaximo(analisisActual);
+
             return View(analisisActual);
         }
 
-        // Indica si el analisis posee puestos
-        // (Retorna un bool que indica si hay puestos o no | Parametros: modelo del analisis que se desea verificar)
-        // Se encarga de verificar si existen puestos dentro de un análisis.
-        public static bool hayPuestos(AnalisisModel analisis) {
-            bool resultado = false;
-            // Se crea instancia del handler
-            EstructuraOrgHandler estHandler = new EstructuraOrgHandler();
-            // Se obtiene de la base de datos los diferentes puestos del Análisis.
-            List<PuestoModel> puestos = estHandler.ObtenerListaDePuestos(analisis.FechaCreacion);
-            // Se determina si la cantidad de puestos que posee es mayor a 0
-            if (puestos.Count > 0) {
-                resultado = true;
-            }
-            return resultado;
-        }
 
         // Indica si el analisis posee gastos fijos
         // (Retorna un bool que indica si hay gastos fijos o no | Parametros: modelo del analisis que se desea verificar)
@@ -92,7 +81,7 @@ namespace PI.Controllers
 
         // Devuelve la vista de la configuracion de un analisis especifico 
         // (Retorna la vista de la configuracion | Parametros: la fecha del analisis cuya configuracion se quiere revisar)
-        public IActionResult ConfiguracionAnalisis (string fechaAnalisis)
+        public IActionResult ConfiguracionAnalisis(string fechaAnalisis)
         {
             ViewBag.FechaAnalisis = fechaAnalisis;
             AnalisisHandler analisisHandler = new AnalisisHandler();
@@ -123,26 +112,6 @@ namespace PI.Controllers
             // Actualiza la configuracion del analisis
             analisisHandler.ActualizarConfiguracionAnalisis(configAnalisis);
             return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
-        }
-
-        // método que verifica si es posible que exista una meta de ventas en el análisis de rentabilidad.
-        // detalle: sirve para determinar si la tarjeta de la inversión inicial se debe habilitar.
-        // se asume que si un producto tiene valores en algunos de sus atributos, la meta de ventas ha sido calculada.
-        public bool ExisteMetaDeVentas (DateTime fechaAnalisis)
-        {
-            bool resultado = false;
-            ProductoHandler productoHandler = new ProductoHandler();
-            List<ProductoModel> productos = productoHandler.obtenerProductos(fechaAnalisis);
-            for (int actual = 0; actual < productos.Count && resultado == false; ++actual)
-            {
-                if (productos[actual].Precio > 0 
-                    && productos[actual].CostoVariable > 0
-                    && productos[actual].PorcentajeDeVentas > 0)
-                {
-                    resultado = true;
-                }
-            }
-            return resultado;
         }
     }
 }

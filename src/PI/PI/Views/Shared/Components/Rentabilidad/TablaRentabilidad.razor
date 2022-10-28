@@ -9,7 +9,7 @@
         <form class="d-flex flex-row align-items-center justify-content-start">
             <div class="form-row">
                 <div class="col col-xs-5">
-                    <input type="number" class="form-control" placeholder=@analisis.gananciaMensual @bind="analisis.gananciaMensual" @onfocusout = "actualizarGananciaMensual">
+                    <input type="number" class="form-control" placeholder=@analisis.GananciaMensual @bind="analisis.GananciaMensual" @onfocusout = "actualizarGananciaMensual">
                 </div>
                 <div class="col col-xs-5">
                     <input type="text" class="form-control" placeholder=@montoGastosFijos readonly>
@@ -87,7 +87,7 @@
                     <p class="datos-calculados">@calcularMargen(productoActual)</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">""</p>
+                    <p class="datos-calculados">@calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable)</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@ 
@@ -141,7 +141,7 @@
     public void actualizarGananciaMensual()
     {
         AnalisisHandler handler = new AnalisisHandler();
-        handler.ActualizarGananciaMensual(analisis.gananciaMensual, analisis.FechaCreacion);
+        handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
     }
 
     public void actualizarPorcentajeVentas(ProductoModel producto) 
@@ -165,7 +165,7 @@
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+        return AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
     }
 
     public decimal calcularMetaMoneda(ProductoModel productoActual)
@@ -174,7 +174,7 @@
 
         decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
 
-        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.gananciaMensual, margenPonderado);
+        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidades(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
 
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }
@@ -200,5 +200,11 @@
             total += this.calcularMetaMoneda(productActual);
         }
         return total;
+    }
+
+    public decimal calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
+    {
+        decimal result = AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable); 
+        return Math.Round(result,2);
     }
 }

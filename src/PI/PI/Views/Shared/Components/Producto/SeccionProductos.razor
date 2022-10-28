@@ -49,56 +49,38 @@
             En caso de haber uno seleccionado, se está editando un gasto
             Caso contrario se está agregando uno nuevo
             *@
-            @if (hayGastoSeleccionado == false)
-            {
-                <h1>Nuevo producto</h1>
-            }
-            else
-            {
-                <h1>Editar producto</h1>
-            }
+            <div class="popup-top">
+                @if (hayGastoSeleccionado == false)
+                {
+                    <h1>Nuevo producto</h1>
+                }
+                else
+                {
+                    <h1>Editar producto</h1>
+                }
+                <div class="salir-popup">
+                    <img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarVisibilidadPopupBoton">
+                </div>
+            </div>
 
             @*Form para ingresar los datos referentes al gasto fijo*@
             <div class="contenedor-datos-gasto">
                 <div class="entrada-datos">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="nombre-producto">Nombre del producto:</label>
-                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre">
-                    @((MarkupString)ErrorNombre) @*Mensaje de error*@
+                    <input id="nombre-producto" type="text" @bind="productoActivo.Nombre" placeholder="@placeHolderNombre">    
                 </div>
                 <div class="entrada-datos">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="lote-producto">Lote del producto:</label>
-                    <input id="lote-producto" type="text" @bind="productoActivo.Lote">
-                    @((MarkupString)ErrorLote) @*Mensaje de error*@
-                </div>
+                    <input id="lote-producto" type="text" min="1" @bind="productoActivo.Lote">
+                </div>      
             </div>
+            @((MarkupString)ErrorNombre) @*Mensaje de error*@
+            @((MarkupString)ErrorLote) @*Mensaje de error*@
+            @((MarkupString)ErrorComponentesNuevos) @*Mensaje de error*@
 
             @*Seccion de los botones para eliminar o guardar el gasto variable*@
-            <div id="inferior-horizontal">
-                @if (hayGastoSeleccionado == true)
-                {
-                    /*Mostramos el boton de elimnar solo si se selccionó un gasto*/
-                    <div id="eliminar-gasto" class="gasto-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGasto(productoActivo)">
-                        <a>
-                            @if (hoverEliminar == false)
-                            {
-                                <img src="img/generic/trashCan.png" alt="">
-                            }
-                            @hoverTextEliminar
-                        </a>
-                    </div>
-                }
-                <div id="guardar-boton" class="gasto-boton " @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGasto(productoActivo)">
-                    <a>
-                        @if (hoverGuardar == false)
-                        {
-                            <img src="img/estructuraOrg/guardarPuesto.png" alt="">
-                        }
-                        @hoverTextGuardar
-                    </a>
-                </div>
-            </div>
         </div>
 
         @*Seccion de ingreso y edicion de componentes*@
@@ -131,8 +113,13 @@
 
                     <tr class="filas-tabla-componente">
                         <td> @productoActivo.Componentes[index].Nombre</td>
-                        <td> @productoActivo.Componentes[index].Unidad</td>
-                        <td> @productoActivo.Componentes[index].Cantidad</td>
+                        @if (@productoActivo.Componentes[index].Unidad == 0) {
+                            <td>Unitario</td>
+                        }
+                        else {
+                            <td>Porcentaje</td>
+                        }
+                        <td> @productoActivo.Componentes[index].Cantidad.ToString()</td>
                         <td> @productoActivo.Componentes[index].Costo </td>
                         @*Botón para borrar un beenficio*@
                         <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>borrarComponente(productoActivo.Componentes[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
@@ -144,52 +131,53 @@
             {
                 @*Se agrega a los comodines un nuevo beneficio*@
                 componentes.Add(new ComponenteModel());
-
-                <h2>Nuevo Componente</h2>
-                @*Sección de forms para ingresar los datos de un nuevo componente*@
-                <div id="tabla-form">
-                    @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo componente*@
-                    <div id="container-input-nombre-componente">
-                        <label for="nombreComponente">Nombre:</label>
-                        <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].Nombre">
-                    </div>
-                    @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
-                    <div id="container-input-unidad-componente">
-                        <label for="unidadComponente">Unidad:</label>
-                        <select class="input-componente" id="unidadComponente" name="unidadComponente">
-                            <option selected value="0">Unitario</option>
-                            <option value="1">Porcentaje</option>
-                        </select> 
-                    </div>
-                    @*Sección donde se encuentra el form donde se ingresa la cantidad del nuevo componente*@
-                    <div id="container-input-cantidad-componente">
-                        <label for="cantidadComponente">Cantidad:</label>
-                        <input class="input-componente" id="cantidadComponente" min="1" name="cantidadComponente" type="number" @bind="componentes[componenteActual].Cantidad">
-                    </div>
-                    @*Sección donde se encuentra el form donde se ingresa la costo del nuevo componente*@
-                    <div id="container-input-costo-componente">
-                        <label for="costoComponente">Costo:</label>
-                        <input class="input-componente" id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Costo">
-                    </div>
-                    @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
-                    <div id="seccion-guardar-componente">
-                        <div id="boton-guardar-componente" @onclick="agregarComponenteNuevo">
-                            <img src="img/estructuraOrg/guardarPuesto.png" alt="" width="30px" height="30px">
+                <div class="form-componentes">
+                    <h2>Nuevo Componente</h2>
+                    @*Sección de forms para ingresar los datos de un nuevo componente*@
+                    <div id="tabla-form">
+                        @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo componente*@
+                        <div id="container-input-nombre-componente">
+                            <label for="nombreComponente">Nombre:</label>
+                            <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].Nombre">
+                        </div>
+                        @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
+                        <div id="container-input-unidad-componente">
+                            <label for="unidadComponente">Unidad:</label>
+                            <select class="input-unidad" id="unidadComponente" name="unidadComponente" @bind="componentes[componenteActual].Unidad">
+                                <option selected value="0">Unitario</option>
+                                <option value="1">Porcentaje</option>
+                            </select> 
+                        </div>
+                        @*Sección donde se encuentra el form donde se ingresa la cantidad del nuevo componente*@
+                        <div id="container-input-cantidad-componente">
+                            <label for="cantidadComponente">Cantidad:</label>
+                            <input class="input-componente" id="cantidadComponente" min="1" name="cantidadComponente" type="number" @bind="componentes[componenteActual].Cantidad">
+                        </div>
+                        @*Sección donde se encuentra el form donde se ingresa la costo del nuevo componente*@
+                        <div id="container-input-costo-componente">
+                            <label for="costoComponente">Costo:</label>
+                            <input class="input-componente" id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Costo">
+                        </div>
+                        @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
+                        <div id="seccion-guardar-componente">
+                            <div id="boton-guardar-componente" @onclick="agregarComponenteNuevo">
+                                <p class="aceptar">Aceptar</p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 @*Sección de mensajes de error en caso de que se hayan ingresado datos erróneos en los forms del nuevo beneficio*@
                 @if (NombreVacio)
                 {
-                    <p style="color:red; align-self:self-start; margin-left:10px;">ERROR: El nombre ingresado es vacío</p>
+                    <p style="color:red; align-self:center; margin-bottom:10px;">ERROR: El nombre ingresado es vacío</p>
                 }
                 @if (!CantidadPositiva)
                 {
-                    <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: La cantidad ingresada debe ser positivo</p>
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: La cantidad ingresada debe ser positivo</p>
                 }
                 @if (!CostoPositivo)
                 {
-                    <p style="color:red;  align-self:self-start; margin-left:10px;">ERROR: El costo debe de ser positivo</p>
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El costo debe de ser positivo</p>
                 }
             }
             @*Sección de botones en la parte inferior del popup de los componente*@
@@ -198,20 +186,44 @@
                 @if (!formVisible)
                 {
                     <div id="boton-agregar-componente">
-                        <img src="img/estructuraOrg/addPuesto.png" alt="" width="30px" height="30px" @onclick="cambiarVisibilidadForm">
+                        <img src="img/estructuraOrg/addPuesto.png" alt="" width="20px" height="20px" @onclick="cambiarVisibilidadForm">
                     </div>
                 }
                 @*En casode que el form sea visible, se muestra un botón de "^" que al presionarlo, oculta la sección de los forms de los componente*@
                 else
                 {
                     <div id="boton-cerrar-form-componente">
-                        <img src="img/estructuraOrg/up-arrow.png" alt="" width="30px" height="30px" @onclick="cambiarVisibilidadForm">
+                        <img src="img/estructuraOrg/up-arrow.png" alt="" width="20px" height="20px" @onclick="cambiarVisibilidadForm">
                     </div>
                 }
             </div>
             @*Botón de X en la parte superior derecha del popup que al presionarlo se cierra el popup*@
             @*
             *@
+        </div>
+        <div id="inferior-horizontal">
+            @if (hayGastoSeleccionado == true)
+            {
+                /*Mostramos el boton de elimnar solo si se selccionó un gasto*/
+                <div id="eliminar-gasto" class="gasto-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGasto(productoActivo)">
+                    <a>
+                        @if (hoverEliminar == false)
+                        {
+                            <img src="img/generic/trashCan.png" alt="">
+                        }
+                        @hoverTextEliminar
+                    </a>
+                </div>
+            }
+            <div id="guardar-boton" class="gasto-boton " @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGasto(productoActivo)">
+                <a>
+                    @if (hoverGuardar == false)
+                    {
+                        <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                    }
+                    @hoverTextGuardar
+                </a>
+            </div>
         </div>
     </div>
 }
@@ -237,6 +249,8 @@
     // handler con el cual comunicarse con la base de datos
     public ProductoHandler HandlerGasto = new ProductoHandler();
 
+    public ComponenteHandler HandlerComponente = new ComponenteHandler();
+
 
     // string que almacena el nombre de un producto antes de ser modificado para pdoer actualizarlo en la base de datos
     public string copiaNombreOriginal = "";
@@ -257,6 +271,9 @@
     // strings que muestran los mensajes de error con respecto al nombre y los números negativos
     public string ErrorNombre = "";
     public string ErrorLote = "";
+    public string ErrorComponentesNuevos = "";
+
+    public bool nuevosComponentes = false; 
 
     // método para controlar el hover de los botones guardar y agregar
     public void Hover(int action)
@@ -265,7 +282,7 @@
         // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
         if (action == 1)
         {
-            hoverTextAgregar = "Agregar gasto variable";
+            hoverTextAgregar = "Agregar producto";
             hoverAgregar = true;
         }
         else if (action == 2)
@@ -276,7 +293,7 @@
         else if (action == 3)
         {
             hoverEliminar = true;
-            hoverTextEliminar = "Eliminar gasto variable";
+            hoverTextEliminar = "Eliminar producto";
         }
     }
 
@@ -307,6 +324,25 @@
     {
         if (PopupVisible)
         {
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            PopupVisible = false;     
+        }
+        else
+        {
+            PopupVisible = true;
+        }
+    }
+
+    public void cambiarVisibilidadPopupBoton()
+    {
+        nuevosComponentes = componentesNuevos.Count() > 0;
+        if (PopupVisible && nuevosComponentes)
+        {
+            ErrorComponentesNuevos = "<p class=\"mensaje-error\">Error: hay componentes nuevos, presione el botón de guardar datos antes de salir.</p>";
+        }
+        else if (PopupVisible) {
+            ErrorComponentesNuevos = "";
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
             PopupVisible = false;
         }
         else
@@ -370,10 +406,18 @@
         // se revisa que el nombre no este repetido y que no haya números negativo
         if (revisarNombre(gastoGuardar) && revisarLote(gastoGuardar))
         {
-            // se asigna el pueso la fecha del análisis por si es un gasto variable nuevo
+
+            // se asigna la fecha del análisis por si es un gasto variable nuevo
             gastoGuardar.FechaAnalisis = fechaAnalisis;
             // se ingresa con el handler en la base de datos el gasto variable
             HandlerGasto.InsertarProducto(copiaNombreOriginal, gastoGuardar);
+
+            // Se ingresan los componentes del producto que se va a guardar
+            foreach (ComponenteModel componente in componentesNuevos)
+            {
+                componente.NombreProducto = productoActivo.Nombre;
+                HandlerComponente.AgregarComponente(componente);
+            }
 
             // se resetean variables de vista y de control
             if (hayGastoSeleccionado == false)
@@ -395,16 +439,15 @@
         // se revisa que no esté vacío
         if (string.IsNullOrWhiteSpace(gastoGuardar.Nombre))
         {
-            ErrorNombre = "<p class=\"puesto-error-nombrevacio\">Error: ingrese un nombre para el producto.</p>";
+            ErrorNombre = "<p class=\"mensaje-error\">Error: ingrese un nombre para el producto.</p>";
             valido = false;
         }
-
-        if (!hayGastoSeleccionado)
+        else if (!hayGastoSeleccionado)
         {
             // si es un producto nuevo solo revisamos que no esté en la lista
             if (productos.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
             {
-                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                ErrorNombre = "<p class=\"mensaje-error\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
         }
@@ -415,7 +458,7 @@
             productos.Remove(gastoGuardar);
             if (productos.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
             {
-                ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+                ErrorNombre = "<p class=\"mensaje-error\"> Error: el nombre del producto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
             // resinertamos el peusto en la misma posición donde estaba
@@ -436,9 +479,9 @@
     {
         bool valido = true;
         // se revisa que no sea negativo
-        if (gastoGuardar.Lote < 0.0m)
+        if (gastoGuardar.Lote < 1)
         {
-            ErrorLote = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un número de lote positivo.</p>";
+            ErrorLote = "<p class=\"mensaje-error\"> Error: Ingrese un número de lote positivo.</p>";
             valido = false;
         }
         else
@@ -465,6 +508,8 @@
     // Se agregan a la lista de componentes del gastoActivo.
     public List<ComponenteModel> componentes = new List<ComponenteModel>();
 
+    public List<ComponenteModel> componentesNuevos = new List<ComponenteModel>();
+
     // El índice del comodín sobre el cual se está operando en determinado momento
     int componenteActual = 0;
 
@@ -488,20 +533,18 @@
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
         bool costoPositivo = componentes[componenteActual].Costo >= 0;
 
-
+        NombreVacio = !(hayNombre);
+        CantidadPositiva = cantidadPositiva;
+        CostoPositivo = costoPositivo;
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
         if (hayNombre && cantidadPositiva && costoPositivo)
         {
-            NombreVacio = false;
-            CantidadPositiva = true;
-            CostoPositivo = true; 
-
-            ComponenteHandler handler = new ComponenteHandler();
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
             formVisible = false;
+            componentesNuevos.Add(componentes[componenteActual]);
             productoActivo.Componentes.Add(componentes[componenteActual]);
-            handler.AgregarComponente(componentes[componenteActual]);
+           
             componentes.Add(new ComponenteModel());
             componenteActual += 1; 
         }
