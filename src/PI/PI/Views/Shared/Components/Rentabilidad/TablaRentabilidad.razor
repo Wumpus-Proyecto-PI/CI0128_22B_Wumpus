@@ -49,7 +49,7 @@
                     <p class="datos-calculados texto-nombres">Totales</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    @getPorcentajeVentasTotal() %
+                    <p class="datos-calculados">@getPorcentajeVentasTotal() %</p>
                 </div>
                 <div class="col col-1" data-label="Precio">
                     -
@@ -58,7 +58,7 @@
                     -
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p>@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @if (@opcionSwitchBool) {
