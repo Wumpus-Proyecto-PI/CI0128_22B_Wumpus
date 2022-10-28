@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\css\Rentabilidad\SwitchButton.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Markdig.Signed" Version="0.30.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.9" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />

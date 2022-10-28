@@ -30,7 +30,7 @@
         @foreach (var item in Model)
         {
             <div class="card-trash-container"> 
-                <a class="link-tarjeta" asp-controller="Analisis" asp-action="MisAnalisis" asp-route-IDNegocio=@item.ID.ToString()>
+                <a class="link-tarjeta" asp-controller="Negocio" asp-action="direccionarAnalisis" asp-route-IDNegocio=@item.ID.ToString()>
                     <div class="card card-negocio">
                         <div  class="card-info">
                             <!-- Nombre del negocio -->
@@ -40,9 +40,9 @@
                             <div class="card-tipo">
                                 @if (@item.TipoUltimoAnalisis == false)
                                 {
-                                    <span id="tipoNegocio">No iniciado</span>
+                                    <span id="tipoNegocio">Emprendimiento</span>
                                 }else {
-                                    <span id="tipoNegocio">En marcha</span>
+                                    <span id="tipoNegocio">Ya iniciado</span>
                                 }
                                 <div class="inicial-nombre">
                                     <span> @item.Nombre[0] </span></div>

@@ -1,13 +1,12 @@
 ﻿@using PI.Models
 @using PI.Handlers
-@using System.Globalization
 @inject NavigationManager NavigationManager;
 
 <!-- Razor que representa la sección de gastos fijos -->
 
 <!-- Sección de edición (lado izquierdo) -->
 @*Comienzo ventana izquierda de edición e ingreso de gastos fijos*@
-    <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoAnual">
+    <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoMensual">
 
         <div id="titulo-contenido">
             @*TODO: quitar. Aqui se agrega lo de las pestanas*@
@@ -37,7 +36,7 @@
                         @((MarkupString)CasoError_repetido)
 
                         <div class="fila-form-configuracion">
-                            <label>Monto anual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
+                            <label>Monto mensual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
                         </div>
                         @((MarkupString)CasoError_negativo)
                     </form>
@@ -50,20 +49,7 @@
         *@
         <!-- Botón de guardar el gasto fijo-->
         <div id="inferior-horizontal">
-            @if (hayGastoFijoSeleccionado == true)
-            {
-                /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGastoFijo(gastoFijoActivo)">
-                    <a>
-                        @if (hoverEliminar == false)
-                        {
-                            <img src="img/generic/trashCan.png" alt="">
-                        }
-                        @hoverTextEliminar
-                    </a>
-                </div>
-            }
-            <div class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
+            <div id="guardar-gastoFijo" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
 
                     @if (hoverGuardar == false) {
                         <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -80,15 +66,11 @@
     <div class="altura-seccion" id="seccion-gastosFijos">
         <div class="totales"> 
             <div class="fila-form-configuracion">
-                <!-- Con N2 indica que quiere un número de 2 decimales siempre -->
-            <label class="total">Total mensual</label> <p>
-                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (totalAnual / 12))) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+                <label class="total">Total mensual</label> <p> @((totalMensual).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
             </div>
             <div class="fila-form-configuracion">
            
-                <label class="total">Total anual </label> <p>
-                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", totalAnual)) <img class="divisa-img" src="/img/generic/coin-icon.svg">
-            </p>
+                <label class="total">Total anual </label> <p> @((totalMensual * 12).ToString()) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
             </div>
 @*Fin de sección de totales*@
 
@@ -104,15 +86,13 @@
                 Se muestran no clikeables las prestaciones sociales, seguro social y suma de beneficios
             *@
                 @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
-                {
-                    <div class="gastoFijo-clickeable" @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
-                        <div >
-                            <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
-                        </div>
-                        <div class="gastoFijo-icono-editar">
-                            <img src=img/generic/editPhoto.png>
-                        </div>
+                { 
+                    <div class="gastoFijo-clickeable-eliminable" >
+                    <div @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
+                        <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
                     </div>
+                        <img @onclick="() => eliminarGastoFijo(gastoFijoActual)" class="gastoFijo-icono-eliminar" src=img/generic/trashCan.png>
+                </div>
                 } else {
                     <div class="gastoFijo-noClickeable-noEliminable">
                             <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
@@ -122,7 +102,7 @@
             }
         </div>
         <!-- Botón de agregar un nuevo gasto fijo-->
-        <div class="transition gastoFijo-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
+        <div id="agregar-gastoFijo" class="transition" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
             <a>
                 @if (hoverAgregar == false)
                 {
@@ -145,7 +125,7 @@
 
     // total mensual de gastos fijos
     [Parameter]
-    public decimal totalAnual { get; set; }
+    public decimal totalMensual { get; set; }
 
     // booleano que indica si se está editanto un gasto fijo o agregando
     public bool hayGastoFijoSeleccionado = false;
@@ -166,12 +146,10 @@
     // variables para agregar y quitar texto al hacer hover en botones de guardar y agregar
     public string hoverTextAgregar = "";
     public string hoverTextGuardar = "";
-    public string hoverTextEliminar = "";
 
     // booleanos para el control de los hover en botones guardar y agregar
     public bool hoverGuardar = false;
     public bool hoverAgregar = false;
-    public bool hoverEliminar = false;
 
     // atributo obsoleto, se debe revisar y validar si se peude eliminar
     bool pestanyaConfiguracionActiva = true;
@@ -181,7 +159,7 @@
     string CasoError_negativo = "";
 
     // nombres de gastos fijos que no deben ser clickeables
-    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
+    string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados", "Prestaciones", "SeguroSocial", "Salarios" };
 
     // métodos para manevar la acción de hover de agregar y guardar gasto fijo.
     public void Hover(int action)
@@ -196,10 +174,6 @@
         {
             hoverGuardar = true;
             hoverTextGuardar = "Guardar datos";
-        } else if (action == 3)
-        {
-            hoverEliminar = true;
-            hoverTextEliminar = "Eliminar puesto";
         }
     }
 
@@ -212,15 +186,9 @@
         {
             hoverTextAgregar = "";
             hoverAgregar = false;
-        }
-        else if (action == 2)
-        {
+        } else {
             hoverGuardar = false;
             hoverTextGuardar = "";
-        } else if (action == 3)
-        {
-            hoverEliminar = false;
-            hoverTextEliminar = "";
         }
     }
 
@@ -295,7 +263,7 @@
                 gastoFijoActivo = new GastoFijoModel();
             }
             copiaNombreOriginal = string.Empty;
-            actualizarMontoAnual();
+            actualizarMontoMensual();
 
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
@@ -313,14 +281,15 @@
         // se utiliza el handler para eliminar el puesto
         HandlerGastoFijo.eliminarGastoFijo(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
 
-        actualizarMontoAnual();
+        actualizarMontoMensual();
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
-    // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total anual es actualizado.
-    public void actualizarMontoAnual () {
-        this.totalAnual = HandlerGastoFijo.obtenerTotalAnual(this.fechaAnalasis);
+    // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total mensual es actualizado.
+    // TODO hacerlo para el anual en lugar del mensual.
+    public void actualizarMontoMensual () {
+        this.totalMensual = HandlerGastoFijo.obtenerTotalMensual(this.fechaAnalasis);
     }
 }

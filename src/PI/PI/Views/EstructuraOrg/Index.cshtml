@@ -17,7 +17,10 @@
 
 </head>
 
-@Html.Partial("LayoutNombreEmpresa")
+<div id="subtitulo">
+    @*Se asigna el nombre del negocio que se recibe del handler*@
+    <div id="nombre_negocio">@ViewData["NombreNegocio"]</div><PuestoParcialView />
+</div>
 
 <div id="contenido-puestos-pestañas">   
     @*se llama al componente reazor dinamico que contiene lado del cliente de agregar puestos y beneficios*@
