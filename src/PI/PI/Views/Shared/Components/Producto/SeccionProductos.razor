@@ -114,13 +114,22 @@
 
                     <tr class="filas-tabla-componente">
                         <td> @productoActivo.Componentes[index].Nombre</td>
+                        @*Verifica la unidad del componente en el indice para mostrar los datos de unidad y cantidad correctamente*@
                         @if (@productoActivo.Componentes[index].Unidad == 0) {
                             <td>Unitario</td>
+                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad)))</td>
                         }
                         else {
                             <td>Porcentaje</td>
+                            @if (hayGastoSeleccionado == false)
+                            {
+                                <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad)))%</td>
+                            }
+                            else
+                            {
+                                <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad * 100)))%</td>
+                            }  
                         }
-                        <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad)))</td>
                         <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Costo)))</td>
                         @*Botón para borrar un beenficio*@
                         <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>borrarComponente(productoActivo.Componentes[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
@@ -398,7 +407,6 @@
         ErrorLote = "";
     }
 
-
     // método que permitir guardar en la base de datos un gasto variable
     // recibe el gasto variable a guardar
     public void GuardarDatosGasto(ProductoModel gastoGuardar)
@@ -417,6 +425,7 @@
             foreach (ComponenteModel componente in componentesNuevos)
             {
                 componente.NombreProducto = productoActivo.Nombre;
+                componente.Cantidad = RevisarUnidad(componente);
                 HandlerComponente.AgregarComponente(componente);
             }
 
@@ -545,7 +554,7 @@
             formVisible = false;
             componentesNuevos.Add(componentes[componenteActual]);
             productoActivo.Componentes.Add(componentes[componenteActual]);
-           
+
             componentes.Add(new ComponenteModel());
             componenteActual += 1; 
         }
@@ -565,6 +574,21 @@
                 CostoPositivo = false;
             }
         }
+    }
+
+    // Revisa la unidad del componente que se pasa por parametro
+    // Si la unidad es porcentaje (==1) se le realiza una division entre 100
+    public decimal RevisarUnidad(ComponenteModel componente) {
+        decimal valorOficial = 0;
+
+        if (componente.Unidad == 0) {
+            valorOficial = componente.Cantidad;
+        }
+        if (componente.Unidad == 1) {
+            valorOficial = componente.Cantidad / 100;
+        }
+
+        return valorOficial;
     }
 
     // Método que borra un componente de la base de datos.
