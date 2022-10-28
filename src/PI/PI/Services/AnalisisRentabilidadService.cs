@@ -1,6 +1,6 @@
 ﻿using PI.Models;
 using PI.Handlers;
-
+using System;
 namespace PI.Services
 {
     public class AnalisisRentabilidadService
@@ -29,17 +29,19 @@ namespace PI.Services
         // Parameetr: gananciaMensual meta indicada por el usuario
         // Parameetr: margenPonderado calculado con la funcion @calcularMargen
         // Return: las unidades meta a vender de un producto para cumplir la meta de ganancia mensual
-        public static int CalcularMetaVentasUnidades(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderado)
+        public static int CalcularMetaVentasUnidad(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderado)
         {
-            decimal resultado = 0;
+            int resultado;
             try
             {
-                resultado = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
+                decimal temp = 0;
+                temp = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
+                resultado = Convert.ToInt32(Math.Ceiling(temp));
             } catch
             {
                 resultado = 0;
             }
-            return Convert.ToInt32(resultado);
+            return resultado;
         }
 
         // método para calcular la meta de ventas de un producto en moneda
@@ -75,7 +77,12 @@ namespace PI.Services
         }
 
         public static decimal CalcularPuntoEquilibrio(decimal gastosFijos, decimal precio, decimal costoVariable) {
-            return gastosFijos / (precio - costoVariable);
+            decimal resultado = 0;
+            decimal denominador = (precio - costoVariable);
+            if (denominador > 0) {
+                resultado = gastosFijos / denominador;
+            }
+            return resultado;
         }
 
 
