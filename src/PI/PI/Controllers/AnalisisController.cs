@@ -53,7 +53,7 @@ namespace PI.Controllers
             ViewBag.gananciaMensual = analisisActual.GananciaMensual;
             PasosProgresoControl controlDePasos = new();
 
-            ViewBag.pasoDisponibleMaximo = controlDePasos.DeterminarPasoActivoMaximo(analisisActual);
+            ViewBag.pasoDisponibleMaximo = controlDePasos.EstaActivoMaximo(analisisActual);
 
             return View(analisisActual);
         }
