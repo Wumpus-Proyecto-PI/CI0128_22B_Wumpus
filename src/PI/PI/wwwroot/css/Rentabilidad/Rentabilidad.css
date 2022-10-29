@@ -46,6 +46,11 @@ small {
     font-size: .5em
 }
 
+li p {
+    margin: 0;
+    padding: 0;
+}
+
 ul {
     padding-left:0px;
 }
@@ -79,11 +84,7 @@ li {
 }
 
 .datos-calculados {
-    margin: 0;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .datos-header {
@@ -95,6 +96,9 @@ li {
 }
 
 .col-1 {
+    display:flex;
+    justify-content:center;
+    align-items:center;
     position: relative;
     flex-basis: 10%;
 }
