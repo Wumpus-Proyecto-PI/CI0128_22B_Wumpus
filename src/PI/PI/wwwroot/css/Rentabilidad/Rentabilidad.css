@@ -22,6 +22,12 @@ input[type=number] {
 
 }
 
+#container-forms-top > div:nth-child(2) {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
 .texto-nombres {
     letter-spacing: .03em;
     font-weight: bold;

@@ -4,22 +4,37 @@
 @using System.Globalization
 
 
-    <div class="container text-center mt-5">
+<div class="container text-center mt-5">
 
     <div id="container-forms-top">
         <div id="form-parametros-rentabilidad">
             <div class="pill-form">
-               <div><h5>Ganancia mensual</h5></div>
-                <input id="form-ganancia-mensual" type="text" class="form-control" @bind="analisis.GananciaMensual" @onfocusout = "actualizarGananciaMensual">
+                <div><h5>Ganancia mensual</h5></div>
+                <input id="form-ganancia-mensual" type="text" class="form-control" @bind="analisis.GananciaMensual" @onfocusout="actualizarGananciaMensual">
             </div>
             <div class="pill-form">
                 <div><h5>Gastos fijos</h5></div>
-                <input id="form-gastos-fijos-totales" type="text" class="form-control" placeholder=@IOManager.ToFormatoEstadistico(montoGastosFijos)  readonly>
+                <input id="form-gastos-fijos-totales" type="text" class="form-control" placeholder=@IOManager.ToFormatoEstadistico(montoGastosFijos) readonly>
             </div>
         </div>
-        <div class="switch-container">
-                <span class="switch-text">@opcionSwitch</span>
-            <input type="checkbox" class="switch_1" @onclick="switchMetaVentas">
+        <div class="row">
+            <div class="row">
+                <span class="switch-text">Representar en</span>
+            </div>
+            <div class="row">
+                <div class="switch-container">
+                    @*<span class="switch-text">@opcionSwitch</span>*@
+                    <div class="opcion-unidad">
+                        <span class="switch-text">Unidad</span>
+                        <img src="Images/simbolo_unidades.svg" />
+                    </div>
+                    <input type="checkbox" class="switch_1" @onclick="switchMetaVentas">
+                    <div class="opcion-monto">
+                        <span class="switch-text">Monto</span>
+                        <img src="Images/simbolo_moneda.svg" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <ul class="responsive-table">
@@ -31,10 +46,10 @@
                 <p class="datos-header">Porcentaje de Ventas</p>
             </div>
             <div class="col col-1">
-                <p class="datos-header">Precio</p>
+                <p>Precio</p>
             </div>
             <div class="col col-1">
-                <p class="datos-header">Margen</p>
+                <p>Margen</p>
             </div>
             <div class="col col-1">
                 <p class="datos-header">Punto Equilibrio</p>
@@ -44,27 +59,30 @@
             </div>
         </li>
 
-            <li class="table-row-totales">
-                <div class="col col-1" data-label="Nombre">
-                    <p class="datos-calculados texto-nombres">Totales</p>
-                </div>
-                <div class="col col-1" data-label="% Ventas">
-                    <p class="datos-calculados">@getPorcentajeVentasTotal() %</p>
-                </div>
-                <div class="col col-1" data-label="Precio">
-                    -
-                </div>
-                <div class="col col-1" data-label="Margen">
-                    -
-                </div>
-                <div class="col col-1" data-label="Punto Eq">
+        <li class="table-row-totales">
+            <div class="col col-1" data-label="Nombre">
+                <p class="datos-calculados texto-nombres">Totales</p>
+            </div>
+            <div class="col col-1" data-label="% Ventas">
+                @getPorcentajeVentasTotal() %
+            </div>
+            <div class="col col-1" data-label="Precio">
+                -
+            </div>
+            <div class="col col-1" data-label="Margen">
+                -
+            </div>
+            <div class="col col-1" data-label="Punto Eq">
                     <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
-                </div>
-                <div class="col col-1" data-label="Meta">
-                    @if (@opcionSwitchBool) {
-                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaUnidades())</p>
-                } else {
-                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaMoneda())</p>
+            </div>
+            <div class="col col-1" data-label="Meta">
+                @if (@opcionSwitchBool)
+                {
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaUnidades()) <img src="Images/simbolo_unidades.svg" /></p>
+                }
+                else
+                {
+                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaMoneda()) <img src="Images/simbolo_moneda.svg" /></p>
                 }
             </div>
         </li>
@@ -91,15 +109,15 @@
                     <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
-                    @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@ 
+                    @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     @if (@opcionSwitchBool)
                     {
-                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaUnidades(productoActual)))</p>
+                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaUnidades(productoActual))) <img src="Images/simbolo_unidades.svg" /></p>
                     }
                     else
                     {
-                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaMoneda(productoActual)))</p>
+                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaMoneda(productoActual))) <img src="Images/simbolo_moneda.svg" /></p>
                     }
                 </div>
             </li>
@@ -121,19 +139,16 @@
 
     public int puntoEquilibrioTotal { get; set; }
 
-    public string opcionSwitch = "Meta en unidades";
 
-    public string opcionUnidades = "Meta en unidades";
-    public string opcionMoneda = "Meta en moneda";
-
-    public void switchMetaVentas() {
-        if (!opcionSwitchBool) {
-            opcionSwitch = "Meta en unidades";
-            opcionSwitchBool = true;
-        }
-        else {
-            opcionSwitch = "Meta en moneda";
+    public void switchMetaVentas()
+    {
+        if (opcionSwitchBool)
+        {
             opcionSwitchBool = false;
+        }
+        else
+        {
+            opcionSwitchBool = true;
         }
     }
     public decimal puntoEquilibrio { get; set; }
@@ -156,12 +171,14 @@
         {
             productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
 
-        } else {
+        }
+        else
+        {
             producto.PorcentajeDeVentas = productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
         }
     }
 
-    public decimal getPorcentajeVentasTotal() 
+    public decimal getPorcentajeVentasTotal()
     {
         return productoHandler.obtenerPorcentajeVentasTotal(analisis.FechaCreacion);
     }
@@ -174,15 +191,18 @@
     public void actualizarPrecio(ProductoModel producto)
     {
         decimal precioActual = producto.Precio;
-        if (precioActual >= 0) {
+        if (precioActual >= 0)
+        {
             productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
-        } else {
+        }
+        else
+        {
             producto.Precio = 0;
         }
     }
 
-    public decimal calcularMargen(ProductoModel productoActual) {
-
+    public decimal calcularMargen(ProductoModel productoActual)
+    {
         return AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
     }
 
@@ -206,7 +226,8 @@
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }
 
-    public int actualizarTotalMetaUnidades() {
+    public int actualizarTotalMetaUnidades()
+    {
         int total = 0;
 
         foreach (ProductoModel productActual in productos)
