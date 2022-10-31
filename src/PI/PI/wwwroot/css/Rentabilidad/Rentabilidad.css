@@ -22,6 +22,12 @@ input[type=number] {
 
 }
 
+#container-forms-top > div:nth-child(2) {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
 .texto-nombres {
     letter-spacing: .03em;
     font-weight: bold;
@@ -46,6 +52,11 @@ small {
     font-size: .5em
 }
 
+li p {
+    margin: 0;
+    padding: 0;
+}
+
 ul {
     padding-left:0px;
 }
@@ -59,10 +70,11 @@ li {
 }
 
 .table-header {
-    background-color: #C7EEFF;
+    color: #4A4F55;
+    background-color: #92D050;
     font-size: 16px;
     box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .table-row {
@@ -79,11 +91,7 @@ li {
 }
 
 .datos-calculados {
-    margin: 0;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .datos-header {
@@ -95,6 +103,9 @@ li {
 }
 
 .col-1 {
+    display:flex;
+    justify-content:center;
+    align-items:center;
     position: relative;
     flex-basis: 10%;
 }
@@ -158,32 +169,4 @@ li {
     width:45%;
     border-radius: 0px 20px 20px 0px;
     height:100%;
-}
-
-@media all and (max-width:767px) {
-    .container {
-        text-align:start;
-    }
-
-    .table-header {
-        display: none
-    }
-
-    li {
-        display: block
-    }
-
-    .col {
-        flex-basis: 100%;
-        display: flex;
-        padding: 10px 0
-    }
-
-    .col:before {
-        color: #6C7A89;
-        padding-right: 10px;
-        content: attr(data-label);
-        flex-basis: 50%;
-        text-align: right
-    }
 }
