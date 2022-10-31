@@ -178,7 +178,7 @@
                 }
                 @if (!CantidadPositiva)
                 {
-                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: La cantidad ingresada debe ser positivo</p>
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: La cantidad ingresada debe ser positiva</p>
                 }
                 @if (!CostoPositivo)
                 {
@@ -549,15 +549,22 @@
     {
 
         bool hayNombre = !(string.IsNullOrWhiteSpace(componentes[componenteActual].Nombre));
-        bool nombreNoExiste = RevisarNombreRepetido(componentes[componenteActual]);
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
         bool costoPositivo = componentes[componenteActual].Costo >= 0;
+        bool nombreRepetido = false;
 
+        // Verifica que haya nombre para revisar si esta repetido
+        if (hayNombre) 
+        {
+            nombreRepetido = RevisarNombreRepetido(componentes[componenteActual]);
+        }
+        
         NombreVacio = !(hayNombre);
         CantidadPositiva = cantidadPositiva;
         CostoPositivo = costoPositivo;
+        NombreRepetido = nombreRepetido;
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
-        if (hayNombre && cantidadPositiva && costoPositivo && nombreNoExiste)
+        if (hayNombre && cantidadPositiva && costoPositivo && (nombreRepetido==false))
         {
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
@@ -583,7 +590,7 @@
             {
                 CostoPositivo = false;
             }
-            if (!nombreNoExiste) {
+            if (nombreRepetido) {
                 NombreRepetido = true;
             }
         }
@@ -591,14 +598,14 @@
 
     public bool RevisarNombreRepetido(ComponenteModel componente) {
 
-        bool valido = true; 
+        bool esRepetido = false; 
 
         if (productoActivo.Componentes.Exists(x => x.Nombre.ToLower() == componente.Nombre.ToLower()))
         {
-            valido = false;
+            esRepetido = true;
         }
 
-        return valido; 
+        return esRepetido; 
     }
 
     // Revisa la unidad del componente que se pasa por parametro
