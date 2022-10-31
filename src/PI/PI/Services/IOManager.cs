@@ -22,5 +22,15 @@ namespace PI.Services
             }
             return valido;        
         }
+
+        public static bool ValidarInputInt(int monto)
+        {
+            bool valido = true;
+            if (Convert.ToString(monto).Length > 10)
+            {
+                valido = false;
+            }
+            return valido;
+        }
     }
 }
