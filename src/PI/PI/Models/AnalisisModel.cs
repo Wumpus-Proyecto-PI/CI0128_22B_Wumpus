@@ -1,4 +1,6 @@
-﻿namespace PI.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System;
+namespace PI.Models
 {
     public class AnalisisModel
     {
