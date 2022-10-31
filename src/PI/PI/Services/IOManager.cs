@@ -14,5 +14,13 @@ namespace PI.Services
                 return "";
             }
         }
+
+        public static bool ValidarInputDecimal(decimal monto) {
+            bool valido = true;
+            if (monto < 0 || Convert.ToString(monto).Length > 18) {
+                valido = false;
+            }
+            return valido;        
+        }
     }
 }
