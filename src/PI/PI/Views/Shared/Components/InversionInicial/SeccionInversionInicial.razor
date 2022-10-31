@@ -1,7 +1,7 @@
 ﻿@using PI.Models;
 @using PI.Handlers;
-@using PI.Services;
 @using System.Globalization
+@using PI.Services
 @inject NavigationManager NavigationManager;
 
 <!-- Representa la sección de la inversión inicial -->
@@ -230,7 +230,7 @@
         }
 
         // Valida el número
-        if (IOManager.ValidarInputDecimal(GastoInicialActivo.Monto))
+        if (!IOManager.ValidarInputDecimal(GastoInicialActivo.Monto))
         {
             resultado = false;
             ErrorMonto = "Error: el monto debe ser un número positivo y tener 18 dígitos como máximo";
