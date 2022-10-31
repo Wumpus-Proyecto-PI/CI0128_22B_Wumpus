@@ -4,31 +4,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/LayoutPasosAnalisis.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <header id="encabezado">
-        <div id="logo">
-            <a asp-controller="Home" asp-action="Index">
-                <img src="~/img/lagoysarmiento.png" alt="Logo de la empresa">
-            </a>
-        </div>
-        <div id="nombre_seccion">
-            @ViewData["TituloPaso"]
-        </div>
-        <div id="botones_der">
-            <div id="boton_usuario">
-                <a asp-controller="Mensajes" asp-action="BajoConstruccion" ><img src="~/img/user.png" alt="Usuario"></a>
-            </div>
-
-            @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios" && @ViewBag.fechaAnalisis != null)
-            {
-                <div id="boton_ajustes">
-                    <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
+        <div class="row">
+            <div class="col d-flex justify-content-start">
+                <div id="logo">
+                    <a asp-controller="Home" asp-action="Index">
+                        <img src="~/img/lagoysarmiento.png" alt="Logo de la empresa">
+                    </a>
                 </div>
-            }
+            </div>
+            <div class="col d-flex justify-content-center">
+                <div id="nombre_seccion">
+                    @ViewData["TituloPaso"]
+                </div>
+            </div>
+            <div class="col d-flex justify-content-end">
+                <div id="botones_der">
+                    <div id="boton_usuario">
+                        <a asp-controller="Mensajes" asp-action="BajoConstruccion"><img src="~/img/user.png" alt="Usuario"></a>
+                    </div>
 
-            <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
+                    @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios" && @ViewBag.fechaAnalisis != null)
+                    {
+                        <div id="boton_ajustes">
+                            <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
+                        </div>
+                    }
+
+                    <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
+                </div>
+            </div>
         </div>
     </header>
         <main role="main" class="pb-3">

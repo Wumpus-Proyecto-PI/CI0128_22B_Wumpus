@@ -6,9 +6,10 @@
     border-radius: 20px;
     width: 100%;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.19);
     margin-inline: 60px;
+    min-height: 70vh;
 }
 
 /*Popup*/
@@ -34,7 +35,7 @@
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
     width: 100%;
-    height: 100%;
+    height: 200%;
     /**/
     overflow: hidden;
 }

@@ -105,9 +105,11 @@ CREATE TABLE [dbo].[COMPONENTE] (
     [nombreProducto]   VARCHAR (30)    NOT NULL,
     [fechaAnalisis]    DATETIME        NOT NULL,
     [monto]            DECIMAL (18, 2) NULL,
+    [cantidad]         DECIMAL (18, 2) NULL,
+    [unidad]           INT             NULL,
     PRIMARY KEY CLUSTERED ([nombreComponente] ASC, [nombreProducto] ASC, [fechaAnalisis] ASC),
-    CONSTRAINT [FK__COMPONENTE__FECHA__UPDATE] FOREIGN KEY ([fechaAnalisis]) REFERENCES [dbo].[ANALISIS] ([fechaCreacion]) ON UPDATE CASCADE,
-    CONSTRAINT [FK__COMPONENTE__FECHA] FOREIGN KEY ([fechaAnalisis]) REFERENCES [dbo].[ANALISIS] ([fechaCreacion]) ON DELETE CASCADE
+    CONSTRAINT [FK_ComponenteProducto] FOREIGN KEY ([nombreProducto], [fechaAnalisis]) REFERENCES [dbo].[PRODUCTO] ([nombre], [fechaAnalisis]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ComponenteProducto_Update] FOREIGN KEY ([nombreProducto], [fechaAnalisis]) REFERENCES [dbo].[PRODUCTO] ([nombre], [fechaAnalisis]) ON UPDATE CASCADE
 );
 
 -- Tabla Egreso
@@ -341,7 +343,7 @@ CREATE procedure [dbo].[ObtenerConfigAnalisis](
 )
 as 
 begin 
-	select fechaAnalisis, ISNULL(tipoCambio,0) as tipoCambio, moneda, tipoNegocio, ISNULL(porcentajeSS, 0) as porcentajeSS, ISNULL(porcentajePL,0) as porcentajePL from Configuracion where fechaAnalisis = @fechaAnalisis
+	select fechaAnalisis, tipoNegocio, ISNULL(porcentajeSS, 0) as porcentajeSS, ISNULL(porcentajePL,0) as porcentajePL from Configuracion where fechaAnalisis = @fechaAnalisis
 end
 
 -- Procedure 10
@@ -561,3 +563,64 @@ create or alter procedure ObtenerSumInversionInicial ( @fechaAnalisis Datetime) 
 begin
 	Select SUM(valor) total from INVERSION_INICIAL where fechaAnalisis = @fechaAnalisis
 end
+
+
+-- Procedure 19
+-- Creado por Christopher Perez Blanco | C05881
+GO
+CREATE procedure InsertarProducto 
+(@nombreProducto varchar(30), @nombreAnterior varchar(30), @fechaAnalisis datetime, @lote int, 
+@porcentajeDeVentas decimal(18,2), @precio decimal(18,2), @costoVariable decimal(18, 2)) as 
+begin
+if exists (Select PRODUCTO.nombre from Producto 
+where @nombreAnterior=PRODUCTO.nombre and @fechaAnalisis=PRODUCTO.fechaAnalisis)
+	begin 
+		update Producto set nombre=@nombreProducto, lote=@lote, porcentajeDeVentas=@porcentajeDeVentas, precio=@precio, costoVariable=@costoVariable
+		where nombre=@nombreAnterior and fechaAnalisis=@fechaAnalisis
+	end
+else 
+	begin
+		insert into Producto values(@nombreProducto, @fechaAnalisis, @lote, @porcentajeDeVentas, @precio, @costoVariable)
+	end
+end
+
+
+-- Procedure 20 
+-- Creado por Christopher Perez Blanco | C05881
+GO
+Create procedure EliminarProducto (@nombreProducto varchar(30), @fechaAnalisis datetime) as
+Begin 
+Delete from Producto where nombre=@nombreProducto and fechaAnalisis=@fechaAnalisis
+end
+
+
+-- Procedure 20 
+-- Creado por Christopher Perez Blanco | C05881
+GO
+CREATE procedure AgregarComponente
+(@nombreComponente varchar(30), @nombreProducto varchar(30), @fechaAnalisis datetime, @monto decimal(18, 2),  @cantidad decimal(18, 2), @unidad int)
+as
+Begin
+	insert into Componente values(@nombreComponente, @nombreProducto, @fechaAnalisis,@monto, @cantidad, @unidad)
+End
+
+
+-- Procedure 21
+-- Creado por Christopher Perez Blanco | C05881
+GO
+Create procedure BorrarComponente 
+(@nombreComponente varchar(30), @nombreProducto varchar(30), @fechaAnalisis datetime)
+as
+Begin
+	Delete from COMPONENTE where COMPONENTE.nombreComponente=@nombreComponente and COMPONENTE.nombreProducto=@nombreProducto and COMPONENTE.fechaAnalisis=@fechaAnalisis
+End
+
+
+-- Procedure 22
+-- Creado por Christopher Perez Blanco | C05881
+GO
+Create Procedure ObtenerComponentes (@nombreProducto varchar(30), @fechaAnalisis datetime)
+as 
+Begin
+SELECT * from COMPONENTE where nombreProducto=@nombreProducto and fechaAnalisis=@fechaAnalisis
+End

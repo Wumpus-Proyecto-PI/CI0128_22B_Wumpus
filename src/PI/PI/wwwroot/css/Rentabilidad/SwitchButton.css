@@ -1,12 +1,23 @@
 ﻿
 .switch-container {
+    vertical-align:middle;
     right: 100%;
     width: stretch;
-    justify-content:flex-end;
+    justify-content:center;
+    display:flex;
+    align-items:center;
 }
 
 .switch-text {
-    font-weight:bold;
+    font-weight:600;
+}
+
+.opcion-unidad {
+    margin-right:5px;
+}
+
+.opcion-monto {
+    margin-left: 5px;
 }
 
 input[type="checkbox"].switch_1 {
@@ -17,7 +28,7 @@ input[type="checkbox"].switch_1 {
     appearance: none;
     width: 2em;
     height: 1em;
-    background: #ddd;
+    background: #4A4F55;
     border-radius: 3em;
     position: relative;
     cursor: pointer;
@@ -31,7 +42,7 @@ input[type="checkbox"].switch_1 {
 
 
     input[type="checkbox"].switch_1:checked {
-        background: #337ab7;
+        background: #005DB9;
     }
 
     input[type="checkbox"].switch_1:after {

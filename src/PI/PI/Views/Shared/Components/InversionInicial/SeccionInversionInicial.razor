@@ -6,15 +6,17 @@
 <!-- Representa la sección de la inversión inicial -->
 
 <div id="seccion-gastosVar"> <!-- Contenedor de tarjetas -->
-    <h2 class="fw-bold mt-3">Gastos iniciales</h2>
+    <div class="w-100 text-center">
+        <h2 class="fw-bold mt-3">Gastos iniciales</h2>
 
-    <!-- Sección del monto total -->
-    <div class="total">
-        <div class="fila-total">
-            <label>Total</label> 
-            <p>
-                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", montoTotal))
-            </p>
+        <!-- Sección del monto total -->
+        <div class="total">
+            <div class="fila-total">
+                <label>Total</label> 
+                <p>
+                    @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", montoTotal))
+                </p>
+            </div>
         </div>
     </div>
 
