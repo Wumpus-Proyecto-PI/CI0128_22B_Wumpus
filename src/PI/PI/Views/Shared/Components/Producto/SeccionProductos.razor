@@ -1,4 +1,5 @@
 ﻿@using PI.Models
+@using PI.Services
 @using PI.Handlers
 @using System.Globalization
 @inject NavigationManager NavigationManager;
@@ -176,17 +177,21 @@
                 {
                     <p style="color:red; align-self:center; margin-bottom:10px;">ERROR: El nombre ingresado es vacío</p>
                 }
-                @if (!CantidadPositiva)
+                @if (CantidadPositiva == false)
                 {
                     <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: La cantidad ingresada debe ser positiva</p>
                 }
-                @if (!CostoPositivo)
+                @if (CostoPositivo == false)
                 {
                     <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El costo debe de ser positivo</p>
                 }
                 @if (NombreRepetido)
                 {
                     <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El nombre ingresado ya existe</p>
+                }
+                @if (DecimalValido == false) 
+                {
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El numero ingresado es demasiado grande</p>
                 }
             }
             @*Sección de botones en la parte inferior del popup de los componente*@
@@ -381,6 +386,7 @@
         // se resetean variables e error
         ErrorNombre = "";
         ErrorLote = "";
+        ErrorComponentesNuevos = "";
     }
 
     // método llamado por el botón de agregar
@@ -404,6 +410,7 @@
         // se resetean variables de errores
         ErrorNombre = "";
         ErrorLote = "";
+        ErrorComponentesNuevos = "";
     }
 
     // método que permitir guardar en la base de datos un gasto variable
@@ -439,6 +446,7 @@
             }
             ErrorNombre = "";
             ErrorLote = "";
+            ErrorComponentesNuevos = "";
 
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
@@ -541,6 +549,8 @@
 
     public bool EsNuevo { get; set; } = false;
 
+    public bool DecimalValido = true; 
+
     // Variable que indica si el componente que se esta tratando de agregar ya existe en la base de datos.
     public bool YaExisteComponente { get; set; }
 
@@ -552,6 +562,7 @@
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
         bool costoPositivo = componentes[componenteActual].Costo >= 0;
         bool nombreRepetido = false;
+        bool decimalValido = IOManager.ValidarInputDecimal(componentes[componenteActual].Cantidad) && IOManager.ValidarInputDecimal(componentes[componenteActual].Costo);
 
         // Verifica que haya nombre para revisar si esta repetido
         if (hayNombre) 
@@ -563,8 +574,10 @@
         CantidadPositiva = cantidadPositiva;
         CostoPositivo = costoPositivo;
         NombreRepetido = nombreRepetido;
+        DecimalValido = decimalValido; 
+
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
-        if (hayNombre && cantidadPositiva && costoPositivo && (nombreRepetido==false))
+        if (hayNombre && cantidadPositiva && costoPositivo && (nombreRepetido==false) && decimalValido)
         {
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
@@ -592,6 +605,9 @@
             }
             if (nombreRepetido) {
                 NombreRepetido = true;
+            }
+            if (decimalValido == false) {
+                DecimalValido = false; 
             }
         }
     }
