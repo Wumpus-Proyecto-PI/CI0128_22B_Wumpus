@@ -5,12 +5,11 @@
 
 
 <div class="container text-center mt-5">
-
     <div id="container-forms-top">
         <div id="form-parametros-rentabilidad">
             <div class="pill-form">
                 <div><h5>Ganancia mensual</h5></div>
-                <input id="form-ganancia-mensual" type="text" class="form-control" @bind="analisis.GananciaMensual" @onfocusout="actualizarGananciaMensual">
+                <input id="form-ganancia-mensual" type="number" step="any" min="0" class="form-control" @bind="analisis.GananciaMensual" @onfocusout="actualizarGananciaMensual">
             </div>
             <div class="pill-form">
                 <div><h5>Gastos fijos</h5></div>
@@ -161,9 +160,16 @@
     public ProductoHandler productoHandler = new ProductoHandler();
 
     public void actualizarGananciaMensual()
-    {
+    {   
         AnalisisHandler handler = new AnalisisHandler();
-        handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
+        if (IOManager.ValidarInputDecimal(analisis.GananciaMensual))
+        {
+            handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
+        }
+        else
+        {
+            handler.ActualizarGananciaMensual(0, analisis.FechaCreacion);
+        }
     }
 
     public void actualizarPorcentajeVentas(ProductoModel producto)
