@@ -41,7 +41,7 @@
 @if (PopupVisible)
 {
     @*Se agrega Overlay sobre la pantalla, para que el Popup sobresalga*@
-    <div id="overlay" @onclick="cambiarVisibilidadPopup"></div>
+    <div id="overlay" @onclick="CambiarVisibilidadPopup"></div>
     <div id="contenedor-popup">
         @*Seccion de ingreso de datos referentes al gasto variable*@
         <div id="contenedor-crear-gasto">
@@ -60,7 +60,7 @@
                     <h1>Editar producto</h1>
                 }
                 <div class="salir-popup">
-                    <img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarVisibilidadPopupBoton">
+                    <img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="CambiarVisibilidadPopupBoton">
                 </div>
             </div>
 
@@ -88,47 +88,49 @@
         <div id="contenedor-componentes">
             <h1 id="titulo-componentes">Componentes</h1>
             @*Tabla donde se contienen los componentes*@
-            <table id=lista_componentes>
-                @*En caso de que hayan componente que mostrar, se muestra la tabla*@
-                @if (productoActivo.Componentes.Count() > 0)
-                {
-                    <tr>
-                        <th style="border:none;">Nombre</th>
-                        <th style="border:none;">Unidad</th>
-                        <th style="border:none;">Cantidad</th>
-                        <th style="border:none;">Costo</th>
-                        <th style="border:none;" width="40px"></th>
-                    </tr>
-                }
-                @*En caso de no haber componentes, se le indica al usuario mediante una frase*@
-                else
-                {
-                    <tr>
-                        <th style="border:none; text-align:center; opacity:0.5;"> No hay componentes que mostrar</th>
-                    </tr>
-                }
-                @*Se muestran en una tabla, el nombre, el tipo de unidades, el valor y el costo de los componentes del costo variable seleccionado*@
-                @for (int i = 0; i < productoActivo.Componentes.Count(); i += 1)
-                {
-                    int index = i;
+            <div style="width:100%; height:165px; overflow:auto;">
+                <table id=lista_componentes>
+                    @*En caso de que hayan componente que mostrar, se muestra la tabla*@
+                    @if (productoActivo.Componentes.Count() > 0)
+                    {
+                        <tr>
+                            <th style="border:none;">Nombre</th>
+                            <th style="border:none;">Unidad</th>
+                            <th style="border:none;">Cantidad</th>
+                            <th style="border:none;">Costo</th>
+                            <th style="border:none;" width="40px"></th>
+                        </tr>
+                    }
+                    @*En caso de no haber componentes, se le indica al usuario mediante una frase*@
+                    else
+                    {
+                        <tr>
+                            <th style="border:none; text-align:center; opacity:0.5;"> No hay componentes que mostrar</th>
+                        </tr>
+                    }
+                    @*Se muestran en una tabla, el nombre, el tipo de unidades, el valor y el costo de los componentes del costo variable seleccionado*@
+                    @for (int i = 0; i < productoActivo.Componentes.Count(); i += 1)
+                    {
+                        int index = i;
 
-                    <tr class="filas-tabla-componente">
-                        <td> @productoActivo.Componentes[index].Nombre</td>
-                        @*Verifica la unidad del componente en el indice para mostrar los datos de unidad y cantidad correctamente*@
-                        @if (@productoActivo.Componentes[index].Unidad == 0) {
-                            <td>Unitario</td>
-                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad)))</td>
-                        }
-                        else {
-                            <td>Porcentaje</td>
-                            <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad)))%</td>                       
-                        }
-                        <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Costo)))</td>
-                        @*Botón para borrar un beenficio*@
-                        <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>borrarComponente(productoActivo.Componentes[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
-                    </tr>
-                }
-            </table>
+                        <tr class="filas-tabla-componente">
+                            <td> @productoActivo.Componentes[index].Nombre</td>
+                            @*Verifica la unidad del componente en el indice para mostrar los datos de unidad y cantidad correctamente*@
+                            @if (@productoActivo.Componentes[index].Unidad == 0) {
+                                <td>Unitario</td>
+                                <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad)))</td>
+                            }
+                            else {
+                                <td>Porcentaje</td>
+                                <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad)))%</td>                       
+                            }
+                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Costo)))</td>
+                            @*Botón para borrar un beenficio*@
+                            <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>BorrarComponente(productoActivo.Componentes[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
+                        </tr>
+                    }
+                </table>
+            </div>
             @*Form para ingresar los datos de un nuevo componente*@
             @if (formVisible)
             {
@@ -163,7 +165,7 @@
                         </div>
                         @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
                         <div id="seccion-guardar-componente">
-                            <div id="boton-guardar-componente" @onclick="agregarComponenteNuevo">
+                            <div id="boton-guardar-componente" @onclick="AgregarComponenteNuevo">
                                 <p class="aceptar">Aceptar</p>
                             </div>
                         </div>
@@ -193,14 +195,14 @@
                 @if (!formVisible)
                 {
                     <div id="boton-agregar-componente">
-                        <img src="img/estructuraOrg/addPuesto.png" alt="" width="20px" height="20px" @onclick="cambiarVisibilidadForm">
+                        <img src="img/estructuraOrg/addPuesto.png" alt="" width="20px" height="20px" @onclick="CambiarVisibilidadForm">
                     </div>
                 }
                 @*En casode que el form sea visible, se muestra un botón de "^" que al presionarlo, oculta la sección de los forms de los componente*@
                 else
                 {
                     <div id="boton-cerrar-form-componente">
-                        <img src="img/estructuraOrg/up-arrow.png" alt="" width="20px" height="20px" @onclick="cambiarVisibilidadForm">
+                        <img src="img/estructuraOrg/up-arrow.png" alt="" width="20px" height="20px" @onclick="CambiarVisibilidadForm">
                     </div>
                 }
             </div>
@@ -212,7 +214,7 @@
             @if (hayGastoSeleccionado == true)
             {
                 /*Mostramos el boton de elimnar solo si se selccionó un gasto*/
-                <div id="eliminar-gasto" class="gasto-boton-componente" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGasto(productoActivo)">
+                <div id="eliminar-gasto" class="gasto-boton-componente" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => EliminarGasto(productoActivo)">
                     <a>
                         @if (hoverEliminar == false)
                         {
@@ -327,7 +329,7 @@
     }
 
     // método para activar y descativar el popup de los componente
-    public void cambiarVisibilidadPopup()
+    public void CambiarVisibilidadPopup()
     {
         if (PopupVisible)
         {
@@ -340,7 +342,7 @@
         }
     }
 
-    public void cambiarVisibilidadPopupBoton()
+    public void CambiarVisibilidadPopupBoton()
     {
         nuevosComponentes = componentesNuevos.Count() > 0;
         if (PopupVisible && nuevosComponentes)
@@ -410,13 +412,16 @@
     {
 
         // se revisa que el nombre no este repetido y que no haya números negativo
-        if (revisarNombre(gastoGuardar) && revisarLote(gastoGuardar))
+        if (RevisarNombre(gastoGuardar) && RevisarLote(gastoGuardar))
         {
 
             // se asigna la fecha del análisis por si es un gasto variable nuevo
             gastoGuardar.FechaAnalisis = fechaAnalisis;
             // se ingresa con el handler en la base de datos el gasto variable
             HandlerGasto.InsertarProducto(copiaNombreOriginal, gastoGuardar);
+
+            // Se eliminan los componentes de la base de datos
+            EliminarComponenteBD();
 
             // Se ingresan los componentes del producto que se va a guardar
             foreach (ComponenteModel componente in componentesNuevos)
@@ -425,6 +430,7 @@
                 componente.Cantidad = RevisarUnidad(componente);
                 HandlerComponente.AgregarComponente(componente);
             }
+
 
             // se resetean variables de vista y de control
             if (hayGastoSeleccionado == false)
@@ -440,7 +446,7 @@
     }
 
     // método para revisar si el nombre está repetido y que no esté vacío
-    private bool revisarNombre(ProductoModel gastoGuardar)
+    private bool RevisarNombre(ProductoModel gastoGuardar)
     {
         bool valido = true;
         // se revisa que no esté vacío
@@ -482,7 +488,7 @@
 
     // método que revisa si el número de plazas es válido
     // recibe el producto que se está editando
-    private bool revisarLote(ProductoModel gastoGuardar)
+    private bool RevisarLote(ProductoModel gastoGuardar)
     {
         bool valido = true;
         // se revisa que no sea negativo
@@ -500,7 +506,7 @@
 
     // método para eliminar un producto de la base de datos
     // recibe el producto que se desea eliminar
-    public void eliminarGasto(ProductoModel gastoEliminar)
+    public void EliminarGasto(ProductoModel gastoEliminar)
     {
         // se utiliza el handler para eliminar el producto
         HandlerGasto.EliminarProducto(gastoEliminar);
@@ -516,6 +522,8 @@
     public List<ComponenteModel> componentes = new List<ComponenteModel>();
 
     public List<ComponenteModel> componentesNuevos = new List<ComponenteModel>();
+
+    public List<ComponenteModel> componentesEliminados = new List<ComponenteModel>();
 
     // El índice del comodín sobre el cual se está operando en determinado momento
     int componenteActual = 0;
@@ -537,7 +545,7 @@
     public bool YaExisteComponente { get; set; }
 
     // Método que agrega un componente ingresado por medio de forms, a la base de datos.
-    public void agregarComponenteNuevo()
+    public void AgregarComponenteNuevo()
     {
 
         bool hayNombre = !(string.IsNullOrWhiteSpace(componentes[componenteActual].Nombre));
@@ -582,9 +590,9 @@
     }
 
     public bool RevisarNombreRepetido(ComponenteModel componente) {
-        
+
         bool valido = true; 
-        
+
         if (productoActivo.Componentes.Exists(x => x.Nombre.ToLower() == componente.Nombre.ToLower()))
         {
             valido = false;
@@ -608,19 +616,31 @@
         return valorOficial;
     }
 
-    // Método que borra un componente de la base de datos.
-    public void borrarComponente(ComponenteModel componente)
+    // Método que borra un componente de la lista de componentes.
+    public void BorrarComponente(ComponenteModel componente)
     {
         componente.FechaAnalisis = productoActivo.FechaAnalisis;
         componente.NombreProducto = productoActivo.Nombre;
-        ComponenteHandler handler = new ComponenteHandler();
+        componentesEliminados.Add(componente);
         productoActivo.Componentes.Remove(componente);
-        handler.BorrarComponente(componente);
+    }
 
+    // Método que borra un componente de la base de datos.
+    public void EliminarComponenteBD()
+    {
+        ComponenteHandler handler = new ComponenteHandler();
+        foreach (ComponenteModel componente in componentesEliminados) {
+            if (componentesNuevos.Contains(componente) == false) {  
+                handler.BorrarComponente(componente);
+            }
+            else {
+                componentesNuevos.Remove(componente);
+            }
+        }
     }
 
     // Método que cambia el valor de la variable que indica la visibilidad del form de ingresar un nuevo beneficio.
-    public void cambiarVisibilidadForm()
+    public void CambiarVisibilidadForm()
     {
         if (formVisible)
         {
@@ -633,7 +653,7 @@
     }
 
     // Método que refresca la página actual.
-    public void refrescarPagina()
+    public void RefrescarPagina()
     {
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
