@@ -230,7 +230,7 @@
         }
 
         // Valida el número
-        if (!IOManager.ValidarInputDecimal(GastoInicialActivo.Monto))
+        if (!FormatManager.ValidarInputDecimal(GastoInicialActivo.Monto))
         {
             resultado = false;
             ErrorMonto = "Error: el monto debe ser un número positivo y tener 18 dígitos como máximo";

@@ -2,7 +2,7 @@
 
 namespace PI.Services
 {
-    public class IOManager
+    public class FormatManager
     {
         // Se encargad e pasar ya sea un int o un decimal a un string con formato estadístico.
         public static string ToFormatoEstadistico (Object input) {

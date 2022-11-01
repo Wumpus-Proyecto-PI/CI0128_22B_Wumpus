@@ -565,7 +565,7 @@
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
         bool costoPositivo = componentes[componenteActual].Costo >= 0;
         bool nombreRepetido = false;
-        bool decimalValido = IOManager.ValidarInputDecimal(componentes[componenteActual].Cantidad) && IOManager.ValidarInputDecimal(componentes[componenteActual].Costo);
+        bool decimalValido = FormatManager.ValidarInputDecimal(componentes[componenteActual].Cantidad) && FormatManager.ValidarInputDecimal(componentes[componenteActual].Costo);
 
         // Verifica que haya nombre para revisar si esta repetido
         if (hayNombre) 

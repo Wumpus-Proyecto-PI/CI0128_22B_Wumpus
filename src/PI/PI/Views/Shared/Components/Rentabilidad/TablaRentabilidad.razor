@@ -9,11 +9,11 @@
         <div id="form-parametros-rentabilidad">
             <div class="pill-form">
                 <div><h4>Ganancia mensual</h4></div>
-                <input id="form-ganancia-mensual" type="text" maxlength=18 style="font-size: larger" step="any" min="0" class="form-control" @bind="analisis.GananciaMensual" @onfocusout="actualizarGananciaMensual">
+                <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="analisis.GananciaMensual" @onfocusout="actualizarGananciaMensual"/>
             </div>
             <div class="pill-form">
                 <div><h4>Gastos fijos</h4></div>
-                <input id="form-gastos-fijos-totales" style="font-size: larger" type="text" class="form-control" placeholder=@IOManager.ToFormatoEstadistico(montoGastosFijos) readonly>
+                <input id="form-gastos-fijos-totales" style="font-size: larger" type="text" class="form-control pe-none" placeholder=@FormatManager.ToFormatoEstadistico(montoGastosFijos) disabled/>
             </div>
         </div>
         <div class="row">
@@ -80,16 +80,16 @@
                 -
             </div>
             <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
             </div>
             <div class="col col-1" data-label="Meta">
                 @if (@opcionSwitchBool)
                 {
-                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaUnidades()) <img src="Images/simbolo_unidades.svg" /></p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(actualizarTotalMetaUnidades()) <img src="Images/simbolo_unidades.svg" /></p>
                 }
                 else
                 {
-                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(actualizarTotalMetaMoneda()) <img src="Images/simbolo_moneda.svg" /></p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(actualizarTotalMetaMoneda()) <img src="Images/simbolo_moneda.svg" /></p>
                 }
             </div>
         </li>
@@ -101,30 +101,30 @@
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="number" min="0" max="@getPorcentajeVentasDisponible(productoActual)" @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
+                    <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
-                    <input class="effect-1 text-center" type="number" min="0" @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
+                    <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
-                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularMargen(productoActual))</p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargen(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">@IOManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable))</p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     @if (@opcionSwitchBool)
                     {
-                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaUnidades(productoActual))) <img src="Images/simbolo_unidades.svg" /></p>
+                        <p class="datos-calculados">@(FormatManager.ToFormatoEstadistico(calcularMetaUnidades(productoActual))) <img src="Images/simbolo_unidades.svg" /></p>
                     }
                     else
                     {
-                        <p class="datos-calculados">@(IOManager.ToFormatoEstadistico(calcularMetaMoneda(productoActual))) <img src="Images/simbolo_moneda.svg" /></p>
+                        <p class="datos-calculados">@(FormatManager.ToFormatoEstadistico(calcularMetaMoneda(productoActual))) <img src="Images/simbolo_moneda.svg" /></p>
                     }
                 </div>
             </li>
@@ -170,7 +170,7 @@
     public void actualizarGananciaMensual()
     {   
         AnalisisHandler handler = new AnalisisHandler();
-        if (IOManager.ValidarInputDecimal(analisis.GananciaMensual))
+        if (FormatManager.ValidarInputDecimal(analisis.GananciaMensual))
         {
             gananciaMensualValida = true;
             handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
@@ -178,7 +178,7 @@
         else
         {
             gananciaMensualValida = false;
-            analisis.GananciaMensual = handler.ObtenerGananciaMensual(analisis.FechaCreacion);
+            //analisis.GananciaMensual = handler.ObtenerGananciaMensual(analisis.FechaCreacion);
         }
     }
 
