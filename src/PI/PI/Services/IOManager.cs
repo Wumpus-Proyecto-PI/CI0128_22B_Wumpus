@@ -19,7 +19,7 @@ namespace PI.Services
         // Valida si un decimal es válido de acuerdo a los parámetros definidos para el proyecto.
         public static bool ValidarInputDecimal(decimal monto) {
             bool valido = true;
-            if (monto < 0 || Convert.ToString(monto).Length > 18) {
+            if (monto < 0 || Convert.ToString(monto).Length > 16) {
                 valido = false;
             }
             return valido;        
