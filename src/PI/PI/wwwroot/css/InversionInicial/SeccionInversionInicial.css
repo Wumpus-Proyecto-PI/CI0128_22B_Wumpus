@@ -243,14 +243,6 @@ label {
 }
 
 .total {
-    /*para no poder cliclear*/
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /*para no poder cliclear*/
-
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

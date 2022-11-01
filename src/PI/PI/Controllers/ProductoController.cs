@@ -31,7 +31,7 @@ namespace PI.Controllers
             ViewData["NombreNegocio"] = productoHandler.obtenerNombreNegocio(fechaAnalisis);
 
             // cargamos una lista con todos los productos que existen en la base de datos
-            List<ProductoModel> productos = productoHandler.obtenerProductos(fechaAnalisis);
+            List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaAnalisis);
             return View(productos);
         }
 

@@ -137,7 +137,7 @@ namespace PI.Services
             ProductoHandler productoHandler = new ProductoHandler();
             
             // verificamos si hay al menos un producto en la base de datos
-            if (productoHandler.obtenerProductos(analisis.FechaCreacion).Count > 0)
+            if (productoHandler.ObtenerProductos(analisis.FechaCreacion).Count > 0)
             {
                 resultado = true;
             }
@@ -160,7 +160,7 @@ namespace PI.Services
             bool resultado = false;
 
             ProductoHandler productoHandler = new ProductoHandler();
-            List<ProductoModel> productos = productoHandler.obtenerProductos(analisis.FechaCreacion);
+            List<ProductoModel> productos = productoHandler.ObtenerProductos(analisis.FechaCreacion);
 
             for (int actual = 0; actual < productos.Count && resultado == false; ++actual)
             {
