@@ -263,6 +263,7 @@
     // handler con el cual comunicarse con la base de datos
     public ProductoHandler HandlerGasto = new ProductoHandler();
 
+    // handler con el cual comunicarse con los componentes en la base de datos
     public ComponenteHandler HandlerComponente = new ComponenteHandler();
 
 
@@ -347,6 +348,7 @@
         }
     }
 
+    // metodo que desactiva la visibilidad del popup con el boton
     public void CambiarVisibilidadPopupBoton()
     {
         nuevosComponentes = componentesNuevos.Count() > 0;
@@ -434,7 +436,7 @@
             foreach (ComponenteModel componente in componentesNuevos)
             {
                 componente.NombreProducto = productoActivo.Nombre;
-                componente.Cantidad = RevisarUnidad(componente);
+                componente.Cantidad = RevisarTipoUnidad(componente);
                 HandlerComponente.AgregarComponente(componente);
             }
 
@@ -463,7 +465,7 @@
             ErrorNombre = "<p class=\"mensaje-error\">Error: ingrese un nombre para el producto.</p>";
             valido = false;
         }
-        else if (!hayGastoSeleccionado)
+        else if (hayGastoSeleccionado == false)
         {
             // si es un producto nuevo solo revisamos que no esté en la lista
             if (productos.Exists(x => x.Nombre.ToLower() == gastoGuardar.Nombre.ToLower()))
@@ -539,6 +541,7 @@
     // Variable que indica si el form para ingresar un nuevo beneficio es nuevo o no
     public bool formVisible = false;
 
+    // Variables booleanas que verifican la correctitud de los inputs de los componentes
     public bool NombreVacio { get; set; } = false;
 
     public bool CantidadPositiva { get; set; } = true;
@@ -612,6 +615,7 @@
         }
     }
 
+    // Revisa si el nombre ingresado para el componente esta repetido (ya existe en la base)
     public bool RevisarNombreRepetido(ComponenteModel componente) {
 
         bool esRepetido = false; 
@@ -626,7 +630,7 @@
 
     // Revisa la unidad del componente que se pasa por parametro
     // Si la unidad es porcentaje (==1) se le realiza una division entre 100
-    public decimal RevisarUnidad(ComponenteModel componente) {
+    public decimal RevisarTipoUnidad(ComponenteModel componente) {
         decimal valorOficial = 0;
 
         if (componente.Unidad == 0) {

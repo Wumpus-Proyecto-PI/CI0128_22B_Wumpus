@@ -7,7 +7,7 @@ namespace PI.Handlers
     {
         public ProductoHandler() : base() { }
 
-
+        // Inserta el modelo del producto que se le pasa por parametro a la base de datos
         public int InsertarProducto(string nombreProducto, ProductoModel producto)
         {
             int filasAfectadas = 0;
@@ -18,6 +18,7 @@ namespace PI.Handlers
             return filasAfectadas;
         }
 
+        // Elimina el modelo del producto que se le pasa por parametro a la base de datos
         public int EliminarProducto(ProductoModel producto)
         {
             int filasAfectadas = 0;
@@ -84,6 +85,7 @@ namespace PI.Handlers
             enviarConsulta(consulta);
         }
 
+        // Obtiene el porcentaje de ventas del producto de la base de datos que concuerde con los parametros de fechaAnalisis y nombreProducto
         public decimal obtenerPorcentajeVentas(DateTime fechaAnalisis, string nombreProducto)
         {
             decimal porcentaje = 0;
@@ -97,6 +99,7 @@ namespace PI.Handlers
             return porcentaje;
         }
 
+        // Obtiene el porcentaje de ventas total del producto de la base de datos que concuerde con los parametros de fechaAnalisis y nombreProducto
         public decimal obtenerPorcentajeVentasTotal(DateTime fechaAnalisis)
         {
             decimal total = 0;
