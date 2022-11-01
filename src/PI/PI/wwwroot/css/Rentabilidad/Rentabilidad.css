@@ -140,7 +140,7 @@ li {
 
 #form-parametros-rentabilidad {
     display: flex;
-    height:40px;
+    height:47px;
     align-items: center;
     justify-content: space-around; 
     width: 55%;
@@ -155,23 +155,23 @@ li {
     flex-direction:row;
 }
 
-    .pill-form div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 45%;
-        height: 100%;
-        background-color: lightgray;
-        border: 2px solid black;
-        border-radius: 20px 0px 0px 20px;
-    }
+.pill-form div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+    height: 100%;
+    background-color: lightgray;
+    border: 1px solid black;
+    border-radius: 20px 0px 0px 20px;
+}
 
-    .pill-form input {
-        width: 45%;
-        border-radius: 0px 20px 20px 0px;
-        border: 2px solid black;
-        height: 100%;
-    }
+.pill-form input {
+    width: 45%;
+    border-radius: 0px 20px 20px 0px;
+    border: 1px solid black;
+    height: 100%;
+}
 
 input[type="text"]::placeholder {
     /* Firefox, Chrome, Opera */

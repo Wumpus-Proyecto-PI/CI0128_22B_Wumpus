@@ -68,7 +68,7 @@
                 <div class="entrada-datos d-flex flex-column">
                     <div class="d-flex">
                         @*Form para agregar el nombre del gasto variable*@
-                        <label for="nombre-gasto">Nombre:</label>
+                        <label for="nombre-gasto">Nombre</label>
                         <input id="nombre-gasto" type="text" @bind="GastoInicialActivo.Nombre" placeholder="Nombre del gasto" maxlength="29">
                     </div>
                     <span class="msg-error">
@@ -77,7 +77,7 @@
 
                     <div class="d-flex m-2">
                     @*Form para agregar el nombre del gasto variable*@
-                    <label for="monto-gasto">Monto:</label>
+                    <label for="monto-gasto">Monto</label>
                         <input id="monto-gasto" type="number" step="any" min="0" @bind="GastoInicialActivo.Monto" placeholder="Monto del gasto">
                     </div>
                     <span class="msg-error">
