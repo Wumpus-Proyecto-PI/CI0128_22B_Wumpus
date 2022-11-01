@@ -40,6 +40,10 @@
             </div>
         </div>
     </div>
+    @if (gananciaMensualValida == false)
+    {
+         <p>ERROR: El monto de ganancia mensual ingresado debe ser de 18 dígitos o menos. Ingréselo nuevamente.</p>   
+    }
     <ul class="responsive-table">
         <li class="table-header">
             <div class="col col-1">
@@ -142,6 +146,8 @@
 
     public int puntoEquilibrioTotal { get; set; }
 
+    public bool gananciaMensualValida { get; set; } = true;
+
 
     public void switchMetaVentas()
     {
@@ -154,6 +160,7 @@
             opcionSwitchBool = true;
         }
     }
+
     public decimal puntoEquilibrio { get; set; }
 
 
@@ -164,11 +171,13 @@
         AnalisisHandler handler = new AnalisisHandler();
         if (IOManager.ValidarInputDecimal(analisis.GananciaMensual))
         {
+            gananciaMensualValida = true;
             handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
         }
         else
         {
-            handler.ActualizarGananciaMensual(0, analisis.FechaCreacion);
+            gananciaMensualValida = false;
+            analisis.GananciaMensual = handler.ObtenerGananciaMensual(analisis.FechaCreacion);
         }
     }
 
@@ -260,12 +269,14 @@
         return total;
     }
 
+    // Se encarga de calcular el punto de equilibrio de un solo producto
     public int calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
     {
         int result = Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable));
         return result;
     }
 
+    // Se encarga de calcular el punto de equilibrio total de todos los productos.
     public int calcularPuntoEquilibrioTotal(decimal gastosFijos, List<ProductoModel> productos)
     {
         int result = 0;

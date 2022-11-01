@@ -193,5 +193,22 @@ namespace PI.Handlers
             conexion.Close();
             return exito;
         }
+        public decimal ObtenerGananciaMensual(DateTime FechaCreacion)
+        {
+            decimal GananciaMensual = 0.0m;
+
+            string fecha = FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            // string con la consulta que obtiene el tipo que posee el analisis indicado de la base de datos
+            string consulta = "SELECT gananciaMensual FROM analisis" + "WHERE fechaCreacion = '" + fecha + "' ";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (tablaResultado.Rows.Count > 0)
+            {
+                GananciaMensual = Convert.ToDecimal(tablaResultado.Rows[0]["gananciaMensual"]);
+            }
+
+            return GananciaMensual;
+        }
+
     }
 }
