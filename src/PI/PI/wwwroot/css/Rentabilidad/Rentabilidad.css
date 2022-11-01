@@ -155,18 +155,30 @@ li {
     flex-direction:row;
 }
 
-.pill-form div{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:45%;
-    height:100%;
-    background-color:lightgray;
-    border-radius: 20px 0px 0px 20px;
+    .pill-form div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45%;
+        height: 100%;
+        background-color: lightgray;
+        border: 2px solid black;
+        border-radius: 20px 0px 0px 20px;
+    }
+
+    .pill-form input {
+        width: 45%;
+        border-radius: 0px 20px 20px 0px;
+        border: 2px solid black;
+        height: 100%;
+    }
+
+input[type="text"]::placeholder {
+    /* Firefox, Chrome, Opera */
+    text-align: center;
 }
 
-.pill-form input {
-    width:45%;
-    border-radius: 0px 20px 20px 0px;
-    height:100%;
+input[type="number"]::placeholder {
+    /* Firefox, Chrome, Opera */
+    text-align: center;
 }
