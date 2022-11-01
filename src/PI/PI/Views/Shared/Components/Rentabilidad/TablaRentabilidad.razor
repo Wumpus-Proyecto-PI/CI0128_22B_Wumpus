@@ -9,7 +9,7 @@
         <div id="form-parametros-rentabilidad">
             <div class="pill-form">
                 <div><h4>Ganancia mensual</h4></div>
-                <input id="form-ganancia-mensual" type="number"  style="font-size: larger" step="any" min="0" class="form-control" @bind="analisis.GananciaMensual" @onfocusout="actualizarGananciaMensual">
+                <input id="form-ganancia-mensual" type="text" maxlength=18 style="font-size: larger" step="any" min="0" class="form-control" @bind="analisis.GananciaMensual" @onfocusout="actualizarGananciaMensual">
             </div>
             <div class="pill-form">
                 <div><h4>Gastos fijos</h4></div>
