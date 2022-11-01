@@ -53,6 +53,7 @@ namespace PI.Services
             return precio * metaVentasUnidad;
         }
 
+        // Calcula el monto total de gastos fijos dado una lista de gastos fijos y otra de puestos.
         public static decimal CalcularGastosFijos(List<GastoFijoModel> gastosFijos, List<PuestoModel> puestos) { 
             decimal resultado = 0;
             PuestoModel puestoActual;
@@ -76,6 +77,7 @@ namespace PI.Services
             return resultado;
         }
 
+        // Calcula el punto de equilibrio de un producto dado su monto de gastosFijos, precio y costoVariable
         public static decimal CalcularPuntoEquilibrio(decimal gastosFijos, decimal precio, decimal costoVariable) {
             decimal resultado = 0;
             decimal denominador = (precio - costoVariable);
