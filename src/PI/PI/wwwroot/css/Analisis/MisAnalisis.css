@@ -42,16 +42,14 @@
     margin-top: 10px;
 }
 
-.card-footer {
-    color:white;
-}
-
 .footer-en-curso {
     background-color: #93D500;
+    color: #4A4F55;
 }
 
 .footer-finalizado {
     background-color: rgb(94, 94, 94);
+    color: white;
 }
 
 .edit-icon img {
