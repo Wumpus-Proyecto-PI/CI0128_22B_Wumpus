@@ -7,6 +7,7 @@ namespace PI.Controllers
 {
     public class RentabilidadController : Controller
     {
+        // // Retorna una lista con todos los modelos de producto existentes y el título del paso.
         public IActionResult Index(string fecha)
         {
             DateTime fechaConversion = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
@@ -14,7 +15,7 @@ namespace PI.Controllers
 
             AnalisisHandler analisisHandler = new AnalisisHandler();
             ProductoHandler productoHandler = new ProductoHandler();
-            List<ProductoModel> productos = productoHandler.obtenerProductos(fechaConversion);
+            List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaConversion);
             AnalisisModel model = analisisHandler.ObtenerUnAnalisis(ViewBag.fechaAnalisis);
             ViewBag.AnalisisActual = model;
 

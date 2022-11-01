@@ -32,7 +32,7 @@ namespace PI.Handlers
 
         // Método que obtiene los productos de un analisis
         // Devuele una lista de ProductoModel
-        public List<ProductoModel> obtenerProductos(DateTime fechaAnalisis)
+        public List<ProductoModel> ObtenerProductos(DateTime fechaAnalisis)
         {
             List<ProductoModel> productos = new List<ProductoModel>();
 
@@ -68,7 +68,7 @@ namespace PI.Handlers
         }
 
         // Método que actualiza el porcentaje de ventas de un producto en la base de datos
-        public void actualizarPorcentajeVentas(ProductoModel producto, DateTime fechaAnalisis)
+        public void ActualizarPorcentajeVentas(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
                               "SET porcentajeDeVentas = " + producto.PorcentajeDeVentas.ToString() +
@@ -77,7 +77,7 @@ namespace PI.Handlers
         }
 
         // Método que actualiza el precio de un producto en la base de datos
-        public void actualizarPrecio(ProductoModel producto, DateTime fechaAnalisis)
+        public void ActualizarPrecio(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
                               "SET precio = " + producto.Precio.ToString() +
@@ -86,12 +86,12 @@ namespace PI.Handlers
         }
 
         // Obtiene el porcentaje de ventas del producto de la base de datos que concuerde con los parametros de fechaAnalisis y nombreProducto
-        public decimal obtenerPorcentajeVentas(DateTime fechaAnalisis, string nombreProducto)
+        public decimal ObtenerPorcentajeVentas(DateTime fechaAnalisis, string nombreProducto)
         {
             decimal porcentaje = 0;
             string consulta = "EXEC ObtenerPorcentajeVentas @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @nombreProducto='" + nombreProducto + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (!tablaResultado.Rows[0].IsNull("porcentajeDeVentas"))
+            if (tablaResultado.Rows[0].IsNull("porcentajeDeVentas") == false)
             {
                 porcentaje = Convert.ToDecimal(tablaResultado.Rows[0]["porcentajeDeVentas"]);
             }
@@ -100,12 +100,12 @@ namespace PI.Handlers
         }
 
         // Obtiene el porcentaje de ventas total del producto de la base de datos que concuerde con los parametros de fechaAnalisis y nombreProducto
-        public decimal obtenerPorcentajeVentasTotal(DateTime fechaAnalisis)
+        public decimal ObtenerPorcentajeVentasTotal(DateTime fechaAnalisis)
         {
             decimal total = 0;
             string consulta = "EXEC ObtenerPorcentajeDeVentasTotal @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (!tablaResultado.Rows[0].IsNull("totalPorcentajeVentas"))
+            if (tablaResultado.Rows[0].IsNull("totalPorcentajeVentas") == false)
             {
                 total = Convert.ToDecimal(tablaResultado.Rows[0]["totalPorcentajeVentas"]);
             }

@@ -133,6 +133,7 @@
 </div>
 
 @code {
+    // Lista de productos de la base de datos
     [Parameter]
     public List<ProductoModel> productos { get; set; }
 
@@ -148,7 +149,11 @@
 
     public bool gananciaMensualValida { get; set; } = true;
 
+    public decimal puntoEquilibrio { get; set; }
 
+    public ProductoHandler productoHandler = new ProductoHandler();
+
+    // Se cambia el estado del switch de la representacion de la meta de ventas
     public void switchMetaVentas()
     {
         if (opcionSwitchBool)
@@ -161,11 +166,7 @@
         }
     }
 
-    public decimal puntoEquilibrio { get; set; }
-
-
-    public ProductoHandler productoHandler = new ProductoHandler();
-
+    // Metodo que actualiza la ganancia mensual en la base de datos
     public void actualizarGananciaMensual()
     {   
         AnalisisHandler handler = new AnalisisHandler();
@@ -181,6 +182,7 @@
         }
     }
 
+    // Metodo que actualiza el porcentaje de ventas de un producto en la base de datos
     public void actualizarPorcentajeVentas(ProductoModel producto)
     {
         decimal porcentajeActual = producto.PorcentajeDeVentas;
@@ -188,31 +190,34 @@
 
         if (porcentajeActual >= 0 && porcentajeActual <= disponible)
         {
-            productoHandler.actualizarPorcentajeVentas(producto, producto.FechaAnalisis);
+            productoHandler.ActualizarPorcentajeVentas(producto, producto.FechaAnalisis);
 
         }
         else
         {
-            producto.PorcentajeDeVentas = productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
+            producto.PorcentajeDeVentas = productoHandler.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
         }
     }
 
+    // Metodo que retorna el porcentaje de ventas total de un analisis
     public decimal getPorcentajeVentasTotal()
     {
-        return productoHandler.obtenerPorcentajeVentasTotal(analisis.FechaCreacion);
+        return productoHandler.ObtenerPorcentajeVentasTotal(analisis.FechaCreacion);
     }
 
+    // Metodo que calcula y retorna el porcentaje de ventas disponible
     public decimal getPorcentajeVentasDisponible(ProductoModel producto)
     {
-        return 100 - getPorcentajeVentasTotal() + productoHandler.obtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
+        return 100 - getPorcentajeVentasTotal() + productoHandler.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
     }
 
+    // Metodo que actualiza el precio de un producto en la base de datos
     public void actualizarPrecio(ProductoModel producto)
     {
         decimal precioActual = producto.Precio;
         if (precioActual >= 0)
         {
-            productoHandler.actualizarPrecio(producto, producto.FechaAnalisis);
+            productoHandler.ActualizarPrecio(producto, producto.FechaAnalisis);
         }
         else
         {
@@ -220,11 +225,13 @@
         }
     }
 
+    // Metodo que calcula y retorna el margen de un producto
     public decimal calcularMargen(ProductoModel productoActual)
     {
         return AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
     }
 
+    // Metodo que calcula y retorna la meta en unidades de un producto
     public int calcularMetaUnidades(ProductoModel productoActual)
     {
         decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
@@ -234,6 +241,7 @@
         return AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
     }
 
+    // Metodo que calcula y retorna la meta en moneda de un producto
     public decimal calcularMetaMoneda(ProductoModel productoActual)
     {
         decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
@@ -245,6 +253,7 @@
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }
 
+    // Metodo que actualiza la meta en unidades en la base de datos
     public int actualizarTotalMetaUnidades()
     {
         int total = 0;
@@ -257,6 +266,7 @@
         return total;
     }
 
+    // Metodo que actualiza la meta en moneda en la base de datos
     public decimal actualizarTotalMetaMoneda()
     {
         decimal total = 0.0m;
