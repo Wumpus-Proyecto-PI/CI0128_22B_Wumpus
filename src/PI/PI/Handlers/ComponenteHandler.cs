@@ -7,6 +7,7 @@ namespace PI.Handlers
     {
         public ComponenteHandler() : base() { }
 
+        // Agrega el modelo de componente que se la pasa por parametro a la base de datos
         public int AgregarComponente(ComponenteModel componente)
         {
             int filasAfectadas = 0;
@@ -19,6 +20,7 @@ namespace PI.Handlers
             return filasAfectadas;
         }
 
+        // Borra el modelo de componente que se la pasa por parametro a la base de datos
         public int BorrarComponente(ComponenteModel componente)
         {
             int filasAfectadas = 0;
