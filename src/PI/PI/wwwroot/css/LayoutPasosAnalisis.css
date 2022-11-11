@@ -109,3 +109,35 @@ div a {
     text-decoration: none;
     font-size: 25px;
 }
+
+footer {
+    border-block-start: solid 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 20px;
+    margin-top: 2em;
+}
+
+.container-contacts {
+    text-align: left;
+}
+
+.contact {
+    font-size: .2em;
+    padding: 0px;
+    margin: 0px;
+}
+
+.container-contacts p {
+    padding: 0px;
+    margin: 0px;
+}
+.contact a  {
+    padding: 0px;
+    margin: 0px;
+}
