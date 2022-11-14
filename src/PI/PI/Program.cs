@@ -8,13 +8,14 @@ var connectionString = builder.Configuration.GetConnectionString("UserDbApplicat
 builder.Services.AddDbContext<UserDbApplicationContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<UserApplication>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<UserApplication>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<UserDbApplicationContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddRazorPages();
+builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
 
