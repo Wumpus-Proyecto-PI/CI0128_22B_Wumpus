@@ -395,10 +395,12 @@ div a {
 .totales p {
     margin: 0px 20px 0px 0px;
     width: fit-content;
+    padding: 0px;
     padding-inline: 50px;
 }
 .totales label {
     background-color: white;
+    padding: 0px;
 }
 
 .error {

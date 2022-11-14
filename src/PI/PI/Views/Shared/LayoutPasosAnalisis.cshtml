@@ -1,8 +1,10 @@
 ﻿<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/LayoutPasosAnalisis.css" asp-append-version="true" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
@@ -34,10 +36,36 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+
+    <footer>
+        <div class="container-contacts">
+            <h2>Contactos</h2>
+            <div class="row">
+                <div class="col-sm">
+                    <p class="contact"> <a href="mailto:daniel.escobargiraldo@ucr.ac.cr">⬤ daniel.escobargiraldo@ucr.ac.cr</a> </p>
+                </div>
+                <div class="col-sm">
+                    <p class="contact"> <a href="mailto:fabian.orozcochaves@ucr.ac.cr">⬤ fabian.orozcochaves@ucr.ac.cr</a> </p>
+                </div>
+                <div class="col-sm">
+                    <p class="contact"> <a href="mailto:gabriel.bonillarivera@ucr.ac.cr">⬤ gabriel.bonillarivera@ucr.ac.cr</a> </p>
+                </div>
+                <div class="col-sm">
+                    <p class="contact"> <a href="mailto:christopher.perez@ucr.ac.cr">⬤ christopher.perez@ucr.ac.cr</a> </p>
+                </div>
+                <div class="col-sm">
+                    <p class="contact"> <a href="mailto:wilmer.araya@ucr.ac.cr">⬤ wilmer.araya@ucr.ac.cr</a> </p>
+                </div>
+            </div>
+            <div class="row">
+            </div>
+        </div>
+    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
 <base href="~/" />
