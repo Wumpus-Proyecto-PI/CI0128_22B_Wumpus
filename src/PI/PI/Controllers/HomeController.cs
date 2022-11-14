@@ -16,7 +16,8 @@ namespace PI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            // return View();
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
 
         public IActionResult Privacy()
