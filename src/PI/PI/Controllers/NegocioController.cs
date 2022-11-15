@@ -33,11 +33,14 @@ namespace PI.Controllers
         }
 
         // agrega un negocio con los datos pasados por parámetros a la base de datos.
-        public IActionResult agregarNegocio_BD(String nombreNegocio, String tipoNegocio, string correoUsuario)
+        public IActionResult agregarNegocio_BD(String nombreNegocio, String tipoNegocio)
         {
             // usuario quemado para efectos del primer sprint.
             // TODO cambiar por un correo de usuario auténtico.
-            correoUsuario = "gabrielperezorozco@testing.com";
+            // string? correoUsuario = User.Identity.Name;
+
+            string correoUsuario = "gabrielperezorozco@testing.com";
+
             // Inserta el negocio en la base de datos.
             NegocioHandler handler = new NegocioHandler();
             NegocioModel negocioIngresado = handler.IngresarNegocio(nombreNegocio, tipoNegocio, correoUsuario);
