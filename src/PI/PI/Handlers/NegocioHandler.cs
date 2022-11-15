@@ -19,12 +19,12 @@ namespace PI.Handlers
 
         // Crea una lista de los negocios existentes en la BD
         // (Retorna la lista con los negocios de la base)
-        public List<NegocioModel> ObtenerNegocios()
+        public List<NegocioModel> ObtenerNegocios(string userEmail)
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
             AnalisisHandler analisisHandler = new AnalisisHandler();
 
-            string consulta = "SELECT * FROM Negocio ORDER BY FechaCreacion DESC";
+            string consulta = $"SELECT * FROM Negocio where correoUsuario = '{userEmail}' ORDER BY FechaCreacion DESC";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
 
             // Crea los modelos de negocio correspondientes segun la tabla obtenida de la base de datos
