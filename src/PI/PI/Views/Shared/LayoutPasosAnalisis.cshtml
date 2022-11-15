@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using PI.Areas.Identity.Data
+@inject SignInManager<UserApplication> SignInManager
+@inject UserManager<UserApplication> UserManager
+
+<!DOCTYPE html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,6 +31,12 @@
                 <div id="boton_ajustes">
                     <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
                 </div>
+            }
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Cerrar sesión</button>
+                </form>
             }
 
             <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
