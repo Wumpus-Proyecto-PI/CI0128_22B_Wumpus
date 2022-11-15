@@ -10,8 +10,8 @@ using PI.Areas.Identity.Data;
 
 namespace PI.Controllers
 {
-    // Controlador del negocio. Administra el traspaso de acciones entre la vista y el modelo/bd referentes al negocio.
-    public class NegocioController : Controller
+    // Controlador del negocio. Administra el traspaso de acciones entre la vista y el modelo/bd referentes al negocio
+    public class NegocioController : ManejadorUsuariosController
     {
         // Retorna una lista con todos los modelos de negocio existentes y el título del paso.
         public IActionResult Index()

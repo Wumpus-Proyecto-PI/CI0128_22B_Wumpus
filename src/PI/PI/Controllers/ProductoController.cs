@@ -5,7 +5,7 @@ using PI.Models;
 
 namespace PI.Controllers
 {
-    public class ProductoController : Controller
+    public class ProductoController : ManejadorUsuariosController
     {
         // GET: GastosVariables
         public IActionResult Index(string fecha)
