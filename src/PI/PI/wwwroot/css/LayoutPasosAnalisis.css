@@ -109,3 +109,11 @@ div a {
     text-decoration: none;
     font-size: 25px;
 }
+
+.logout-button {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    font-size: 26px;
+    cursor: pointer;
+}

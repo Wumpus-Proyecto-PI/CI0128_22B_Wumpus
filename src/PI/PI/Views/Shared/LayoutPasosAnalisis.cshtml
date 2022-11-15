@@ -22,9 +22,6 @@
             @ViewData["TituloPaso"]
         </div>
         <div id="botones_der">
-            <div id="boton_usuario">
-                <a asp-controller="Mensajes" asp-action="BajoConstruccion" ><img src="~/img/user.png" alt="Usuario"></a>
-            </div>
 
             @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios" && @ViewBag.fechaAnalisis != null)
             {
@@ -35,7 +32,7 @@
             @if (SignInManager.IsSignedIn(User))
             {
                 <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Cerrar sesión</button>
+                    <button id="logout" type="submit" class="logout-button">Cerrar sesión</button>
                 </form>
             }
 
