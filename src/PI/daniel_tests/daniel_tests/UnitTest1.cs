@@ -17,7 +17,8 @@ namespace daniel_tests
             driver.Navigate().GoToUrl(url);
         }
 
-        void CierreDriver()
+        [TearDown]
+        public void CierreDriver()
         {
             driver.Close();
         }
@@ -38,7 +39,6 @@ namespace daniel_tests
 
             Assert.AreEqual("Cerrar sesión", logoutButton.Text);
             logoutButton.Click();
-            CierreDriver();
         }
     }
 }
