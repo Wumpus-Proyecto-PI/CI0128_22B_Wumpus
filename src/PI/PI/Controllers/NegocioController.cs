@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using PI.Handlers;
 using PI.Models;
+using Microsoft.AspNetCore.Identity;
+using PI.Areas.Identity.Data;
 
 namespace PI.Controllers
 {
@@ -15,9 +17,10 @@ namespace PI.Controllers
         public IActionResult Index()
         {
             NegocioHandler handler = new NegocioHandler();
-            var negocios = handler.ObtenerNegocios();
+            Console.WriteLine($"User email is : [{User.Identity.Name}]");
+            var negocios = handler.ObtenerNegocios(User.Identity.Name);
             ViewData["Title"] = "Mis negocios";
-
+            /*string userName = UserManager<UserApplication>.GetUserName();*/
             ViewData["TituloPaso"] = "Mis negocios";
             return View(negocios);
         }
@@ -50,7 +53,6 @@ namespace PI.Controllers
             NegocioHandler handler = new NegocioHandler();
             handler.EliminarNegocio(IDNegocio);
 
-            var negocios = handler.ObtenerNegocios();
             // Redirecciona a la pantalla de negocios 
             return RedirectToAction("Index", "Negocio");
         }
