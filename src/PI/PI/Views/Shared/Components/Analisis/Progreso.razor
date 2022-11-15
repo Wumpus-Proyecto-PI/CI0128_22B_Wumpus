@@ -1,0 +1,62 @@
+﻿@using PI.Models
+@using PI.Handlers
+@using System.Globalization
+@inject NavigationManager NavigationManager;
+
+<div class="container-Boton d-flex justify-content-center align-items-center my-3">
+    <div id="boton-eliminar" class="boton-guardar-eliminar" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="EliminarAnalisis">
+        <a>
+            @if (hoverEliminar == false)
+            {
+                <img src="img/generic/trashCan.png" alt="">
+            }
+            @hoverTextEliminar
+        </a>
+    </div>
+</div>
+
+@code {
+    // Recibe el objeto del análisis.
+    [Parameter]
+    public AnalisisModel? Analisis { get; set; }
+
+    [Parameter]
+    public string IdNegocio { get; set; }
+
+    public string hoverTextEliminar = "";
+    public bool hoverEliminar = false;
+
+    // método que redirige al progreso del análisis correspondiente.
+    public void EliminarAnalisis()
+    {
+        AnalisisHandler analisisHandler = new();
+        analisisHandler.EliminarAnalisis(Analisis.FechaCreacion);
+
+        string url = $"Analisis/MisAnalisis?IDNegocio={IdNegocio}";
+        NavigationManager.NavigateTo(url, forceLoad: true);
+    }
+
+    // método para controlar el hover de los botones guardar y agregar
+    public void Hover(int action)
+    {
+        // este metodo quita la imagen y agrega el texto correspondiente
+        // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
+        if (action == 3)
+        {
+            hoverEliminar = true;
+            hoverTextEliminar = "Eliminar análisis actual";
+        }
+    }
+
+    // método para controlar el cuando se quita el hover de los botones guardar y agregar
+    public void HoverOut(int action)
+    {
+        // este metodo agrega la imagen y quita el texto correspondiente
+        // recibe un int para diferenciar si es el quitar hover del botón de guardar (1) o de agregar (2)
+        if (action == 3)
+        {
+            hoverEliminar = false;
+            hoverTextEliminar = "";
+        }
+    }
+}
