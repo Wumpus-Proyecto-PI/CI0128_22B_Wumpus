@@ -1,0 +1,20 @@
+﻿.fila-meta-inversion label {
+    border: solid;
+    border-radius: 20px 0px 0px 20px;
+    border-width: 1px;
+    font-size: 20px;
+    width: 180px;
+    text-align: center;
+    background-color: #E2E2E2;
+}
+
+.dato-meta-inversion {
+    border: solid;
+    border-radius: 0px 20px 20px 0px;
+    border-width: 1px;
+    font-size: 20px;
+    width: 200px;
+    text-align: center;
+    background-color: #E2E2E2;
+    margin: 0px;
+}
