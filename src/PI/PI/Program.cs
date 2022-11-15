@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PI.Areas.Identity.Data;
 using PI.Data;
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("UserDbApplicationContextConnection") ?? throw new InvalidOperationException("Connection string 'UserDbApplicationContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("BaseDeDatos") ?? throw new InvalidOperationException("Connection string 'BaseDeDatos' not found.");
 
 builder.Services.AddDbContext<UserDbApplicationContext>(options =>
     options.UseSqlServer(connectionString));
