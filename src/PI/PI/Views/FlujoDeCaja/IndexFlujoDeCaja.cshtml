@@ -46,5 +46,32 @@
             }
         </div>
 
+        <div id="contenedor-tabs" class="container-lg mt-5">
+            <nav>
+                <div class="nav nav-tabs tabs-tablas" id="nav-tab" role="tablist">
+                    <button class="nav-link active tab-flujo" id="nav-ingresos-tab" data-bs-toggle="tab"
+                            data-bs-target="#ingresos" type="button" role="tab" aria-controls="nav-ingresos"
+                            aria-selected="true">
+                        Ingresos
+                    </button>
+                    <button class="nav-link tab-flujo mx-1" id="nav-egresos-tab" data-bs-toggle="tab"
+                            data-bs-target="#egresos" type="button" role="tab" aria-controls="nav-egresos"
+                            aria-selected="false">
+                        Egresos
+                    </button>
+                </div>
+            </nav>
+
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="ingresos" role="tabpanel" aria-labelledby="nav-ingresos-tab">
+                    <h1>Tabla ingresos</h1>
+                </div>
+
+                <div class="tab-pane fade" id="egresos" role="tabpanel" aria-labelledby="nav-egresos-tab">
+                    <h1>Tabla egresos</h1>
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
