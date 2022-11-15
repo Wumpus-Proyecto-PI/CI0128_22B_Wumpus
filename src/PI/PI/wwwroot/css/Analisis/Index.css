@@ -1,0 +1,52 @@
+﻿/*Botón de eliminar y guardar gasto inicial*/
+.boton-guardar-eliminar {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+    border: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #ccc;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
+    margin: 25px;
+    transition-duration: 0.3s;
+}
+
+.boton-guardar-eliminar:hover {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 49px;
+    width: fit-content;
+    border: solid;
+    border-color: transparent;
+    border-radius: 10px;
+    margin: 25px;
+    padding-inline: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition-duration: 0.8s;
+    background-color: #E2F2FF;
+}
+
+.boton-guardar-eliminar img {
+    width: 45px;
+    padding: 5px;
+}
+
+#boton-eliminar:hover {
+    background-color: #FFC8C8;
+}
+
+main {
+    overflow: hidden;
+}
+main{
+    min-height: 1100px;
+}

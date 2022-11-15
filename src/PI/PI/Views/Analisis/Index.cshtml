@@ -23,7 +23,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PI.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/HoverTexto.css"/>
+    <link rel="stylesheet" href="~/css/HoverTexto.css" />
+    <link rel="stylesheet" href="~/css/Analisis/Index.css" />
 </head>
 
 @*Encabezado de la pantalla del progreso*@
@@ -216,5 +217,7 @@
             </div>
         </div>
     </div>
-
+        @(
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.Progreso>(RenderMode.ServerPrerendered, new { Analisis = Model, IdNegocio = getIdNegocio()})
+            )
 </body>
