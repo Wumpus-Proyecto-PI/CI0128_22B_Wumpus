@@ -116,15 +116,8 @@
 
                         <tr class="filas-tabla-componente">
                             <td> @productoActivo.Componentes[index].Nombre</td>
-                            @*Verifica la unidad del componente en el indice para mostrar los datos de unidad y cantidad correctamente*@
-                            @if (@productoActivo.Componentes[index].Unidad == 0) {
-                                <td>Unitario</td>
-                                <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad)))</td>
-                            }
-                            else {
-                                <td>Porcentaje</td>
-                                <td>@(String.Format(CultureInfo.InvariantCulture, "{0:#,##0}", (@productoActivo.Componentes[index].Cantidad)))%</td>                       
-                            }
+                            <td> @productoActivo.Componentes[index].Unidad</td>
+                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad)))</td>
                             <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Costo)))</td>
                             @*Botón para borrar un beenficio*@
                             <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>BorrarComponente(productoActivo.Componentes[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
@@ -138,7 +131,7 @@
                 @*Se agrega a los comodines un nuevo beneficio*@
                 componentes.Add(new ComponenteModel());
                 <div class="form-componentes">
-                    <h2>Nuevo Componente</h2>
+                    <h2 class="titulo-componente">Nuevo Componente</h2>
                     @*Sección de forms para ingresar los datos de un nuevo componente*@
                     <div id="tabla-form">
                         @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo componente*@
@@ -149,10 +142,7 @@
                         @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
                         <div id="container-input-unidad-componente">
                             <label for="unidadComponente">Unidad:</label>
-                            <select class="input-unidad" id="unidadComponente" name="unidadComponente" @bind="componentes[componenteActual].Unidad">
-                                <option selected value="0">Unitario</option>
-                                <option value="1">Porcentaje</option>
-                            </select> 
+                            <input class="input-componente" id="unidadComponente" name="unidadComponente" @bind="componentes[componenteActual].Unidad" maxlength="30">
                         </div>
                         @*Sección donde se encuentra el form donde se ingresa la cantidad del nuevo componente*@
                         <div id="container-input-cantidad-componente">
@@ -176,6 +166,10 @@
                 @if (NombreVacio)
                 {
                     <p style="color:red; align-self:center; margin-bottom:10px;">ERROR: El nombre ingresado es vacío</p>
+                }
+                @if (UnidadVacia)
+                {
+                    <p style="color:red; align-self:center; margin-bottom:10px;">ERROR: La unidad ingresada es vacía</p>
                 }
                 @if (CantidadPositiva == false)
                 {
@@ -436,7 +430,6 @@
             foreach (ComponenteModel componente in componentesNuevos)
             {
                 componente.NombreProducto = productoActivo.Nombre;
-                componente.Cantidad = RevisarTipoUnidad(componente);
                 HandlerComponente.AgregarComponente(componente);
             }
 
@@ -544,6 +537,8 @@
     // Variables booleanas que verifican la correctitud de los inputs de los componentes
     public bool NombreVacio { get; set; } = false;
 
+    public bool UnidadVacia { get; set; } = false;
+
     public bool CantidadPositiva { get; set; } = true;
 
     public bool CostoPositivo { get; set;  } = true;
@@ -562,6 +557,7 @@
     {
 
         bool hayNombre = !(string.IsNullOrWhiteSpace(componentes[componenteActual].Nombre));
+        bool hayUnidad = !(string.IsNullOrWhiteSpace(componentes[componenteActual].Unidad));
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
         bool costoPositivo = componentes[componenteActual].Costo >= 0;
         bool nombreRepetido = false;
@@ -572,15 +568,16 @@
         {
             nombreRepetido = RevisarNombreRepetido(componentes[componenteActual]);
         }
-        
+
         NombreVacio = !(hayNombre);
+        UnidadVacia = !(hayUnidad);
         CantidadPositiva = cantidadPositiva;
         CostoPositivo = costoPositivo;
         NombreRepetido = nombreRepetido;
         DecimalValido = decimalValido; 
 
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
-        if (hayNombre && cantidadPositiva && costoPositivo && (nombreRepetido==false) && decimalValido)
+        if (hayNombre && hayUnidad && cantidadPositiva && costoPositivo && (nombreRepetido==false) && decimalValido)
         {
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
@@ -601,6 +598,10 @@
             if (string.IsNullOrWhiteSpace(componentes[componenteActual].Nombre))
             {
                 NombreVacio = true;
+            }
+            if (string.IsNullOrWhiteSpace(componentes[componenteActual].Unidad)) 
+            {
+                UnidadVacia = true;
             }
             if (componentes[componenteActual].Costo < 0)
             {
@@ -626,21 +627,6 @@
         }
 
         return esRepetido; 
-    }
-
-    // Revisa la unidad del componente que se pasa por parametro
-    // Si la unidad es porcentaje (==1) se le realiza una division entre 100
-    public decimal RevisarTipoUnidad(ComponenteModel componente) {
-        decimal valorOficial = 0;
-
-        if (componente.Unidad == 0) {
-            valorOficial = componente.Cantidad;
-        }
-        if (componente.Unidad == 1) {
-            valorOficial = componente.Cantidad / 100;
-        }
-
-        return valorOficial;
     }
 
     // Método que borra un componente de la lista de componentes.

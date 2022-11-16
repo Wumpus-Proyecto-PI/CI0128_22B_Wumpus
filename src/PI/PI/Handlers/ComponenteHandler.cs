@@ -46,7 +46,7 @@ namespace PI.Handlers
                     Nombre = Convert.ToString(columna["nombreComponente"]),
                     NombreProducto = Convert.ToString(columna["nombreProducto"]),
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
-                    Unidad = Convert.ToInt32(columna["unidad"])
+                    Unidad = Convert.ToString(columna["unidad"])
                 };
                 if (columna["monto"] != DBNull.Value)
                 {
@@ -54,14 +54,7 @@ namespace PI.Handlers
                 }
                 if (columna["cantidad"] != DBNull.Value)
                 {
-                    if (componente.Unidad == 1) { 
-                        componente.Cantidad = Convert.ToDecimal(columna["cantidad"]) * 100;
-                
-                    }
-                    else
-                    {
-                        componente.Cantidad = Convert.ToDecimal(columna["cantidad"]);
-                    }
+                    componente.Cantidad = Convert.ToDecimal(columna["cantidad"]);                   
                 }
                 componentes.Add(componente);
 
