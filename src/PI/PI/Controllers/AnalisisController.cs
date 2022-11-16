@@ -12,7 +12,7 @@ using PI.Services;
 namespace PI.Controllers
 {
     // Controlador del analisis
-    public class AnalisisController : Controller
+    public class AnalisisController : ManejadorUsuariosController
     {
         public IActionResult CrearAnalisis(int idNegocio, string estadoNegocio)
         {

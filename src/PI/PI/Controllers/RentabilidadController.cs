@@ -5,7 +5,7 @@ using PI.Services;
 
 namespace PI.Controllers
 {
-    public class RentabilidadController : Controller
+    public class RentabilidadController : ManejadorUsuariosController
     {
         // // Retorna una lista con todos los modelos de producto existentes y el título del paso.
         public IActionResult Index(string fecha)

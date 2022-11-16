@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PI.Controllers
 {
     // Controlador del gasto fijo.  Administra el traspaso de acciones entre la vista y el modelo/bd referentes al gasto fijo.
-    public class GastoFijoController : Controller
+    public class GastoFijoController : ManejadorUsuariosController
     {
         // Retorna una lista de gastos fijos que pertenecen al análisis con la fecha pasada por parámetro.
         public IActionResult GastoFijo(string fecha)

@@ -1,0 +1,41 @@
+﻿@page
+@model LoginModel
+
+<div class="d-flex justify-content-center align-content-center align-items-center login-card">
+    <div class="card">
+        <div class="card-body text-center">
+            <form id="account" method="post">
+                <img src="~/img/lagoysarmiento.png" alt="Logo de la empresa" style="max-width: 75%">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                    <label asp-for="Input.Email" class="form-label">Correo electrónico</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>   
+                </div>
+                <div class="form-floating mt-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                    <label asp-for="Input.Password" class="form-label">Contraseña</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <p class="mt-2">
+                    <a id="forgot-password" asp-page="./ForgotPassword">Recuperar contraseña</a>
+                </p>
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Iniciar sesión</button>
+                </div>
+                <div>
+                    <p class="mt-3">
+                        ¿No tiene una cuenta?
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registrese aquí</a>.
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
