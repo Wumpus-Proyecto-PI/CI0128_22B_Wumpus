@@ -18,11 +18,14 @@
                     <label asp-for="Input.Password" class="form-label">Contraseña</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <p class="mt-2">
-                    <a id="forgot-password" asp-page="./ForgotPassword">Recuperar contraseña</a>
-                </p>
+                @*
+                    TODO: incorporar sisetma de recuperar contraseña con email sender
+                    <p class="mt-2">
+                        <a id="forgot-password" asp-page="./ForgotPassword">Recuperar contraseña</a>
+                    </p>.
+                *@
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Iniciar sesión</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-3">Iniciar sesión</button>
                 </div>
                 <div>
                     <p class="mt-3">
