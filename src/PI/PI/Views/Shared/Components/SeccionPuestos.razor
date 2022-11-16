@@ -359,45 +359,7 @@
 
 
 
-    // Método que agrega un beneficio ingresado por medio de forms, a la base de datos.
-    public void agregarBeneficioNuevo()
-    {
-        // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
-        if (comodines[comodinActual].monto >= 0 && !string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio) && comodines[comodinActual].plazasPorBeneficio <= puestoActivo.Plazas && comodines[comodinActual].plazasPorBeneficio >= 0)
-        {
-            MontoBeneficiosPositivo = true;
-            NombreVacio = false;
-            PlazasBeneficiosMenoresAPuesto = true;
-            PlazasBeneficiosPositivo = true;
-            EstructuraOrgHandler h = new EstructuraOrgHandler();
-            comodines[comodinActual].fechaAnalisis = fechaAnalasis;
-            comodines[comodinActual].nombrePuesto = puestoActivo.Nombre;
-            formVisible = false;
-            puestoActivo.Beneficios.Add(comodines[comodinActual]);
-            h.AgregarBeneficio(comodines[comodinActual]);
-            comodines.Add(new BeneficioModel());
-            comodinActual += 1;
-        }
-        // En caso de que los datos ingresados en el form de los beneficios sean incorrectos, se verifica uno por uno para indicarlo en las variables correspondientes.
-        else { 
-            if (comodines[comodinActual].monto < 0)
-            {
-                MontoBeneficiosPositivo = false;
-            }
-            if (string.IsNullOrWhiteSpace(comodines[comodinActual].nombreBeneficio))
-            {
-                NombreVacio = true;
-            }
-            if (comodines[comodinActual].plazasPorBeneficio > puestoActivo.Plazas)
-            {
-                PlazasBeneficiosMenoresAPuesto = false;
-            }
-            if (comodines[comodinActual].plazasPorBeneficio < 0)
-            {
-                PlazasBeneficiosPositivo = false;
-            }
-        }
-    }
+
 
     // Método que borra un beneficio de la base de datos.
     public void borrarBeneficio(BeneficioModel b)
