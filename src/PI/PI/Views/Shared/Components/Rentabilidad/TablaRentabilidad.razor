@@ -83,7 +83,7 @@
                 -
             </div>
             <div class="col col-1" data-label="Margen ponderado">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((productos))</p>
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargenPonderadoTotal(productos))</p>
             </div>
             <div class="col col-1" data-label="Punto Eq">
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
