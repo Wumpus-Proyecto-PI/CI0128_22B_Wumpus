@@ -357,26 +357,7 @@
 
 
 
-    // El índice del comodín sobre el cual se está operando en determinado momento
-    int comodinActual = 0;
 
-    // Variable que indica si el form para ingresar un nuevo beneficio es nuevo o no
-    public bool formVisible = false;
-    
-    // Variable que indica si el número ingresado en el form de las plazas de un beneficio nuevo, es posisitivo.
-    public bool PlazasBeneficiosPositivo { get; set; } = true;
-
-    // Variable que indica si el monto ingresado en el form del monto del beneficio, es positivo.
-    public bool MontoBeneficiosPositivo { get; set; } = true;
-
-    // Variable que indica si el número de plazas ingresado en el form de las plazas de un beneficio, es menor a la cantidad de plazas del puestoActivo
-    public bool PlazasBeneficiosMenoresAPuesto { get; set; } = true;
-
-    // Variable que indica si el nombre ingresado en el form del beneficio es vació o no
-    public bool NombreVacio { get; set; } = false;
-
-    // Variable que indica si el beneficio que se es´tá tratando de agregar ya existe en la base de datos.
-    public bool YaExisteBeneficio { get; set; }
 
     // Método que agrega un beneficio ingresado por medio de forms, a la base de datos.
     public void agregarBeneficioNuevo()
