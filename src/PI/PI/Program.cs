@@ -26,7 +26,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddRazorPages();
-builder.WebHost.UseStaticWebAssets();
+//builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
 
