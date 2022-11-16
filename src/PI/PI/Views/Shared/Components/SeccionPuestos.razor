@@ -361,17 +361,6 @@
 
 
 
-    // Método que borra un beneficio de la base de datos.
-    public void borrarBeneficio(BeneficioModel b)
-    {
-        b.fechaAnalisis = puestoActivo.FechaAnalisis;
-        b.nombrePuesto = puestoActivo.Nombre;
-        EstructuraOrgHandler h = new EstructuraOrgHandler();
-        puestoActivo.Beneficios.Remove(b);
-        h.BorrarBeneficio(b);
-
-    }
-
     // Método que cambia el valor de la variable que indica la visibilidad del form de ingresar un nuevo beneficio.
     public void cambiarVisibilidadForm()
     {
