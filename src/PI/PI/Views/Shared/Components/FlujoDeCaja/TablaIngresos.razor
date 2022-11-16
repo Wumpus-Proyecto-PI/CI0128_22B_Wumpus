@@ -1,0 +1,82 @@
+﻿
+
+<ul class="responsive-table">
+    <li class="table-header">
+        <div class="col col-1">
+            <p class="">Ingresos</p>
+        </div>
+        <div class="col col-1">
+            <p class="datos-header">Mes 1</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 2</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 3</p>
+        </div>
+        <div class="col col-1">
+            <p class="datos-header">Mes 4</p>
+        </div>
+        <div class="col col-1">
+            <p class="datos-header">Mes 5</p>
+        </div>
+        <div class="col col-1">
+            <p class="datos-header">Mes 6</p>
+        </div>
+    </li>
+
+    <li class="table-row-totales">
+        <div class="col col-1" data-label="Nombre">
+            <p class="datos-calculados texto-nombres">Totales</p>
+        </div>
+        <div class="col col-1" data-label="% Ventas">
+            %
+        </div>
+        <div class="col col-1" data-label="Precio">
+            -
+        </div>
+        <div class="col col-1" data-label="Margen">
+            -
+        </div>
+        <div class="col col-1" data-label="Punto Eq">
+            <p class="datos-calculados">700</p>
+        </div>
+        <div class="col col-1" data-label="Meta">
+               <p class="datos-calculados">400</p>
+        </div>
+        <div class="col col-1" data-label="Meta">
+            <p class="datos-calculados">400</p>
+        </div>
+    </li>
+
+        <li class="table-row">
+            <div class="col col-1" data-label="Nombre">
+                <p class="datos-calculados texto-nombres">A credito</p>
+            </div>
+            <div class="col col-1" data-label="% Ventas">
+                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)"*@>%
+                <span class="focus-border"></span>
+            </div>
+            <div class="col col-1" data-label="Precio">
+                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)"*@>
+                <span class="focus-border"></span>
+            </div>
+            <div class="col col-1" data-label="Margen">
+                @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
+                <p class="datos-calculados">899</p>
+            </div>
+            <div class="col col-1" data-label="Punto Eq">
+                <p class="datos-calculados">200</p>
+            </div>
+            <div class="col col-1" data-label="Meta">
+                <p class="datos-calculados">900</p>
+            </div>
+        <div class="col col-1" data-label="Meta">
+            <p class="datos-calculados">900</p>
+        </div>
+        </li>
+</ul>
+
+@code {
+
+}
