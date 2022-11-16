@@ -2,8 +2,11 @@ div {
     font-family: sans-serif;
 }
 
-body {
+html, body, main {
+    height: 100vh;
+    padding: 0;
     margin: 0px;
+    overflow-x: hidden;
 }
 
 #encabezado {
@@ -108,6 +111,47 @@ div a {
     color: black;
     text-decoration: none;
     font-size: 25px;
+}
+
+footer {
+  display: flex;
+  white-space: nowrap;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  line-height: 20px;
+  margin-top: 3em;
+  background-color: #005db9;
+  color: white;
+  padding-block-start: 1em;
+  padding-block-end: 1em;
+  margin: 0px;
+}
+
+.container-contacts {
+  text-align: left;
+}
+.contact:hover {
+  text-decoration: underline;
+}
+.contact a {
+  font-size: 0.9em;
+  padding: 0px;
+  margin: 0px;
+  padding-block-end: 1em;
+  color: white;
+  text-decoration: none;
+}
+
+.contact a:hover {
+  font-size: 0.9em;
+  padding: 0px;
+  margin: 0px;
+  padding-block-end: 1em;
+  color: white;
+  text-decoration: none;
 }
 
 .logout-button {

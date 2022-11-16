@@ -92,10 +92,13 @@ namespace PI.Handlers
             string consulta = "SELECT Max(A.fechaCreacion) as UltimoAnalisis from ANALISIS as A inner join Negocio as N " +
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-            DateTime fecha = (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
- 
-            return fecha;
+            if (tablaResultado.Rows[0].IsNull("UltimoAnalisis") == false)
+            {
+                return (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
+            } else
+            {
+                return DateTime.Now;
+            }
         }
 
         // Obtiene el estado de un analisis en especifico
@@ -208,6 +211,14 @@ namespace PI.Handlers
             }
 
             return GananciaMensual;
+        }
+
+        // Método que elimina un análisis de la base de datos.
+        public void EliminarAnalisis(DateTime FechaCreacion)
+        {
+            string fecha = FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string consulta = $"Exec EliminarAnalisis @fechaCreacion = '{fecha}'";
+            enviarConsultaVoid(consulta);
         }
 
     }
