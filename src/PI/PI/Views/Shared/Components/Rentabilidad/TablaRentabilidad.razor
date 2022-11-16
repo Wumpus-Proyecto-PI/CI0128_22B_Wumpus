@@ -59,6 +59,9 @@
                 <p>Margen</p>
             </div>
             <div class="col col-1">
+                <p>Margen ponderado</p>
+            </div>
+            <div class="col col-1">
                 <p class="datos-header">Punto Equilibrio</p>
             </div>
             <div class="col col-1">
@@ -77,6 +80,9 @@
                 -
             </div>
             <div class="col col-1" data-label="Margen">
+                -
+            </div>
+            <div class="col col-1" data-label="Margen ponderado">
                 -
             </div>
             <div class="col col-1" data-label="Punto Eq">
@@ -111,6 +117,9 @@
                 <div class="col col-1" data-label="Margen">
                     @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargen(productoActual))</p>
+                </div>
+                <div class="col col-1" data-label="Margen ponderado">
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargenPonderado(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable))</p>
@@ -229,6 +238,13 @@
     public decimal calcularMargen(ProductoModel productoActual)
     {
         return AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+    }
+
+    // Metodo que calcula y retorna el margen ponderado de un producto
+    public decimal calcularMargenPonderado(ProductoModel productoActual)
+    {
+        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+        return AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
     }
 
     // Metodo que calcula y retorna la meta en unidades de un producto
