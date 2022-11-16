@@ -8,7 +8,6 @@ using PI.Controllers;
 using System.Data;
 using System.Data.SqlClient;
 using PI.Models;
-using PI.Views.Shared.Components.GastoFijo;
 
 namespace PI.Handlers
 {   

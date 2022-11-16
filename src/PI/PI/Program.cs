@@ -1,9 +1,32 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using PI.Areas.Identity.Data;
+using PI.Data;
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("BaseDeDatos") ?? throw new InvalidOperationException("Connection string 'BaseDeDatos' not found.");
+
+builder.Services.AddDbContext<UserDbApplicationContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<UserApplication>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<UserDbApplicationContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Configracion de requisitos de password
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 0;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddRazorPages();
+builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
 
@@ -19,6 +42,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 

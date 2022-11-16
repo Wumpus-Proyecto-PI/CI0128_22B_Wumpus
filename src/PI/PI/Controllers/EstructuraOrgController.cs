@@ -7,7 +7,7 @@ using PI.Services;
 namespace PI.Controllers
 {
     // clase controladora que se encarga de las vistas y los llamados necesarios con respecto a la estrutura organizativa
-    public class EstructuraOrgController : Controller
+    public class EstructuraOrgController : ManejadorUsuariosController
     {
         // Acción que retorna la vista predeterminada de la estrutura organizativa
         // Recibe un string que indica la fecha del análisis a la que pertenece la estrutura organizativa actual

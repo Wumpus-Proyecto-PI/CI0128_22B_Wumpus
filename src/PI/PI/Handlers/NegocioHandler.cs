@@ -19,12 +19,12 @@ namespace PI.Handlers
 
         // Crea una lista de los negocios existentes en la BD
         // (Retorna la lista con los negocios de la base)
-        public List<NegocioModel> ObtenerNegocios()
+        public List<NegocioModel> ObtenerNegocios(string idUsuario)
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
             AnalisisHandler analisisHandler = new AnalisisHandler();
 
-            string consulta = "SELECT * FROM Negocio ORDER BY FechaCreacion DESC";
+            string consulta = $"SELECT * FROM Negocio where idUsuario = '{idUsuario}' ORDER BY FechaCreacion DESC";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
 
             // Crea los modelos de negocio correspondientes segun la tabla obtenida de la base de datos
@@ -36,7 +36,7 @@ namespace PI.Handlers
                 {
                     Nombre = Convert.ToString(columna["nombre"]),
                     ID = Convert.ToInt32(columna["id"]),
-                    CorreoUsuario = Convert.ToString(columna["correoUsuario"]),
+                    idUsuario = Convert.ToString(columna["idUsuario"]),
                     Analisis = analisisHandler.ObtenerAnalisis(Convert.ToInt32(columna["id"])),
                     FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]),
                     TipoUltimoAnalisis = analisisHandler.ObtenerTipoAnalisis(fechaUltAnalisis)
@@ -69,7 +69,7 @@ namespace PI.Handlers
 
         // Inserta el nuevo negocio a la base de datos
         // (Retorna el negocio creado que fue ingresado | Parametros: nombre, estado del negocio, correo del usuario)
-        public NegocioModel IngresarNegocio(string Nombre, string tipo, string correoUsuario) 
+        public NegocioModel IngresarNegocio(string Nombre, string tipo, string idUsuario) 
         {
             AnalisisHandler analisisHandler = new AnalisisHandler();
 
@@ -79,8 +79,8 @@ namespace PI.Handlers
             int nextID = getNextID();
             
             // String con la consulta para insertar el negocio en la base de datos 
-            string consulta = "INSERT INTO Negocio (ID,Nombre,correoUsuario,FechaCreacion) VALUES (" 
-                + nextID + ",'" + Nombre + "', '" + correoUsuario + "', '" + sqlFormattedDate + "');";
+            string consulta = "INSERT INTO Negocio (ID,Nombre,idUsuario,FechaCreacion) VALUES ("
+                + nextID + ",'" + Nombre + "', '" + idUsuario + "', '" + sqlFormattedDate + "');";
             enviarConsultaVoid(consulta);
 
             // Le ingresa un analisis por defecto al negocio recien creado 
@@ -89,7 +89,7 @@ namespace PI.Handlers
             // Crea un modelo para el negocio recien creado 
             NegocioModel negocioIngresado = new NegocioModel();
             negocioIngresado.Nombre = Nombre;
-            negocioIngresado.CorreoUsuario = correoUsuario;
+            negocioIngresado.idUsuario = idUsuario;
             negocioIngresado.FechaCreacion = DateOnly.FromDateTime(myDateTime);
             negocioIngresado.ID = nextID;
 

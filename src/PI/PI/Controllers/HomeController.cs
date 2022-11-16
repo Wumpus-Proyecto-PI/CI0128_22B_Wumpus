@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace PI.Controllers
 {
     // Controlador del home. Este se usa el deafult de asp.net mvc
-    public class HomeController : Controller
+    public class HomeController : ManejadorUsuariosController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -16,7 +16,8 @@ namespace PI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            // return View();
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
 
         public IActionResult Privacy()

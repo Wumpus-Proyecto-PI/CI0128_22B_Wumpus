@@ -4,7 +4,7 @@ using PI.Models;
 
 namespace PI.Controllers
 {
-    public class InversionInicialController : Controller
+    public class InversionInicialController : ManejadorUsuariosController
     {
         // Recibe la fecha del análisis del que se quiere obtener los gastos iniciales.
         // Retorna una lista de gastos iniciales que pertenecen al análisis con la fecha pasada por parámetro.

@@ -144,7 +144,7 @@ namespace PI.Handlers
             {
                 // si tiene algo la tabla resultado, se asigna el nombre del negocio
                 negocioObtenido.Nombre = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
-                negocioObtenido.CorreoUsuario = Convert.ToString(tablaResultado.Rows[0]["correoUsuario"]);
+                negocioObtenido.idUsuario = Convert.ToString(tablaResultado.Rows[0]["idUsuario"]);
                 negocioObtenido.ID = Convert.ToInt32(tablaResultado.Rows[0]["id"]);
                 negocioObtenido.FechaCreacion = DateOnly.FromDateTime((DateTime) tablaResultado.Rows[0]["FechaCreacion"]);
             }
