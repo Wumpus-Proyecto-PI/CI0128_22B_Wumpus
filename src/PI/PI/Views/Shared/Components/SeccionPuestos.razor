@@ -45,11 +45,6 @@
                     </div>
                     @((MarkupString)ErrorPlaza) @*Mensaje de error*@
                     </form>
-
-                    @*Se muestra edición de beneficios si se está editando un puesto*@
-                    @if (hayPuestoSeleccionado) {
-                        <button id="boton-beneficios"  @onclick="cambiarVisibilidadPopup"> Editar Beneficios</button>
-                    }
                 </div>
             @*
                 Comienzo sección de ingreso de datos de un puesto
