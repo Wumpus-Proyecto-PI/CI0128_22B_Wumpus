@@ -83,7 +83,7 @@
                 -
             </div>
             <div class="col col-1" data-label="Margen ponderado">
-                -
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((productos))</p>
             </div>
             <div class="col col-1" data-label="Punto Eq">
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
@@ -309,6 +309,20 @@
         for (int i = 0; i < productos.Count; i += 1)
         {
             result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, productos[i].CostoVariable);
+        }
+        return result;
+    }
+
+    // Se encarga de calcular el maregn ponderado total de todos los proudcto
+    public decimal calcularMargenPonderadoTotal(List<ProductoModel> productos)
+    {
+        decimal result = 0.0m;
+        decimal margenActual = 0.0m;
+        foreach (var productoActual in productos)
+        {
+            margenActual = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+
+            result += AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margenActual);
         }
         return result;
     }
