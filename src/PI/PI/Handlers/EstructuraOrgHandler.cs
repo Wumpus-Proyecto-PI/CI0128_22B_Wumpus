@@ -126,7 +126,6 @@ namespace PI.Handlers
                 puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
 
                 // los beneficios se cargan con otro método que carga beneficios según el puesto y el análisis
-                puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisis);
                 puestos.Add(puesto);
             }
 
