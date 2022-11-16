@@ -8,7 +8,7 @@ using System;
     public string Nombre { get; set; }
 
     // Correo del usuario que creó el negocio
-    public string CorreoUsuario { get; set; }
+    public string idUsuario { get; set; }
 
     // Id único entre objetos Negocio
     public int ID { get; set; }
