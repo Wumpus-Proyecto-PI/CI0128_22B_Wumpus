@@ -44,9 +44,9 @@ namespace PI.Services
             try
             {
                 decimal temp = 0;
-                temp = (porcentajeVentas * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
+                temp = ((porcentajeVentas /  100) * (gastosFijosMensuales + gananciaMensual)) / margenPonderado;
                 resultado = Convert.ToInt32(Math.Ceiling(temp));
-            } catch
+            } catch (DivideByZeroException)
             {
                 resultado = 0;
             }
