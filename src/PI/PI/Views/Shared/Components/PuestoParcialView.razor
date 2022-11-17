@@ -25,9 +25,9 @@
         </div>
     </div>
         <div style=" display:flex; align-items:center; justify-content:center;">
-            @if (puesto.Beneficios.Count > 0) {
+            @if (puesto.Beneficios != 0) {
                 <p style="margin-right:5px; font-size:large;">@(
-                    puesto.Beneficios.Count
+                    puesto.Beneficios
                 )</p>
                 <img src="img/estructuraOrg/incentive.png" width="30px" height="30px">
             }
