@@ -143,33 +143,7 @@ namespace PI.Handlers
 
        
 
-        // Método encargado de agregar un beneficio a la base de datos. El modelo del Beneficio a agregar es pasado como parámetro.
-        public List<BeneficioModel> AgregarBeneficio(BeneficioModel b)
-        {
-            List<BeneficioModel> resultadoBeneficios = new List<BeneficioModel>();
-
-            // consulta para extraer los beneficios y devolver la tabla de beneficios con dicho beneficio ya agregado
-            string consulta = "DECLARE @montoTemp varchar(20) SET @montoTemp = '"+ b.monto.ToString() 
-                + "' SET @montoTemp = REPLACE(@montoTemp, ',', '.') INSERT INTO BENEFICIO VALUES('" + b.nombrePuesto + "','" 
-                + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "','" 
-                + b.nombreBeneficio + "', dbo.convertTOdecimal (@montoTemp),"
-                + b.plazasPorBeneficio.ToString() + ") SELECT * FROM BENEFICIO";
-            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
-
-            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
-            {
-                resultadoBeneficios.Add(new BeneficioModel
-                {
-                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
-                    monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"]),
-                    nombrePuesto = Convert.ToString(beneficio["nombrePuesto"]),
-                    fechaAnalisis = Convert.ToDateTime(beneficio["fechaAnalisis"])
-                });
-            }
-
-            return resultadoBeneficios;
-        }
+      
 
         // Método encargado de eliminar un beneficio de la base de datos, a partir de un Modelo de Beneficio, el cual es pasado por parámetro.
         public List<BeneficioModel> BorrarBeneficio(BeneficioModel b)
