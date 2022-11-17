@@ -1,0 +1,47 @@
+﻿main {
+    overflow: hidden
+}
+
+.fila-meta-inversion label {
+    border: solid;
+    border-radius: 20px 0px 0px 20px;
+    border-width: 1px;
+    font-size: 20px;
+    width: 270px;
+    text-align: center;
+    background-color: #E2E2E2;
+}
+
+.dato-meta-inversion {
+    border: solid;
+    border-radius: 0px 20px 20px 0px;
+    border-width: 1px;
+    font-size: 20px;
+    width: 200px;
+    text-align: center;
+    background-color: #E2E2E2;
+    margin: 0px;
+}
+
+#contenedor-tabs .tab-content {
+    color: black;
+}
+
+#contenedor-tabs .tabs-tablas {
+    font-size: 20px;
+    color: black;
+}
+
+#contenedor-tabs .nav .active {
+    background-color: #92D050 !important
+}
+
+.tab-flujo {
+    color: #4A4F55;
+    background-color: #F2F2F2 !important;
+}
+
+    .tab-flujo:hover {
+        color: #4A4F55;
+        background-color: #F9F9F9 !important;
+    }

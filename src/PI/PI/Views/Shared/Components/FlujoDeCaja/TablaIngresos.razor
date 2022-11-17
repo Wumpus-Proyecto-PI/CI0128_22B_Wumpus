@@ -1,0 +1,226 @@
+﻿@using System.Globalization
+
+
+<ul class="responsive-table">
+
+    @*Header*@
+    <li class="table-header">
+        <div class="col col-1">
+            <p>Ingresos</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 1</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 2</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 3</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 4</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 5</p>
+        </div>
+        <div class="col col-1">
+            <p>Mes 6</p>
+        </div>
+    </li>
+
+    @*Flujo de caja mensual*@
+    <FilaFlujoMensual />
+
+    @*Totales*@
+    <li class="table-row-totales">
+        <div class="col col-1">
+            <p class="datos-calculados texto-nombres">Totales</p>
+        </div>
+        <div class="col col-1">
+            0
+        </div>
+        <div class="col col-1">
+            0
+        </div>
+        <div class="col col-1">
+            0
+        </div>
+        <div class="col col-1">
+            0
+        </div>
+        <div class="col col-1">
+            0
+        </div>
+        <div class="col col-1">
+            0
+        </div>
+    </li>
+
+    @*Ventas de contado*@
+    <li class="table-row">
+        <div class="col col-1">
+            <p class="datos-calculados texto-nombres">Ventas de contado</p>
+        </div>
+        <div class="col col-1">
+            @if (estadosFilaContado[0])
+            {
+                <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {estadosFilaContado[0] = false;}">
+                    <p>
+                        @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", cantidad))
+                    </p>
+                </div>
+            }
+            else
+            {
+                <input class="effect-1 text-center" type="text" maxlength=16 @onmouseout="() => {estadosFilaContado[0] = true;}" @bind="cantidad">
+                <span class="focus-border"></span>
+            }
+        </div>
+        <div class="col col-1">
+            @if (estadosFilaContado[1])
+            {
+                <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {estadosFilaContado[1] = false;}">
+                    <p>
+                        @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", cantidad))
+                    </p>
+                </div>
+            }
+            else
+            {
+                <input class="effect-1 text-center" type="text" maxlength=16 @onmouseout="() => {estadosFilaContado[1] = true;}" @bind="cantidad">
+                <span class="focus-border"></span>
+            }
+        </div>
+        <div class="col col-1">
+            @if (estadosFilaContado[2])
+            {
+                <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {estadosFilaContado[2] = false;}">
+                    <p>
+                        @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", cantidad))
+                    </p>
+                </div>
+            }
+            else
+            {
+                <input class="effect-1 text-center" type="text" maxlength=16 @onmouseout="() => {estadosFilaContado[2] = true;}" @bind="cantidad">
+                <span class="focus-border"></span>
+            }
+        </div>
+        <div class="col col-1">
+            @if (estadosFilaContado[3])
+            {
+                <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {estadosFilaContado[3] = false;}">
+                    <p>
+                        @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", cantidad))
+                    </p>
+                </div>
+            }
+            else
+            {
+                <input class="effect-1 text-center" type="text" maxlength=16 @onmouseout="() => {estadosFilaContado[3] = true;}" @bind="cantidad">
+                <span class="focus-border"></span>
+            }
+        </div>
+        <div class="col col-1">
+            @if (estadosFilaContado[4])
+            {
+                <div class="div-datos w-100 h-100 text-center" @onmouseover="() =>{estadosFilaContado[4] = false;}">
+                    <p>
+                        @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", cantidad))
+                    </p>
+                </div>
+            }
+            else
+            {
+                <input class="effect-1 text-center" type="text" maxlength=16 @onmouseout="() => {estadosFilaContado[4] = true;}" @bind="cantidad">
+                <span class="focus-border"></span>
+            }
+        </div>
+        <div class="col col-1">
+            @if (estadosFilaContado[5])
+            {
+                <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {estadosFilaContado[5] = false;}">
+                        <p>
+                        @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", cantidad))
+                        </p>
+                    </div>
+            }
+            else
+            {
+                <input class="effect-1 text-center" type="text" maxlength=16 @onmouseout="() => {estadosFilaContado[5] = true;}" @bind="cantidad">
+                    <span class="focus-border"></span>
+            }
+        </div>
+    </li>
+
+    @*Ventas a credito*@
+    <li class="table-row">
+        <div class="col col-1">
+            <p class="datos-calculados texto-nombres">Ventas a crédito</p>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+    </li>
+
+    @*Otros ingresos*@
+    <li class="table-row">
+        <div class="col col-1">
+            <p class="datos-calculados texto-nombres">Otros ingresos</p>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+        <div class="col col-1">
+            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
+            <span class="focus-border"></span>
+        </div>
+    </li>
+</ul>
+
+@code {
+
+    public bool[] estadosFilaContado = {true, true, true, true, true, true};
+    public bool[] estadosFila2 = { true, true, true, true, true, true };
+    public bool[] estadosFila3 = { true, true, true, true, true, true };
+
+    public decimal cantidad = 56743454231.45m;
+}
