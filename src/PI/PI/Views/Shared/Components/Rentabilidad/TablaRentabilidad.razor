@@ -115,7 +115,6 @@
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
-                    @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargen(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Margen ponderado">
@@ -125,8 +124,6 @@
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijosMensuales,productoActual.Precio,productoActual.CostoVariable))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
-                    @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@
-                    @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     @if (@opcionSwitchBool)
                     {
                         <p class="datos-calculados">@(FormatManager.ToFormatoEstadistico(calcularMetaUnidades(productoActual))) <img src="Images/simbolo_unidades.svg" /></p>
@@ -276,7 +273,6 @@
 
         foreach (ProductoModel productActual in productos)
         {
-            // TODO: se debe enviar el costo variable total del producto en lugar de 100
             total += this.calcularMetaUnidades(productActual);
         }
         return total;
@@ -289,7 +285,6 @@
 
         foreach (ProductoModel productActual in productos)
         {
-            // TODO: se debe enviar el costo variable total del producto en lugar de 100
             total += this.calcularMetaMoneda(productActual);
         }
         return total;
