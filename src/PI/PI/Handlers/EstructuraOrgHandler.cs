@@ -43,7 +43,9 @@ namespace PI.Handlers
                 + "'" + puesotAInsertar.Nombre + "', "
                 + "'" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
                 + puesotAInsertar.Plazas.ToString() + ", "
-                + "dbo.convertTOdecimal ( @salarioTemp))";
+                + "dbo.convertTOdecimal ( @salarioTemp)," + puesotAInsertar.Beneficios + ")"  ;
+
+                Console.WriteLine(insert);
 
                 // realizamos la consulta
                 // este método es heredado del padre y permite enviar consultas de actualización, borrado e inserción   
