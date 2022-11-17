@@ -43,7 +43,9 @@ namespace PI.Handlers
                 + "'" + puesotAInsertar.Nombre + "', "
                 + "'" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
                 + puesotAInsertar.Plazas.ToString() + ", "
-                + "dbo.convertTOdecimal ( @salarioTemp))";
+                + "dbo.convertTOdecimal ( @salarioTemp)," + puesotAInsertar.Beneficios + ")"  ;
+
+                Console.WriteLine(insert);
 
                 // realizamos la consulta
                 // este método es heredado del padre y permite enviar consultas de actualización, borrado e inserción   
@@ -85,11 +87,11 @@ namespace PI.Handlers
             bool error = false;
 
             // consulta sql con la cual actualizamos el puesto. Aquí támbien casteamos los decimales según si tiene punto o decimal
-            string update = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '"+ puestoInsertar.SalarioBruto.ToString() 
+            string update = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '" + puestoInsertar.SalarioBruto.ToString()
                 + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.') UPDATE PUESTO SET "
                 + "nombre='" + puestoInsertar.Nombre + "', "
                 + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
-                + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp)"
+                + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp), beneficios=" + puestoInsertar.Beneficios
                 + "WHERE "
                 + "nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";
@@ -124,9 +126,9 @@ namespace PI.Handlers
                 puesto.Plazas = Convert.ToInt32(fila["cantidadPlazas"]);
                 puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
                 puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
+                puesto.Beneficios = Convert.ToDecimal(fila["beneficios"]);
 
                 // los beneficios se cargan con otro método que carga beneficios según el puesto y el análisis
-                puesto.Beneficios = ObtenerBeneficios(puesto.Nombre, fechaAnalisis);
                 puestos.Add(puesto);
             }
 
@@ -142,86 +144,9 @@ namespace PI.Handlers
             return enviarConsulta(delete);
         }
 
-        // Método encargado de obtener de la base de datos, los beneficios correspondientes a un puesto.
-        // Tomando como parámetros tanto el nombre como la fecha de análisis de dicho puesto.
-        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, DateTime fechaAnalisis)
-        {
-            List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
+       
 
-            // consulta para extraer los beneficios
-            string consulta = "SELECT nombre, monto, cantidadPlazas FROM BENEFICIO WHERE " 
-                + "nombrePuesto='" + nombrePuesto + "' and " 
-                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
-            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
-
-            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
-            {
-                resultadoBeneficios.Add(new BeneficioModel
-                {
-                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
-                    monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"])
-                });
-            }
-
-            return resultadoBeneficios;
-        }
-
-        // Método encargado de agregar un beneficio a la base de datos. El modelo del Beneficio a agregar es pasado como parámetro.
-        public List<BeneficioModel> AgregarBeneficio(BeneficioModel b)
-        {
-            List<BeneficioModel> resultadoBeneficios = new List<BeneficioModel>();
-
-            // consulta para extraer los beneficios y devolver la tabla de beneficios con dicho beneficio ya agregado
-            string consulta = "DECLARE @montoTemp varchar(20) SET @montoTemp = '"+ b.monto.ToString() 
-                + "' SET @montoTemp = REPLACE(@montoTemp, ',', '.') INSERT INTO BENEFICIO VALUES('" + b.nombrePuesto + "','" 
-                + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "','" 
-                + b.nombreBeneficio + "', dbo.convertTOdecimal (@montoTemp),"
-                + b.plazasPorBeneficio.ToString() + ") SELECT * FROM BENEFICIO";
-            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
-
-            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
-            {
-                resultadoBeneficios.Add(new BeneficioModel
-                {
-                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
-                    monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"]),
-                    nombrePuesto = Convert.ToString(beneficio["nombrePuesto"]),
-                    fechaAnalisis = Convert.ToDateTime(beneficio["fechaAnalisis"])
-                });
-            }
-
-            return resultadoBeneficios;
-        }
-
-        // Método encargado de eliminar un beneficio de la base de datos, a partir de un Modelo de Beneficio, el cual es pasado por parámetro.
-        public List<BeneficioModel> BorrarBeneficio(BeneficioModel b)
-        {
-            List<BeneficioModel> resultadoBeneficios = new List<BeneficioModel>();
-
-            Console.WriteLine(b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            // consulta para extraer los beneficios
-            string consulta = "DECLARE @montoTemp varchar(20) SET @montoTemp = '"+ b.monto.ToString() 
-                + "' SET @montoTemp = REPLACE(@montoTemp, ',', '.') DELETE FROM BENEFICIO WHERE nombre ='" + b.nombreBeneficio + "' and fechaAnalisis ='" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' and nombrePuesto ='" + b.nombrePuesto + "' and monto = dbo.convertTOdecimal(@montoTemp) and cantidadPlazas=" + b.plazasPorBeneficio.ToString();
-
-            //string consulta = "DELETE FROM BENEFICIO WHERE nombre ='" + b.nombreBeneficio + "' and fechaAnalisis ='" + b.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' and nombrePuesto ='" + b.nombrePuesto + "' and monto =" + b.monto.ToString() + "and cantidadPlazas=" + b.plazasPorBeneficio.ToString();
-            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
-
-            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
-            {
-                resultadoBeneficios.Add(new BeneficioModel
-                {
-                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
-                    monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"]),
-                    nombrePuesto = Convert.ToString(beneficio["nombrePuesto"]),
-                    fechaAnalisis = Convert.ToDateTime(beneficio["fechaAnalisis"])
-                });
-            }
-
-            return resultadoBeneficios;
-        }
+      
 
 
         /* 

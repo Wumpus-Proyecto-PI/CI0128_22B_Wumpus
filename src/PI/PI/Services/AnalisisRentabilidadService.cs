@@ -67,12 +67,8 @@ namespace PI.Services
                 puestoActual = puestos[index];
                 resultado += (puestoActual.Plazas * puestoActual.SalarioBruto) * 12;
 
-                for (int indexBeneficios = 0; indexBeneficios < puestoActual.Beneficios.Count
-                     ; indexBeneficios += 1) 
-                {
-                    resultado += (puestoActual.Beneficios[indexBeneficios].monto
-                          * puestoActual.Beneficios[indexBeneficios].plazasPorBeneficio) * 12;
-                }
+                resultado += puestoActual.Beneficios * 12;
+               
             }
             return resultado;
         }
