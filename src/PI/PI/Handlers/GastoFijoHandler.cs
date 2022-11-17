@@ -136,10 +136,15 @@ namespace PI.Handlers
         // Reordena la lista de gastos fijos para que los de la estructura siempre esten al comienzo 
         public void acomodarGastosFijos(List<GastoFijoModel> gastosFijos)
         {
+            foreach(var x in gastosFijos)
+            {
+                Console.WriteLine($"Nombre {x.Nombre}, Monto {x.Monto}, Fecha {x.FechaAnalisis}, Orden {x.orden}");
+            }
             GastoFijoModel Beneficios = gastosFijos.Find(x => x.Nombre == "Beneficios de empleados");
             GastoFijoModel Prestaciones = gastosFijos.Find(x => x.Nombre == "Prestaciones laborales");
             GastoFijoModel Salarios = gastosFijos.Find(x => x.Nombre == "Salarios netos");
             GastoFijoModel Seguridad = gastosFijos.Find(x => x.Nombre == "Seguridad social");
+
 
             gastosFijos.Remove(Beneficios);
             gastosFijos.Remove(Prestaciones);
