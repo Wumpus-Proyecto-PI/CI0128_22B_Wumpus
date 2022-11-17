@@ -87,11 +87,11 @@ namespace PI.Handlers
             bool error = false;
 
             // consulta sql con la cual actualizamos el puesto. Aquí támbien casteamos los decimales según si tiene punto o decimal
-            string update = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '"+ puestoInsertar.SalarioBruto.ToString() 
+            string update = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '" + puestoInsertar.SalarioBruto.ToString()
                 + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.') UPDATE PUESTO SET "
                 + "nombre='" + puestoInsertar.Nombre + "', "
                 + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
-                + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp)"
+                + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp), beneficios=" + puestoInsertar.Beneficios
                 + "WHERE "
                 + "nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";
