@@ -141,6 +141,7 @@ namespace PI.Handlers
             GastoFijoModel Salarios = gastosFijos.Find(x => x.Nombre == "Salarios netos");
             GastoFijoModel Seguridad = gastosFijos.Find(x => x.Nombre == "Seguridad social");
 
+
             gastosFijos.Remove(Beneficios);
             gastosFijos.Remove(Prestaciones);
             gastosFijos.Remove(Salarios);

@@ -42,12 +42,6 @@ input[type=number] {
     padding-right: 10px;
 }
 
-h2 {
-    font-size: 26px;
-    margin: 20px 0;
-    text-align: center
-}
-
 small {
     font-size: .5em
 }
@@ -181,4 +175,47 @@ input[type="text"]::placeholder {
 input[type="number"]::placeholder {
     /* Firefox, Chrome, Opera */
     text-align: center;
+}
+
+footer {
+    display: flex;
+    white-space: nowrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    line-height: 20px;
+    margin-top: 3em;
+    background-color: #005db9;
+    color: white;
+    padding-block-start: 1em;
+    padding-block-end: 1em;
+    margin: 0px;
+}
+
+.container-contacts {
+    text-align: left;
+}
+
+.contact:hover {
+    text-decoration: underline;
+}
+
+.contact a {
+    font-size: 0.9em;
+    padding: 0px;
+    margin: 0px;
+    padding-block-end: 1em;
+    color: white;
+    text-decoration: none;
+}
+
+.contact a:hover {
+    font-size: 0.9em;
+    padding: 0px;
+    margin: 0px;
+    padding-block-end: 1em;
+    color: white;
+    text-decoration: none;
 }

@@ -23,7 +23,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PI.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/HoverTexto.css"/>
+    <link rel="stylesheet" href="~/css/HoverTexto.css" />
+    <link rel="stylesheet" href="~/css/Analisis/Index.css" />
 </head>
 
 @*Encabezado de la pantalla del progreso*@
@@ -173,7 +174,7 @@
                 <div class="col-md-4 d-flex mb-3 justify-content-center">
                     <div title="@inversionTitleText">
                         <div class="@claseCarta">
-                            <a class="@claseLink" asp-controller="InversionInicial" asp-action="InversionInicial" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
+                            <a class="@claseLink" asp-area="" asp-controller="InversionInicial" asp-action="InversionInicial" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                                 <div class="m-2">
                                     <img src="Images/undraw_savings_re_eq4w.svg" class="card-img-top" alt="">
                                         <div class="card-body">
@@ -188,7 +189,7 @@
                 </div>
 
                 @{
-                    claseCarta = "card card-no-clickeable m-4";
+                    claseCarta = "card card-clickeable m-4";
                     claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
                     claseLink = "link-no-clikeable";
                 }
@@ -201,7 +202,7 @@
                 }
                 <div class="col-md-4 d-flex mb-3 justify-content-center">
                     <div class="@claseCarta">
-                        <a class="@claseLink">
+                        <a class="@claseLink" asp-controller="FlujoDeCaja" asp-action="IndexFlujoDeCaja" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
                             <div class="m-2">
                                 <img src="Images/undraw_stepping_up_g6oo.svg" class="card-img-top" alt="">
                                 <div class="card-body">
@@ -216,5 +217,7 @@
             </div>
         </div>
     </div>
-
+        @(
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.Progreso>(RenderMode.ServerPrerendered, new { Analisis = Model, IdNegocio = getIdNegocio()})
+            )
 </body>

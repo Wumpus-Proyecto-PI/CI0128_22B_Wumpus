@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+body {
+    margin: 0px;
+}
+
 .card-container {
     display: flex;
     justify-content: center;
@@ -73,6 +77,7 @@
 .card:hover {
     background-color: #E2F2FF;
     cursor: pointer;
+    color: black;
 }
 
 .card-container {

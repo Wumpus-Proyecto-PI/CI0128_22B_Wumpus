@@ -2,8 +2,11 @@ div {
     font-family: sans-serif;
 }
 
-body {
+html, body, main {
+    height: 100vh;
+    padding: 0;
     margin: 0px;
+    overflow-x: hidden;
 }
 
 #encabezado {
@@ -12,9 +15,9 @@ body {
     height: 100px;
     box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
     margin: 0px 5px 0px 0px;
-    align-items: center;
+/*    align-items: center;
     display:flex;
-    justify-content:space-between;
+    justify-content:space-between;*/
 }
 
 #logo {
@@ -45,7 +48,7 @@ body {
     align-items: center;
     padding: 0px;
     flex-direction: row-reverse;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 #botones_der div{
@@ -110,10 +113,52 @@ div a {
     font-size: 25px;
 }
 
+footer {
+  display: flex;
+  white-space: nowrap;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  line-height: 20px;
+  margin-top: 3em;
+  background-color: #005db9;
+  color: white;
+  padding-block-start: 1em;
+  padding-block-end: 1em;
+  margin: 0px;
+}
+
+.container-contacts {
+  text-align: left;
+}
+.contact:hover {
+  text-decoration: underline;
+}
+.contact a {
+  font-size: 0.9em;
+  padding: 0px;
+  margin: 0px;
+  padding-block-end: 1em;
+  color: white;
+  text-decoration: none;
+}
+
+.contact a:hover {
+  font-size: 0.9em;
+  padding: 0px;
+  margin: 0px;
+  padding-block-end: 1em;
+  color: white;
+  text-decoration: none;
+}
+
 .logout-button {
     background: none !important;
     border: none;
     padding: 0 !important;
     font-size: 26px;
     cursor: pointer;
+    margin-left: 15px;
 }
