@@ -15,31 +15,40 @@
 </head>
 <body>
     <header id="encabezado">
-        <div id="logo">
-            <a asp-controller="Negocio" asp-action="Index">
-                <img src="~/img/lagoysarmiento.png" alt="Logo de la empresa">
-            </a>
-        </div>
-        <div id="nombre_seccion">
-            @ViewData["TituloPaso"]
-        </div>
-        <div id="botones_der">
-
-            @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios" && @ViewBag.fechaAnalisis != null)
-            {
-                <div id="boton_ajustes">
-                    <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
+        <div class="row">
+            <div class="col-4 d-flex justify-content-start align-items-center">
+                <div id="logo">
+                    <a asp-controller="Negocio" asp-action="Index">
+                        <img src="~/img/lagoysarmiento.png" alt="Logo de la empresa">
+                    </a>
                 </div>
-            }
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button id="logout" type="submit" class="logout-button">Cerrar sesión</button>
-                </form>
-            }
+            </div>
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div id="nombre_seccion">
+                    @ViewData["TituloPaso"]
+                </div>
+            </div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+                <div id="botones_der">
 
-            <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
+                    @if (Convert.ToString(ViewData["TituloPaso"]) != "Mis negocios" && @ViewBag.fechaAnalisis != null)
+                    {
+                        <div id="boton_ajustes">
+                            <a asp-controller="Analisis" asp-action="ConfiguracionAnalisis" asp-route-fechaAnalisis=@ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")><img src="~/img/settings.png" alt="Ajustes"></a>
+                        </div>
+                    }
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button id="logout" type="submit" class="logout-button">Cerrar sesión</button>
+                        </form>
+                    }
+
+                    <div id="boton_negocios"><a asp-controller="Negocio" asp-action="Index">Mis negocios</a></div>
+                </div>
+            </div>
         </div>
+     
     </header>
         <main role="main" class="pb-3">
             @RenderBody()

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PI", "PI\PI.csproj", "{46329975-1239-4E6D-B20B-35DB240B41B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiTests", "PiTests\PiTests.csproj", "{441E4D21-24CD-43F5-B62E-3A85FE1754FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{46329975-1239-4E6D-B20B-35DB240B41B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46329975-1239-4E6D-B20B-35DB240B41B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46329975-1239-4E6D-B20B-35DB240B41B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{441E4D21-24CD-43F5-B62E-3A85FE1754FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{441E4D21-24CD-43F5-B62E-3A85FE1754FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{441E4D21-24CD-43F5-B62E-3A85FE1754FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{441E4D21-24CD-43F5-B62E-3A85FE1754FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

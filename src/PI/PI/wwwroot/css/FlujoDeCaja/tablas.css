@@ -1,0 +1,172 @@
+﻿/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.texto-nombres {
+    letter-spacing: .03em;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+small {
+    font-size: .5em
+}
+
+li p {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    padding-left: 0px;
+}
+
+li {
+    border-radius: 20px;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px
+}
+
+.table-header {
+    color: white;
+    background-color: #4A4F55;
+    font-size: 18px;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-weight:500;
+    letter-spacing: .6px
+}
+
+.table-row {
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-size: 15px;
+}
+
+.table-row-totales {
+    background-color: #E8E8E8;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-size: 15px;
+}
+
+.table-row-flujoMensual {
+    color: white;
+    background-color: #005DB9;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-size: 15px;
+}
+
+.datos-calculados {
+    position: absolute;
+}
+
+
+.col-1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-basis: 10%;
+}
+
+.effect-1 {
+    border: 0;
+    padding: 7px 0;
+    border-bottom: 1px solid #ccc;
+    width: 8rem;
+    align-items: center;
+}
+
+:focus {
+    outline: none;
+}
+
+.effect-1 ~ .focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #3399FF;
+    transition: 0.4s;
+}
+
+.effect-1:focus ~ .focus-border {
+    width: 100%;
+    transition: 0.4s;
+    left: 0;
+}
+
+#form-parametros-rentabilidad {
+    display: flex;
+    height: 47px;
+    align-items: center;
+    justify-content: space-around;
+    width: 55%;
+}
+
+.pill-form {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+    .pill-form div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45%;
+        height: 100%;
+        background-color: lightgray;
+        border: 1px solid black;
+        border-radius: 20px 0px 0px 20px;
+    }
+
+    .pill-form input {
+        width: 45%;
+        border-radius: 0px 20px 20px 0px;
+        border: 1px solid black;
+        height: 100%;
+    }
+
+.div-datos {
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: .2rem;
+    margin-top: 0.3rem;
+}
+
+.div-datos p {
+    margin-top:0.45rem;
+}
+
+input[type="text"]::placeholder {
+    /* Firefox, Chrome, Opera */
+    text-align: center;
+}
+
+input[type="number"]::placeholder {
+    /* Firefox, Chrome, Opera */
+    text-align: center;
+}
