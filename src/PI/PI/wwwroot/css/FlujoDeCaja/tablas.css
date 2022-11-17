@@ -67,17 +67,17 @@ li {
     font-size: 15px;
 }
 
+.table-row-flujoMensual {
+    color: white;
+    background-color: #005DB9;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+    font-size: 15px;
+}
+
 .datos-calculados {
     position: absolute;
 }
 
-/*.datos-header {
-    margin: 0;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}*/
 
 .col-1 {
     display: flex;
@@ -149,6 +149,17 @@ li {
         border: 1px solid black;
         height: 100%;
     }
+
+.div-datos {
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: .2rem;
+    margin-top: 0.3rem;
+}
+
+.div-datos p {
+    margin-top:0.45rem;
+}
 
 input[type="text"]::placeholder {
     /* Firefox, Chrome, Opera */
