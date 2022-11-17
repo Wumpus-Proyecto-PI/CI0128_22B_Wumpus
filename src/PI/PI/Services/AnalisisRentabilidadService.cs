@@ -20,16 +20,7 @@ namespace PI.Services
         // Return: el valor del margen ponderado del producto
         public static decimal CalcularMargenPonderado(decimal porcentajeVentas, decimal margen)
         {
-            decimal resultado;
-            try
-            {
-                resultado = porcentajeVentas / 100;
-            } catch (DivideByZeroException)
-            {
-                resultado = 0;
-            }
-
-            return resultado * margen;
+            return (porcentajeVentas / 100) * margen;
         }
 
         // método para calcular la meta de ventas de un producto en unidades
