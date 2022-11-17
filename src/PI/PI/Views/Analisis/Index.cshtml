@@ -220,4 +220,8 @@
         @(
             await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.Progreso>(RenderMode.ServerPrerendered, new { Analisis = Model, IdNegocio = getIdNegocio()})
             )
+
+    <div class="text-center d-flex justify-content-center align-items-center">
+        <a asp-area="" asp-action="Exportar" asp-controller="Exportador" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")"> Descargar </a>
+    </div>
 </body>
