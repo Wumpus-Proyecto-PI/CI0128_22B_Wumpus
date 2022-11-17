@@ -141,30 +141,7 @@ namespace PI.Handlers
             return enviarConsulta(delete);
         }
 
-        // Método encargado de obtener de la base de datos, los beneficios correspondientes a un puesto.
-        // Tomando como parámetros tanto el nombre como la fecha de análisis de dicho puesto.
-        private List<BeneficioModel> ObtenerBeneficios(string nombrePuesto, DateTime fechaAnalisis)
-        {
-            List < BeneficioModel > resultadoBeneficios = new List<BeneficioModel>();
-
-            // consulta para extraer los beneficios
-            string consulta = "SELECT nombre, monto, cantidadPlazas FROM BENEFICIO WHERE " 
-                + "nombrePuesto='" + nombrePuesto + "' and " 
-                + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
-            DataTable tablaResultadoBeneficios = CrearTablaConsulta(consulta);
-
-            foreach (DataRow beneficio in tablaResultadoBeneficios.Rows)
-            {
-                resultadoBeneficios.Add(new BeneficioModel
-                {
-                    nombreBeneficio = Convert.ToString(beneficio["nombre"]),
-                    monto = Convert.ToDecimal(beneficio["monto"]),
-                    plazasPorBeneficio = Convert.ToInt16(beneficio["cantidadPlazas"])
-                });
-            }
-
-            return resultadoBeneficios;
-        }
+       
 
         // Método encargado de agregar un beneficio a la base de datos. El modelo del Beneficio a agregar es pasado como parámetro.
         public List<BeneficioModel> AgregarBeneficio(BeneficioModel b)
