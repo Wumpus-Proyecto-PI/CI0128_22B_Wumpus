@@ -44,9 +44,33 @@
     background-color: #FFC8C8;
 }
 
-main {
-    overflow: hidden;
+#flecha-descarga {
+    width: 80px;
+    padding: 5px;
 }
-main{
-    min-height: 1100px;
+
+.boton-analisis {
+    border-radius: 22px;
+    transition-duration: 0.3s;
+    box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 350px;
+}
+
+.boton-descargar:hover {
+    text-decoration: none;
+    transition: box-shadow .4s;
+    transform: scale(1.03);
+    background-color: #E2F2FF;
+    color: black;
+    cursor: pointer;
+}
+.boton-descargar a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+main {
+    min-height: 175vh;
+    overflow: hidden;
 }

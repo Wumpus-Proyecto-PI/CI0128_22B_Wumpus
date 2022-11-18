@@ -216,8 +216,28 @@
                 </div>
             </div>
         </div>
+    <div class="seccion-botones row d-flex d-flex justify-content-center align-items-center my-3">
+        <div class="col-6">
+            @* Botón de eliminar *@
+        </div>
+        <div class="col-6 justify-content-center align-items-center">
+            @* Botón de descarga *@
+            <div class="card boton-analisis boton-descargar text-center w-50 py-3 justify-content-center align-items-center">
+            <a asp-area="" asp-action="Exportar" asp-controller="Exportador" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")"> 
+                <div class="card-body">
+                    <img class="mb-3" id="flecha-descarga" src="img/generic/download-arrow.png" alt="Flecha de descarga"/>
+                    <h4 class="card-title">Descargar análisis</h4>
+                    <h6 class="card-text"> El reporte se descargará en formato .xlsx</h6>
+                </div>
+            </a>
+            </div>
+            @*<div class="text-center d-flex justify-content-center align-items-center">
+            </div> *@
+@*    <div class="text-center d-flex justify-content-center align-items-center">
+        <a asp-area="" asp-action="Exportar" asp-controller="Exportador" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")"> Descargar </a>
+    </div>*@
     </div>
-        @(
+@*        @(
             await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.Progreso>(RenderMode.ServerPrerendered, new { Analisis = Model, IdNegocio = getIdNegocio()})
-            )
+            )*@
 </body>
