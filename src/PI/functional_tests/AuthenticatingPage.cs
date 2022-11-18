@@ -14,7 +14,7 @@ namespace PiTests
         private string ContraseñaPredeterminada = "wumpus";
 
 
-        private IWebElement EntradaCorreo 
+        public IWebElement EntradaCorreo 
         { 
             get 
             { 
@@ -22,7 +22,7 @@ namespace PiTests
             } 
         }
 
-        private IWebElement EntradaContraseña
+        public IWebElement EntradaContraseña
         {
             get
             {
@@ -30,7 +30,7 @@ namespace PiTests
             }
         }
 
-        private IWebElement EntradaConfirmarContraseña
+        public IWebElement EntradaConfirmarContraseña
         {
             get
             {
@@ -38,7 +38,7 @@ namespace PiTests
             }
         }
 
-        private IWebElement BotonIniciarSesion
+        public IWebElement BotonIniciarSesion
         {
             get
             {
@@ -46,7 +46,7 @@ namespace PiTests
             }
         }
 
-        private IWebElement BotonCerrarSesion
+        public IWebElement BotonCerrarSesion
         {
             get
             {
@@ -54,7 +54,7 @@ namespace PiTests
             }
         }
 
-        private IWebElement BotonRegistrarse
+        public IWebElement BotonRegistrarse
         {
             get
             {
