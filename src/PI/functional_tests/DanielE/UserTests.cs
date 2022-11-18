@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using System;
+using PiTests;
 
 namespace PiTests.DanielE
 {
@@ -26,19 +27,11 @@ namespace PiTests.DanielE
         [TestMethod]
         public void LoginTest()
         {
-            var inputUsername = driver.FindElement(By.Name("Input.Email"));
-            // inputUsername.Click();
-            inputUsername.SendKeys("wumpustest@gmail.com");
-            var inputPassword = driver.FindElement(By.Name("Input.Password"));
-            inputPassword.SendKeys("wumpus");
-
-            var loginButton = driver.FindElement(By.Id("login-submit"));
-            loginButton.Click();
-
-            var logoutButton = driver.FindElement(By.ClassName("logout-button"));
-
-            Assert.AreEqual("Cerrar sesión", logoutButton.Text);
-            logoutButton.Click();
+            AuthenticatingPage authenticatingPage = new(driver);
+            authenticatingPage.IniciarSesionUsuarioDefault();
+            IWebElement botonLogout = authenticatingPage.BotonCerrarSesion;
+            Assert.AreEqual("Cerrar sesión", botonLogout.Text);
+            authenticatingPage.CerrarSesion();
         }
     }
 }
