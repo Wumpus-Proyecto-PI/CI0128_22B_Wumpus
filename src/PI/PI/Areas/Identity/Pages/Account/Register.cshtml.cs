@@ -77,7 +77,7 @@ namespace PI.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "COrreo electrónico")]
+            [Display(Name = "correo electrónico")]
             public string Email { get; set; }
 
             /// <summary>
@@ -95,7 +95,7 @@ namespace PI.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirmar contraseña")]
+            [Display(Name = "confirmar contraseña")]
             [Compare("Password", ErrorMessage = "Las contraseñas no coinciden.")]
             public string ConfirmPassword { get; set; }
         }
