@@ -8,6 +8,7 @@ using PI.Controllers;
 using PI.Models;
 using System.Globalization;
 using PI.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace PI.Controllers
 {
@@ -26,6 +27,7 @@ namespace PI.Controllers
         // Retorna una lista de análisis creados que pertenen al negocio.
         public IActionResult MisAnalisis(int idNegocio)
         {
+            Console.WriteLine("id: " + idNegocio);
             // Título de la pestaña en el navegador.
             ViewData["Title"] = "Mis análisis";
             // Título del paso en el que se está en el layout
@@ -56,27 +58,6 @@ namespace PI.Controllers
             ViewBag.pasoDisponibleMaximo = controlDePasos.EstaActivoMaximo(analisisActual);
 
             return View(analisisActual);
-        }
-
-
-        // Indica si el analisis posee gastos fijos
-        // (Retorna un bool que indica si hay gastos fijos o no | Parametros: modelo del analisis que se desea verificar)
-        // Determina si un análisis contiene gastos fijos.
-        public static bool contieneGastosFijos(AnalisisModel analisis) {
-            bool resultado = false;
-            // Se crea instancia del handler
-            GastoFijoHandler gastosHandler = new GastoFijoHandler();
-            // Mediante el handler, se obtiene de la base de datos la cantidad de gastos fijos que contiene un análisis.
-            List<GastoFijoModel> gastosFijos = gastosHandler.ObtenerGastosFijos(analisis.FechaCreacion);
-            // Por cada uno de los gastos fijos obtenidos, se verifica si corresponde a uno de los gastos fijos por defecto de los análisis.
-            // Si alguno de los gastos fijos obtenidos es diferente a todos ellos, se determina que si se le han agregado gastos fijos al análisis.
-            for (int i = 0; i<gastosFijos.Count(); i += 1) {
-                if (gastosFijos[i].Nombre != "Seguridad social" && gastosFijos[i].Nombre != "Prestaciones laborales" && gastosFijos[i].Nombre != "Beneficios de empleados" && gastosFijos[i].Nombre != "Salarios netos") {
-                    resultado = true;
-                    break;
-                }
-            }
-            return resultado;
         }
 
         // Devuelve la vista de la configuracion de un analisis especifico 
@@ -111,7 +92,18 @@ namespace PI.Controllers
             };
             // Actualiza la configuracion del analisis
             analisisHandler.ActualizarConfiguracionAnalisis(configAnalisis);
-            return RedirectToAction("Index", "Analisis", new { fechaAnalisis = fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") });
+            return RedirectToAction("Index", "Analisis", new  { fechaAnalisis = fechaAnalisis});
+        }
+        // método que redirige al progreso del análisis correspondiente.
+        public IActionResult EliminarAnalisis(string fechaAnalisis, int idNegocio)
+        {
+            Console.WriteLine("idEliminar: " + idNegocio);
+
+            AnalisisHandler analisisHandler = new();
+            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+            analisisHandler.EliminarAnalisis(fechaCreacionAnalisis);
+
+            return RedirectToAction("MisAnalisis", "Analisis", new { idNegocio = idNegocio });
         }
     }
 }

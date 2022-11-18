@@ -55,14 +55,13 @@
     box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);
     max-width: 400px;
     width: 350px;
+    margin: 0px;
 }
 
-.boton-descargar:hover {
-    text-decoration: none;
+.boton-analisis:hover {
     transition: box-shadow .4s;
     transform: scale(1.03);
     background-color: #E2F2FF;
-    color: black;
     cursor: pointer;
 }
 .boton-descargar a:hover {
@@ -73,4 +72,18 @@
 main {
     min-height: 175vh;
     overflow: hidden;
+}
+
+.seccion-botones {
+    justify-content: space-between;
+    margin: 0px;
+}
+
+.boton-eliminar:hover {
+    background-color: #FFC8C8;
+}
+
+.boton-eliminar a:hover {
+    text-decoration: none;
+    color: black;
 }
