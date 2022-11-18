@@ -20,10 +20,7 @@ namespace PI.Controllers
             ViewBag.AnalisisActual = model;
 
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
-
-            ViewBag.MontoGastosFijos = AnalisisRentabilidadService.CalcularGastosFijos(
-                gastoFijoHandler.ObtenerGastosFijos(ViewBag.fechaAnalisis), estructuraOrgHandler.ObtenerListaDePuestos(ViewBag.fechaAnalisis));
+            ViewBag.MontoGastosFijosMensuales = AnalisisRentabilidadService.CalcularGastosFijosTotalesMensuales(gastoFijoHandler.obtenerTotalAnual(fechaConversion));
             // para que se muestre el boton de volver al analisis
             ViewBag.BotonRetorno = "Progreso";
 
