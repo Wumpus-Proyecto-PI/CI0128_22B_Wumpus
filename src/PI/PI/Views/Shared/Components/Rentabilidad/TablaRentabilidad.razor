@@ -247,8 +247,6 @@
     // Metodo que calcula y retorna la meta en unidades de un producto
     public int calcularMetaUnidades(ProductoModel productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
-
         decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
         return AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
@@ -257,8 +255,6 @@
     // Metodo que calcula y retorna la meta en moneda de un producto
     public decimal calcularMetaMoneda(ProductoModel productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
-
         decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
         int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
