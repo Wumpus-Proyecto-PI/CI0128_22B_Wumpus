@@ -61,11 +61,11 @@ namespace PI.Services
         }
 
         // Calcula el punto de equilibrio de un producto dado su monto de gastosFijos, precio y costoVariable
-        public static decimal CalcularPuntoEquilibrio(decimal gastosFijos, decimal precio, decimal costoVariable) {
+        public static decimal CalcularPuntoEquilibrio(decimal gastosFijosMensuales, decimal precio, decimal costoVariable) {
             decimal resultado = 0;
             decimal denominador = (precio - costoVariable);
             if (denominador > 0) {
-                resultado = gastosFijos / denominador;
+                resultado = gastosFijosMensuales / denominador;
             }
             return resultado;
         }
