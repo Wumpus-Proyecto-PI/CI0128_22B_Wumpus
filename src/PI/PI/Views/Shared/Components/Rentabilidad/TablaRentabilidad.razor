@@ -13,7 +13,7 @@
             </div>
             <div class="pill-form">
                 <div><h4>Gastos fijos</h4></div>
-                <input id="form-gastos-fijos-totales" style="font-size: larger" type="text" class="form-control pe-none" placeholder=@FormatManager.ToFormatoEstadistico(montoGastosFijos) disabled/>
+                <input id="form-gastos-fijos-totales" style="font-size: larger" type="text" class="form-control pe-none" placeholder=@FormatManager.ToFormatoEstadistico(montoGastosFijosMensuales) disabled/>
             </div>
         </div>
         <div class="row">
@@ -83,10 +83,10 @@
                 -
             </div>
             <div class="col col-1" data-label="Margen ponderado">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargenPonderadoTotal(productos))</p>
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargenPonderadoTotal())</p>
             </div>
             <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijos,productos))</p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrioTotal(montoGastosFijosMensuales,productos))</p>
             </div>
             <div class="col col-1" data-label="Meta">
                 @if (@opcionSwitchBool)
@@ -115,18 +115,15 @@
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
-                    @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargen(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Margen ponderado">
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargenPonderado(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijos,productoActual.Precio,productoActual.CostoVariable))</p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijosMensuales,productoActual.Precio,productoActual.CostoVariable))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
-                    @*TODO: se debe mostrar solo el valor en unidades o en moneda segun el estado de un switch/boton*@
-                    @*TODO: se debe enviar el costo variable total del producto en lugar de 100*@
                     @if (@opcionSwitchBool)
                     {
                         <p class="datos-calculados">@(FormatManager.ToFormatoEstadistico(calcularMetaUnidades(productoActual))) <img src="Images/simbolo_unidades.svg" /></p>
@@ -150,7 +147,7 @@
     public AnalisisModel analisis { get; set; }
 
     [Parameter]
-    public decimal montoGastosFijos { get; set; }
+    public decimal montoGastosFijosMensuales { get; set; }
 
     public bool opcionSwitchBool = true;
 
@@ -250,21 +247,17 @@
     // Metodo que calcula y retorna la meta en unidades de un producto
     public int calcularMetaUnidades(ProductoModel productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+        decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
-        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
-
-        return AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
+        return AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
     }
 
     // Metodo que calcula y retorna la meta en moneda de un producto
     public decimal calcularMetaMoneda(ProductoModel productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+        decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
-        decimal margenPonderado = AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
-
-        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijos, this.analisis.GananciaMensual, margenPonderado);
+        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
 
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }
@@ -276,7 +269,6 @@
 
         foreach (ProductoModel productActual in productos)
         {
-            // TODO: se debe enviar el costo variable total del producto en lugar de 100
             total += this.calcularMetaUnidades(productActual);
         }
         return total;
@@ -289,16 +281,15 @@
 
         foreach (ProductoModel productActual in productos)
         {
-            // TODO: se debe enviar el costo variable total del producto en lugar de 100
             total += this.calcularMetaMoneda(productActual);
         }
         return total;
     }
 
     // Se encarga de calcular el punto de equilibrio de un solo producto
-    public int calcularPuntoEquilibrio(decimal montoGastosFijos, decimal precio, decimal costoVariable)
+    public int calcularPuntoEquilibrio(decimal montoGastosFijosMensuales, decimal precio, decimal costoVariable)
     {
-        int result = Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijos, precio, costoVariable));
+        int result = Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijosMensuales, precio, costoVariable));
         return result;
     }
 
@@ -314,7 +305,7 @@
     }
 
     // Se encarga de calcular el maregn ponderado total de todos los proudcto
-    public decimal calcularMargenPonderadoTotal(List<ProductoModel> productos)
+    public decimal calcularMargenPonderadoTotal()
     {
         decimal result = 0.0m;
         decimal margenActual = 0.0m;
