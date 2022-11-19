@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PI.Handlers;
+using PI.Models;
+using PI.Services;
+using PI.Views.Shared.Components.Producto;
 
 namespace PI.Controllers
 {
@@ -18,8 +21,20 @@ namespace PI.Controllers
             // Muestra el botón de regreso hacia el progreso (pasos) del análisis.
             ViewBag.BotonRetorno = "Progreso";
 
+            ProductoHandler productoHandler = new ProductoHandler();
+            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            AnalisisHandler analisisHandler = new AnalisisHandler();
+
+            List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaCreacionAnalisis);
+            decimal totalGastosFijos = gastoFijoHandler.obtenerTotalAnual(fechaCreacionAnalisis);
+            decimal gananciaMensual = analisisHandler.ObtenerGananciaMensual(fechaCreacionAnalisis);
+            ViewBag.Iniciado = analisisHandler.ObtenerTipoAnalisis(fechaCreacionAnalisis);
+
+            ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
+
             InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
             ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
+            ViewBag.InversionInicial = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
 
             return View();
         }
