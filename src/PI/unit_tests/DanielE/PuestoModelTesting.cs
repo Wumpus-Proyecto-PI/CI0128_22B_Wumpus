@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using PI;
 using PI.Handlers;
 using PI.Models;
-using UnitTestsResources;
+using unit_tests.SharedResources;
 
 namespace unit_tests.DanielE
 {
     [TestClass]
     public class PuestoModelTesting
     {
-        private NegocioHandler? NegocioHandler = null;
+        private NegocioTestingHandler? NegocioTestingHandler = null;
 
         private AnalisisHandler? AnalisisHandler = null;
 
@@ -22,9 +22,7 @@ namespace unit_tests.DanielE
 
         private AnalisisModel? AnalisisFicticio = null;
 
-        private readonly string TestingUserId = "e690ef97-31c4-4064-bede-93aeedaf6857";
-
-        private HandlerGenerico handlerGenerico = new();
+        private HandlerGenerico HandlerGenerico = new();
 
         [TestInitialize]
         public void Setup()
@@ -32,13 +30,13 @@ namespace unit_tests.DanielE
 
             // creamos un negocio ficticio al usuario de testing de wumpus
             // tambien le creamos un analisis vacio para realizar las pruebas
-            NegocioHandler = new();
+            NegocioTestingHandler = new();
             AnalisisHandler = new();
 
             // para que el test exista debe existir el siguiente usuario en la base
             // usuario: wumpustest@gmail.com 
             // id del usuario: e690ef97-31c4-4064-bede-93aeedaf6857
-            NegocioFicticio = NegocioHandler.IngresarNegocio("Negocio Ficticio", "Emprendimiento", TestingUserId);
+            NegocioFicticio = NegocioTestingHandler.IngresarNegocioFicticio(TestingUserModel.UserId, "Emprendimiento");
             AnalisisFicticio = AnalisisHandler.ObtenerAnalisisMasReciente(NegocioFicticio.ID);
         }
 
@@ -46,97 +44,50 @@ namespace unit_tests.DanielE
         public void CleanUp()
         {
             // eliminar el negocio elimina todos lso datos relacionados a el
-            NegocioHandler.EliminarNegocio(NegocioFicticio.ID.ToString());
+            NegocioTestingHandler.EliminarNegocioFicticio();
+            NegocioTestingHandler = null;
             NegocioFicticio = null;
             AnalisisHandler = null;
-            NegocioHandler = null;
             AnalisisFicticio = null;
-        }
-
-        public List<PuestoModel> InsertarListaPuestosSemillaEnBase()
-        {
-            List<PuestoModel> puestosSemilla = new List<PuestoModel>();
-            puestosSemilla.Add(new PuestoModel
-            {
-                Nombre = "Jefe",
-                Plazas = 1,
-                SalarioBruto = 4400.56m,
-                Beneficios = 1500.89m,
-                FechaAnalisis = AnalisisFicticio.FechaCreacion
-            });
-            puestosSemilla.Add(new PuestoModel
-            {
-                Nombre = "Empacador",
-                Plazas = 25,
-                SalarioBruto = 3698.56m,
-                Beneficios = 45687.78m,
-                FechaAnalisis = AnalisisFicticio.FechaCreacion
-            });
-            puestosSemilla.Add(new PuestoModel
-            {
-                Nombre = "Cajero",
-                Plazas = 8,
-                SalarioBruto = 4567.56m,
-                Beneficios = 4578.08m,
-                FechaAnalisis = AnalisisFicticio.FechaCreacion
-            });
-
-            string insert = "";
-            foreach (var puesto in puestosSemilla)
-            {
-                insert = "INSERT INTO PUESTO values ("
-                + "'" + puesto.Nombre + "', "
-                + "'" + puesto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
-                + puesto.Plazas.ToString() + ", "
-                + puesto.SalarioBruto + ", "
-                + puesto.Beneficios + ")";
-
-                handlerGenerico.EnviarConsultaGenerica(insert);
-            }
-
-            return puestosSemilla;
-        }
-
-        public List<PuestoModel> LeerPuestosDeBase()
-        {
-            List<PuestoModel> puestoEnBase = new List<PuestoModel>();
-
-            DataTable resultadoConsulta = handlerGenerico.CrearTablaConsultaGenerico("SELECT * FROM PUESTO WHERE fechaAnalisis=" +
-                AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff") + " order by orden ASC");
-            // iteramos por las filas de la consulta para crear los puestos
-            foreach (DataRow fila in resultadoConsulta.Rows)
-            {
-                // ingresamos todos los datos de cada puesto
-                PuestoModel puesto = new PuestoModel();
-                Console.WriteLine(puesto.Nombre);
-                puesto.Nombre = Convert.ToString(fila["nombre"]);
-                puesto.Plazas = Convert.ToInt32(fila["cantidadPlazas"]);
-                puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
-                puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
-                puesto.Beneficios = Convert.ToDecimal(fila["beneficios"]);
-
-                // los beneficios se cargan con otro método que carga beneficios según el puesto y el análisis
-                puestoEnBase.Add(puesto);
-            }
-            return puestoEnBase;
         }
 
         [TestMethod]
         public void InsertarPuesto_NoModificaOtrosPuestos()
         {
             // arrange
+
+            PuestoTestingHandler puestoTestingHandler = new();
             // ingresamos una lista de puestos inicial
-            InsertarListaPuestosSemillaEnBase();
+            List<PuestoModel> puestosPreInsercion = puestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+
+            // creamos puesto que vamos a insertar de prueba
+            PuestoModel nuevoPuesto = new PuestoModel
+            {
+                Nombre = "Nuevo Puesto",
+                Plazas = 48,
+                Beneficios = 4567.89m,
+                SalarioBruto = 7894.45m,
+                FechaAnalisis = AnalisisFicticio.FechaCreacion
+            };
 
             // creamos handler con el metodo que deseamos probar
             EstructuraOrgHandler estructuraOrgHandler= new();
 
-            
-
             // accion
-
+            estructuraOrgHandler.InsertarPuesto("", nuevoPuesto);
 
             // assert
+            // obtenemos los puestos de la base
+            List<PuestoModel> puestosPostInsercion = puestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+            bool FueInsertado = puestosPostInsercion.Exists(x => x.Nombre == nuevoPuesto.Nombre);
+
+            // removemos de la lista el que insertamos para comparar si el resto de puestos se vieron afectados
+            puestosPostInsercion.RemoveAll(x => x.Nombre == nuevoPuesto.Nombre);
+
+            bool puestoIguales = PuestoTestingHandler.SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
+
+            Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
+            Assert.IsTrue(FueInsertado, "'Nuevo puesto' no se insertó en la base");
         }
     }
 }
