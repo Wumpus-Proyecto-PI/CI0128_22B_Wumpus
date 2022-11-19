@@ -79,6 +79,38 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Cell("K8").Value = "Monto";
         }
 
+        public void InsertarEncabezadoFlujoDeCaja() {
+            hojaFlujoCaja.Range("A1", "C1").Merge();
+            hojaFlujoCaja.Cell("A1").Value = "Flujo de caja";
+            hojaFlujoCaja.Cell("D1").Value = "Meta mensual de ventas";
+            hojaFlujoCaja.Cell("F1").Value = "Inversión inicial";
+
+            hojaFlujoCaja.Cell("A3").Value = "Ingresos";
+            hojaFlujoCaja.Cell("B3").Value = "Mes 1";
+            hojaFlujoCaja.Cell("C3").Value = "Mes 2";
+            hojaFlujoCaja.Cell("D3").Value = "Mes 3";
+            hojaFlujoCaja.Cell("E3").Value = "Mes 4";
+            hojaFlujoCaja.Cell("F3").Value = "Mes 5";
+            hojaFlujoCaja.Cell("G3").Value = "Mes 6";
+
+            hojaFlujoCaja.Cell("A4").Value = "Ingresos por ventas de contado";
+            hojaFlujoCaja.Cell("A5").Value = "Ingresos por ventas a crédito";
+            hojaFlujoCaja.Cell("A6").Value = "Otros ingresos";
+            hojaFlujoCaja.Cell("A7").Value = "Total ingresos";
+
+            hojaFlujoCaja.Cell("A8").Value = "Egresos";
+            hojaFlujoCaja.Cell("B8").Value = "Mes 1";
+            hojaFlujoCaja.Cell("C8").Value = "Mes 2";
+            hojaFlujoCaja.Cell("D8").Value = "Mes 3";
+            hojaFlujoCaja.Cell("E8").Value = "Mes 4";
+            hojaFlujoCaja.Cell("F8").Value = "Mes 5";
+            hojaFlujoCaja.Cell("G8").Value = "Mes 6";
+
+            hojaFlujoCaja.Cell("A9").Value = "Egresos por compras de contado";
+            hojaFlujoCaja.Cell("A10").Value = "Egresos por compras de crédito";
+
+        }
+
         // Inserta los valores cargados del encabezado de la hoja de análisis de rentabilidad
         public void AgregarValoresDeEncabezado(DateTime fechaCreacionAnalisis)
         {
