@@ -13,6 +13,7 @@ namespace PI.Service
         // Archivo xlsx
         XLWorkbook libro = new XLWorkbook();
         IXLWorksheet? hojaAnalisisRentabilidad;
+        IXLWorksheet? hojaFlujoCaja;
 
         // Invoca la creación del archivo xlsx y lo retorna en memoria.
         public MemoryStream obtenerReporte(string fechaAnalisis)
@@ -49,6 +50,7 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Columns().AdjustToContents();
             libro.RecalculateAllFormulas();
         }
+
         // Inserta los valores predeterminados del encabezado de la hoja de análisis de rentabilidad
         public void InsertarEncabezadoRentabilidad()
         {
