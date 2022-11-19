@@ -8,6 +8,25 @@ namespace PI.Handlers
     {
         public FlujoDeCajaHandler() : base() { }
 
-        public 
+        public List<EgresoModel> ObtenerEgresosMes(string NombreMes, DateTime FechaAnalisis) 
+        {
+            string consulta = "EXEC ObtenerEgresosMes @fechAnalisis ='" + FechaAnalisis +"', @nombreMes ='" + NombreMes +"';";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            List<EgresoModel> egresos = new List<EgresoModel>();
+            foreach (DataRow columna in tablaResultado.Rows)
+            {
+                egresos.Add(
+                new EgresoModel
+                {
+                    FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
+                    Tipo = Convert.ToBoolean(columna["tipo"]),
+                    Monto = Convert.ToDecimal(columna["monto"]),
+                    Mes = Convert.ToString(columna["mes"])
+                }
+                ) ;
+            }
+            return egresos;
+        }
+
     }
 }
