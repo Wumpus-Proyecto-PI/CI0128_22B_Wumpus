@@ -89,7 +89,7 @@ namespace PiTests
         {
             HandlerGenerico handler = new HandlerGenerico();
             string consulta = 
-                @$"if exists (Select AspNetUsers.Email from AspNetUsers where AspNetUsers.Email = '{this.UsuarioRegistroPredeterminado}'
+                @$"if exists (Select AspNetUsers.Email from AspNetUsers where AspNetUsers.Email = '{this.UsuarioRegistroPredeterminado}')
                 begin
                     Delete from AspNetUsers where email = '{this.UsuarioRegistroPredeterminado}'
                 end ";
