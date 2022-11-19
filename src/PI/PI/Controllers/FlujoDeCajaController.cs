@@ -23,6 +23,7 @@ namespace PI.Controllers
 
             ProductoHandler productoHandler = new ProductoHandler();
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
             AnalisisHandler analisisHandler = new AnalisisHandler();
 
             List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaCreacionAnalisis);
