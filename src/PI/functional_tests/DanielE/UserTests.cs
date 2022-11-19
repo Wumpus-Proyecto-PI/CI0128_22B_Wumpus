@@ -27,8 +27,28 @@ namespace PiTests.DanielE
         [TestMethod]
         public void LoginTest()
         {
+            // preparacion
             AuthenticatingPage authenticatingPage = new(driver);
+
+            // accion
             authenticatingPage.IniciarSesionUsuarioDefault();
+            
+            // verificacion
+            IWebElement botonLogout = authenticatingPage.BotonCerrarSesion;
+            Assert.AreEqual("Cerrar sesión", botonLogout.Text);
+            authenticatingPage.CerrarSesion();
+        }
+
+        [TestMethod]
+        public void RegistroDeUsuario()
+        {
+            // preparacion
+            AuthenticatingPage authenticatingPage = new(driver);
+
+            // accion
+            authenticatingPage.RegistrarUsuarioPredeterminado();
+
+            // verificacion
             IWebElement botonLogout = authenticatingPage.BotonCerrarSesion;
             Assert.AreEqual("Cerrar sesión", botonLogout.Text);
             authenticatingPage.CerrarSesion();
