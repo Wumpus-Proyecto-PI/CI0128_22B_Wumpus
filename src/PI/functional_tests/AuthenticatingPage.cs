@@ -88,7 +88,11 @@ namespace PiTests
         public void EliminarUsuarioRegistrado()
         {
             HandlerGenerico handler = new HandlerGenerico();
-            string consulta = $"Delete from AspNetUsers where email = {this.CorreoPredeterminado}";
+            string consulta = 
+                @$"if exists (Select AspNetUsers.Email from AspNetUsers where AspNetUsers.Email = '{this.UsuarioRegistroPredeterminado}'
+                begin
+                    Delete from AspNetUsers where email = '{this.UsuarioRegistroPredeterminado}'
+                end ";
             handler.EnviarConsultaGenerica(consulta);
         }
     }
