@@ -1,9 +1,6 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using System;
 using functional_tests.Pages;
-using DocumentFormat.OpenXml.Bibliography;
-using Microsoft.Extensions.Options;
 
 namespace PiTests
 {
@@ -19,10 +16,8 @@ namespace PiTests
         [TestInitialize]
         public void Setup()
         {
-            // Para correr sin que muestre el navegador
-            var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("headless");
-            Driver = new ChromeDriver(chromeOptions);
+            Driver = new ChromeDriver();
+            Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
 
             Driver.Navigate().GoToUrl(URL);
             this.AutenticacionPage = new AutenticacionPage(Driver);
