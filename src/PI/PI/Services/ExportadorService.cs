@@ -203,7 +203,7 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Range($"C{9}", $"C{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#.00%";
 
             // columna precio
-            hojaAnalisisRentabilidad.Range("B9", $"B{8 + cantidadProductos}").Style.NumberFormat.Format = "#,##0.00";
+            hojaAnalisisRentabilidad.Range("B9", $"B{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";
             
             // rango: desde costo variable a meta de ventas.
             hojaAnalisisRentabilidad.Range("D9", $"K{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";
