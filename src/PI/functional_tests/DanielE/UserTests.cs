@@ -8,27 +8,35 @@ namespace PiTests.DanielE
     [TestClass]
     public class UserTests
     {
-        private IWebDriver driver = new ChromeDriver();
+        private IWebDriver? Driver = null;
         public const string url = "https://localhost:7073";
+        private AuthenticatingPage? authenticatingPage = null;
 
         [TestInitialize]
         public void Setup()
         {
-            driver.Url = url;
-            driver.Navigate().GoToUrl(url);
+            Driver = new ChromeDriver();
+            Driver.Url = url;
+            Driver.Navigate().GoToUrl(url);
+            authenticatingPage = new(Driver);
         }
 
         [TestCleanup]
-        public void CierreDriver()
+        public void CleanUp()
         {
-            driver.Close();
+            authenticatingPage.CerrarSesion();
+            authenticatingPage.EliminarUsuarioRegistrado();
+            authenticatingPage = null;
+
+            Driver.Close();
+            Driver = null;
         }
 
         [TestMethod]
         public void LoginTest()
         {
             // preparacion
-            AuthenticatingPage authenticatingPage = new(driver);
+            // en el setup creamos AuthenticatingPage con el que se hace la prueba
 
             // accion
             authenticatingPage.IniciarSesionUsuarioDefault();
@@ -36,22 +44,20 @@ namespace PiTests.DanielE
             // verificacion
             IWebElement botonLogout = authenticatingPage.BotonCerrarSesion;
             Assert.AreEqual("Cerrar sesión", botonLogout.Text);
-            authenticatingPage.CerrarSesion();
         }
 
         [TestMethod]
         public void RegistroDeUsuario()
         {
             // preparacion
-            AuthenticatingPage authenticatingPage = new(driver);
-
+            // en el setup creamos AuthenticatingPage con el que se hace la prueba
+            Driver.Navigate().GoToUrl("https://localhost:7073/Identity/Account/Register");
             // accion
             authenticatingPage.RegistrarUsuarioPredeterminado();
 
             // verificacion
             IWebElement botonLogout = authenticatingPage.BotonCerrarSesion;
             Assert.AreEqual("Cerrar sesión", botonLogout.Text);
-            authenticatingPage.CerrarSesion();
         }
     }
 }
