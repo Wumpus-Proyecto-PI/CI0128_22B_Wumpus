@@ -16,9 +16,9 @@
             @{bool NO_INICIADO = false;}
              @if (@analisis.Configuracion.EstadoNegocio == NO_INICIADO)
             {
-                <span class="card-text pb-2">No iniciado</span>
+                <span id="estado-negocio" class="card-text pb-2">No iniciado</span>
             } else {
-                <span class="card-text pb-2">En marcha</span>
+                <span id="estado-negocio" class="card-text pb-2">En marcha</span>
             }
     
         </div>
