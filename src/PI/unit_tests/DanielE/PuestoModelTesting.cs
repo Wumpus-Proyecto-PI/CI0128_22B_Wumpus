@@ -11,19 +11,23 @@ using unit_tests.SharedResources;
 
 namespace unit_tests.DanielE
 {
+    // class: clase de testing para el modelo puesto y su interaccion con la base de datos
     [TestClass]
     public class PuestoModelTesting
     {
+        // handler de testing uqe permite crear un negocio de pruebas
         private NegocioTestingHandler? NegocioTestingHandler = null;
 
+        // handler de analisis que nos permite obtener analisis del negocio
         private AnalisisHandler? AnalisisHandler = null;
 
+        // negocio ficticio creado para la prueba
         private NegocioModel? NegocioFicticio = null;
 
+        // analisis ficticio creado para la prueba
         private AnalisisModel? AnalisisFicticio = null;
 
-        private HandlerGenerico HandlerGenerico = new();
-
+        // en la inicializacion creamos un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
         [TestInitialize]
         public void Setup()
         {
@@ -40,6 +44,7 @@ namespace unit_tests.DanielE
             AnalisisFicticio = AnalisisHandler.ObtenerAnalisisMasReciente(NegocioFicticio.ID);
         }
 
+        // en el cleanup eliminamos el negocio que creamos
         [TestCleanup]
         public void CleanUp()
         {
@@ -51,6 +56,7 @@ namespace unit_tests.DanielE
             AnalisisFicticio = null;
         }
 
+        // este test prueba que al insertar un nuevo puesto no se modifiquen los puestos ya existentes
         [TestMethod]
         public void InsertarPuesto_NoModificaOtrosPuestos()
         {
