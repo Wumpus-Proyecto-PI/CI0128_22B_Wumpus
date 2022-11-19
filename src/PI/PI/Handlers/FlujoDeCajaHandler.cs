@@ -27,6 +27,26 @@ namespace PI.Handlers
             }
             return egresos;
         }
+        public List<IngresoModel> ObtenerIngresosMes(string NombreMes, DateTime FechaAnalisis)
+        {
+            string consulta = "EXEC ObtenerEgresosMes @fechAnalisis ='" + FechaAnalisis + "', @nombreMes ='" + NombreMes + "';";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            List<IngresoModel> ingresos = new List<IngresoModel>();
+            foreach (DataRow columna in tablaResultado.Rows)
+            {
+                ingresos.Add(
+                new IngresoModel
+                {
+                    FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
+                    Tipo = Convert.ToBoolean(columna["tipo"]),
+                    Monto = Convert.ToDecimal(columna["monto"]),
+                    Mes = Convert.ToString(columna["mes"])
+                }
+                );
+            }
+            return ingresos;
+        }
+
 
     }
 }
