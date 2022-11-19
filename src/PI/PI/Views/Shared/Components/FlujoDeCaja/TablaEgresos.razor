@@ -1,8 +1,11 @@
-﻿
+﻿@using PI.Handlers
+@using PI.Models
+@using PI.Services
+
 <ul class="responsive-table">
 
     @*Header*@
-    <li class="table-header">
+    <li class="table-header sticky-top">
         <div class="col col-1">
             <p>Egresos</p>
         </div>
@@ -211,8 +214,38 @@
             <span class="focus-border"></span>
         </div>
     </li>
+
+    @*Gastos fijos*@
+    @foreach (var gasto in gastosFijos)
+    {
+        <li class="table-row">
+            <div class="col col-1">
+                <p class="datos-calculados texto-nombres">@gasto.Nombre</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+            </div>
+        </li>
+    }
 </ul>
 
 @code {
+    [Parameter]
+    public List<GastoFijoModel> gastosFijos { get; set; }
 
 }

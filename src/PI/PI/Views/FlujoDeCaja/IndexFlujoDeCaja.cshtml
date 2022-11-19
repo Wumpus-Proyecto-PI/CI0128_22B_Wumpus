@@ -1,10 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Components
 @using PI.Models
 @using PI.Handlers
+@using PI.Services
 
 @{
     Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
     String fechaAnalisis = ViewBag.fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
+    decimal metaDeVentasMensual = ViewBag.MetaDeVentasMensual;
+    decimal inversionInicial = ViewBag.InversionInicial;
+    bool estadoIniciado = ViewBag.Iniciado;
 }
 
 
@@ -30,19 +34,19 @@
                 <label>Meta mensual de ventas</label>
                 <div class="dato-meta-inversion">
                     <span>
-                        800,765.87
+                        @FormatManager.ToFormatoEstadistico(metaDeVentasMensual)
                     </span>
                 </div>
             </div>
 
             @*Inversion inicial*@
-            @if (true)
+            @if (estadoIniciado == false)
             {
                 <div class="col-6 d-flex justify-content-center">
                     <label>Inversion inicial</label>
                     <div class="dato-meta-inversion">
                         <span>
-                            800,765.87
+                            @FormatManager.ToFormatoEstadistico(inversionInicial)
                         </span>
                     </div>
                 </div>
@@ -77,7 +81,7 @@
                 <div class="tab-pane fade" id="egresos" role="tabpanel" aria-labelledby="nav-egresos-tab">
                     <div class="mt-4">
                         @(
-                            await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TablaEgresos>(RenderMode.ServerPrerendered)
+                            await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TablaEgresos>(RenderMode.ServerPrerendered, new { gastosFijos = ViewBag.GastosFijos})
                             )
                     </div>
                 </div>
