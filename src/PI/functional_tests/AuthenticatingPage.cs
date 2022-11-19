@@ -11,7 +11,7 @@ namespace PiTests
         private string URL = "https://localhost:7073";
         private string CorreoPredeterminado = "wumpustest@gmail.com";
         private string UsuarioRegistroPredeterminado = "wumpusRegisterTest@gmail.com";
-        private string ContraseñaPredeterminada = "wumpus";
+        private string ContrasenaPredeterminada = "wumpus";
 
 
         public IWebElement EntradaCorreo 
@@ -69,14 +69,14 @@ namespace PiTests
         public void IniciarSesionUsuarioDefault()
         {
             this.EntradaCorreo.SendKeys(CorreoPredeterminado);
-            this.EntradaContraseña.SendKeys(ContraseñaPredeterminada);
+            this.EntradaContraseña.SendKeys(ContrasenaPredeterminada);
             this.BotonIniciarSesion.Click();
         }
         public void RegistrarUsuarioPredeterminado ()
         {
             this.EntradaCorreo.SendKeys(this.UsuarioRegistroPredeterminado);
-            this.EntradaContraseña.SendKeys(this.ContraseñaPredeterminada);
-            this.EntradaConfirmarContraseña.SendKeys(this.ContraseñaPredeterminada);
+            this.EntradaContraseña.SendKeys(this.ContrasenaPredeterminada);
+            this.EntradaConfirmarContraseña.SendKeys(this.ContrasenaPredeterminada);
             this.BotonRegistrarse.Click();
         }
 
@@ -89,7 +89,7 @@ namespace PiTests
         {
             HandlerGenerico handler = new HandlerGenerico();
             string consulta = 
-                @$"if exists (Select AspNetUsers.Email from AspNetUsers where AspNetUsers.Email = '{this.UsuarioRegistroPredeterminado}'
+                @$"if exists (Select AspNetUsers.Email from AspNetUsers where AspNetUsers.Email = '{this.UsuarioRegistroPredeterminado}')
                 begin
                     Delete from AspNetUsers where email = '{this.UsuarioRegistroPredeterminado}'
                 end ";

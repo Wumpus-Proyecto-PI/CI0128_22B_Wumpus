@@ -6,18 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnitTestsResources
+namespace unit_tests.SharedResources
 {
     public class HandlerGenerico : Handler
     {
         public void EnviarConsultaGenerica(string consulta)
         {
-            base.enviarConsultaVoid(consulta);
+            enviarConsultaVoid(consulta);
         }
 
         public DataTable CrearTablaConsultaGenerico(string consulta)
         {
-            return base.CrearTablaConsulta(consulta);
+            return CrearTablaConsulta(consulta);
         }
     }
 }
