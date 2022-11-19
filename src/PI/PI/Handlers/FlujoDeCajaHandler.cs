@@ -47,7 +47,14 @@ namespace PI.Handlers
             return ingresos;
         }
 
-        public void IngresarEgreso(IngresoModel Ingreso) 
+        public void EgresarEgreso(EgresoModel Egreso) 
+        {
+            string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Egreso.FechaAnalisis
+                + "', @nombreMes ='" + Egreso.Mes + "', @tipo=" + Egreso.Tipo + ", @monto=" + Egreso.Monto;
+            enviarConsultaVoid(consulta);
+        }
+
+        public void IngresarEgreso(IngresoModel Ingreso)
         {
             string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Ingreso.FechaAnalisis
                 + "', @nombreMes ='" + Ingreso.Mes + "', @tipo=" + Ingreso.Tipo + ", @monto=" + Ingreso.Monto;
