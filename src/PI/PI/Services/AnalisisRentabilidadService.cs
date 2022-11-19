@@ -70,7 +70,41 @@ namespace PI.Services
             return resultado;
         }
 
+        #region Total meta de ventas para flujo de caja
+        // Metodo que calcula la meta en moneda en la base de datos
+        public static decimal calcularTotalMetaMoneda(List<ProductoModel> productos, decimal montoGastosFijos, decimal GananciaMensual)
+        {
+            decimal margenPonderadoTotal = calcularMargenPonderadoTotal(productos);
+            decimal total = 0.0m;
 
+            foreach (ProductoModel productActual in productos)
+            {
+                total += calcularMetaMoneda(productActual, montoGastosFijos, GananciaMensual, margenPonderadoTotal);
+            }
+            return total;
+        }
 
+        // Metodo que calcula y retorna la meta en moneda de un producto
+        public static decimal calcularMetaMoneda(ProductoModel productoActual, decimal montoGastosFijosMensuales, decimal GananciaMensual, decimal margenPonderadoTotal)
+        {
+            int metaVentasUnidad = CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, montoGastosFijosMensuales, GananciaMensual, margenPonderadoTotal);
+
+            return CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
+        }
+
+        // Se encarga de calcular el maregn ponderado total de todos los proudcto
+        public static decimal calcularMargenPonderadoTotal(List<ProductoModel> productos)
+        {
+            decimal result = 0.0m;
+            decimal margenActual = 0.0m;
+            foreach (var productoActual in productos)
+            {
+                margenActual = CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+
+                result += CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margenActual);
+            }
+            return result;
+        }
+        #endregion
     }
 }
