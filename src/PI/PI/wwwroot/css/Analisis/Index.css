@@ -44,9 +44,46 @@
     background-color: #FFC8C8;
 }
 
+#flecha-descarga {
+    width: 80px;
+    padding: 5px;
+}
+
+.boton-analisis {
+    border-radius: 22px;
+    transition-duration: 0.3s;
+    box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 350px;
+    margin: 0px;
+}
+
+.boton-analisis:hover {
+    transition: box-shadow .4s;
+    transform: scale(1.03);
+    background-color: #E2F2FF;
+    cursor: pointer;
+}
+.boton-descargar a:hover {
+    text-decoration: none;
+    color: black;
+}
+
 main {
+    min-height: 175vh;
     overflow: hidden;
 }
-main{
-    min-height: 1100px;
+
+.seccion-botones {
+    justify-content: space-between;
+    margin: 0px;
+}
+
+.boton-eliminar:hover {
+    background-color: #FFC8C8;
+}
+
+.boton-eliminar a:hover {
+    text-decoration: none;
+    color: black;
 }

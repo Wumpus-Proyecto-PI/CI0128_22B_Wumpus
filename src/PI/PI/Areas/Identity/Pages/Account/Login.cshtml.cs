@@ -130,7 +130,7 @@ namespace PI.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Inicio de sesión fallido. Revise su correo o contraseña.");
                     return Page();
                 }
             }
