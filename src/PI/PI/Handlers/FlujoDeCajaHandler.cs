@@ -8,6 +8,7 @@ namespace PI.Handlers
     {
         public FlujoDeCajaHandler() : base() { }
 
+        // Obtiene los Egresos de un determinado mes en un análisis
         public List<EgresoModel> ObtenerEgresosMes(string NombreMes, DateTime FechaAnalisis) 
         {
             string consulta = "EXEC ObtenerEgresosMes @fechaAnalisis ='" + FechaAnalisis +"', @nombreMes ='" + NombreMes +"';";
@@ -27,6 +28,8 @@ namespace PI.Handlers
             }
             return egresos;
         }
+
+        // Obtiene los Ingresos de un determinado mes en un análisis
         public List<IngresoModel> ObtenerIngresosMes(string NombreMes, DateTime FechaAnalisis)
         {
             string consulta = "EXEC ObtenerEgresosMes @fechaAnalisis ='" + FechaAnalisis + "', @nombreMes ='" + NombreMes + "';";
@@ -47,14 +50,16 @@ namespace PI.Handlers
             return ingresos;
         }
 
-        public void EgresarEgreso(EgresoModel Egreso) 
+        // Agrega un Egreso a la base de datos
+        public void AgregarEgreso(EgresoModel Egreso) 
         {
             string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Egreso.FechaAnalisis
                 + "', @nombreMes ='" + Egreso.Mes + "', @tipo=" + Egreso.Tipo + ", @monto=" + Egreso.Monto;
             enviarConsultaVoid(consulta);
         }
 
-        public void IngresarEgreso(IngresoModel Ingreso)
+        // Agrego un Ingreso a la base de datos
+        public void AgregarIngreso(IngresoModel Ingreso)
         {
             string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Ingreso.FechaAnalisis
                 + "', @nombreMes ='" + Ingreso.Mes + "', @tipo=" + Ingreso.Tipo + ", @monto=" + Ingreso.Monto;
