@@ -73,7 +73,7 @@
                 <div class="tab-pane fade show active" id="ingresos" role="tabpanel" aria-labelledby="nav-ingresos-tab">
                     <div class="mt-4">
                         @(
-                        await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TablaIngresos>(RenderMode.ServerPrerendered)
+                        await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TablaIngresos>(RenderMode.ServerPrerendered, new { ingresos = ViewBag.Ingresos })
                         )
                     </div>
                 </div>
