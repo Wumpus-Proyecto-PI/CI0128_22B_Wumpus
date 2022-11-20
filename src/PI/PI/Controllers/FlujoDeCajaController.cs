@@ -12,6 +12,9 @@ namespace PI.Controllers
         {
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
+            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+            flujoDeCajaHandler.crearMeses(fechaCreacionAnalisis);
+
             // Datos que ocupa la vista
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
             // Título de la pestaña en el navegador.

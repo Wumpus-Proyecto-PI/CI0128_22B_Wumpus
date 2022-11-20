@@ -66,6 +66,11 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
+        public void crearMeses(DateTime fechaAnalisis)
+        {
+            string consulta = "EXEC crearMesesDeAnalisis @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsultaVoid(consulta);
+        }
 
     }
 }
