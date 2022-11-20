@@ -12,6 +12,7 @@ namespace PI.Models
 
         public decimal GananciaMensual { get; set; }
         // Indica si el análisis ha sido finalizado o no. 1: en curso. 2: finalizado.
-        public int EstadoAnalisis { get; set; } 
+        public int EstadoAnalisis { get; set; }
+        
     }
 }

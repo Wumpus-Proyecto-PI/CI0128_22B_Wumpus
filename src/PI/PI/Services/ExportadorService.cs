@@ -1,6 +1,7 @@
 using ClosedXML.Excel;
 using PI.Handlers;
 using PI.Models;
+using PI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Globalization;
@@ -13,6 +14,7 @@ namespace PI.Service
         // Archivo xlsx
         XLWorkbook libro = new XLWorkbook();
         IXLWorksheet? hojaAnalisisRentabilidad;
+        IXLWorksheet? hojaFlujoCaja;
 
         // Invoca la creación del archivo xlsx y lo retorna en memoria.
         public MemoryStream obtenerReporte(string fechaAnalisis)
@@ -49,6 +51,7 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Columns().AdjustToContents();
             libro.RecalculateAllFormulas();
         }
+
         // Inserta los valores predeterminados del encabezado de la hoja de análisis de rentabilidad
         public void InsertarEncabezadoRentabilidad()
         {
@@ -75,6 +78,80 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Cell("J7").Value = $"Meta de ventas";
             hojaAnalisisRentabilidad.Cell("J8").Value = "Unidad";
             hojaAnalisisRentabilidad.Cell("K8").Value = "Monto";
+        }
+
+        public void InsertarEncabezadoFlujoDeCaja() {
+            hojaFlujoCaja.Range("A1", "C1").Merge();
+            hojaFlujoCaja.Cell("A1").Value = "Flujo de caja";
+            hojaFlujoCaja.Cell("D1").Value = "Meta mensual de ventas";
+            hojaFlujoCaja.Cell("F1").Value = "Inversión inicial";
+
+            hojaFlujoCaja.Cell("A3").Value = "Ingresos";
+            hojaFlujoCaja.Cell("B3").Value = "Mes 1";
+            hojaFlujoCaja.Cell("C3").Value = "Mes 2";
+            hojaFlujoCaja.Cell("D3").Value = "Mes 3";
+            hojaFlujoCaja.Cell("E3").Value = "Mes 4";
+            hojaFlujoCaja.Cell("F3").Value = "Mes 5";
+            hojaFlujoCaja.Cell("G3").Value = "Mes 6";
+
+            hojaFlujoCaja.Cell("A4").Value = "Ingresos por ventas de contado";
+            hojaFlujoCaja.Cell("A5").Value = "Ingresos por ventas a crédito";
+            hojaFlujoCaja.Cell("A6").Value = "Otros ingresos";
+            hojaFlujoCaja.Cell("A7").Value = "Total ingresos";
+
+            hojaFlujoCaja.Cell("A8").Value = "Egresos";
+            hojaFlujoCaja.Cell("B8").Value = "Mes 1";
+            hojaFlujoCaja.Cell("C8").Value = "Mes 2";
+            hojaFlujoCaja.Cell("D8").Value = "Mes 3";
+            hojaFlujoCaja.Cell("E8").Value = "Mes 4";
+            hojaFlujoCaja.Cell("F8").Value = "Mes 5";
+            hojaFlujoCaja.Cell("G8").Value = "Mes 6";
+
+            hojaFlujoCaja.Cell("A9").Value = "Egresos por compras de contado";
+            hojaFlujoCaja.Cell("A10").Value = "Egresos por compras de crédito";
+
+        }
+
+        public void AgregarValoresDeEncabezadoFlujoDeCaja(DateTime FechaAnalisis) {
+            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+            decimal IngresosContado;
+            decimal IngresosOtros;
+            decimal IngresosCredito;
+            decimal EgresosContado;
+            decimal EgresosCredito;
+            decimal TotalIngresos;
+            decimal TotalEgresos;
+
+            List<EgresoModel> EgresosActuales = new List<EgresoModel>();
+            List<IngresoModel> IngresosActuales = new List<IngresoModel>();
+
+            char[] ColumnasExcel = { 'B', 'C', 'D', 'E', 'F', 'G' };
+            for (int i = 1; i < 7; i += 1) {
+                IngresosActuales = flujoDeCajaHandler.ObtenerIngresosMes("Mes "+ i, FechaAnalisis);
+                EgresosActuales = flujoDeCajaHandler.ObtenerEgresosMes("Mes " + i, FechaAnalisis);
+
+                IngresosContado = FlujoCajaService.CalcularIngresosTipo("Contado",IngresosActuales);
+                IngresosOtros = FlujoCajaService.CalcularIngresosTipo("Otros",IngresosActuales);
+                IngresosCredito = FlujoCajaService.CalcularIngresosTipo("Credito", IngresosActuales);
+                TotalIngresos = IngresosContado + IngresosOtros + IngresosCredito;
+
+                EgresosContado = FlujoCajaService.CalcularEgresosTipo("Contado", EgresosActuales);
+                EgresosCredito = FlujoCajaService.CalcularEgresosTipo("Credito", EgresosActuales);
+                TotalEgresos = EgresosContado +EgresosCredito;
+
+
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "4").Value = IngresosContado;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "5").Value = IngresosCredito;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "6").Value = IngresosOtros;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "7").Value = TotalIngresos;
+
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "9").Value = EgresosContado;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "10").Value = EgresosCredito;
+
+
+
+            }
+        
         }
 
         // Inserta los valores cargados del encabezado de la hoja de análisis de rentabilidad
@@ -203,7 +280,7 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Range($"C{9}", $"C{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#.00%";
 
             // columna precio
-            hojaAnalisisRentabilidad.Range("B9", $"B{8 + cantidadProductos}").Style.NumberFormat.Format = "#,##0.00";
+            hojaAnalisisRentabilidad.Range("B9", $"B{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";
             
             // rango: desde costo variable a meta de ventas.
             hojaAnalisisRentabilidad.Range("D9", $"K{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";

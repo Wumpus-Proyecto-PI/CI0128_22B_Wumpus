@@ -216,10 +216,10 @@
                 </div>
             </div>
         </div>
-    <div class="seccion-botones row d-flex justify-content-center align-items-center align-content-center my-3">
+        <div class="seccion-botones row d-flex justify-content-center align-items-center align-content-center my-3">
             <div class="col-6 d-flex mt-4 p-0 justify-content-center align-items-center align-content-center">
             @* Botón de eliminar *@
-                <div class="card boton-analisis boton-eliminar text-center py-3 justify-content-center align-items-center mx-0">
+                <div class="card card-clickeable boton-analisis boton-eliminar text-center py-3 justify-content-center align-items-center mx-0">
                     <a asp-area="" asp-action="EliminarAnalisis" asp-controller="Analisis" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")" asp-route-idNegocio="@getIdNegocio()">
                         <div class="card-body mx-0">
                         <img class="mb-3" id="flecha-descarga" src="img/generic/trashCan.png" alt="Ícono de basurero" />
@@ -228,16 +228,38 @@
                     </div>
                 </a>
                 </div>
-        </div>
-            <div class="col-6 d-flex m-0 p-0 justify-content-center align-items-center align-content-center">
-            @* Botón de descarga *@
-            <div class="card boton-analisis boton-descargar text-center py-3 justify-content-center align-items-center">
-                    <a asp-area="" asp-action="Exportar" asp-controller="Exportador" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
-                        <div class="card-body">
-                    <img class="mb-3" id="flecha-descarga" src="img/generic/download-arrow.png" alt="Flecha de descarga"/>
-                    <h4 class="card-title">Descargar análisis</h4>
-                    <h6 class="card-text"> El reporte se descargará en formato .xlsx</h6>
-                </div>
-            </a>
             </div>
+
+
+            @{
+                claseCarta = "card card-no-clickeable m-4 text-center justify-content-center align-items-center";
+                claseLink = "link-no-clikeable";
+                string descargaReporteTitleText = "Esta acción está disponible sólo cuando el análisis de rentabilidad ha sido creado";
+                if (4 <= ViewBag.pasoDisponibleMaximo)
+                {
+                    descargaReporteTitleText = "";
+                }
+            }
+
+            @*Si el análisis de rentabilidad está disponible*@
+            @if(4 <= ViewBag.pasoDisponibleMaximo) {
+                claseCarta = "card card-clickeable boton-analisis boton-descargar m-4 text-center justify-content-center align-items-center";
+                claseLink = "";
+            }
+            <div class="col-6 d-flex m-0 p-0 justify-content-center align-items-center align-content-center">
+                @* Botón de descarga *@
+                <div title="@descargaReporteTitleText">
+                <div class="@claseCarta">
+                        <a asp-area="" asp-action="Exportar" asp-controller="Exportador" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")">
+                            <div class="card-body">
+                                <img class="mb-3" id="flecha-descarga" src="img/generic/download-arrow.png" alt="Flecha de descarga"/>
+                                <h4 class="card-title">Descargar análisis</h4>
+                                <h6 class="card-text"> El reporte se descargará en formato .xlsx</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
 </body>

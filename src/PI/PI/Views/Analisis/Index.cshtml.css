@@ -171,3 +171,11 @@ hr {
 #boton-eliminar:hover {
     background-color: #FFC8C8;
 }
+
+.boton-eliminar:hover {
+    background-color: #FFC8C8;
+}
+
+.boton-descargar:hover {
+    background-color: #E2F2FF;
+}
