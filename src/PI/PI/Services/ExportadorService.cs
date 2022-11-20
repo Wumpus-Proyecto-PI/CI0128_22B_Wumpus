@@ -1,6 +1,7 @@
 using ClosedXML.Excel;
 using PI.Handlers;
 using PI.Models;
+using PI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Globalization;
@@ -109,6 +110,48 @@ namespace PI.Service
             hojaFlujoCaja.Cell("A9").Value = "Egresos por compras de contado";
             hojaFlujoCaja.Cell("A10").Value = "Egresos por compras de crédito";
 
+        }
+
+        public void AgregarValoresDeEncabezadoFlujoDeCaja(DateTime FechaAnalisis) {
+            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+            decimal IngresosContado;
+            decimal IngresosOtros;
+            decimal IngresosCredito;
+            decimal EgresosContado;
+            decimal EgresosCredito;
+            decimal TotalIngresos;
+            decimal TotalEgresos;
+
+            List<EgresoModel> EgresosActuales = new List<EgresoModel>();
+            List<IngresoModel> IngresosActuales = new List<IngresoModel>();
+
+            char[] ColumnasExcel = { 'B', 'C', 'D', 'E', 'F', 'G' };
+            for (int i = 1; i < 7; i += 1) {
+                IngresosActuales = flujoDeCajaHandler.ObtenerIngresosMes("Mes "+ i, FechaAnalisis);
+                EgresosActuales = flujoDeCajaHandler.ObtenerEgresosMes("Mes " + i, FechaAnalisis);
+
+                IngresosContado = FlujoCajaService.CalcularIngresosTipo("Contado",IngresosActuales);
+                IngresosOtros = FlujoCajaService.CalcularIngresosTipo("Otros",IngresosActuales);
+                IngresosCredito = FlujoCajaService.CalcularIngresosTipo("Credito", IngresosActuales);
+                TotalIngresos = IngresosContado + IngresosOtros + IngresosCredito;
+
+                EgresosContado = FlujoCajaService.CalcularEgresosTipo("Contado", EgresosActuales);
+                EgresosCredito = FlujoCajaService.CalcularEgresosTipo("Credito", EgresosActuales);
+                TotalEgresos = EgresosContado +EgresosCredito;
+
+
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "4").Value = IngresosContado;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "5").Value = IngresosCredito;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "6").Value = IngresosOtros;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "7").Value = TotalIngresos;
+
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "9").Value = EgresosContado;
+                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "10").Value = EgresosCredito;
+
+
+
+            }
+        
         }
 
         // Inserta los valores cargados del encabezado de la hoja de análisis de rentabilidad
