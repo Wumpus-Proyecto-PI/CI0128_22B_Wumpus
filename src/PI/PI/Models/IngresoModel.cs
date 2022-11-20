@@ -6,6 +6,7 @@
         public string Tipo { get; set; } = "";
         public decimal Monto { get; set; } = 0M;
         public DateTime FechaAnalisis { get; set; }
+        public bool estadoInput { get; set; } = true;
 
     }
 }
