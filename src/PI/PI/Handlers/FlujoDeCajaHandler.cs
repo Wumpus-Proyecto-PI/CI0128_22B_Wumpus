@@ -41,7 +41,7 @@ namespace PI.Handlers
                 new IngresoModel
                 {
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
-                    Tipo = Convert.ToInt32(columna["tipo"]),
+                    Tipo = Convert.ToString(columna["tipo"]),
                     Monto = Convert.ToDecimal(columna["monto"]),
                     Mes = Convert.ToString(columna["mes"])
                 }
@@ -69,6 +69,12 @@ namespace PI.Handlers
         public void crearMeses(DateTime fechaAnalisis)
         {
             string consulta = "EXEC crearMesesDeAnalisis @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsultaVoid(consulta);
+        }
+
+        public void crearIngresos(DateTime fechaAnalisis)
+        {
+            string consulta = "EXEC crearIngresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsultaVoid(consulta);
         }
 
