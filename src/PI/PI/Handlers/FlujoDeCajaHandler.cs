@@ -82,6 +82,27 @@ namespace PI.Handlers
         {
             this.crearMeses(fechaAnalisis);
             this.crearIngresos(fechaAnalisis);
+            this.obtenerIngresos(fechaAnalisis);
+        }
+
+        public List<IngresoModel> obtenerIngresos(DateTime fechaAnalisis)
+        {
+            string consulta = "SELECT * FROM INGRESO WHERE fechaAnalisis = '" +  fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            List<IngresoModel> ingresos = new List<IngresoModel>();
+            foreach (DataRow columna in tablaResultado.Rows)
+            {
+                ingresos.Add(
+                new IngresoModel
+                {
+                    FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
+                    Tipo = Convert.ToString(columna["tipo"]),
+                    Monto = Convert.ToDecimal(columna["monto"]),
+                    Mes = Convert.ToString(columna["mes"])
+                }
+                );
+            }
+            return ingresos;
         }
 
     }
