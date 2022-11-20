@@ -104,5 +104,15 @@ namespace PI.Handlers
             return ingresos;
         }
 
+        public void actualizarIngreso(IngresoModel ingreso)
+        {
+            string consulta = "UPDATE INGRESO" +
+                              " SET monto = " + ingreso.Monto +
+                              " WHERE fechaAnalisis = '" + ingreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                              "' AND mes = '" + ingreso.Mes +
+                              "' AND tipo = '" + ingreso.Tipo + "'";
+            enviarConsultaVoid(consulta);
+        }
+
     }
 }
