@@ -78,5 +78,11 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
+        public void crearFlujoDeCaja(DateTime fechaAnalisis)
+        {
+            this.crearMeses(fechaAnalisis);
+            this.crearIngresos(fechaAnalisis);
+        }
+
     }
 }
