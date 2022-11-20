@@ -82,7 +82,6 @@ namespace PI.Handlers
         {
             this.crearMeses(fechaAnalisis);
             this.crearIngresos(fechaAnalisis);
-            this.obtenerIngresos(fechaAnalisis);
         }
 
         public List<IngresoModel> obtenerIngresos(DateTime fechaAnalisis)
