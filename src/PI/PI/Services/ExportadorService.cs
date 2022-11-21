@@ -190,6 +190,7 @@ namespace PI.Service
         }
 
         // Agrega los valores (que no son fórmulas) que posee cada producto a la hoja de análisis de rentabilidad.
+        // Detalle: El costo variable sí contempla una fórmula debido a la comisión de ventas.
         public void AgregarValoresDeProductos(ref List<ProductoModel> productos)
         {
             int productoActual = 0;
@@ -203,23 +204,22 @@ namespace PI.Service
                 hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].Nombre;
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // C Porcentaje de ventas
+                // B Porcentaje de ventas
                 hojaAnalisisRentabilidad.Cell(celdaActual).Value = $"{productos[productoActual].PorcentajeDeVentas}%";
                 hojaAnalisisRentabilidad.Cell(celdaActual).CellRight();
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // E Comisión de ventas
+                // C Comisión de ventas
                 hojaAnalisisRentabilidad.Cell(celdaActual).Value = $"{productos[productoActual].ComisionDeVentas}%";
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // B Precio
+                // D Precio
                 hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].Precio;
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // D Costo Variable
-
+                // E Costo Variable
                 hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = @$"
-                    {productos[productoActual].CostoVariable}+{ComisionVentasRentabilidad}{filaActual}*{PrecioRentabilidad}{filaActual}";
+                    {productos[productoActual].CostoVariable}+{ComisionVentasRentabilidad}{filaActual}*{PrecioRentabilidad}{filaActual}"; // costoVariable + precio * comisionVentas
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // itera al siguiente producto
