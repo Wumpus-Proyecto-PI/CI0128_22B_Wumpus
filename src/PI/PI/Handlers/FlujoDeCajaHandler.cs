@@ -114,5 +114,23 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
+        public decimal obtenerMontoTotaldeIngresosPorMes(string mes, DateTime fechaAnalisis)
+        {
+            decimal total = 0.0m;
+
+            string consulta = "SELECT SUM(monto) as total" +
+                             " FROM INGRESO" +
+                             " WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                             "' AND mes = '" + mes + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("total"))
+            {
+                total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
+            }
+
+            return total;
+        }
+
     }
 }

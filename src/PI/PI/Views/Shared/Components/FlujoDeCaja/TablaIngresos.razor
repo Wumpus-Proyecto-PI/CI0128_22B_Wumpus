@@ -1,7 +1,9 @@
-﻿@using System.Globalization
+﻿@using BlazorCleave.Data
+@using PI.Services;
 @using PI.Handlers
 @using PI.Models
-
+@using BlazorCleave
+@using System.Globalization
 
 <ul class="responsive-table">
 
@@ -39,22 +41,22 @@
             <p class="datos-calculados texto-nombres">Totales</p>
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes1")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes2")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes3")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes4")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes5")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes6")
         </div>
     </li>
 
@@ -63,10 +65,16 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Ventas de contado</p>
         </div>
-        
         @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "contado"))
         {
-            <ColumnaIngreso ingresoActual="ingresoActual" />
+            <div class="col col-1">
+                <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
+                    class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)" 
+                    @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
+                    @onfocusout="() => actualizarIngreso(ingresoActual)"
+                 />
+                    <span class="focus-border"></span>
+            </div>
         }
     </li>
 
@@ -77,7 +85,13 @@
         </div>
         @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "credito"))
         {
-            <ColumnaIngreso ingresoActual="ingresoActual" />
+            <div class="col col-1">
+                <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
+                    class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)"
+                    @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
+                    @onfocusout="() => actualizarIngreso(ingresoActual)" />
+                <span class="focus-border"></span>
+            </div>
         }
     </li>
 
@@ -88,7 +102,13 @@
         </div>
         @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "otros"))
         {
-            <ColumnaIngreso ingresoActual="ingresoActual" />
+            <div class="col col-1">
+                <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
+                    class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)"
+                    @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
+                    @onfocusout="() => actualizarIngreso(ingresoActual)" />
+                <span class="focus-border"></span>
+            </div>
         }
     </li>
 
@@ -99,4 +119,15 @@
     [Parameter]
     public List<IngresoModel> ingresos { get; set; }
 
+    public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+
+    public string calcularIngresoMensualTotal(string mes)
+    {
+        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotaldeIngresosPorMes(mes, ingresos[0].FechaAnalisis));
+    }
+
+    public void actualizarIngreso(IngresoModel ingreso)
+    {
+        flujoDeCajaHandler.actualizarIngreso(ingreso);
+    }
 }
