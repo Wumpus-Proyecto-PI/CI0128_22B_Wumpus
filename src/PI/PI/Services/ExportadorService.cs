@@ -16,6 +16,19 @@ namespace PI.Service
         IXLWorksheet? hojaAnalisisRentabilidad;
         IXLWorksheet? hojaFlujoCaja;
 
+        // Una columna del libro a cada caracteristica de un producto.
+        const char NombreProductoRentabilidad = 'A';
+        const char PorcentajeVentasRentabilidad = 'B';
+        const char ComisionVentasRentabilidad = 'C';
+        const char PrecioRentabilidad = 'D';
+        const char CostoVariableRentabilidad = 'E';
+        const char MargenRentabilidad = 'F';
+        const char MargenPonderadoRentabilidad = 'G';
+        const char PtoEquilibrioUnidadRentabilidad = 'H';
+        const char PtoEquilibrioMontoRentabilidad = 'I';
+        const char MetaVentasUnidadRentabilidad = 'J';
+        const char MetaVentasMontoRentabilidad = 'K';
+
         // Invoca la creación del archivo xlsx y lo retorna en memoria.
         public MemoryStream obtenerReporte(string fechaAnalisis)
         {
@@ -61,23 +74,23 @@ namespace PI.Service
 
             hojaAnalisisRentabilidad.Cell("A5").Value = "Ganancia mensual";
             hojaAnalisisRentabilidad.Cell("A6").Value = "Gastos fijos mensuales";
-            hojaAnalisisRentabilidad.Cell("A8").Value = "Nombre de producto";
-            hojaAnalisisRentabilidad.Cell("B8").Value = "Precio";
-            hojaAnalisisRentabilidad.Cell("C8").Value = "Porcentaje de ventas";
-            hojaAnalisisRentabilidad.Cell("D8").Value = "Costo variable";
-            hojaAnalisisRentabilidad.Cell("E8").Value = "Comisión";
-            hojaAnalisisRentabilidad.Cell("F8").Value = "Margen";
-            hojaAnalisisRentabilidad.Cell("G8").Value = "Margen ponderado";
+            hojaAnalisisRentabilidad.Cell($"{NombreProductoRentabilidad}8").Value = "Nombre de producto";
+            hojaAnalisisRentabilidad.Cell($"{PrecioRentabilidad}8").Value = "Precio";
+            hojaAnalisisRentabilidad.Cell($"{PorcentajeVentasRentabilidad}8").Value = "Porcentaje de ventas";
+            hojaAnalisisRentabilidad.Cell($"{CostoVariableRentabilidad}8").Value = "Costo variable";
+            hojaAnalisisRentabilidad.Cell($"{ComisionVentasRentabilidad}8").Value = "Comisión";
+            hojaAnalisisRentabilidad.Cell($"{MargenRentabilidad}8").Value = "Margen";
+            hojaAnalisisRentabilidad.Cell($"{MargenPonderadoRentabilidad}8").Value = "Margen ponderado";
 
             hojaAnalisisRentabilidad.Range("H7","I7").Merge();
             hojaAnalisisRentabilidad.Cell("H7").Value = $"Punto de equilibrio";
-            hojaAnalisisRentabilidad.Cell("H8").Value = "Unidad";
-            hojaAnalisisRentabilidad.Cell("I8").Value = "Monto";
+            hojaAnalisisRentabilidad.Cell($"{PtoEquilibrioUnidadRentabilidad}8").Value = "Unidad";
+            hojaAnalisisRentabilidad.Cell($"{PtoEquilibrioMontoRentabilidad}8").Value = "Monto";
 
             hojaAnalisisRentabilidad.Range("J7","K7").Merge();
             hojaAnalisisRentabilidad.Cell("J7").Value = $"Meta de ventas";
-            hojaAnalisisRentabilidad.Cell("J8").Value = "Unidad";
-            hojaAnalisisRentabilidad.Cell("K8").Value = "Monto";
+            hojaAnalisisRentabilidad.Cell($"{MetaVentasUnidadRentabilidad}8").Value = "Unidad";
+            hojaAnalisisRentabilidad.Cell($"{MetaVentasMontoRentabilidad}8").Value = "Monto";
         }
 
         public void InsertarEncabezadoFlujoDeCaja() {
@@ -177,6 +190,7 @@ namespace PI.Service
         }
 
         // Agrega los valores (que no son fórmulas) que posee cada producto a la hoja de análisis de rentabilidad.
+        // Detalle: El costo variable sí contempla una fórmula debido a la comisión de ventas.
         public void AgregarValoresDeProductos(ref List<ProductoModel> productos)
         {
             int productoActual = 0;
@@ -190,21 +204,22 @@ namespace PI.Service
                 hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].Nombre;
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // B Precio
-                hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].Precio;
-                celdaActual = ++columnaActual + filaActual.ToString();
-
-                // C Porcentaje de ventas
+                // B Porcentaje de ventas
                 hojaAnalisisRentabilidad.Cell(celdaActual).Value = $"{productos[productoActual].PorcentajeDeVentas}%";
                 hojaAnalisisRentabilidad.Cell(celdaActual).CellRight();
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // D Costo Variable
-                hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].CostoVariable;
+                // C Comisión de ventas
+                hojaAnalisisRentabilidad.Cell(celdaActual).Value = $"{productos[productoActual].ComisionDeVentas}%";
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // E Comisión
-                hojaAnalisisRentabilidad.Cell(celdaActual).Value = 0.0; // TODO productos[productoActual].Comision;
+                // D Precio
+                hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].Precio;
+                celdaActual = ++columnaActual + filaActual.ToString();
+
+                // E Costo Variable
+                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = @$"
+                    {productos[productoActual].CostoVariable}+{ComisionVentasRentabilidad}{filaActual}*{PrecioRentabilidad}{filaActual}"; // costoVariable + precio * comisionVentas
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // itera al siguiente producto
@@ -226,27 +241,27 @@ namespace PI.Service
             {
                 celdaActual = columnaActual + filaActual.ToString();
                 // F Margen
-                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"B{filaActual}-D{filaActual}"; // Precio - costo variable
+                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"{PrecioRentabilidad}{filaActual}-{CostoVariableRentabilidad}{filaActual}"; // Precio - costo variable
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // G Margen ponderado
-                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"C{filaActual}*F{filaActual}"; // %Ventas * margen
+                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"{PorcentajeVentasRentabilidad}{filaActual}*{MargenRentabilidad}{filaActual}"; // %Ventas * margen
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // H Punto de equilibrio Unidad
-                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"B6 / (B{filaActual}-D{filaActual})"; // gastosFijos / (precio - costoVariable)
+                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"B6 / ({PrecioRentabilidad}{filaActual}-{CostoVariableRentabilidad}{filaActual})"; // gastosFijos / (precio - costoVariable)
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // I Punto de equilibrio Monto
-                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"B{filaActual}*H{filaActual}"; // (precio * puntoEquilibrioUnidad)
+                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"{PrecioRentabilidad}{filaActual}*{PtoEquilibrioUnidadRentabilidad}{filaActual}"; // (precio * puntoEquilibrioUnidad)
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // J Meta de ventas Unidad
-                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"(B6+B5)/G{filaTotales}*C{filaActual}"; // (gastosFijoMensuales+gananciaMensual)/totalMargenPonderado*%Ventas
+                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"(B6+B5)/{MargenPonderadoRentabilidad}{filaTotales}*{PorcentajeVentasRentabilidad}{filaActual}"; // (gastosFijoMensuales+gananciaMensual)/totalMargenPonderado*%Ventas
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // K Meta de ventas Monto
-                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"B{filaActual} * J{filaActual}"; // precio * metaVentasUnidad
+                hojaAnalisisRentabilidad.Cell(celdaActual).FormulaA1 = $"{PrecioRentabilidad}{filaActual} * {MetaVentasUnidadRentabilidad}{filaActual}"; // precio * metaVentasUnidad
                 columnaActual = 'F';
                 ++filaActual;
                 ++productoActual;
@@ -273,17 +288,17 @@ namespace PI.Service
         public void FormatearCeldasRentabilidad(int cantidadProductos)
         {
             // ganancia mensual y gastos fijos
-            hojaAnalisisRentabilidad.Range("C5", "C6").Style.NumberFormat.Format = "#,##0.00";
+            hojaAnalisisRentabilidad.Range($"{PorcentajeVentasRentabilidad}5", $"{PorcentajeVentasRentabilidad}6").Style.NumberFormat.Format = "#,##0.00";
 
-            // porcentajes de ventas
-            hojaAnalisisRentabilidad.Range($"C{9}", $"C{8 + cantidadProductos + 1}").SetDataType(XLDataType.Number);
-            hojaAnalisisRentabilidad.Range($"C{9}", $"C{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#.00%";
+            // porcentajes y comisión de ventas
+            hojaAnalisisRentabilidad.Range($"{PorcentajeVentasRentabilidad}{9}", $"{ComisionVentasRentabilidad}{8 + cantidadProductos + 1}").SetDataType(XLDataType.Number);
+            hojaAnalisisRentabilidad.Range($"{PorcentajeVentasRentabilidad}{9}", $"{ComisionVentasRentabilidad}{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#.00%";
 
             // columna precio
-            hojaAnalisisRentabilidad.Range("B9", $"B{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";
+            hojaAnalisisRentabilidad.Range($"{PrecioRentabilidad}9", $"{PrecioRentabilidad}{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";
             
             // rango: desde costo variable a meta de ventas.
-            hojaAnalisisRentabilidad.Range("D9", $"K{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";
+            hojaAnalisisRentabilidad.Range($"{CostoVariableRentabilidad}9", $"{MetaVentasMontoRentabilidad}{8 + cantidadProductos + 1}").Style.NumberFormat.Format = "#,##0.00";
         }
 
         // Agrega estilos (decoración visual) a la hoja de análisis de rentabilidad

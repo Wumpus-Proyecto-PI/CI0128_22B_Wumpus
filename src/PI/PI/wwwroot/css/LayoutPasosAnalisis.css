@@ -3,11 +3,12 @@ div {
 }
 
 html, body, main {
-    height: 100vh;
     padding: 0;
     margin: 0px;
     overflow-x: hidden;
 }
+
+
 
 #encabezado {
     width: 100%;
