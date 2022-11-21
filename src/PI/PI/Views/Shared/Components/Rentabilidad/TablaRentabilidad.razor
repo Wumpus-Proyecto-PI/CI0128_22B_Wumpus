@@ -50,7 +50,10 @@
                 <p class="datos-header">Nombre de producto</p>
             </div>
             <div class="col col-1">
-                <p class="datos-header">Porcentaje de Ventas</p>
+                <p class="datos-header">Porcentaje de ventas</p>
+            </div>
+            <div class="col col-1">
+                <p class="datos-header">Comision de ventas</p>
             </div>
             <div class="col col-1">
                 <p>Precio</p>
@@ -75,6 +78,9 @@
             </div>
             <div class="col col-1" data-label="% Ventas">
                 @getPorcentajeVentasTotal() %
+            </div>
+            <div class="col col-1" data-label="Comision">
+                -
             </div>
             <div class="col col-1" data-label="Precio">
                 -
@@ -108,6 +114,10 @@
                 </div>
                 <div class="col col-1" data-label="% Ventas">
                     <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
+                    <span class="focus-border"></span>
+                </div>
+                <div class="col col-1" data-label="ComisionDeVentas">
+                    <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.ComisionDeVentas" @onfocusout="() => actualizarComisionDeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
@@ -217,9 +227,31 @@
         return 100 - getPorcentajeVentasTotal() + productoHandler.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
     }
 
+    public void actualizarComisionDeVentas(ProductoModel producto)
+    {
+        decimal comisionActual = producto.ComisionDeVentas;
+        if (comisionActual >= 0)
+        {
+            productoHandler.ActualizarComision(producto, producto.FechaAnalisis);
+        }
+        else
+        {
+            producto.ComisionDeVentas = 0;
+        }
+    }
+
+    public decimal actualizarCostoVariable(ProductoModel producto) 
+    {
+        decimal comisionSegunPrecio = AnalisisRentabilidadService.CalcularComision(producto.Precio, producto.ComisionDeVentas);
+        decimal nuevoCosto = producto.CostoVariable + comisionSegunPrecio;
+
+        return nuevoCosto;
+
+    }
+
     // Metodo que actualiza el precio de un producto en la base de datos
     public void actualizarPrecio(ProductoModel producto)
-    {
+    {  
         decimal precioActual = producto.Precio;
         if (precioActual >= 0)
         {
@@ -234,13 +266,13 @@
     // Metodo que calcula y retorna el margen de un producto
     public decimal calcularMargen(ProductoModel productoActual)
     {
-        return AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+        return AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, actualizarCostoVariable(productoActual));
     }
 
     // Metodo que calcula y retorna el margen ponderado de un producto
     public decimal calcularMargenPonderado(ProductoModel productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, actualizarCostoVariable(productoActual));
         return AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
     }
 
@@ -299,7 +331,7 @@
         int result = 0;
         for (int i = 0; i < productos.Count; i += 1)
         {
-            result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, productos[i].CostoVariable);
+            result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, actualizarCostoVariable(productos[i]));
         }
         return result;
     }
@@ -311,7 +343,7 @@
         decimal margenActual = 0.0m;
         foreach (var productoActual in productos)
         {
-            margenActual = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+            margenActual = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, actualizarCostoVariable(productoActual));
 
             result += AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margenActual);
         }

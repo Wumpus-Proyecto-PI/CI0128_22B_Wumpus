@@ -12,7 +12,7 @@ namespace PI.Handlers
         {
             int filasAfectadas = 0;
             string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
-                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "',@costoVariable='" + producto.CostoVariable.ToString() + "'";
+                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "',@costoVariable='" + producto.CostoVariable.ToString() + "',@comisionDeVentas='" + producto.ComisionDeVentas.ToString() + "'";
 
             filasAfectadas = enviarConsulta(consulta);
             return filasAfectadas;
@@ -61,6 +61,10 @@ namespace PI.Handlers
                 if (columna["costoVariable"] != DBNull.Value)
                 {
                     nuevoProducto.CostoVariable = Convert.ToDecimal(columna["costoVariable"]);
+                }
+                if (columna["comisionDeVentas"] != DBNull.Value)
+                {
+                    nuevoProducto.ComisionDeVentas = Convert.ToDecimal(columna["comisionDeVentas"]);
                 }
                 productos.Add(nuevoProducto);
             }
@@ -113,5 +117,12 @@ namespace PI.Handlers
             return total;
         }
 
+        public void ActualizarComision(ProductoModel producto, DateTime fechaAnalisis)
+        {
+            string consulta = "UPDATE PRODUCTO " +
+                              "SET comisionDeVentas = " + producto.ComisionDeVentas.ToString() +
+                              " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsulta(consulta);
+        }
     }
 }

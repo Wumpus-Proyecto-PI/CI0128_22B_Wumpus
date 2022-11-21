@@ -20,6 +20,10 @@
         // Lista de componentes asociados al producto 
         public List<ComponenteModel> Componentes { get; set; } = new List<ComponenteModel>();
 
+        // Comision de ventas del producto
+
+        public decimal ComisionDeVentas { get; set; } = 0;
+
         // Costo Variable del producto 
         public decimal CostoVariable { get; set; }  
 
