@@ -131,7 +131,7 @@
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargenPonderado(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijosMensuales,productoActual.Precio,productoActual.CostoVariable))</p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijosMensuales,productoActual.Precio,actualizarCostoVariable(productoActual)))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @if (@opcionSwitchBool)
@@ -230,7 +230,7 @@
     public void actualizarComisionDeVentas(ProductoModel producto)
     {
         decimal comisionActual = producto.ComisionDeVentas;
-        if (comisionActual >= 0)
+        if (comisionActual >= 0 && comisionActual <=100)
         {
             productoHandler.ActualizarComision(producto, producto.FechaAnalisis);
         }
