@@ -15,6 +15,7 @@ namespace PI.Services
             PasosControles.Add(new GastoVariableControl());
             PasosControles.Add(new RentabilidadControl());
             PasosControles.Add(new InversionInicialControl());
+            PasosControles.Add(new FlujoDeCajaControl());
             // aqui se agregan los controladores de los pasos nuevos
 
         }
@@ -170,6 +171,25 @@ namespace PI.Services
                     resultado = true;
                 }
             }
+            return resultado;
+        }
+    }
+
+
+    public class FlujoDeCajaControl : PasosProgresoControl
+    {
+        public FlujoDeCajaControl()
+        {
+            base.NumeroPaso = 6;
+        }
+
+        // método que 
+        // detalle: 
+        override protected bool EstaActivo(AnalisisModel analisis)
+        {
+            bool resultado = false;
+
+
             return resultado;
         }
     }
