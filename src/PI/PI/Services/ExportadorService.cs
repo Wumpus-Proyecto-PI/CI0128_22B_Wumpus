@@ -203,8 +203,8 @@ namespace PI.Service
                 hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].CostoVariable;
                 celdaActual = ++columnaActual + filaActual.ToString();
 
-                // E Comisión
-                hojaAnalisisRentabilidad.Cell(celdaActual).Value = 0.0; // TODO productos[productoActual].Comision;
+                // E Comisión de ventas
+                hojaAnalisisRentabilidad.Cell(celdaActual).Value = productos[productoActual].ComisionDeVentas;
                 celdaActual = ++columnaActual + filaActual.ToString();
 
                 // itera al siguiente producto
