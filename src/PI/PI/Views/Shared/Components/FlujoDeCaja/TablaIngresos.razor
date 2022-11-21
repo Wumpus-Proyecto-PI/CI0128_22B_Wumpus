@@ -1,4 +1,4 @@
-﻿@using System.Globalization
+﻿@using PI.Services;
 @using PI.Handlers
 @using PI.Models
 
@@ -39,22 +39,22 @@
             <p class="datos-calculados texto-nombres">Totales</p>
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes1")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes2")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes3")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes4")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes5")
         </div>
         <div class="col col-1">
-            0
+            @calcularIngresoMensualTotal("mes6")
         </div>
     </li>
 
@@ -62,11 +62,27 @@
     <li class="table-row">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Ventas de contado</p>
-        </div>
-        
+        </div>    
         @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "contado"))
         {
-            <ColumnaIngreso ingresoActual="ingresoActual" />
+            <div class="col col-1">
+                @if (ingresoActual.estadoInput)
+                {
+                    <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {ingresoActual.estadoInput = false;}">
+                        <p>
+                            @FormatManager.ToFormatoEstadistico(ingresoActual.Monto)
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <input class="effect-1 text-center"
+                   type="text" maxlength=16
+                   @onfocusout="() => {ingresoActual.estadoInput = true; actualizarIngreso(ingresoActual);}"
+                   @bind="ingresoActual.Monto">
+                    <span class="focus-border"></span>
+                }
+            </div>
         }
     </li>
 
@@ -77,7 +93,24 @@
         </div>
         @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "credito"))
         {
-            <ColumnaIngreso ingresoActual="ingresoActual" />
+            <div class="col col-1">
+                @if (ingresoActual.estadoInput)
+                {
+                    <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {ingresoActual.estadoInput = false;}">
+                        <p>
+                            @FormatManager.ToFormatoEstadistico(ingresoActual.Monto)
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <input class="effect-1 text-center"
+                   type="text" maxlength=16
+                   @onfocusout="() => {ingresoActual.estadoInput = true; actualizarIngreso(ingresoActual);}"
+                   @bind="ingresoActual.Monto">
+                    <span class="focus-border"></span>
+                }
+            </div>
         }
     </li>
 
@@ -88,7 +121,24 @@
         </div>
         @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "otros"))
         {
-            <ColumnaIngreso ingresoActual="ingresoActual" />
+            <div class="col col-1">
+                @if (ingresoActual.estadoInput)
+                {
+                    <div class="div-datos w-100 h-100 text-center" @onmouseover="() => {ingresoActual.estadoInput = false;}">
+                        <p>
+                            @FormatManager.ToFormatoEstadistico(ingresoActual.Monto)
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <input class="effect-1 text-center"
+                   type="text" maxlength=16
+                   @onfocusout="() => {ingresoActual.estadoInput = true; actualizarIngreso(ingresoActual);}"
+                   @bind="ingresoActual.Monto">
+                    <span class="focus-border"></span>
+                }
+            </div>
         }
     </li>
 
@@ -98,5 +148,17 @@
 
     [Parameter]
     public List<IngresoModel> ingresos { get; set; }
+
+    public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+
+    public string calcularIngresoMensualTotal(string mes) 
+    {
+        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotaldeIngresosPorMes(mes, ingresos[0].FechaAnalisis));
+    }
+
+    public void actualizarIngreso(IngresoModel ingreso)
+    {
+        flujoDeCajaHandler.actualizarIngreso(ingreso);
+    }
 
 }
