@@ -99,6 +99,9 @@ namespace unit_tests.SharedResources
         // return: true si las dos listas son iguales y false en caso contrario
         static public bool SonIgualesListasPuestos(List<PuestoModel> esperada, List<PuestoModel> actual)
         {
+            esperada = esperada.OrderBy(x => x.Nombre).ToList();
+            actual = actual.OrderBy(x => x.Nombre).ToList();
+
             bool listasIguales = true;
             if (esperada.Count != actual.Count)
             {
