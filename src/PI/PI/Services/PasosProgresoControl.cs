@@ -178,17 +178,43 @@ namespace PI.Services
 
     public class FlujoDeCajaControl : PasosProgresoControl
     {
+        private InversionInicialHandler InversionInicialHandler = new();
+        private ProductoHandler ProductoHandler = new();
         public FlujoDeCajaControl()
         {
             base.NumeroPaso = 6;
         }
 
-        // método que 
-        // detalle: 
+        // método que verifica si se puede acceder al paso de flujo de caja
+        // detalle: si el negocio esta en marcha solo revisamos que hayan productos con precio o porcentaje
+        // si no esta iniciado revisamos que haya al menos un gasto inicial
         override protected bool EstaActivo(AnalisisModel analisis)
         {
             bool resultado = false;
+            // si el estado es true, el negocio no esta iniciado
+            // es decir que si esta disponible el paso de inversion inicial
+            if (analisis.Configuracion.EstadoNegocio == true)
+            {
+                List<GastoInicialModel> gastos = InversionInicialHandler.ObtenerGastosIniciales(analisis.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                if (gastos.Count > 0)
+                {
+                    resultado = true;
+                }
+            } else
+            {
+                // si es false el estado del negocio significa que esta en marcha
+                // es decir que el paso de inversion inicial no esta disponible
+                List<ProductoModel> productos = ProductoHandler.ObtenerProductos(analisis.FechaCreacion);
 
+                for (int actual = 0; actual < productos.Count && resultado == false; ++actual)
+                {
+                    if (productos[actual].Precio > 0
+                        && productos[actual].PorcentajeDeVentas > 0)
+                    {
+                        resultado = true;
+                    }
+                }
+            }
 
             return resultado;
         }
