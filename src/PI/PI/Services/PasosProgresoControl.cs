@@ -65,6 +65,8 @@ namespace PI.Services
 
     public class GastosFijosControl : PasosProgresoControl
     {
+        // Se crea instancia del handler
+        private EstructuraOrgHandler EstructuraOrgHandler = new();
         public GastosFijosControl()
         {
             base.NumeroPaso = 2;
@@ -76,11 +78,9 @@ namespace PI.Services
         override protected bool EstaActivo(AnalisisModel analisis)
         {
             bool resultado = false;
-            // Se crea instancia del handler
-            EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
-
+            
             // Se obtiene de la base de datos los diferentes puestos del Análisis.
-            List<PuestoModel> puestos = estructuraOrgHandler.ObtenerListaDePuestos(analisis.FechaCreacion);
+            List<PuestoModel> puestos = EstructuraOrgHandler.ObtenerListaDePuestos(analisis.FechaCreacion);
 
             // Se determina si la cantidad de puestos que posee es mayor a 0
             if (puestos.Count > 0)
@@ -93,6 +93,9 @@ namespace PI.Services
 
     public class GastoVariableControl : PasosProgresoControl
     {
+        // se crea instancia del handler
+        private GastoFijoHandler GastoFijoHandler = new();
+
         public GastoVariableControl()
         {
             base.NumeroPaso = 3;
@@ -104,11 +107,10 @@ namespace PI.Services
         override protected bool EstaActivo(AnalisisModel analisis)
         {
             bool resultado = false;
-            // se crea instancia del handler
-            GastoFijoHandler gastosHandler = new GastoFijoHandler();
+            
             
             // mediante el handler, se obtiene de la base de datos la cantidad de gastos fijos que contiene un análisis.
-            List<GastoFijoModel> gastosFijos = gastosHandler.ObtenerGastosFijos(analisis.FechaCreacion);
+            List<GastoFijoModel> gastosFijos = GastoFijoHandler.ObtenerGastosFijos(analisis.FechaCreacion);
 
             // se revisa si hay mas de 4 gastos fijos porque siempre existen los gastos de: 
             // salarios, beneficios, prestaciones laboralos y seguro social
@@ -122,6 +124,8 @@ namespace PI.Services
 
     public class RentabilidadControl : PasosProgresoControl
     {
+        private ProductoHandler ProductoHandler = new();
+
         public RentabilidadControl()
         {
             base.NumeroPaso = 4;
@@ -135,10 +139,9 @@ namespace PI.Services
             bool resultado = false;
 
             // creamos un handlere de producto para acceder a la base de datos
-            ProductoHandler productoHandler = new ProductoHandler();
             
             // verificamos si hay al menos un producto en la base de datos
-            if (productoHandler.ObtenerProductos(analisis.FechaCreacion).Count > 0)
+            if (ProductoHandler.ObtenerProductos(analisis.FechaCreacion).Count > 0)
             {
                 resultado = true;
             }
@@ -148,6 +151,7 @@ namespace PI.Services
 
     public class InversionInicialControl : PasosProgresoControl
     {
+        private ProductoHandler ProductoHandler = new();
         public InversionInicialControl()
         {
             base.NumeroPaso = 5;
@@ -160,8 +164,7 @@ namespace PI.Services
         {
             bool resultado = false;
 
-            ProductoHandler productoHandler = new ProductoHandler();
-            List<ProductoModel> productos = productoHandler.ObtenerProductos(analisis.FechaCreacion);
+            List<ProductoModel> productos = ProductoHandler.ObtenerProductos(analisis.FechaCreacion);
 
             for (int actual = 0; actual < productos.Count && resultado == false; ++actual)
             {

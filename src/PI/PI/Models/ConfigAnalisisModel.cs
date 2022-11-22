@@ -4,7 +4,7 @@
     {
         // Fecha del análisis a la cual pertenece la configuración
         public DateTime fechaAnalisis { get; set; }
-        // Tipo de negocio: Si es en marcha o nuevo.
+        // Tipo de negocio: Si es en marcha (true) o nuevo (false).
         public bool EstadoNegocio { set; get; }
         // El porcentaje de Seguro Social que se calcula sobre los salarios
         public decimal PorcentajeSS { get; set; }
