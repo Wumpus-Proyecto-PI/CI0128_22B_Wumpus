@@ -11,7 +11,7 @@ namespace unit_tests.SharedResources
     public class PuestoTestingHandler : HandlerGenerico
     {
         // brief: metodo que inserta en la base de datos una lista semilla de puestos
-        public List<PuestoModel> InsertarPuestosSemillaEnBase(DateTime FechaCreacion)
+        public List<PuestoModel> InsertarPuestosSemillaEnBase(DateTime fechaCreacion)
         {
             List<PuestoModel> puestosSemilla = new List<PuestoModel>();
             puestosSemilla.Add(new PuestoModel
@@ -20,7 +20,7 @@ namespace unit_tests.SharedResources
                 Plazas = 1,
                 SalarioBruto = 4400.56m,
                 Beneficios = 1500.89m,
-                FechaAnalisis = FechaCreacion
+                FechaAnalisis = fechaCreacion
             });
             puestosSemilla.Add(new PuestoModel
             {
@@ -28,7 +28,7 @@ namespace unit_tests.SharedResources
                 Plazas = 25,
                 SalarioBruto = 3698.56m,
                 Beneficios = 45687.78m,
-                FechaAnalisis = FechaCreacion
+                FechaAnalisis = fechaCreacion
             });
             puestosSemilla.Add(new PuestoModel
             {
@@ -36,23 +36,38 @@ namespace unit_tests.SharedResources
                 Plazas = 8,
                 SalarioBruto = 4567.56m,
                 Beneficios = 4578.08m,
-                FechaAnalisis = FechaCreacion
+                FechaAnalisis = fechaCreacion
             });
 
-            string insert = "";
+            return InsertarPuestosSemillaEnBase(puestosSemilla);
+        }
+
+        // brief: metodo que inserta en la base de datos una lista semilla de puestos que recibe por paramero
+        // details: este metodo se usa si en el test es necesario meter puesto con condiciones especiales
+        public List<PuestoModel> InsertarPuestosSemillaEnBase(List<PuestoModel> puestosSemilla)
+        {
             foreach (var puesto in puestosSemilla)
             {
-                insert = "INSERT INTO PUESTO values ("
-                + "'" + puesto.Nombre + "', "
-                + "'" + puesto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
-                + puesto.Plazas.ToString() + ", "
-                + puesto.SalarioBruto.ToString() + ", "
-                + puesto.Beneficios.ToString() + ")";
-
-                base.EnviarConsultaGenerica(insert);
+                InsertarPuestosSemillaEnBase(puesto);
             }
 
             return puestosSemilla;
+        }
+
+        // brief: metodo que inserta en la base de datos un solo puesto
+        // details: el puesto debe de tener la fecha del analisis al que corresponde
+        public PuestoModel InsertarPuestosSemillaEnBase(PuestoModel puesto)
+        {
+            string insert = "INSERT INTO PUESTO values ("
+            + "'" + puesto.Nombre + "', "
+            + "'" + puesto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
+            + puesto.Plazas.ToString() + ", "
+            + puesto.SalarioBruto.ToString() + ", "
+            + puesto.Beneficios.ToString() + ")";
+
+            base.EnviarConsultaGenerica(insert);
+
+            return puesto;
         }
 
         // brief: metodo que retorna todos los puestos que hay en la base de datos de un analisis
