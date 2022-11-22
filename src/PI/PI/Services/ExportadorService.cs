@@ -33,6 +33,7 @@ namespace PI.Service
         public MemoryStream obtenerReporte(string fechaAnalisis)
         {
             ReportarAnalisisDeRentabilidad(fechaAnalisis);
+            ReportarFlujoDeCaja(fechaAnalisis);
             // TODO agregar reporte de flujo de caja
             using (MemoryStream stream = new MemoryStream())
             {
@@ -135,21 +136,22 @@ namespace PI.Service
             decimal TotalIngresos;
             decimal TotalEgresos;
 
-            List<EgresoModel> EgresosActuales = new List<EgresoModel>();
-            List<IngresoModel> IngresosActuales = new List<IngresoModel>();
+            List<EgresoModel> EgresosActuales;
+            List<IngresoModel> IngresosActuales;
 
             char[] ColumnasExcel = { 'B', 'C', 'D', 'E', 'F', 'G' };
             for (int i = 1; i < 7; i += 1) {
                 IngresosActuales = flujoDeCajaHandler.ObtenerIngresosMes("Mes "+ i, FechaAnalisis);
+                Console.WriteLine("Count: "+IngresosActuales.Count);
                 EgresosActuales = flujoDeCajaHandler.ObtenerEgresosMes("Mes " + i, FechaAnalisis);
 
-                IngresosContado = FlujoCajaService.CalcularIngresosTipo("Contado",IngresosActuales);
-                IngresosOtros = FlujoCajaService.CalcularIngresosTipo("Otros",IngresosActuales);
-                IngresosCredito = FlujoCajaService.CalcularIngresosTipo("Credito", IngresosActuales);
+                IngresosContado = FlujoCajaService.CalcularIngresosTipo("contado",IngresosActuales);
+                IngresosOtros = FlujoCajaService.CalcularIngresosTipo("otros",IngresosActuales);
+                IngresosCredito = FlujoCajaService.CalcularIngresosTipo("credito", IngresosActuales);
                 TotalIngresos = IngresosContado + IngresosOtros + IngresosCredito;
 
-                EgresosContado = FlujoCajaService.CalcularEgresosTipo("Contado", EgresosActuales);
-                EgresosCredito = FlujoCajaService.CalcularEgresosTipo("Credito", EgresosActuales);
+                EgresosContado = FlujoCajaService.CalcularEgresosTipo("contado", EgresosActuales);
+                EgresosCredito = FlujoCajaService.CalcularEgresosTipo("credito", EgresosActuales);
                 TotalEgresos = EgresosContado +EgresosCredito;
 
 
@@ -165,6 +167,15 @@ namespace PI.Service
 
             }
         
+        }
+
+        public void ReportarFlujoDeCaja(string fechaAnalisis) {
+            hojaFlujoCaja = libro.AddWorksheet("Flujo de Caja");
+            InsertarEncabezadoFlujoDeCaja();
+
+            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+
+            AgregarValoresDeEncabezadoFlujoDeCaja(fechaCreacionAnalisis);
         }
 
         // Inserta los valores cargados del encabezado de la hoja de análisis de rentabilidad
