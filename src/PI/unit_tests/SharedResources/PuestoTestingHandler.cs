@@ -58,12 +58,12 @@ namespace unit_tests.SharedResources
         // details: el puesto debe de tener la fecha del analisis al que corresponde
         public PuestoModel InsertarPuestosSemillaEnBase(PuestoModel puesto)
         {
-            string insert = "INSERT INTO PUESTO values ("
-            + "'" + puesto.Nombre + "', "
-            + "'" + puesto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
-            + puesto.Plazas.ToString() + ", "
-            + puesto.SalarioBruto.ToString() + ", "
-            + puesto.Beneficios.ToString() + ")";
+            string insert = " INSERT INTO PUESTO values ("
+                + "'" + puesto.Nombre + "', "
+                + "'" + puesto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
+                + puesto.Plazas.ToString() + ", "
+                + puesto.SalarioBruto.ToString().Replace(",", ".") + ", "
+                + puesto.Beneficios.ToString().Replace(",", ".") + ")";
 
             base.EnviarConsultaGenerica(insert);
 
