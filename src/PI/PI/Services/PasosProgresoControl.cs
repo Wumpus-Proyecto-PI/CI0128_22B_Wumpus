@@ -191,9 +191,9 @@ namespace PI.Services
         override protected bool EstaActivo(AnalisisModel analisis)
         {
             bool resultado = false;
-            // si el estado es true, el negocio no esta iniciado
+            // si el estado es false, el negocio no esta iniciado
             // es decir que si esta disponible el paso de inversion inicial
-            if (analisis.Configuracion.EstadoNegocio == true)
+            if (analisis.Configuracion.EstadoNegocio == false)
             {
                 List<GastoInicialModel> gastos = InversionInicialHandler.ObtenerGastosIniciales(analisis.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 if (gastos.Count > 0)
@@ -202,7 +202,7 @@ namespace PI.Services
                 }
             } else
             {
-                // si es false el estado del negocio significa que esta en marcha
+                // si es true el estado del negocio significa que esta en marcha
                 // es decir que el paso de inversion inicial no esta disponible
                 List<ProductoModel> productos = ProductoHandler.ObtenerProductos(analisis.FechaCreacion);
 
