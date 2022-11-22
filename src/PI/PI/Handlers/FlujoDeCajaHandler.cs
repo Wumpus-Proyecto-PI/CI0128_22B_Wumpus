@@ -66,6 +66,71 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
+        public void crearMeses(DateTime fechaAnalisis)
+        {
+            string consulta = "EXEC crearMesesDeAnalisis @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsultaVoid(consulta);
+        }
+
+        public void crearIngresos(DateTime fechaAnalisis)
+        {
+            string consulta = "EXEC crearIngresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsultaVoid(consulta);
+        }
+
+        public void crearFlujoDeCaja(DateTime fechaAnalisis)
+        {
+            this.crearMeses(fechaAnalisis);
+            this.crearIngresos(fechaAnalisis);
+        }
+
+        public List<IngresoModel> obtenerIngresos(DateTime fechaAnalisis)
+        {
+            string consulta = "SELECT * FROM INGRESO WHERE fechaAnalisis = '" +  fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            List<IngresoModel> ingresos = new List<IngresoModel>();
+            foreach (DataRow columna in tablaResultado.Rows)
+            {
+                ingresos.Add(
+                new IngresoModel
+                {
+                    FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
+                    Tipo = Convert.ToString(columna["tipo"]),
+                    Monto = Convert.ToDecimal(columna["monto"]),
+                    Mes = Convert.ToString(columna["mes"])
+                }
+                );
+            }
+            return ingresos;
+        }
+
+        public void actualizarIngreso(IngresoModel ingreso)
+        {
+            string consulta = "UPDATE INGRESO" +
+                              " SET monto = " + ingreso.Monto +
+                              " WHERE fechaAnalisis = '" + ingreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                              "' AND mes = '" + ingreso.Mes +
+                              "' AND tipo = '" + ingreso.Tipo + "'";
+            enviarConsultaVoid(consulta);
+        }
+
+        public decimal obtenerMontoTotaldeIngresosPorMes(string mes, DateTime fechaAnalisis)
+        {
+            decimal total = 0.0m;
+
+            string consulta = "SELECT SUM(monto) as total" +
+                             " FROM INGRESO" +
+                             " WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                             "' AND mes = '" + mes + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("total"))
+            {
+                total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
+            }
+
+            return total;
+        }
 
     }
 }

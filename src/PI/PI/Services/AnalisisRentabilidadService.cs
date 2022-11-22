@@ -23,6 +23,22 @@ namespace PI.Services
             return (porcentajeVentas / 100) * margen;
         }
 
+        // método para calcular el precio considerando la comision de ventas de un producto
+        // Parameter: precio  del producto
+        // Parameter: comision de ventas del producto
+        // Return: el valor del precio considerando la comision de ventas de un producto
+        public static decimal CalcularComision(decimal precio, decimal comision) 
+        {
+            decimal resultado = 0;
+
+            if (comision > 0)
+            {
+                resultado = precio * (comision / 100);
+            }
+
+            return resultado;
+        }
+
         // método para calcular la meta de ventas de un producto en unidades
         // Parameter: porcentajeVentas del producto
         // Parameter: gastosFijosMensuales totales del negocio

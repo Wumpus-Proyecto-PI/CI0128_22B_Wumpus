@@ -3,11 +3,12 @@ div {
 }
 
 html, body, main {
-    height: 100vh;
     padding: 0;
     margin: 0px;
     overflow-x: hidden;
 }
+
+
 
 #encabezado {
     width: 100%;
@@ -15,10 +16,12 @@ html, body, main {
     height: 100px;
     box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
     margin: 0px 5px 0px 0px;
-/*    align-items: center;
-    display:flex;
-    justify-content:space-between;*/
 }
+
+    #encabezado .row {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
 
 #logo {
     width: fit-content;
