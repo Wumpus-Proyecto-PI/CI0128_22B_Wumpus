@@ -133,5 +133,69 @@ namespace unit_tests.DanielE
             // revisamos que no exista el puesto eliminado en la lista de puesto que leimos de la base
             Assert.IsFalse(FueInsertado, $"'{puestoELiminar}' sí se insertó en la base y no fue eliminado");
         }
+
+        // este test prueba que al eliminar puesto no se modifiquen los puestos ya existentes
+        [TestMethod]
+        public void ActualizarNombre_NoModificaOtrosPuestos()
+        {
+            // arrange
+
+            PuestoTestingHandler puestoTestingHandler = new();
+            // ingresamos una lista de puestos inicial
+            List<PuestoModel> puestosPreInsercion = puestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+
+            // deseamos actualizar el nombre del puesto de la posicion [1]
+            PuestoModel puestoActualizar = puestosPreInsercion[1];
+
+            // creamos puesto que vamos a insertar de prueba
+            PuestoModel nuevoPuesto = new PuestoModel
+            {
+                Nombre = "Nuevo Puesto",
+                Plazas = 48,
+                Beneficios = 4567.89m,
+                SalarioBruto = 7894.45m,
+                FechaAnalisis = AnalisisFicticio.FechaCreacion
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            EstructuraOrgHandler estructuraOrgHandler = new();
+
+            // accion
+            // eliminamos el [1] puesto de la lista de puestos semilla
+            estructuraOrgHandler.InsertarPuesto(puestoActualizar.Nombre, nuevoPuesto);
+
+            // assert
+            // obtenemos los puestos de la base
+            List<PuestoModel> puestosPostInsercion = puestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+            bool ExisteViejoNombre = puestosPostInsercion.Exists(x => x.Nombre == puestoActualizar.Nombre);
+            
+            PuestoModel puestoActualizadoEnBase = puestosPostInsercion.Find(x => x.Nombre == nuevoPuesto.Nombre);
+            bool puestoActualizado = false;
+
+            if (puestoActualizadoEnBase != null 
+                && puestoActualizadoEnBase.Nombre == nuevoPuesto.Nombre 
+                && puestoActualizadoEnBase.Plazas == nuevoPuesto.Plazas
+                && puestoActualizadoEnBase.Beneficios == nuevoPuesto.Beneficios
+                && puestoActualizadoEnBase.SalarioBruto == nuevoPuesto.SalarioBruto
+                && puestoActualizadoEnBase.FechaAnalisis == nuevoPuesto.FechaAnalisis)
+            {
+                puestoActualizado = true;
+            }
+            // removemos de la lista de puestos semilla el que eliminamos en la base para comparar 
+            // las listas antes y despues del borrado en la base
+            puestosPreInsercion.RemoveAt(1);
+            puestosPreInsercion.Insert(1, nuevoPuesto);
+
+            bool puestoIguales = PuestoTestingHandler.SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
+
+            // si las dos listas esta igual antes y despues de la elminacion no se vio afectado otro puesto por el query
+            Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
+
+            // revisamos que no exista el puesto antes de ser actualizado en la lista de puesto que leimos de la base
+            Assert.IsFalse(ExisteViejoNombre, $"No se modificó el nombre anterior '{puestoActualizar}'");
+
+            // revisamos que si exista el nuevo nombre del puesot que actualizamos en la lista de puesto que leimos de la base
+            Assert.IsTrue(puestoActualizado, $"Sí se modificó el nombre y se asignó el nombre '{nuevoPuesto}'");
+        }
     }
 }
