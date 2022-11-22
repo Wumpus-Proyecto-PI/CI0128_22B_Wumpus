@@ -95,5 +95,43 @@ namespace unit_tests.DanielE
             Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
             Assert.IsTrue(FueInsertado, "'Nuevo puesto' no se insertó en la base");
         }
+
+        // este test prueba que al eliminar puesto no se modifiquen los puestos ya existentes
+        [TestMethod]
+        public void EliminarPuesto_NoModificaOtrosPuestos()
+        {
+            // arrange
+
+            PuestoTestingHandler puestoTestingHandler = new();
+            // ingresamos una lista de puestos inicial
+            List<PuestoModel> puestosPreInsercion = puestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+           
+            // deseamos elminar el puesto de la posicion [1]
+            PuestoModel puestoELiminar = puestosPreInsercion[1];
+
+            // creamos handler con el metodo que deseamos probar
+            EstructuraOrgHandler estructuraOrgHandler = new();
+
+            // accion
+            // eliminamos el [1] puesto de la lista de puestos semilla
+            estructuraOrgHandler.EliminarPuesto(puestoELiminar);
+
+            // assert
+            // obtenemos los puestos de la base
+            List<PuestoModel> puestosPostInsercion = puestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+            bool FueInsertado = puestosPostInsercion.Exists(x => x.Nombre == puestoELiminar.Nombre);
+
+            // removemos de la lista de puestos semilla el que eliminamos en la base para comparar 
+            // las listas antes y despues del borrado en la base
+            puestosPreInsercion.RemoveAt(1);
+
+            bool puestoIguales = PuestoTestingHandler.SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
+
+            // si las dos listas esta igual antes y despues de la elminacion no se vio afectado otro puesto por el query
+            Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
+
+            // revisamos que no exista el puesto eliminado en la lista de puesto que leimos de la base
+            Assert.IsFalse(FueInsertado, $"'{puestoELiminar}' sí se insertó en la base y no fue eliminado");
+        }
     }
 }
