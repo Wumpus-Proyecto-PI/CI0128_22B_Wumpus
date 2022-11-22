@@ -66,11 +66,11 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
-        public void crearMeses(DateTime fechaAnalisis)
-        {
-            string consulta = "EXEC crearMesesDeAnalisis @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
-            enviarConsultaVoid(consulta);
-        }
+        //public void crearMeses(DateTime fechaAnalisis)
+        //{
+        //    string consulta = "EXEC crearMesesDeAnalisis @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+        //    enviarConsultaVoid(consulta);
+        //}
 
         public void crearIngresos(DateTime fechaAnalisis)
         {
@@ -80,7 +80,7 @@ namespace PI.Handlers
 
         public void crearFlujoDeCaja(DateTime fechaAnalisis)
         {
-            this.crearMeses(fechaAnalisis);
+            //this.crearMeses(fechaAnalisis);
             this.crearIngresos(fechaAnalisis);
         }
 
