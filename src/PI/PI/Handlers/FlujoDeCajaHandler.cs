@@ -11,7 +11,7 @@ namespace PI.Handlers
         // Obtiene los Egresos de un determinado mes en un análisis
         public List<EgresoModel> ObtenerEgresosMes(string NombreMes, DateTime FechaAnalisis) 
         {
-            string consulta = "EXEC ObtenerEgresosMes @fechaAnalisis ='" + FechaAnalisis.ToString() +"', @nombreMes ='" + NombreMes +"';";
+            string consulta = "EXEC ObtenerEgresosMes @fechaAnalisis ='" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @nombreMes ='" + NombreMes +"';";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             List<EgresoModel> egresos = new List<EgresoModel>();
             foreach (DataRow columna in tablaResultado.Rows)
@@ -32,7 +32,8 @@ namespace PI.Handlers
         // Obtiene los Ingresos de un determinado mes en un análisis
         public List<IngresoModel> ObtenerIngresosMes(string NombreMes, DateTime FechaAnalisis)
         {
-            string consulta = "EXEC ObtenerEgresosMes @fechaAnalisis ='" + FechaAnalisis.ToString() + "', @nombreMes ='" + NombreMes + "';";
+            string consulta = "EXEC ObtenerIngresosMes @fechaAnalisis ='" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @nombreMes ='" + NombreMes + "';";
+            Console.WriteLine(consulta);
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             List<IngresoModel> ingresos = new List<IngresoModel>();
             foreach (DataRow columna in tablaResultado.Rows)
@@ -53,7 +54,7 @@ namespace PI.Handlers
         // Agrega un Egreso a la base de datos
         public void AgregarEgreso(EgresoModel Egreso) 
         {
-            string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Egreso.FechaAnalisis.ToString()
+            string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Egreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")
                 + "', @nombreMes ='" + Egreso.Mes + "', @tipo=" + Egreso.Tipo + ", @monto=" + Egreso.Monto;
             enviarConsultaVoid(consulta);
         }
@@ -61,7 +62,7 @@ namespace PI.Handlers
         // Agrego un Ingreso a la base de datos
         public void AgregarIngreso(IngresoModel Ingreso)
         {
-            string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Ingreso.FechaAnalisis.ToString()
+            string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Ingreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")
                 + "', @nombreMes ='" + Ingreso.Mes + "', @tipo=" + Ingreso.Tipo + ", @monto=" + Ingreso.Monto;
             enviarConsultaVoid(consulta);
         }
