@@ -56,6 +56,49 @@ namespace unit_tests.DanielE
             AnalisisFicticio = null;
         }
 
+        // brief: metodo que compara si dos listas de puesto model son iguales
+        // details: se compara cada uno de los atributos del puesto model
+        // return: true si las dos listas son iguales y false en caso contrario
+        static public bool SonIgualesListasPuestos(List<PuestoModel> esperada, List<PuestoModel> actual)
+        {
+            esperada = esperada.OrderBy(x => x.Nombre).ToList();
+            actual = actual.OrderBy(x => x.Nombre).ToList();
+
+            bool listasIguales = true;
+            if (esperada.Count != actual.Count)
+            {
+                listasIguales = false;
+            }
+            else
+            {
+                for (int i = 0; i < esperada.Count && listasIguales == true; ++i)
+                {
+                    listasIguales = SonIgualesPuestos(esperada[i], actual[i]);
+                }
+            }
+            return listasIguales;
+        }
+
+        // brief: metodo que compara si dos puestos son iguales
+        // details: se compara cada uno de los atributos del puesto model
+        // return: true si los dos puestos son iguales y false en caso contrario
+        static public bool SonIgualesPuestos(PuestoModel esperada, PuestoModel actual)
+        {
+            bool puestosIguales = false;
+
+            if (esperada.Nombre == actual.Nombre
+                && esperada.Plazas == actual.Plazas
+                && esperada.SalarioBruto == actual.SalarioBruto
+                && esperada.Beneficios == actual.Beneficios
+                && esperada.FechaAnalisis == actual.FechaAnalisis
+                )
+            {
+                puestosIguales = true;
+            }
+
+            return puestosIguales;
+        }
+
         // este test prueba que al insertar un nuevo puesto no se modifiquen los puestos ya existentes
         [TestMethod]
         public void InsertarPuesto_NoModificaOtrosPuestos()
@@ -90,7 +133,7 @@ namespace unit_tests.DanielE
             // removemos de la lista el que insertamos para comparar si el resto de puestos se vieron afectados
             puestosPostInsercion.RemoveAll(x => x.Nombre == nuevoPuesto.Nombre);
 
-            bool puestoIguales = PuestoTestingHandler.SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
+            bool puestoIguales = SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
 
             Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
             Assert.IsTrue(FueInsertado, "'Nuevo puesto' no se insertó en la base");
@@ -125,7 +168,7 @@ namespace unit_tests.DanielE
             // las listas antes y despues del borrado en la base
             puestosPreInsercion.RemoveAt(1);
 
-            bool puestoIguales = PuestoTestingHandler.SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
+            bool puestoIguales = SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
 
             // si las dos listas esta igual antes y despues de la elminacion no se vio afectado otro puesto por el query
             Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
@@ -134,7 +177,7 @@ namespace unit_tests.DanielE
             Assert.IsFalse(FueInsertado, $"'{puestoELiminar}' sí se insertó en la base y no fue eliminado");
         }
 
-        // este test prueba que al eliminar puesto no se modifiquen los puestos ya existentes
+        // este test prueba que al actualizar el nombre de un puesto en la base se modifique el correspondiente puesto
         [TestMethod]
         public void ActualizarNombre_NoModificaOtrosPuestos()
         {
@@ -172,21 +215,16 @@ namespace unit_tests.DanielE
             PuestoModel? puestoActualizadoEnBase = puestosPostInsercion.Find(x => x.Nombre == nuevoPuesto.Nombre);
             bool puestoActualizado = false;
 
-            if (puestoActualizadoEnBase != null 
-                && puestoActualizadoEnBase.Nombre == nuevoPuesto.Nombre 
-                && puestoActualizadoEnBase.Plazas == nuevoPuesto.Plazas
-                && puestoActualizadoEnBase.Beneficios == nuevoPuesto.Beneficios
-                && puestoActualizadoEnBase.SalarioBruto == nuevoPuesto.SalarioBruto
-                && puestoActualizadoEnBase.FechaAnalisis == nuevoPuesto.FechaAnalisis)
+            if (puestoActualizadoEnBase != null)
             {
-                puestoActualizado = true;
+                puestoActualizado = SonIgualesPuestos(puestoActualizadoEnBase, nuevoPuesto); ;
             }
             // removemos de la lista de puestos semilla el que eliminamos en la base para comparar 
             // las listas antes y despues del borrado en la base
             puestosPreInsercion.RemoveAt(1);
             puestosPreInsercion.Insert(1, nuevoPuesto);
 
-            bool puestoIguales = PuestoTestingHandler.SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
+            bool puestoIguales = SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
 
             // si las dos listas esta igual antes y despues de la elminacion no se vio afectado otro puesto por el query
             Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
