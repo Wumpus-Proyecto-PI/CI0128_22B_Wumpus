@@ -93,35 +93,5 @@ namespace unit_tests.SharedResources
             }
             return puestoEnBase;
         }
-
-        // brief: metodo que compara si dos listas de puesto model son iguales
-        // details: se compara cada uno de los atributos del puesto model
-        // return: true si las dos listas son iguales y false en caso contrario
-        static public bool SonIgualesListasPuestos(List<PuestoModel> esperada, List<PuestoModel> actual)
-        {
-            esperada = esperada.OrderBy(x => x.Nombre).ToList();
-            actual = actual.OrderBy(x => x.Nombre).ToList();
-
-            bool listasIguales = true;
-            if (esperada.Count != actual.Count)
-            {
-                listasIguales = false;
-            } else
-            {
-                for (int i = 0; i < esperada.Count && listasIguales == true; ++i)
-                {
-                    if (esperada[i].Nombre != actual[i].Nombre
-                        || esperada[i].Plazas != actual[i].Plazas
-                        || esperada[i].SalarioBruto != actual[i].SalarioBruto
-                        || esperada[i].Beneficios != actual[i].Beneficios
-                        || esperada[i].FechaAnalisis != actual[i].FechaAnalisis
-                        )
-                    {
-                        listasIguales = false;
-                    }
-                }
-            }
-            return listasIguales;
-        }
     }
 }
