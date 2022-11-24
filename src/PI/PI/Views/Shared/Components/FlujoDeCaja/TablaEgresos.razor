@@ -222,7 +222,7 @@
 
     public string calcularEgresoMensualTotal(string mes)
     {
-        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotaldeEgresosPorMes(mes, egresos[0].FechaAnalisis));
+        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mes, egresos[0].FechaAnalisis));
     }
 
     public void actualizarEgreso(EgresoModel egreso)
