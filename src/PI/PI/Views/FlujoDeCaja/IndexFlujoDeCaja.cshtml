@@ -82,7 +82,7 @@
                     <div class="mt-4">
                         @(
                             await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TablaEgresos>(RenderMode.ServerPrerendered, 
-                                new { egresos = ViewBag.Egresos, gastosFijos = ViewBag.GastosFijos, estadoIniciado, inversionInicial })
+                                new { egresos = ViewBag.Egresos, gastosFijos = ViewBag.GastosFijos, estadoIniciado, inversionInicial, meses = ViewBag.Meses })
                             )
                     </div>
                 </div>
