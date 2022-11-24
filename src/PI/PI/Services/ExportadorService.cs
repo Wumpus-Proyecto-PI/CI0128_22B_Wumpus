@@ -123,59 +123,8 @@ namespace PI.Service
 
             hojaFlujoCaja.Cell("A9").Value = "Egresos por compras de contado";
             hojaFlujoCaja.Cell("A10").Value = "Egresos por compras de crédito";
+            hojaFlujoCaja.Cell("A11").Value = "Otros egresos";
 
-        }
-
-        public void AgregarValoresDeEncabezadoFlujoDeCaja(DateTime FechaAnalisis) {
-            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
-            decimal IngresosContado;
-            decimal IngresosOtros;
-            decimal IngresosCredito;
-            decimal EgresosContado;
-            decimal EgresosCredito;
-            decimal TotalIngresos;
-            decimal TotalEgresos;
-
-            List<EgresoModel> EgresosActuales;
-            List<IngresoModel> IngresosActuales;
-
-            char[] ColumnasExcel = { 'B', 'C', 'D', 'E', 'F', 'G' };
-            for (int i = 1; i < 7; i += 1) {
-                IngresosActuales = flujoDeCajaHandler.ObtenerIngresosMes("Mes "+ i, FechaAnalisis);
-                Console.WriteLine("Count: "+IngresosActuales.Count);
-                EgresosActuales = flujoDeCajaHandler.ObtenerEgresosMes("Mes " + i, FechaAnalisis);
-
-                IngresosContado = FlujoCajaService.CalcularIngresosTipo("contado",IngresosActuales);
-                IngresosOtros = FlujoCajaService.CalcularIngresosTipo("otros",IngresosActuales);
-                IngresosCredito = FlujoCajaService.CalcularIngresosTipo("credito", IngresosActuales);
-                TotalIngresos = IngresosContado + IngresosOtros + IngresosCredito;
-
-                EgresosContado = FlujoCajaService.CalcularEgresosTipo("contado", EgresosActuales);
-                EgresosCredito = FlujoCajaService.CalcularEgresosTipo("credito", EgresosActuales);
-                TotalEgresos = EgresosContado +EgresosCredito;
-
-
-                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "4").Value = IngresosContado;
-                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "5").Value = IngresosCredito;
-                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "6").Value = IngresosOtros;
-                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "7").Value = TotalIngresos;
-
-                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "9").Value = EgresosContado;
-                hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "10").Value = EgresosCredito;
-
-
-
-            }
-        
-        }
-
-        public void ReportarFlujoDeCaja(string fechaAnalisis) {
-            hojaFlujoCaja = libro.AddWorksheet("Flujo de Caja");
-            InsertarEncabezadoFlujoDeCaja();
-
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-
-            AgregarValoresDeEncabezadoFlujoDeCaja(fechaCreacionAnalisis);
         }
 
         // Inserta los valores cargados del encabezado de la hoja de análisis de rentabilidad
