@@ -1,0 +1,65 @@
+﻿@using PI.Handlers
+@using PI.Models
+@using PI.Services
+@using BlazorCleave
+@using BlazorCleave.Data
+@using System.Globalization
+@using PI.Views.Shared.Components.FlujoDeCaja
+
+<div id="contenedor-tabs" class="my-5">
+    <nav>
+        <div class="nav nav-tabs tabs-tablas" id="nav-tab" role="tablist">
+            <button class="nav-link active tab-flujo" id="nav-ingresos-tab" data-bs-toggle="tab"
+                    data-bs-target="#ingresos" type="button" role="tab" aria-controls="nav-ingresos"
+                    aria-selected="true" @onclick="actualizarFlujoMensual">
+                Ingresos
+            </button>
+            <button class="nav-link tab-flujo mx-1" id="nav-egresos-tab" data-bs-toggle="tab"
+                    data-bs-target="#egresos" type="button" role="tab" aria-controls="nav-egresos"
+                    aria-selected="false" @onclick="actualizarFlujoMensual">
+                Egresos
+            </button>
+        </div>
+    </nav>
+
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="ingresos" role="tabpanel" aria-labelledby="nav-ingresos-tab">
+            <div class="mt-4">
+                <TablaIngresos ingresos=ingresos meses=meses flujoMensual=flujoMensual />
+
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="egresos" role="tabpanel" aria-labelledby="nav-egresos-tab">
+            <div class="mt-4">
+                <TablaEgresos gastosFijos=gastosFijos egresos=egresos estadoIniciado=estadoIniciado inversionInicial=inversionInicial meses=meses flujoMensual=flujoMensual />
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public List<GastoFijoModel> gastosFijos { get; set; }
+
+    [Parameter]
+    public List<EgresoModel> egresos { get; set; }
+
+    [Parameter]
+    public List<IngresoModel> ingresos { get; set; }
+
+    [Parameter]
+    public bool estadoIniciado { get; set; }
+
+    [Parameter]
+    public decimal inversionInicial { get; set; }
+
+    [Parameter]
+    public List<MesModel> meses { get; set; }
+
+    [Parameter]
+    public List<string> flujoMensual { get; set; }
+
+    public void actualizarFlujoMensual(){
+        flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
+    }
+}

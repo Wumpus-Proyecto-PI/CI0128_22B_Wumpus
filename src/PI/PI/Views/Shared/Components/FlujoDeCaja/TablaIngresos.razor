@@ -33,7 +33,7 @@
     </li>
 
     @*Flujo de caja mensual*@
-    <FilaFlujoMensual />
+    <FilaFlujoMensual flujoMensual=flujoMensual />
 
     @*Totales*@
     <li class="table-row-totales">
@@ -119,7 +119,14 @@
     [Parameter]
     public List<IngresoModel> ingresos { get; set; }
 
+    [Parameter]
+    public List<MesModel> meses { get; set; }
+
+    [Parameter]
+    public List<string> flujoMensual { get; set; }
+
     public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+
 
     public string calcularIngresoMensualTotal(string mes)
     {
@@ -129,5 +136,7 @@
     public void actualizarIngreso(IngresoModel ingreso)
     {
         flujoDeCajaHandler.actualizarIngreso(ingreso);
+
+        flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }
 }

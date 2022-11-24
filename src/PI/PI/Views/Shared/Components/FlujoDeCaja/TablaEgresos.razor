@@ -33,7 +33,7 @@
     </li>
 
     @*Flujo de caja mensual*@
-    <FilaFlujoMensual />
+    <FilaFlujoMensual flujoMensual=flujoMensual />
 
     @*Totales*@
     <li class="table-row-totales">
@@ -164,6 +164,9 @@
     [Parameter]
     public List<MesModel> meses { get; set; }
 
+    [Parameter]
+    public List<string> flujoMensual { get; set; }
+
     public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
 
     public EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
@@ -241,6 +244,6 @@
         {
             egreso.Monto = 0;
         }
+        flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }
-
 }
