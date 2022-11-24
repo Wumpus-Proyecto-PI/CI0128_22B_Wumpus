@@ -1,6 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using PI.Models;
 using System.Data;
-using PI.Models;
 
 namespace PI.Handlers
 {
@@ -48,6 +47,27 @@ namespace PI.Handlers
                 );
             }
             return ingresos;
+        }
+
+        // obtiene los meses segun una fecha de analisis
+        public List<MesModel> ObtenerMeses(DateTime fechaAnalisis)
+        {
+            string consulta = "SELECT * FROM MES WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            List<MesModel> meses = new List<MesModel>();
+            foreach (DataRow columna in tablaResultado.Rows)
+            {
+                meses.Add(
+                new MesModel
+                {
+                    NombreMes = Convert.ToString(columna["nombre"]),
+                    FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
+                    InversionPorMes = Convert.ToDecimal(columna["invresionPorMes"]),
+ 
+                }
+                );
+            }
+            return meses;
         }
 
         // Agrega un Egreso a la base de datos
