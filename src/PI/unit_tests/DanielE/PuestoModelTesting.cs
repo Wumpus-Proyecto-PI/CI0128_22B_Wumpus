@@ -168,7 +168,7 @@ namespace unit_tests.DanielE
             EstructuraOrgHandler estructuraOrgHandler = new();
 
             // action
-            IngresarPuestoNoTiraExpeciones(nuevoPuesto, puestoActualizar.Nombre);
+            ActualizarPuestoNoTiraExpeciones(nuevoPuesto, puestoActualizar.Nombre);
 
             // assert
             // obtenemos los puestos de la base
@@ -189,13 +189,13 @@ namespace unit_tests.DanielE
 
             bool puestoIguales = SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
 
-            // si las dos listas esta igual antes y despues de la elminacion no se vio afectado otro puesto por el query
+            // si las dos listas esta igual antes y despues de la eliminacion no se vio afectado otro puesto por el query
             Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
 
             // revisamos que no exista el puesto antes de ser actualizado en la lista de puesto que leimos de la base
             Assert.IsFalse(ExisteViejoNombre, $"No se modificó el nombre anterior '{puestoActualizar.Nombre}'");
 
-            // revisamos que si exista el nuevo nombre del puesot que actualizamos en la lista de puesto que leimos de la base
+            // revisamos que si exista el nuevo nombre del puesto que actualizamos en la lista de puesto que leimos de la base
             Assert.IsTrue(puestoActualizado, $"Sí se modificó el nombre {puestoActualizar.Nombre} y se asignó el nombre '{nuevoPuesto.Nombre}'");
         }
 
@@ -256,6 +256,56 @@ namespace unit_tests.DanielE
 
             // revisamos que solo se haya ingresado solo un puesto en la base
             Assert.AreEqual(1, puestosBasePostInsercion.Count, "En la base se encontró más de un puesto cuando solo se ingresó uno");
+        }
+
+        // este test prueba que se puede actualizar un puesto con un valor de salario bruto que contiene decimales
+        // details: ver @details de la prueba IngresarPuestoConSalarioConDecimales_NoTiraExcepcion porque en se de la misma situacion al ingresar y actualizar un decimal en la base
+        [TestMethod]
+        public void ActualizarPuesto_ConSalarioConDecimales_NoTiraExcepciones()
+        {
+            // arrange
+
+            // insertamos los puesto semilla en la base de datos
+            List<PuestoModel> puestosPreActualizacion = PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+
+
+            // action
+            // actualizamos el salario del puesto [1] con un valor que contiene decimales
+            // modificamos directsmente el arreglo puestosPreActualizacion para comparar al final con puestosPostActualizacion
+            puestosPreActualizacion[1].SalarioBruto = 4587.56m;
+            ActualizarPuestoNoTiraExpeciones(puestosPreActualizacion[1], puestosPreActualizacion[1].Nombre);
+
+            // assert
+            // leemos los puestos. En este caso deberia haber solo uno
+            List<PuestoModel> puestoPostActualizacion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // revisamos que los puestos despues de la actualizacion sean iguales a los esperados
+            Assert.IsTrue(SonIgualesListasPuestos(puestosPreActualizacion, puestoPostActualizacion), "La lista de puestos en la base no es igual a la esperada");
+        }
+
+        // este test prueba que se puede actualizar un puesto con un valor de beneficios que contiene decimales
+        // details: ver @details de la prueba IngresarPuestoConSalarioConDecimales_NoTiraExcepcion porque en se de la misma situacion al ingresar y actualizar un decimal en la base
+        [TestMethod]
+        public void ActualizarPuesto_ConBeneficiosConDecimales_NoTiraExcepciones()
+        {
+            // arrange
+
+            // insertamos los puesto semilla en la base de datos
+            List<PuestoModel> puestosPreActualizacion = PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+
+
+            // action
+            // actualizamos el salario del puesto [1] con un valor que contiene decimales
+            // modificamos directsmente el arreglo puestosPreActualizacion para comparar al final con puestosPostActualizacion
+            puestosPreActualizacion[1].Beneficios = 4587.56m;
+            ActualizarPuestoNoTiraExpeciones(puestosPreActualizacion[1], puestosPreActualizacion[1].Nombre);
+
+            // assert
+            // leemos los puestos. En este caso deberia haber solo uno
+            List<PuestoModel> puestoPostActualizacion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // revisamos que los puestos despues de la actualizacion sean iguales a los esperados
+            Assert.IsTrue(SonIgualesListasPuestos(puestosPreActualizacion, puestoPostActualizacion), "La lista de puestos en la base no es igual a la esperada");
         }
 
         [TestMethod]
@@ -384,7 +434,7 @@ namespace unit_tests.DanielE
 
         // metodo que ingresa un puesto y verifica que se haya ingresado sin tirar excepciones
         // details: este metodos solo hace assert para revisar que no se hayan tirado excepciones y que el puesto ingresado se ingreso correctamente en la base
-        private void IngresarPuestoNoTiraExpeciones(PuestoModel puestoAInsertar, string nombrePreActualizacion = "")
+        private void IngresarPuestoNoTiraExpeciones(PuestoModel puestoAInsertar)
         {
             // creamos handler que contiene el metodo que deseamos probar
             EstructuraOrgHandler estructuraOrgHandler = new();
@@ -392,12 +442,12 @@ namespace unit_tests.DanielE
             // action
             try
             {
-                estructuraOrgHandler.InsertarPuesto(nombrePreActualizacion, puestoAInsertar);
+                estructuraOrgHandler.InsertarPuesto("", puestoAInsertar);
             }
             catch (Exception e)
             {
                 // assert
-                // en caso de tirar una exepcion la prueba falla y se muestra el error
+                // en caso de tirar una excepcion la prueba falla y se muestra el error
                 Assert.Fail(
                     string.Format("Se dio la excepción de tipo {0} con el mensaje: {1}", e.GetType(), e.Message)
                );
@@ -418,6 +468,43 @@ namespace unit_tests.DanielE
             // revisamos que el puesto ingresado y el esperado sean iguales
             // asi nos aseguramos de que se ingreso correctamente
             Assert.IsTrue(SonIgualesPuestos(puestoAInsertar, puestoIngresado), "El puesto leído de la base y el esperado no son iguales");
+        }
+
+        // metodo que ingresa un puesto y verifica que se haya ingresado sin tirar excepciones
+        // details: este metodos solo hace assert para revisar que no se hayan tirado excepciones y que el puesto ingresado se ingreso correctamente en la base
+        private void ActualizarPuestoNoTiraExpeciones(PuestoModel puestoAInsertar, string nombrePreActualizacion)
+        {
+            // creamos handler que contiene el metodo que deseamos probar
+            EstructuraOrgHandler estructuraOrgHandler = new();
+
+            // action
+            try
+            {
+                estructuraOrgHandler.ActualizarPuesto(nombrePreActualizacion, puestoAInsertar);
+            }
+            catch (Exception e)
+            {
+                // assert
+                // en caso de tirar una excepcion la prueba falla y se muestra el error
+                Assert.Fail(
+                    string.Format("Se dio la excepción de tipo {0} con el mensaje: {1}", e.GetType(), e.Message)
+               );
+            }
+
+            // assert
+
+            // leemos los puestos luego de la insercion
+            List<PuestoModel> puestosBasePostInsercion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // buscamos el puesto que se ingreso
+            // solo buscamos por el nombre porque este es unico ya que es llave primaria en la base de datos
+            PuestoModel? puestoIngresado = puestosBasePostInsercion.Find(x => x.Nombre == puestoAInsertar.Nombre);
+
+            // si es nulo el puestoIngresado significa que no se ingreso en la base de datos
+            Assert.IsNotNull(puestoIngresado, "El puesto no se ingresó en la base de datos");
+
+            // revisamos que el puesto ingresado y el esperado sean iguales
+            // asi nos aseguramos de que se ingreso correctamente
         }
 
         // brief: metodo que compara si dos listas de puesto model son iguales
