@@ -18,24 +18,24 @@ namespace unit_tests.SharedResources
             {
                 Nombre = "Jefe",
                 Plazas = 1,
-                SalarioBruto = 4400.56m,
-                Beneficios = 1500.89m,
+                SalarioBruto = 4400m,
+                Beneficios = 1500m,
                 FechaAnalisis = fechaCreacion
             });
             puestosSemilla.Add(new PuestoModel
             {
                 Nombre = "Empacador",
                 Plazas = 25,
-                SalarioBruto = 3698.56m,
-                Beneficios = 45687.78m,
+                SalarioBruto = 3698m,
+                Beneficios = 45687m,
                 FechaAnalisis = fechaCreacion
             });
             puestosSemilla.Add(new PuestoModel
             {
                 Nombre = "Cajero",
                 Plazas = 8,
-                SalarioBruto = 4567.56m,
-                Beneficios = 4578.08m,
+                SalarioBruto = 4567m,
+                Beneficios = 4578m,
                 FechaAnalisis = fechaCreacion
             });
 
