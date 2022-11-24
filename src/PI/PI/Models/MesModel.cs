@@ -4,7 +4,7 @@
     {
         public string NombreMes { get; set; }
 
-        public string FechaAnalisis { get; set; }   
+        public DateTime FechaAnalisis { get; set; }   
 
         public decimal SalarioPorMes { get; set; }
 
