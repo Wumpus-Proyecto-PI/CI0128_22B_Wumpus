@@ -119,19 +119,6 @@
         }
     </li>
 
-    @*Salarios*@
-    <li class="table-row">
-        <div class="col col-1">
-            <p class="datos-calculados texto-nombres">Salarios</p>
-        </div>
-        @foreach (var mes in meses)
-        {
-            <div class="col col-1">
-                @estructuraOrgHandler.obtenerMontoTotalSalarios(egresos[0].FechaAnalisis)
-            </div>
-        }
-    </li>
-
     @*Gastos fijos*@
     @foreach (var gasto in gastosFijos)
     {
@@ -198,11 +185,10 @@
         decimal total = 0;
 
         decimal totalEgresos = flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mes);
-        decimal totalSalarios = estructuraOrgHandler.obtenerMontoTotalSalarios(egresos[0].FechaAnalisis);
         decimal inversionInicialDelMes = mes.InversionPorMes;
         decimal totalGastosFijos = calcularTotalGastosFijos();
 
-        total = totalEgresos + totalSalarios + inversionInicialDelMes + totalGastosFijos;
+        total = totalEgresos + inversionInicialDelMes + totalGastosFijos;
 
         return FormatManager.ToFormatoEstadistico(total);
     }
