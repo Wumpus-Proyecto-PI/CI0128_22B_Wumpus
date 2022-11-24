@@ -40,24 +40,12 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Totales</p>
         </div>
-        <div class="col col-1">
-            0
-        </div>
-        <div class="col col-1">
-            0
-        </div>
-        <div class="col col-1">
-            0
-        </div>
-        <div class="col col-1">
-            0
-        </div>
-        <div class="col col-1">
-            0
-        </div>
-        <div class="col col-1">
-            0
-        </div>
+        @foreach (var mes in meses) {      
+            <div class="col col-1">
+                @calcularEgresoMensualTotal(mes)
+            </div>
+        }
+        
     </li>
 
     @*Inversion inicial*@
@@ -67,30 +55,16 @@
             <div class="col col-1">
                 <p class="datos-calculados texto-nombres">Inversión inicial</p>
             </div>
-            <div class="col col-1">
-                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-                <span class="focus-border"></span>
-            </div>
-            <div class="col col-1">
-                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-                <span class="focus-border"></span>
-            </div>
-            <div class="col col-1">
-                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-                <span class="focus-border"></span>
-            </div>
-            <div class="col col-1">
-                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-                <span class="focus-border"></span>
-            </div>
-            <div class="col col-1">
-                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-                <span class="focus-border"></span>
-            </div>
-            <div class="col col-1">
-                <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-                <span class="focus-border"></span>
-            </div>
+            @foreach (var mes in meses) 
+            {
+                <div class="col col-1">
+                        <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
+                        class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(mes.InversionPorMes)"
+                        @onchange="n => mes.InversionPorMes = Convert.ToDecimal(n.Value.ToString())"
+                        @onfocusout="() => actualizarInversionPorMes(mes)" />
+                        <span class="focus-border"></span>
+                </div>
+            }
         </li>
     }
 
@@ -150,30 +124,12 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Salarios</p>
         </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
+        @foreach (var mes in meses)
+        {
+            <div class="col col-1">
+                @estructuraOrgHandler.obtenerMontoTotalSalarios(egresos[0].FechaAnalisis)
+            </div>
+        }
     </li>
 
     @*Gastos fijos*@
@@ -218,11 +174,85 @@
     [Parameter]
     public decimal inversionInicial { get; set; }
 
+    [Parameter]
+    public List<MesModel> meses { get; set; }
+
     public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
 
-    public string calcularEgresoMensualTotal(string mes)
+    public EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
+
+
+    public decimal calcularTotalGastosFijos() 
     {
-        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mes, egresos[0].FechaAnalisis));
+        decimal total = 0; 
+        foreach (GastoFijoModel gasto in gastosFijos)
+        {
+            total += gasto.Monto/12; 
+        }
+
+        return total; 
+    }
+
+    public string calcularEgresoMensualTotal(MesModel mes)
+    {
+        decimal total = 0;
+
+        decimal totalEgresos = flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mes);
+        decimal totalSalarios = estructuraOrgHandler.obtenerMontoTotalSalarios(egresos[0].FechaAnalisis);
+        decimal inversionInicialDelMes = mes.InversionPorMes;
+        decimal totalGastosFijos = calcularTotalGastosFijos();
+
+        total = totalEgresos + totalSalarios + inversionInicialDelMes + totalGastosFijos;
+
+        return FormatManager.ToFormatoEstadistico(total);
+    }
+
+    public decimal obtenerTotalInversiones()
+    {
+        return flujoDeCajaHandler.obtenerMontoTotalInversiones(egresos[0].FechaAnalisis);
+    }
+
+    public decimal obtenerDiferencia(decimal ingresado, decimal actual) {
+        decimal diferencia = 0;
+
+        if (ingresado > actual) {
+            diferencia = ingresado - actual;
+        }
+        else if (ingresado == 0) {
+            diferencia = 0; 
+        }
+        else 
+        {
+            diferencia = actual - ingresado;
+        }
+
+        return diferencia;
+    }
+
+    public void actualizarInversionPorMes(MesModel mes) {
+
+        decimal inversionActual = flujoDeCajaHandler.obtenerInversionDelMes(mes);
+
+        decimal totalInversiones = 0; 
+
+        if (inversionActual > 0) {
+            decimal diferencia = obtenerDiferencia(mes.InversionPorMes, inversionActual);
+            totalInversiones = obtenerTotalInversiones() + diferencia; 
+        }
+        else if (inversionActual == 0 && mes.InversionPorMes>=0) {
+            totalInversiones = obtenerTotalInversiones() + mes.InversionPorMes;
+        }
+        else if (mes.InversionPorMes < 0){
+            mes.InversionPorMes = inversionActual;
+            totalInversiones = inversionInicial + 1;
+        }
+
+        if (inversionInicial >= totalInversiones) {
+            flujoDeCajaHandler.actualizarInversionPorMes(mes);
+        }
+        else {
+            mes.InversionPorMes = inversionActual; 
+        }
     }
 
     public void actualizarEgreso(EgresoModel egreso)
