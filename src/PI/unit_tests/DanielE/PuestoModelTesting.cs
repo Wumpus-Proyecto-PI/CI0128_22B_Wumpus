@@ -80,8 +80,8 @@ namespace unit_tests.DanielE
             {
                 Nombre = "Nuevo Puesto",
                 Plazas = 48,
-                Beneficios = 4567.89m,
-                SalarioBruto = 7894.45m,
+                Beneficios = 4567m,
+                SalarioBruto = 7894m,
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
@@ -159,8 +159,8 @@ namespace unit_tests.DanielE
             {
                 Nombre = "Nuevo Puesto",
                 Plazas = 48,
-                Beneficios = 4567.89m,
-                SalarioBruto = 7894.45m,
+                Beneficios = 4567m,
+                SalarioBruto = 7894m,
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
