@@ -236,5 +236,22 @@ namespace PI.Handlers
             return puestoActual;
         }
 
+        public decimal obtenerMontoTotalSalarios(DateTime fechaAnalisis)
+        {
+            decimal total = 0.0m;
+
+            string consulta = "SELECT SUM(salarioBruto) as total" +
+                             " FROM PUESTO" +
+                             " WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("total"))
+            {
+                total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
+            }
+
+            return total;
+        }
+
     }
 }
