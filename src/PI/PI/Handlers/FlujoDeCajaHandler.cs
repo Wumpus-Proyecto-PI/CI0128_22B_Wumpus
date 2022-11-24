@@ -62,7 +62,7 @@ namespace PI.Handlers
                 {
                     NombreMes = Convert.ToString(columna["nombre"]),
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
-                    InversionPorMes = Convert.ToDecimal(columna["invresionPorMes"]),
+                    InversionPorMes = Convert.ToDecimal(columna["inversionPorMes"]),
  
                 }
                 );
