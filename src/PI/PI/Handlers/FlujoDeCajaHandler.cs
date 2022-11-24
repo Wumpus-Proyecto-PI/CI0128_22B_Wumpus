@@ -78,10 +78,17 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
+        public void crearEgresos(DateTime fechaAnalisis)
+        {
+            string consulta = "EXEC crearEgresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            enviarConsultaVoid(consulta);
+        }
+
         public void crearFlujoDeCaja(DateTime fechaAnalisis)
         {
             //this.crearMeses(fechaAnalisis);
             this.crearIngresos(fechaAnalisis);
+            this.crearEgresos(fechaAnalisis);
         }
 
         public List<IngresoModel> obtenerIngresos(DateTime fechaAnalisis)
@@ -114,7 +121,7 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
-        public decimal obtenerMontoTotaldeIngresosPorMes(string mes, DateTime fechaAnalisis)
+        public decimal obtenerMontoTotalDeIngresosPorMes(string mes, DateTime fechaAnalisis)
         {
             decimal total = 0.0m;
 
@@ -132,5 +139,52 @@ namespace PI.Handlers
             return total;
         }
 
+        public List<EgresoModel> obtenerEgresos(DateTime fechaAnalisis)
+        {
+            string consulta = "SELECT * FROM EGRESO WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            List<EgresoModel> egresos = new List<EgresoModel>();
+            foreach (DataRow columna in tablaResultado.Rows)
+            {
+                egresos.Add(
+                new EgresoModel
+                {
+                    FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
+                    Tipo = Convert.ToString(columna["tipo"]),
+                    Monto = Convert.ToDecimal(columna["monto"]),
+                    Mes = Convert.ToString(columna["mes"])
+                }
+                );
+            }
+            return egresos;
+        }
+
+        public void actualizarEgreso(EgresoModel egreso)
+        {
+            string consulta = "UPDATE EGRESO" +
+                              " SET monto = " + egreso.Monto +
+                              " WHERE fechaAnalisis = '" + egreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                              "' AND mes = '" + egreso.Mes +
+                              "' AND tipo = '" + egreso.Tipo + "'";
+            enviarConsultaVoid(consulta);
+        }
+
+        public decimal obtenerMontoTotalDeEgresosPorMes(string mes, DateTime fechaAnalisis)
+        {
+            decimal total = 0.0m;
+
+            string consulta = "SELECT SUM(monto) as total" +
+                             " FROM EGRESO" +
+                             " WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                             "' AND mes = '" + mes + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("total"))
+            {
+                total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
+            }
+
+            return total;
+        }
     }
 }
