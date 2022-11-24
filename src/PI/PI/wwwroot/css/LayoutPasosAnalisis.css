@@ -8,15 +8,18 @@ html, body, main {
     overflow-x: hidden;
 }
 
-
-
-#encabezado {
-    width: 100%;
-    padding-top: 10px;
-    height: 100px;
-    box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
-    margin: 0px 5px 0px 0px;
+main {
+    min-height: 100vh;
 }
+
+
+    #encabezado {
+        width: 100%;
+        padding-top: 10px;
+        height: 100px;
+        box-shadow: 2px 2px 10px rgba(158, 158, 158, 0.5);
+        margin: 0px 5px 0px 0px;
+    }
 
     #encabezado .row {
         margin-left: 0px !important;
