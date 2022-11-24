@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using Microsoft.VisualBasic;
 using PI;
 using PI.Handlers;
 using PI.Models;
@@ -12,7 +13,7 @@ using unit_tests.SharedResources;
 
 namespace unit_tests.DanielE
 {
-    // class: clase de testing para el modelo puesto y su interaccion con la base de datos
+    // class: clase de testing para el modelo puesto y su interaction con la base de datos
     [TestClass]
     public class PuestoModelTesting
     {
@@ -65,49 +66,6 @@ namespace unit_tests.DanielE
             PuestoTestingHandler = null;
         }
 
-        // brief: metodo que compara si dos listas de puesto model son iguales
-        // details: se compara cada uno de los atributos del puesto model
-        // return: true si las dos listas son iguales y false en caso contrario
-        static public bool SonIgualesListasPuestos(List<PuestoModel> esperada, List<PuestoModel> actual)
-        {
-            esperada = esperada.OrderBy(x => x.Nombre).ToList();
-            actual = actual.OrderBy(x => x.Nombre).ToList();
-
-            bool listasIguales = true;
-            if (esperada.Count != actual.Count)
-            {
-                listasIguales = false;
-            }
-            else
-            {
-                for (int i = 0; i < esperada.Count && listasIguales == true; ++i)
-                {
-                    listasIguales = SonIgualesPuestos(esperada[i], actual[i]);
-                }
-            }
-            return listasIguales;
-        }
-
-        // brief: metodo que compara si dos puestos son iguales
-        // details: se compara cada uno de los atributos del puesto model
-        // return: true si los dos puestos son iguales y false en caso contrario
-        static public bool SonIgualesPuestos(PuestoModel esperada, PuestoModel actual)
-        {
-            bool puestosIguales = false;
-
-            if (esperada.Nombre == actual.Nombre
-                && esperada.Plazas == actual.Plazas
-                && esperada.SalarioBruto == actual.SalarioBruto
-                && esperada.Beneficios == actual.Beneficios
-                && esperada.FechaAnalisis == actual.FechaAnalisis
-                )
-            {
-                puestosIguales = true;
-            }
-
-            return puestosIguales;
-        }
-
         // este test prueba que al insertar un nuevo puesto no se modifiquen los puestos ya existentes
         [TestMethod]
         public void InsertarPuesto_NoModificaOtrosPuestos()
@@ -130,8 +88,8 @@ namespace unit_tests.DanielE
             // creamos handler con el metodo que deseamos probar
             EstructuraOrgHandler estructuraOrgHandler= new();
 
-            // accion
-            estructuraOrgHandler.InsertarPuesto("", nuevoPuesto);
+            // action
+            IngresarPuestoNoTiraExpeciones(nuevoPuesto);
 
             // assert
             // obtenemos los puestos de la base
@@ -144,7 +102,7 @@ namespace unit_tests.DanielE
             bool puestoIguales = SonIgualesListasPuestos(puestosPreInsercion, puestosPostInsercion);
 
             Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
-            Assert.IsTrue(FueInsertado, "'Nuevo puesto' no se insertó en la base");
+            Assert.IsTrue(FueInsertado, $"'{nuevoPuesto.Nombre}' no se insertó en la base");
         }
 
         // este test prueba que al eliminar puesto no se modifiquen los puestos ya existentes
@@ -162,7 +120,7 @@ namespace unit_tests.DanielE
             // creamos handler con el metodo que deseamos probar
             EstructuraOrgHandler estructuraOrgHandler = new();
 
-            // accion
+            // action
             // eliminamos el [1] puesto de la lista de puestos semilla
             estructuraOrgHandler.EliminarPuesto(puestoELiminar);
 
@@ -209,9 +167,8 @@ namespace unit_tests.DanielE
             // creamos handler con el metodo que deseamos probar
             EstructuraOrgHandler estructuraOrgHandler = new();
 
-            // accion
-            // eliminamos el [1] puesto de la lista de puestos semilla
-            estructuraOrgHandler.InsertarPuesto(puestoActualizar.Nombre, nuevoPuesto);
+            // action
+            IngresarPuestoNoTiraExpeciones(nuevoPuesto, puestoActualizar.Nombre);
 
             // assert
             // obtenemos los puestos de la base
@@ -260,9 +217,9 @@ namespace unit_tests.DanielE
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
-            // accion
+            // action
             // assert
-            // la accion y el assert se realizan dentro del siguiente metodo
+            // la action y el assert se realizan dentro del siguiente metodo
             IngresarPuestoNoTiraExpeciones(puestoConSalarioDecimal);
 
             // leemos los puestos. En este caso deberia haber solo uno
@@ -289,8 +246,8 @@ namespace unit_tests.DanielE
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
-            // accion
-            // la accion y el assert se realizan dentro del siguiente metodo
+            // action
+            // la action y el assert se realizan dentro del siguiente metodo
             IngresarPuestoNoTiraExpeciones(puestoConSalarioDecimal);
 
             // assert
@@ -301,6 +258,77 @@ namespace unit_tests.DanielE
             Assert.AreEqual(1, puestosBasePostInsercion.Count, "En la base se encontró más de un puesto cuando solo se ingresó uno");
         }
 
+        [TestMethod]
+        public void ObtenerPuestosRetornaPuestosDelAnalisisCorrespondiente()
+        {
+            // arrange
+            // creamos un segundo analisis en la base para el negocio actual
+            // para verificar que obtener puestos de un analisis nos devuelve solo los del analisis correspondiente
+            AnalisisHandler analisisHandler= new ();
+            DateTime fechaSegundoAnalisis = analisisHandler.IngresarAnalisis(NegocioFicticio.ID, "En marcha");
+
+            // insertamos en el primer analisis (analisis ficticio) del negocio ficticio una lista de puestos semilla
+            List<PuestoModel> puestosEsperadosPrimerAnalisis = PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+
+            // creamos una lista de puestos para insertar en el segundo analisis del negocio ficticio
+            // esta lista debe ser diferente a la ingresadas en el primr analisis con el metodo PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosEsperadosSegundoAnalisis = new()
+            {
+                new PuestoModel() {
+                    Nombre = "Cajero",
+                    Plazas = 45,
+                    SalarioBruto = 7894m,
+                    Beneficios = 8963m,
+                    FechaAnalisis = fechaSegundoAnalisis
+                },
+                new PuestoModel() {
+                    Nombre = "Repartidor",
+                    Plazas = 11,
+                    SalarioBruto = 4568m,
+                    Beneficios = 9632m,
+                    FechaAnalisis = fechaSegundoAnalisis
+                },
+                new PuestoModel() {
+                    Nombre = "Conserje",
+                    Plazas = 4,
+                    SalarioBruto = 7894m,
+                    Beneficios = 1234m,
+                    FechaAnalisis = fechaSegundoAnalisis
+                },
+                new PuestoModel() {
+                    Nombre = "Fotografo",
+                    Plazas = 6,
+                    SalarioBruto = 4567m,
+                    Beneficios = 78941m,
+                    FechaAnalisis = fechaSegundoAnalisis
+                }
+            };
+            // insertamos en el segundo analisis del negocio ficticio la lista de puestos semilla anterior
+            puestosEsperadosSegundoAnalisis = PuestoTestingHandler.InsertarPuestosSemillaEnBase(puestosEsperadosSegundoAnalisis);
+
+            // creamos handler con el metodo que deseamos probar
+            EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
+
+            // action
+            // esta primera lista deberia ser igual al que se ingreso en el metodo PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosEnBaseDePrimerAnalisis = estructuraOrgHandler.ObtenerListaDePuestos(AnalisisFicticio.FechaCreacion);
+
+            // esta lista deberia de estar vacia porque no se le ingreso ningun puesto
+            List<PuestoModel> puestosEnBaseDeSegundoAnalisis = estructuraOrgHandler.ObtenerListaDePuestos(fechaSegundoAnalisis);
+
+            // assert
+            // revisamos que los puestos del primer analisis son iguales a los esperados
+            Assert.IsTrue(SonIgualesListasPuestos(puestosEsperadosPrimerAnalisis, puestosEnBaseDePrimerAnalisis), "Los puestos esperados del primer análisis no son iguales a los leídos de la base");
+
+            // revisamos que los puestos del segundo analisis son iguales a los esperados
+            Assert.IsTrue(SonIgualesListasPuestos(puestosEsperadosSegundoAnalisis, puestosEnBaseDeSegundoAnalisis), "Los puestos esperados del segundo análisis no son iguales a los leídos de la base");
+
+            // revisamos que los puestos de los dos analisis sean diferentes porque se les ingreso listas diferentes de puestos
+            Assert.IsFalse(SonIgualesListasPuestos(puestosEnBaseDePrimerAnalisis, puestosEnBaseDeSegundoAnalisis), "Los puestos leídos del primer análisis y del segundo análisis son iguales y no deberían");
+        }
+
+        // // metodos que asisten a los metodos de testing
+
         // metodo que ingresa un puesto y verifica que se haya ingresado sin tirar excepciones
         // details: este metodos solo hace assert para revisar que no se hayan tirado excepciones y que el puesto ingresado se ingreso correctamente en la base
         private void IngresarPuestoNoTiraExpeciones(PuestoModel puestoAInsertar, string nombrePreActualizacion = "")
@@ -308,7 +336,7 @@ namespace unit_tests.DanielE
             // creamos handler que contiene el metodo que deseamos probar
             EstructuraOrgHandler estructuraOrgHandler = new();
 
-            // accion
+            // action
             try
             {
                 estructuraOrgHandler.InsertarPuesto(nombrePreActualizacion, puestoAInsertar);
@@ -337,6 +365,47 @@ namespace unit_tests.DanielE
             // revisamos que el puesto ingresado y el esperado sean iguales
             // asi nos aseguramos de que se ingreso correctamente
             Assert.IsTrue(SonIgualesPuestos(puestoAInsertar, puestoIngresado), "El puesto leído de la base y el esperado no son iguales");
+        }
+
+        // brief: metodo que compara si dos listas de puesto model son iguales
+        // details: se compara cada uno de los atributos del puesto model
+        // return: true si las dos listas son iguales y false en caso contrario
+        static public bool SonIgualesListasPuestos(List<PuestoModel> esperada, List<PuestoModel> actual)
+        {
+            esperada = esperada.OrderBy(x => x.Nombre).ToList();
+            actual = actual.OrderBy(x => x.Nombre).ToList();
+
+            bool listasIguales = true;
+            if (esperada.Count != actual.Count)
+            {
+                listasIguales = false;
+            }
+            else
+            {
+                for (int i = 0; i < esperada.Count && listasIguales == true; ++i)
+                {
+                    listasIguales = SonIgualesPuestos(esperada[i], actual[i]);
+                }
+            }
+            return listasIguales;
+        }
+
+        // brief: metodo que compara si dos puestos son iguales
+        // details: se compara cada uno de los atributos del puesto model
+        // return: true si los dos puestos son iguales y false en caso contrario
+        static public bool SonIgualesPuestos(PuestoModel esperada, PuestoModel actual)
+        {
+            bool puestosIguales = false;
+
+            if (esperada.Nombre == actual.Nombre
+                && esperada.Plazas == actual.Plazas
+                && esperada.SalarioBruto == actual.SalarioBruto
+                && esperada.Beneficios == actual.Beneficios)
+            {
+                puestosIguales = true;
+            }
+
+            return puestosIguales;
         }
     }
 }
