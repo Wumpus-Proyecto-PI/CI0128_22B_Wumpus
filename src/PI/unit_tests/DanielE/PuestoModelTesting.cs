@@ -327,6 +327,59 @@ namespace unit_tests.DanielE
             Assert.IsFalse(SonIgualesListasPuestos(puestosEnBaseDePrimerAnalisis, puestosEnBaseDeSegundoAnalisis), "Los puestos leídos del primer análisis y del segundo análisis son iguales y no deberían");
         }
 
+        [TestMethod]
+        public void ExisteEnBase_RetornaVerdadero_CuandoEncuentraElPuesto()
+        {
+            // arrange 
+            // creamos puesto a ingresar en la base para revisar si existe
+            PuestoModel existePuesto = new PuestoModel
+            {
+                Nombre = "Puesto existe",
+                Plazas = 48,
+                Beneficios = 4567m,
+                SalarioBruto = 7894m,
+                FechaAnalisis = AnalisisFicticio.FechaCreacion
+            };
+            PuestoTestingHandler.InsertarPuestosSemillaEnBase(existePuesto);
+
+            // creamos handler con el metodo que deseamos probar
+            EstructuraOrgHandler estructuraOrgHandler = new();
+
+            // action
+            bool existeEnBase = estructuraOrgHandler.existePuestoEnBase(existePuesto.Nombre, existePuesto.FechaAnalisis);
+
+            // assert
+
+            // verificamos que el metodo si devuelva true porque el puesto si existe en la base ya que si lo insertamos
+            Assert.IsTrue(existeEnBase, $"El puesto {existePuesto.Nombre} no existe en la base y no debería");
+        }
+
+        [TestMethod]
+        public void ExisteEnBase_RetornaFalso_CuandoNoEncuentraElPuesto()
+        {
+            // arrange 
+            // creamos puesto a ingresar en la base para revisar si existe
+            PuestoModel noExistePuesto = new PuestoModel
+            {
+                Nombre = "No existe puesto",
+                Plazas = 48,
+                Beneficios = 4567m,
+                SalarioBruto = 7894m,
+                FechaAnalisis = AnalisisFicticio.FechaCreacion
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            EstructuraOrgHandler estructuraOrgHandler = new();
+
+            // action
+            bool existeEnBase = estructuraOrgHandler.existePuestoEnBase(noExistePuesto.Nombre, noExistePuesto.FechaAnalisis);
+
+            // assert
+
+            // verificamos que el metodo si devuelva true porque el puesto si existe en la base ya que si lo insertamos
+            Assert.IsFalse(existeEnBase, $"El puesto {noExistePuesto.Nombre} si existe en la base y no debería");
+        }
+
         // // metodos que asisten a los metodos de testing
 
         // metodo que ingresa un puesto y verifica que se haya ingresado sin tirar excepciones
