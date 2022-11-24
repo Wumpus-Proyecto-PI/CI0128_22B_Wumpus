@@ -1,28 +1,19 @@
-﻿
+﻿@using PI.Services;
+@using PI.Handlers;
+@using PI.Models;
+
 <li class="table-row-flujoMensual">
     <div class="col col-1">
         <p class="datos-calculados texto-nombres">Flujo mensual</p>
     </div>
-    <div class="col col-1">
-        0
-    </div>
-    <div class="col col-1">
-        0
-    </div>
-    <div class="col col-1">
-        0
-    </div>
-    <div class="col col-1">
-        0
-    </div>
-    <div class="col col-1">
-        0
-    </div>
-    <div class="col col-1">
-        0
-    </div>
+    @foreach(var mes in flujoMensual){
+        <div class="col col-1">
+            @mes
+        </div>
+    }
 </li>
 
 @code {
-
+    [Parameter]
+    public List<string> flujoMensual { get; set; }
 }
