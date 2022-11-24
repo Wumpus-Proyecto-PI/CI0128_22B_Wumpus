@@ -1,6 +1,9 @@
 ﻿@using PI.Handlers
 @using PI.Models
 @using PI.Services
+@using BlazorCleave
+@using BlazorCleave.Data
+@using System.Globalization
 
 <ul class="responsive-table">
 
@@ -58,7 +61,7 @@
     </li>
 
     @*Inversion inicial*@
-    @if (true)
+    @if (estadoIniciado == false)
     {
         <li class="table-row">
             <div class="col col-1">
@@ -91,103 +94,61 @@
         </li>
     }
 
-    @*Ventas de contado*@
+    @*Compras de contado*@
     <li class="table-row">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Compras de contado</p>
         </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
+        @foreach (var egresoActual in egresos.Where(t => t.Tipo == "contado"))
+        {
+            <div class="col col-1">
+                <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
+                    class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(egresoActual.Monto)"
+                    @onchange="n => egresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
+                    @onfocusout="() => actualizarEgreso(egresoActual)" />
+                <span class="focus-border"></span>
+            </div>
+        }
     </li>
 
-    @*Ventas a credito*@
+    @*Compras a credito*@
     <li class="table-row">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Compras a crédito</p>
         </div>
+        @foreach (var egresoActual in egresos.Where(t => t.Tipo == "credito"))
+        {
+            <div class="col col-1">
+                <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
+                    class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(egresoActual.Monto)"
+                    @onchange="n => egresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
+                    @onfocusout="() => actualizarEgreso(egresoActual)" />
+                <span class="focus-border"></span>
+            </div>
+        }
+    </li>
+
+    @*Otros egresos*@
+    <li class="table-row">
         <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
+            <p class="datos-calculados texto-nombres">Otros egresos</p>
         </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
+        @foreach (var egresoActual in egresos.Where(t => t.Tipo == "otros"))
+        {
+            <div class="col col-1">
+                <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
+                    class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(egresoActual.Monto)"
+                    @onchange="n => egresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
+                    @onfocusout="() => actualizarEgreso(egresoActual)" />
+                <span class="focus-border"></span>
+            </div>
+        }
     </li>
 
     @*Salarios*@
     <li class="table-row">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Salarios</p>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-        <div class="col col-1">
-            <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
-            <span class="focus-border"></span>
-        </div>
-    </li>
-
-    @*Otros ingresos*@
-    <li class="table-row">
-        <div class="col col-1">
-            <p class="datos-calculados texto-nombres">Otros egresos</p>
         </div>
         <div class="col col-1">
             <input class="effect-1 text-center" type="text" maxlength=16 @*@bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)" *@>
@@ -247,5 +208,26 @@
 @code {
     [Parameter]
     public List<GastoFijoModel> gastosFijos { get; set; }
+
+    [Parameter]
+    public List<EgresoModel> egresos { get; set; }
+
+    [Parameter]
+    public bool estadoIniciado { get; set; }
+
+    [Parameter]
+    public decimal inversionInicial { get; set; }
+
+    public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+
+    public string calcularEgresoMensualTotal(string mes)
+    {
+        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotaldeEgresosPorMes(mes, egresos[0].FechaAnalisis));
+    }
+
+    public void actualizarEgreso(EgresoModel egreso)
+    {
+        flujoDeCajaHandler.actualizarEgreso(egreso);
+    }
 
 }
