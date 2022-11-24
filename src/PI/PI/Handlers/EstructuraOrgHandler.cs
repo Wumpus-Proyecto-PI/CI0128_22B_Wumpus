@@ -38,8 +38,9 @@ namespace PI.Handlers
             {
                 // en caso de no existir lo insertamos como un nuevo puesto
                 // en estaconsulta de sql convertimos los decimales según si es con coma o punto para evitar errores
-                string insert = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '"+ puesotAInsertar.SalarioBruto.ToString() 
-                + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.') INSERT INTO PUESTO values ("
+                string insert = "DECLARE @salarioTemp varchar(20), @beneficiosTemp varchar(20) SET @salarioTemp = '"+ puesotAInsertar.SalarioBruto.ToString() 
+                + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.')  SET @beneficiosTemp = '"+puesotAInsertar.Beneficios.ToString()
+                + "' SET @beneficiosTemp = REPLACE(@beneficiosTemp, ',', '.') INSERT INTO PUESTO values ("
                 + "'" + puesotAInsertar.Nombre + "', "
                 + "'" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
                 + puesotAInsertar.Plazas.ToString() + ", "
@@ -87,8 +88,9 @@ namespace PI.Handlers
             bool error = false;
 
             // consulta sql con la cual actualizamos el puesto. Aquí támbien casteamos los decimales según si tiene punto o decimal
-            string update = "DECLARE @salarioTemp varchar(20) SET @salarioTemp = '" + puestoInsertar.SalarioBruto.ToString()
-                + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.') UPDATE PUESTO SET "
+            string update = "DECLARE @salarioTemp varchar(20), @beneficiosTemp varchar(20) SET @salarioTemp = '" + puestoInsertar.SalarioBruto.ToString()
+                + "' SET @salarioTemp = REPLACE(@salarioTemp, ',', '.') SET @beneficiosTemp = '" +puestoInsertar.Beneficios.ToString()
+                + "' SET @beneficiosTemp = REPLACE(@beneficiosTemp, ',' , '.') UPDATE PUESTO SET "
                 + "nombre='" + puestoInsertar.Nombre + "', "
                 + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
                 + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp), beneficios=" + puestoInsertar.Beneficios
