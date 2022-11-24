@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using PI;
 using PI.Handlers;
 using PI.Models;
@@ -27,15 +28,22 @@ namespace unit_tests.DanielE
         // analisis ficticio creado para la prueba
         private AnalisisModel? AnalisisFicticio = null;
 
+        // handler de testing usado para manejar la creacion de puestos semilla
+        PuestoTestingHandler? PuestoTestingHandler = null;
+
         // en la inicializacion creamos un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
         [TestInitialize]
         public void Setup()
         {
 
             // creamos un negocio ficticio al usuario de testing de wumpus
-            // tambien le creamos un analisis vacio para realizar las pruebas
             NegocioTestingHandler = new();
+
+            // tambien le creamos un analisis vacio para realizar las pruebas
             AnalisisHandler = new();
+
+            // creamos instancia de handler de testing usado para manejar la creacion de puestos semilla
+            PuestoTestingHandler = new();
 
             // para que el test exista debe existir el siguiente usuario en la base
             // usuario: wumpustest@gmail.com 
@@ -54,6 +62,7 @@ namespace unit_tests.DanielE
             NegocioFicticio = null;
             AnalisisHandler = null;
             AnalisisFicticio = null;
+            PuestoTestingHandler = null;
         }
 
         // brief: metodo que compara si dos listas de puesto model son iguales
@@ -105,9 +114,8 @@ namespace unit_tests.DanielE
         {
             // arrange
 
-            PuestoTestingHandler puestoTestingHandler = new();
             // ingresamos una lista de puestos inicial
-            List<PuestoModel> puestosPreInsercion = puestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosPreInsercion = PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
 
             // creamos puesto que vamos a insertar de prueba
             PuestoModel nuevoPuesto = new PuestoModel
@@ -127,7 +135,7 @@ namespace unit_tests.DanielE
 
             // assert
             // obtenemos los puestos de la base
-            List<PuestoModel> puestosPostInsercion = puestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosPostInsercion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
             bool FueInsertado = puestosPostInsercion.Exists(x => x.Nombre == nuevoPuesto.Nombre);
 
             // removemos de la lista el que insertamos para comparar si el resto de puestos se vieron afectados
@@ -145,9 +153,8 @@ namespace unit_tests.DanielE
         {
             // arrange
 
-            PuestoTestingHandler puestoTestingHandler = new();
             // ingresamos una lista de puestos inicial
-            List<PuestoModel> puestosPreInsercion = puestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosPreInsercion = PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
            
             // deseamos elminar el puesto de la posicion [1]
             PuestoModel puestoELiminar = puestosPreInsercion[1];
@@ -161,7 +168,7 @@ namespace unit_tests.DanielE
 
             // assert
             // obtenemos los puestos de la base
-            List<PuestoModel> puestosPostInsercion = puestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosPostInsercion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
             bool FueInsertado = puestosPostInsercion.Exists(x => x.Nombre == puestoELiminar.Nombre);
 
             // removemos de la lista de puestos semilla el que eliminamos en la base para comparar 
@@ -183,9 +190,8 @@ namespace unit_tests.DanielE
         {
             // arrange
 
-            PuestoTestingHandler puestoTestingHandler = new();
             // ingresamos una lista de puestos inicial
-            List<PuestoModel> puestosPreInsercion = puestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosPreInsercion = PuestoTestingHandler.InsertarPuestosSemillaEnBase(AnalisisFicticio.FechaCreacion);
 
             // deseamos actualizar el nombre del puesto de la posicion [1]
             PuestoModel puestoActualizar = puestosPreInsercion[1];
@@ -209,7 +215,7 @@ namespace unit_tests.DanielE
 
             // assert
             // obtenemos los puestos de la base
-            List<PuestoModel> puestosPostInsercion = puestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+            List<PuestoModel> puestosPostInsercion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
             bool ExisteViejoNombre = puestosPostInsercion.Exists(x => x.Nombre == puestoActualizar.Nombre);
             
             PuestoModel? puestoActualizadoEnBase = puestosPostInsercion.Find(x => x.Nombre == nuevoPuesto.Nombre);
@@ -230,10 +236,107 @@ namespace unit_tests.DanielE
             Assert.IsTrue(puestoIguales, "Los puestos pre-inserción son diferentes a los puestos post-inserción");
 
             // revisamos que no exista el puesto antes de ser actualizado en la lista de puesto que leimos de la base
-            Assert.IsFalse(ExisteViejoNombre, $"No se modificó el nombre anterior '{puestoActualizar}'");
+            Assert.IsFalse(ExisteViejoNombre, $"No se modificó el nombre anterior '{puestoActualizar.Nombre}'");
 
             // revisamos que si exista el nuevo nombre del puesot que actualizamos en la lista de puesto que leimos de la base
-            Assert.IsTrue(puestoActualizado, $"Sí se modificó el nombre y se asignó el nombre '{nuevoPuesto}'");
+            Assert.IsTrue(puestoActualizado, $"Sí se modificó el nombre {puestoActualizar.Nombre} y se asignó el nombre '{nuevoPuesto.Nombre}'");
+        }
+
+        // este test prueba que se puede ingresar un puesto con un salario que contiene decimales
+        // details: esta prueba la hacemos porque la insercion de valores decimales nos ha dado varios proeblemas en sql
+        // esto porque sql soo acepat deimales con el punto como separador y en las computadoras en español el separador es una coma
+        // al ser coma el separador sql tira excpecion porque considera que es un parametro aparte por la coma que separar los decimales en lugar de un numero con decimales
+        [TestMethod]
+        public void IngresarPuestoConSalarioConDecimales_NoTiraExcepcionAlIngresarEnBase()
+        {
+            // arrange
+
+            // creamos un puesto que tiene valores decimales en el salario bruto
+            PuestoModel puestoConSalarioDecimal = new (){
+                Nombre = "Salario decimales",
+                Plazas = 45,
+                SalarioBruto = 15440.89m,
+                Beneficios = 0m,
+                FechaAnalisis = AnalisisFicticio.FechaCreacion
+            };
+
+            // accion
+            // assert
+            // la accion y el assert se realizan dentro del siguiente metodo
+            IngresarPuestoNoTiraExpeciones(puestoConSalarioDecimal);
+
+            // leemos los puestos. En este caso deberia haber solo uno
+            List<PuestoModel> puestosBasePostInsercion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // revisamos que solo se haya ingresado solo un puesto en la base
+            Assert.AreEqual(1, puestosBasePostInsercion.Count, "En la base se encontró más de un puesto cuando solo se ingresó uno");
+        }
+
+        // este test prueba que se puede ingresar un puesto con un valor de beneficios que contiene decimales
+        // details: ver @details de la prueba IngresarPuestoConSalarioConDecimales_NoTiraExcepcion porque en se de la misma situacion con los beneficios
+        [TestMethod]
+        public void IngresarPuestoConBeneficiosConDecimales_NoTiraExcepcionAlIngresarEnBase()
+        {
+            // arrange
+
+            // creamos un puesto que tiene valores decimales en el salario bruto
+            PuestoModel puestoConSalarioDecimal = new()
+            {
+                Nombre = "Salario decimales",
+                Plazas = 45,
+                SalarioBruto = 0m,
+                Beneficios = 456778.45m,
+                FechaAnalisis = AnalisisFicticio.FechaCreacion
+            };
+
+            // accion
+            // la accion y el assert se realizan dentro del siguiente metodo
+            IngresarPuestoNoTiraExpeciones(puestoConSalarioDecimal);
+
+            // assert
+            // leemos los puestos. En este caso deberia haber solo uno
+            List<PuestoModel> puestosBasePostInsercion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // revisamos que solo se haya ingresado solo un puesto en la base
+            Assert.AreEqual(1, puestosBasePostInsercion.Count, "En la base se encontró más de un puesto cuando solo se ingresó uno");
+        }
+
+        // metodo que ingresa un puesto y verifica que se haya ingresado sin tirar excepciones
+        // details: este metodos solo hace assert para revisar que no se hayan tirado excepciones y que el puesto ingresado se ingreso correctamente en la base
+        private void IngresarPuestoNoTiraExpeciones(PuestoModel puestoAInsertar, string nombrePreActualizacion = "")
+        {
+            // creamos handler que contiene el metodo que deseamos probar
+            EstructuraOrgHandler estructuraOrgHandler = new();
+
+            // accion
+            try
+            {
+                estructuraOrgHandler.InsertarPuesto(nombrePreActualizacion, puestoAInsertar);
+            }
+            catch (Exception e)
+            {
+                // assert
+                // en caso de tirar una exepcion la prueba falla y se muestra el error
+                Assert.Fail(
+                    string.Format("Se dio la excepción de tipo {0} con el mensaje: {1}", e.GetType(), e.Message)
+               );
+            }
+
+            // assert
+
+            // leemos los puestos luesgo de la insercion
+            List<PuestoModel> puestosBasePostInsercion = PuestoTestingHandler.LeerPuestosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // buscamos el puesto que se ingreso
+            // solo buscamos por el nombre porque este es unico ya que es llave primaria en la base de datos
+            PuestoModel? puestoIngresado = puestosBasePostInsercion.Find(x => x.Nombre == puestoAInsertar.Nombre);
+
+            // si es nulo el puestoIngresado significa que no se ingreso en la base de datos
+            Assert.IsNotNull(puestoIngresado, "El puesto no se ingresó en la base de datos");
+
+            // revisamos que el puesto ingresado y el esperado sean iguales
+            // asi nos aseguramos de que se ingreso correctamente
+            Assert.IsTrue(SonIgualesPuestos(puestoAInsertar, puestoIngresado), "El puesto leído de la base y el esperado no son iguales");
         }
     }
 }
