@@ -17,6 +17,10 @@ namespace PI.Controllers
 
             ViewBag.Ingresos = flujoDeCajaHandler.obtenerIngresos(fechaCreacionAnalisis);
 
+            ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
+
+            ViewBag.Meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
+
             // Datos que ocupa la vista
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
             // Título de la pestaña en el navegador.

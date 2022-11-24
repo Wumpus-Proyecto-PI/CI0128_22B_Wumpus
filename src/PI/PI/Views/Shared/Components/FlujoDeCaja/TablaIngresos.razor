@@ -123,7 +123,7 @@
 
     public string calcularIngresoMensualTotal(string mes)
     {
-        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotaldeIngresosPorMes(mes, ingresos[0].FechaAnalisis));
+        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mes, ingresos[0].FechaAnalisis));
     }
 
     public void actualizarIngreso(IngresoModel ingreso)
