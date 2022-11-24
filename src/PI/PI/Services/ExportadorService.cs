@@ -175,6 +175,40 @@ namespace PI.Service
 
         }
 
+        public void AgregarValoresDeGastosFijos(DateTime FechaAnalisis)
+        {
+            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis);
+            for (int i = 0; i < gastosFijos.Count; i += 1)
+            {
+                hojaFlujoCaja.Cell("A" + (i + 12)).Value = gastosFijos[i].Nombre;
+                hojaFlujoCaja.Cell("B" + (i + 12)).Value = gastosFijos[i].Monto;
+                hojaFlujoCaja.Cell("C" + (i + 12)).Value = gastosFijos[i].Monto;
+                hojaFlujoCaja.Cell("D" + (i + 12)).Value = gastosFijos[i].Monto;
+                hojaFlujoCaja.Cell("E" + (i + 12)).Value = gastosFijos[i].Monto;
+                hojaFlujoCaja.Cell("F" + (i + 12)).Value = gastosFijos[i].Monto;
+                hojaFlujoCaja.Cell("G" + (i + 12)).Value = gastosFijos[i].Monto;
+            }
+            hojaFlujoCaja.Cell("B" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(B" + (gastosFijos.Count + 11) + ":B9)";
+            hojaFlujoCaja.Cell("C" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(C" + (gastosFijos.Count + 11) + ":C9)";
+            hojaFlujoCaja.Cell("D" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(D" + (gastosFijos.Count + 11) + ":D9)";
+            hojaFlujoCaja.Cell("E" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(E" + (gastosFijos.Count + 11) + ":E9)";
+            hojaFlujoCaja.Cell("F" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(F" + (gastosFijos.Count + 11) + ":F9)";
+            hojaFlujoCaja.Cell("G" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(G" + (gastosFijos.Count + 11) + ":G9)";
+
+        }
+
+        public void ReportarFlujoDeCaja(string fechaAnalisis)
+        {
+            hojaFlujoCaja = libro.AddWorksheet("Flujo de Caja");
+            InsertarEncabezadoFlujoDeCaja();
+
+            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+
+            AgregarValoresDeEncabezadoFlujoDeCaja(fechaCreacionAnalisis);
+            AgregarValoresDeGastosFijos(fechaCreacionAnalisis);
+        }
+
 
         // Inserta los valores cargados del encabezado de la hoja de análisis de rentabilidad
         public void AgregarValoresDeEncabezado(DateTime fechaCreacionAnalisis)
