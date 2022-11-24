@@ -189,14 +189,14 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
-        public decimal obtenerMontoTotalDeEgresosPorMes(string mes, DateTime fechaAnalisis)
+        public decimal obtenerMontoTotalDeEgresosPorMes(MesModel mes)
         {
             decimal total = 0.0m;
 
             string consulta = "SELECT SUM(monto) as total" +
                              " FROM EGRESO" +
-                             " WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
-                             "' AND mes = '" + mes + "'";
+                             " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                             "' AND mes = '" + mes.NombreMes + "'";
 
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             if (!tablaResultado.Rows[0].IsNull("total"))
@@ -205,6 +205,49 @@ namespace PI.Handlers
             }
 
             return total;
+        }
+
+        public decimal obtenerInversionDelMes(MesModel mes)
+        {
+            decimal inversion = 0.0m;
+
+            string consulta = "SELECT inversionPorMes as inversion" +
+                             " FROM MES" +
+                             " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND nombre = '" + mes.NombreMes + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("inversion"))
+            {
+                inversion = Convert.ToDecimal(tablaResultado.Rows[0]["inversion"]);
+            }
+
+            return inversion;
+        }
+
+        public decimal obtenerMontoTotalInversiones(DateTime fechaAnalisis)
+        {
+            decimal total = 0.0m;
+
+            string consulta = "SELECT SUM(inversionPorMes) as total" +
+                             " FROM MES" +
+                             " WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+
+            DataTable tablaResultado = CrearTablaConsulta(consulta);
+            if (!tablaResultado.Rows[0].IsNull("total"))
+            {
+                total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
+            }
+
+            return total;
+        }
+
+        public void actualizarInversionPorMes(MesModel mes)
+        {
+            string consulta = "UPDATE MES" +
+                             " SET inversionPorMes = " + mes.InversionPorMes +
+                             " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
+                             "' AND nombre = '" + mes.NombreMes + "'";
+            enviarConsultaVoid(consulta);
         }
     }
 }
