@@ -6,8 +6,6 @@
 
         public DateTime FechaAnalisis { get; set; }   
 
-        public decimal SalarioPorMes { get; set; }
-
         public decimal InversionPorMes { get; set; }
     }
 }
