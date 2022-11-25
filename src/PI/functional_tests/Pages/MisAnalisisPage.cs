@@ -15,6 +15,19 @@ namespace functional_tests.Pages
             }
         }
 
+        public IWebElement TarjetaAnalisis
+        {
+            get
+            {
+                return Driver.FindElement(By.ClassName("card-analisis"));
+            }
+        }
+
+        public void IngresarAlAnalisis()
+        {
+            TarjetaAnalisis.Click();
+        }
+
         public String TituloDePagina
         {
             get
