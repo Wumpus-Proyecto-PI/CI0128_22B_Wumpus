@@ -5,6 +5,7 @@ using PI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Globalization;
+using PI.Views.Shared.Components.GastoFijo;
 
 namespace PI.Service
 {
@@ -189,13 +190,26 @@ namespace PI.Service
                 hojaFlujoCaja.Cell("F" + (i + 12)).Value = gastosFijos[i].Monto;
                 hojaFlujoCaja.Cell("G" + (i + 12)).Value = gastosFijos[i].Monto;
             }
+            hojaFlujoCaja.Cell("A" + (gastosFijos.Count + 12)).Value = "Total Egresos";
             hojaFlujoCaja.Cell("B" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(B" + (gastosFijos.Count + 11) + ":B9)";
             hojaFlujoCaja.Cell("C" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(C" + (gastosFijos.Count + 11) + ":C9)";
             hojaFlujoCaja.Cell("D" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(D" + (gastosFijos.Count + 11) + ":D9)";
             hojaFlujoCaja.Cell("E" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(E" + (gastosFijos.Count + 11) + ":E9)";
             hojaFlujoCaja.Cell("F" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(F" + (gastosFijos.Count + 11) + ":F9)";
             hojaFlujoCaja.Cell("G" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(G" + (gastosFijos.Count + 11) + ":G9)";
+        }
 
+        public void AgregarFlujoMensual(DateTime FechaAnalisis) {
+            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            int NumeroCeldaTotalEgresos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis).Count+13;
+
+            hojaFlujoCaja.Cell("A"+NumeroCeldaTotalEgresos).Value = "Flujo Mensual";
+            hojaFlujoCaja.Cell("B" + NumeroCeldaTotalEgresos).FormulaA1 = "B"+(NumeroCeldaTotalEgresos-1)+"+B7";
+            hojaFlujoCaja.Cell("C" + NumeroCeldaTotalEgresos).FormulaA1 = "C" + (NumeroCeldaTotalEgresos - 1) + "+C7";
+            hojaFlujoCaja.Cell("D" + NumeroCeldaTotalEgresos).FormulaA1 = "D" + (NumeroCeldaTotalEgresos - 1) + "+D7";
+            hojaFlujoCaja.Cell("E" + NumeroCeldaTotalEgresos).FormulaA1 = "E" + (NumeroCeldaTotalEgresos - 1) + "+E7";
+            hojaFlujoCaja.Cell("F" + NumeroCeldaTotalEgresos).FormulaA1 = "F" + (NumeroCeldaTotalEgresos - 1) + "+F7";
+            hojaFlujoCaja.Cell("G" + NumeroCeldaTotalEgresos).FormulaA1 = "G" + (NumeroCeldaTotalEgresos - 1) + "+G7";
         }
 
         public void ReportarFlujoDeCaja(string fechaAnalisis)
@@ -207,6 +221,7 @@ namespace PI.Service
 
             AgregarValoresDeEncabezadoFlujoDeCaja(fechaCreacionAnalisis);
             AgregarValoresDeGastosFijos(fechaCreacionAnalisis);
+            AgregarFlujoMensual(fechaCreacionAnalisis);
         }
 
 
