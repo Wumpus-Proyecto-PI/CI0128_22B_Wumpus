@@ -164,5 +164,13 @@ namespace PI.Handlers
                 gastosFijos.Insert(3, Seguridad);
             }
         }
+
+        public void actualizarGastosPredeterminados(DateTime fechaConversion, decimal seguroSocial, decimal prestaciones)
+        {
+            actualizarSalariosNeto(fechaConversion, seguroSocial, prestaciones);
+            actualizarSeguroSocial(fechaConversion, seguroSocial);
+            actualizarPrestaciones(fechaConversion, prestaciones);
+            actualizarBeneficios(fechaConversion);
+        }
     }
 }
