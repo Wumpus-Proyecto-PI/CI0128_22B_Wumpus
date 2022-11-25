@@ -28,26 +28,26 @@
                 <form id="form_configuracion">
                     @*Input del nombre del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Nombre del puesto</label> <input name="" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                    <label>Nombre del puesto</label> <input name="" id="nombre_puesto" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
                     </div>
 
                      @((MarkupString)ErrorNombre) @*Mensaje de error*@
 
                     @*Input del salario del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Salario Mensual</label> <input name="" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
+                    <label>Salario Mensual</label> <input name="" id="salario_mensual" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
                     </div>
                     @((MarkupString)ErrorSalario) @*Mensaje de error*@
 
                     @*Input de las plazas del puesto*@
                     <div class="fila-form-configuracion">
-                    <label>Plazas</label> <input name="" min="1" type="number" @bind="puestoActivo.Plazas">
+                    <label>Plazas</label> <input name="" id="num-plazas" min="1" type="number" @bind="puestoActivo.Plazas">
                     </div>
                     @((MarkupString)ErrorPlaza) @*Mensaje de error*@
 
                     @*Input del monto de beneficios del puesto*@
                     <div class="fila-form-configuracion">
-                        <label>Beneficios</label> <input name="" min="1" type="number" @bind="puestoActivo.Beneficios">
+                        <label>Beneficios</label> <input name="" id="beneficios" min="1" type="number" @bind="puestoActivo.Beneficios">
                     </div>
                     </form>
                 </div>
@@ -71,7 +71,7 @@
                     </a>
                 </div>
             }
-            <div  class="est-org-boton " @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
+            <div  class="est-org-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
                 <a>
                     @if (hoverGuardar == false) {
                         <img src="img/estructuraOrg/guardarPuesto.png" alt="">
