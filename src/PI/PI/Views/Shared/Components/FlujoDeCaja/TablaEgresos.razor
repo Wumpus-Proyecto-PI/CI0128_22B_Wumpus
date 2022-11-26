@@ -33,7 +33,7 @@
     </li>
 
     @*Flujo de caja mensual*@
-    <FilaFlujoMensual />
+    <FilaFlujoMensual flujoMensual=flujoMensual />
 
     @*Totales*@
     <li class="table-row-totales">
@@ -126,24 +126,22 @@
             <div class="col col-1">
                 <p class="datos-calculados texto-nombres">@gasto.Nombre</p>
             </div>
-            <div class="col col-1">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
-            </div>
-            <div class="col col-1">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
-            </div>
-            <div class="col col-1">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
-            </div>
-            <div class="col col-1">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
-            </div>
-            <div class="col col-1">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
-            </div>
-            <div class="col col-1">
-                <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
-            </div>
+            @if (gastosEstructura.Any(gasto.Nombre.Contains))
+            {
+                 @for (var mes = 0; mes < meses.Count; mes++)
+                {
+                    <div class="col col-1">
+                        <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto))</p>
+                    </div>
+                }
+            } else {
+                @for (var mes = 0; mes < meses.Count; mes++)
+                {
+                    <div class="col col-1">
+                        <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+                    </div>
+                }
+            }
         </li>
     }
 </ul>
@@ -164,19 +162,30 @@
     [Parameter]
     public List<MesModel> meses { get; set; }
 
+    [Parameter]
+    public List<string> flujoMensual { get; set; }
+
     public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
 
     public EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
 
+    public string[] gastosEstructura = new string[] { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
 
     public decimal calcularTotalGastosFijos() 
     {
         decimal total = 0; 
         foreach (GastoFijoModel gasto in gastosFijos)
         {
-            total += gasto.Monto/12; 
-        }
+            if (gastosEstructura.Any(gasto.Nombre.Contains))
+            {
+                total += gasto.Monto;
+            }
+            else
+            {
+                total += gasto.Monto / 12;
 
+            }
+        }
         return total; 
     }
 
@@ -241,6 +250,6 @@
         {
             egreso.Monto = 0;
         }
+        flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }
-
 }
