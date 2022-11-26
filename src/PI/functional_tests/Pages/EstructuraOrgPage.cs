@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using UnitTestsResources;
+using static functional_tests.TestServices; 
 
 namespace functional_tests.Pages
 {
@@ -11,8 +12,8 @@ namespace functional_tests.Pages
         public IWebElement InputNombrePuesto
         {
             get
-            {
-                return Driver.FindElement(By.Id("nombre_puesto"));
+            { 
+                return EsperarElemento(By.Id("nombre_puesto"), Driver);
             }
         }
 
@@ -20,7 +21,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.Id("salario_mensual"));
+                return EsperarElemento(By.Id("salario_mensual"), Driver);
             }
         }
 
@@ -28,7 +29,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.Id("num-plazas"));
+                return EsperarElemento(By.Id("num-plazas"), Driver);
             }
         }
 
@@ -36,23 +37,23 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.Id("beneficios"));
+                return EsperarElemento(By.Id("beneficios"), Driver);
             }
         }
 
         public IWebElement BotonGuardarPuesto
         {
             get
-            {
-                return Driver.FindElement(By.Id("est-org-boton"));
+            {                
+                return EsperarElemento(By.ClassName("est-org-boton"), Driver);
             }
         }
 
         public IWebElement BotonVolver
         {
             get
-            {
-                return Driver.FindElement(By.Id("boton-volver"));
+            {  
+                return EsperarElemento(By.Id("boton-volver"), Driver);
             }
         }
 
@@ -60,7 +61,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.Id("no-beneficios")).Text;
+                return EsperarElemento(By.Id("no-beneficios"), Driver).Text;
             }
         }
 
@@ -68,7 +69,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.Id("con-beneficios")).Text;
+                return EsperarElemento(By.Id("con-beneficios"), Driver).Text;
             }
         }
 

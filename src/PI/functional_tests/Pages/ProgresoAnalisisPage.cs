@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static functional_tests.TestServices;
 
 namespace functional_tests.Pages
 {
@@ -14,8 +15,8 @@ namespace functional_tests.Pages
         public IWebElement TarjetaEstructuraOrg
         {
             get
-            {
-                return Driver.FindElement(By.ClassName("titulo-carta"));
+            { 
+                return EsperarElemento(By.ClassName("titulo-carta"), Driver);
             }
         }
 

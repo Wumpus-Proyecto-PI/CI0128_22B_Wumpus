@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using UnitTestsResources;
+using static functional_tests.TestServices; 
 
 namespace functional_tests.Pages
 {
@@ -10,8 +11,8 @@ namespace functional_tests.Pages
         public String TextEstadoDelNegocio
         {
             get
-            {
-                return Driver.FindElement(By.Id("estado-negocio")).Text;
+            { 
+                return EsperarElemento(By.Id("estado-negocio"), Driver).Text;
             }
         }
 
@@ -19,7 +20,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.ClassName("card-analisis"));
+                return EsperarElemento(By.ClassName("card-analisis"), Driver);
             }
         }
 
