@@ -127,7 +127,7 @@ namespace PI.Handlers
                 puesto.Nombre = Convert.ToString(fila["nombre"]);
                 puesto.Plazas = Convert.ToInt32(fila["cantidadPlazas"]);
                 puesto.SalarioBruto = Convert.ToDecimal(fila["salarioBruto"]);
-                puesto.FechaAnalisis = (DateTime)fila["fechaAnalisis"];
+                puesto.FechaAnalisis = Convert.ToDateTime(fila["fechaAnalisis"]);
                 puesto.Beneficios = Convert.ToDecimal(fila["beneficios"]);
 
                 // los beneficios se cargan con otro método que carga beneficios según el puesto y el análisis
