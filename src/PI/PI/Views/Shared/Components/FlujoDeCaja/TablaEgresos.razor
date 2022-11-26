@@ -176,9 +176,16 @@
         decimal total = 0; 
         foreach (GastoFijoModel gasto in gastosFijos)
         {
-            total += gasto.Monto/12; 
-        }
+            if (gastosEstructura.Any(gasto.Nombre.Contains))
+            {
+                total += gasto.Monto;
+            }
+            else
+            {
+                total += gasto.Monto / 12;
 
+            }
+        }
         return total; 
     }
 
