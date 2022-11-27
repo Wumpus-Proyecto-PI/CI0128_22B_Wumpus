@@ -35,17 +35,21 @@ namespace PI.Handlers
         // Recibe la fecha del análisis al que se quiere insertar el gasto inicial y lo inserta en la base de datos
         public void IngresarGastoInicial(string fechaAnalisis, GastoInicialModel gastoInicial)
         {
+            if (gastoInicial.Monto < 0m)
+            {
+                throw new Exception("El valor del monto debe ser un número positivo", new ArgumentOutOfRangeException());
+            }
             string consulta = $"EXEC IngresarGastoInicial @fechaAnalisis = '{fechaAnalisis}', @nombre = '{gastoInicial.Nombre}', @valor = {gastoInicial.Monto}";
 
             enviarConsultaVoid(consulta);
         }
 
         // Recibe la fecha del análisis del que se quiere eliminar el gasto inicial y lo elimina en la base de datos el gasto inicial que coincida con el nombre pasada por parámetro.
-        public void EliminarGastoInicial(string fechaAnalisis, string nombreGastoInicial)
+        public int EliminarGastoInicial(string fechaAnalisis, string nombreGastoInicial)
         {
             string consulta = $"EXEC EliminarGastoInicial @nombre= '{nombreGastoInicial}', @fechaAnalisis='{fechaAnalisis}'";
 
-            enviarConsultaVoid(consulta);
+            return enviarConsulta(consulta);
         }
 
         // Recibe la fecha del análisis del que se quiere obtener la sumatoria de los montos de los gastos iniciales del análisis pasado por parámetro.
