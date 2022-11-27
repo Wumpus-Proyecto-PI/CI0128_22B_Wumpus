@@ -21,9 +21,6 @@ namespace unit_tests.Fabian
         // analisis ficticio creado para la prueba
         private AnalisisModel? AnalisisFicticio = null;
 
-        // handler de testing usado para manejar la creacion de puestos semilla
-        InversionInicialTestingHandler? InversionInicialTestingHandler = null;
-
         // en la inicializacion creamos un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
         [TestInitialize]
         public void Setup()
@@ -34,9 +31,6 @@ namespace unit_tests.Fabian
 
             // tambien le creamos un analisis vacio para realizar las pruebas
             AnalisisHandler = new();
-
-            // creamos instancia de handler de testing usado para manejar la creacion de puestos semilla
-            InversionInicialTestingHandler = new();
 
             // para que el test exista debe existir el siguiente usuario en la base
             // usuario: wumpustest@gmail.com 
@@ -60,7 +54,7 @@ namespace unit_tests.Fabian
             // arrange
 
             // ingresamos una lista de puestos inicial
-            List<GastoInicialModel> gastosPreInsercion = InversionInicialTestingHandler.InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<GastoInicialModel> gastosPreInsercion = InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
 
             // creamos gastoInicial que vamos a insertar de prueba
             GastoInicialModel gasto = new GastoInicialModel
@@ -190,7 +184,7 @@ namespace unit_tests.Fabian
         public void EliminarGastoInicialExistente()
         {
             // arrange
-            List<GastoInicialModel> gastosPreInsercion = InversionInicialTestingHandler.InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<GastoInicialModel> gastosPreInsercion = InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
 
             String nombreGastoFijoVictima = gastosPreInsercion[0].Nombre;
 
@@ -215,7 +209,7 @@ namespace unit_tests.Fabian
         public void EliminarGastoInicialNoExistente_AfectaCeroFilas()
         {
             // arrange
-            List<GastoInicialModel> gastosPreInsercion = InversionInicialTestingHandler.InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<GastoInicialModel> gastosPreInsercion = InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
             
             String nombreGastoFijoVictima = "GastoNoExistente";
             int filasAfectadasEsperadas = 0;
@@ -236,7 +230,7 @@ namespace unit_tests.Fabian
         public void IngresarGastoInicial_ConMontoNegativo_GeneraExcepcion()
         {
             // arrange
-            List<GastoInicialModel> gastosPreInsercion = InversionInicialTestingHandler.InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
+            List<GastoInicialModel> gastosPreInsercion = InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
 
             GastoInicialModel gastoNuevo = new GastoInicialModel
             {
@@ -319,6 +313,36 @@ namespace unit_tests.Fabian
             return esperado.Nombre == actual.Nombre && esperado.Monto == actual.Monto;
         }
 
+        // brief: metodo que inserta en la base de datos una lista semilla de puestos
+        public List<GastoInicialModel> InsertarGastosInicialesSemillaEnBase(DateTime fechaCreacion)
+        {
+            InversionInicialHandler inversionInicialHandler = new();
+            List<GastoInicialModel> gastosInicialesSemilla = new List<GastoInicialModel>();
+            gastosInicialesSemilla.Add(new GastoInicialModel
+            {
+                Nombre = "Cocina",
+                FechaAnalisis = fechaCreacion,
+                Monto = 1234m
+            });
+            gastosInicialesSemilla.Add(new GastoInicialModel
+            {
+                Nombre = "Local",
+                FechaAnalisis = fechaCreacion,
+                Monto = 1000000m
+            });
+            gastosInicialesSemilla.Add(new GastoInicialModel
+            {
+                Nombre = "Uniformes",
+                FechaAnalisis = fechaCreacion,
+                Monto = 500000m
+            });
 
+            foreach (var gasto in gastosInicialesSemilla)
+            {
+                inversionInicialHandler.IngresarGastoInicial(fechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff"), gasto);
+            }
+
+            return gastosInicialesSemilla;
+        }
     }
 }
