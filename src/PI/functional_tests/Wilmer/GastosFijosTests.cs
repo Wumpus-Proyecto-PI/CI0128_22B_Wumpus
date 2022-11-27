@@ -1,0 +1,92 @@
+﻿using functional_tests.Pages;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Bibliography;
+
+namespace PiTests
+{
+    [TestClass]
+    public class GastosFijosTests
+    {
+        private IWebDriver Driver;
+        public const string url = "https://localhost:7073";
+        MisNegociosPage MisNegociosPage;
+        MisAnalisisPage MisAnalisisPage;
+        AutenticacionPage AutenticacionPage;
+        ProgresoAnalisisPage ProgresoAnalisisPage;
+        EstructuraOrgPage EstructuraOrgPage;
+        GastosFijosPage GastosFijosPage;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            Driver = new ChromeDriver();
+            Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            Driver.Url = url;
+            Driver.Navigate().GoToUrl(url);
+
+            this.AutenticacionPage = new AutenticacionPage(Driver);
+            AutenticacionPage.IniciarSesionUsuarioDefault();
+
+            this.MisNegociosPage = new MisNegociosPage(Driver);
+            MisNegociosPage.CrearNegocioNoIniciadoPredeterminado();
+
+            this.MisAnalisisPage = new MisAnalisisPage(Driver);
+            MisAnalisisPage.IngresarAlAnalisis();
+
+            this.ProgresoAnalisisPage = new ProgresoAnalisisPage(Driver);
+            ProgresoAnalisisPage.IngresarEstructuraOrg();
+            
+            this.EstructuraOrgPage = new EstructuraOrgPage(Driver);
+            EstructuraOrgPage.CrearPuestoPredeterminado();
+            EstructuraOrgPage.BotonVolver.Click();
+
+            Thread.Sleep(500);
+
+            ProgresoAnalisisPage.IngresarGastosFijos();
+            this.GastosFijosPage = new GastosFijosPage(Driver);
+        }
+
+        [TestCleanup]
+        public void CleanUp()
+        {
+            MisNegociosPage.EliminarNegocioNoIniciadoPredeterminado();
+            AutenticacionPage.CerrarSesion();
+            Driver.Quit();
+        }
+
+        [TestMethod]
+        public void CrearGastoFijo()
+        {
+            // preparacion
+            string gasto = "Electricidad";
+            string monto = "100";
+            // accion
+            GastosFijosPage.CrearGastoFijo(gasto, monto);
+
+            // verificacion
+            // verificacion
+            string texto = GastosFijosPage.TextoGastoCreado;
+            Assert.AreEqual("Electricidad", texto);
+        }
+
+        [TestMethod]
+        public void NoSePermiteIngresarMontosNegativos()
+        {
+            // preparacion
+            string gasto = "Electricidad";
+            string monto = "-100";
+            // accion
+            GastosFijosPage.CrearGastoFijo(gasto, monto);
+
+            // verificacion
+            string texto = GastosFijosPage.TextoError;
+            Assert.AreEqual("Error: el monto es un número negativo.\ningrese un monto positivo.", texto);
+        }
+    }
+}
