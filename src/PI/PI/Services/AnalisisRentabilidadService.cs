@@ -45,15 +45,14 @@ namespace PI.Services
         // Parameetr: gananciaMensual meta indicada por el usuario
         // Parameetr: margenPonderadTotal se calcula sumando el margen ponderado de cada producto
         // Return: las unidades meta a vender de un producto para cumplir la meta de ganancia mensual
-        public static int CalcularMetaVentasUnidad(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderadoTotal)
+        public static decimal CalcularMetaVentasUnidad(decimal porcentajeVentas, decimal gastosFijosMensuales, decimal gananciaMensual, decimal margenPonderadoTotal)
         {
-            int resultado;
+            decimal resultado;
             try
             {
-                decimal temp = 0;
                 // meta de ventas en unidad = (ganancia mensual + gastos fijos mensuales) / margen ponderado total * porcentaje de ventas
-                temp = (gastosFijosMensuales + gananciaMensual) / margenPonderadoTotal * (porcentajeVentas / 100);
-                resultado = Convert.ToInt32(Math.Ceiling(temp));
+                resultado = (gastosFijosMensuales + gananciaMensual) / margenPonderadoTotal * (porcentajeVentas / 100);
+ 
             } catch (DivideByZeroException)
             {
                 resultado = 0;
@@ -65,7 +64,7 @@ namespace PI.Services
         // Parameter: precio  del producto
         // Parameter: metaVentasUnidad que se calcula con el metodo @calcularMetaVentasUnidades
         // Return: la meta a vender en moneda de un producto para cumplir la meta de ganancia mensual
-        public static decimal CalcularMetaVentasMoneda(decimal precio, int metaVentasUnidad)
+        public static decimal CalcularMetaVentasMoneda(decimal precio, decimal metaVentasUnidad)
         {
             return precio * metaVentasUnidad;
         }
@@ -103,7 +102,7 @@ namespace PI.Services
         // Metodo que calcula y retorna la meta en moneda de un producto
         public static decimal calcularMetaMoneda(ProductoModel productoActual, decimal montoGastosFijosMensuales, decimal GananciaMensual, decimal margenPonderadoTotal)
         {
-            int metaVentasUnidad = CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, montoGastosFijosMensuales, GananciaMensual, margenPonderadoTotal);
+            decimal metaVentasUnidad = CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, montoGastosFijosMensuales, GananciaMensual, margenPonderadoTotal);
 
             return CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
         }

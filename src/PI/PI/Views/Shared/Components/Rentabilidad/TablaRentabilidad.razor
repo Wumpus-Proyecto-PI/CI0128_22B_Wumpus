@@ -277,7 +277,7 @@
     }
 
     // Metodo que calcula y retorna la meta en unidades de un producto
-    public int calcularMetaUnidades(ProductoModel productoActual)
+    public decimal calcularMetaUnidades(ProductoModel productoActual)
     {
         decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
@@ -289,15 +289,15 @@
     {
         decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
-        int metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
+        decimal metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
 
         return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
     }
 
     // Metodo que actualiza la meta en unidades en la base de datos
-    public int actualizarTotalMetaUnidades()
+    public decimal actualizarTotalMetaUnidades()
     {
-        int total = 0;
+        decimal total = 0;
 
         foreach (ProductoModel productActual in productos)
         {
