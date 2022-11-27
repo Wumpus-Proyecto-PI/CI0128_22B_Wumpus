@@ -43,7 +43,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return EsperarElemento(By.ClassName("gastoFijo-nombre"), Driver).Text;
+                return EsperarElemento(By.ClassName("gastoFijo-clickeable"), Driver).FindElement(By.ClassName("gastoFijo-nombre")).Text;
             }
         }
 
@@ -51,13 +51,14 @@ namespace functional_tests.Pages
         {
             get
             {
-                return EsperarElemento(By.ClassName("error error-gastoFijo"), Driver).Text;
+                return EsperarElemento(By.ClassName("error-gastoFijo"), Driver).Text;
             }
         }
 
         public void CrearGastoFijo(string nombre, string monto)
         {
             InputNombreGastoFijo.SendKeys(nombre);
+            InputMontoAnual.SendKeys(Keys.Backspace);
             InputMontoAnual.SendKeys(monto);
             BotonGuardarGasto.Click();
         }

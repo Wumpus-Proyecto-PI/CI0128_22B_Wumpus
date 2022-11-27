@@ -31,10 +31,7 @@ namespace functional_tests.Pages
 
         public void IngresarGastosFijos()
         {
-            if (TarjetaEstructuraOrg.Text == "Gastos Fijos")
-            {
-                TarjetaEstructuraOrg.Click();
-            }
+            Driver.FindElement(By.XPath("/html/body/main/div/div[2]/div[1]/div[2]/div")).Click();
 
         }
 

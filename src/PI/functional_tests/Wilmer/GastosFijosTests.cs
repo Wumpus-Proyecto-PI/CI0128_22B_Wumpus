@@ -34,7 +34,7 @@ namespace PiTests
             AutenticacionPage.IniciarSesionUsuarioDefault();
 
             this.MisNegociosPage = new MisNegociosPage(Driver);
-            MisNegociosPage.CrearNegocioNoIniciadoPredeterminado();
+            MisNegociosPage.CrearNegocioEnMarchaPredeterminado();
 
             this.MisAnalisisPage = new MisAnalisisPage(Driver);
             MisAnalisisPage.IngresarAlAnalisis();
@@ -55,7 +55,7 @@ namespace PiTests
         [TestCleanup]
         public void CleanUp()
         {
-            MisNegociosPage.EliminarNegocioNoIniciadoPredeterminado();
+            MisNegociosPage.EliminarNegocioEnMarchaPredeterminado();
             AutenticacionPage.CerrarSesion();
             Driver.Quit();
         }
@@ -86,7 +86,7 @@ namespace PiTests
 
             // verificacion
             string texto = GastosFijosPage.TextoError;
-            Assert.AreEqual("Error: el monto es un número negativo.\ningrese un monto positivo.", texto);
+            Assert.IsTrue(texto.Contains("Error: el monto es un número negativo"));
         }
     }
 }
