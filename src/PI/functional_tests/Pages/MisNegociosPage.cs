@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using System;
 using UnitTestsResources;
+using static functional_tests.TestServices;
 
 namespace functional_tests.Pages
 {
@@ -13,7 +14,8 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.ClassName("card-agregar"));
+                
+                return EsperarElemento(By.ClassName("card-agregar"), Driver);
             }
         }
 
@@ -21,7 +23,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.Name("nombreNegocio"));
+                return EsperarElemento(By.Name("nombreNegocio"), Driver);
             }
         }
 
@@ -29,15 +31,15 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.Id("tipoNoIniciado"));
+                return EsperarElemento(By.Id("tipoNoIniciado"), Driver);
             }
         }
 
         public IWebElement RadioEnMarcha
         {
             get
-            {
-                return Driver.FindElement(By.Id("tipoEnMarcha"));
+            {  
+                return EsperarElemento(By.Id("tipoEnMarcha"), Driver);
             }
         }
 
@@ -45,7 +47,7 @@ namespace functional_tests.Pages
         {
             get
             {
-                return Driver.FindElement(By.ClassName("btn-primary"));
+                return EsperarElemento(By.ClassName("btn-primary"), Driver);
             }
         }
 
