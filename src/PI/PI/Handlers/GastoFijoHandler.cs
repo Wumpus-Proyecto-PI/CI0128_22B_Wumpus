@@ -67,6 +67,10 @@ namespace PI.Handlers
         // Inserta el nuevo gasto fijo a la BD.
         public void ingresarGastoFijo(string nombreAnterior, string Nombre, string monto, DateTime fechaAnalisis)
         {
+            if (Convert.ToDecimal(monto) < 0)
+            {
+                throw new Exception("El valor del monto debe ser un número positivo", new ArgumentOutOfRangeException());
+            }
             // TODO arreglar el datetime para que est� asociado al an�lisis realmente.
             string consulta = "EXECUTE insertarGastoFijo '"
                 + nombreAnterior + "', '"
