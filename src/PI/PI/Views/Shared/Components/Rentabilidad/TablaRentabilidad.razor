@@ -319,16 +319,16 @@
     }
 
     // Se encarga de calcular el punto de equilibrio de un solo producto
-    public int calcularPuntoEquilibrio(decimal montoGastosFijosMensuales, decimal precio, decimal costoVariable)
+    public decimal calcularPuntoEquilibrio(decimal montoGastosFijosMensuales, decimal precio, decimal costoVariable)
     {
-        int result = Decimal.ToInt32(AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijosMensuales, precio, costoVariable));
+        decimal result = AnalisisRentabilidadService.CalcularPuntoEquilibrio(montoGastosFijosMensuales, precio, costoVariable);
         return result;
     }
 
     // Se encarga de calcular el punto de equilibrio total de todos los productos.
-    public int calcularPuntoEquilibrioTotal(decimal gastosFijos, List<ProductoModel> productos)
+    public decimal calcularPuntoEquilibrioTotal(decimal gastosFijos, List<ProductoModel> productos)
     {
-        int result = 0;
+        decimal result = 0;
         for (int i = 0; i < productos.Count; i += 1)
         {
             result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, actualizarCostoVariable(productos[i]));

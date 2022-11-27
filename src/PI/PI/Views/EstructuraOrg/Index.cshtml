@@ -1,4 +1,4 @@
-﻿@model List<PuestoModel>
+﻿@model List<Object>
 @*
     Html para la estructura orgranizativa.
     Como este es dinamico del lado del cliente se utilzan componentes razor
@@ -14,16 +14,11 @@
     <title>HTML template</title>
     <link rel="stylesheet" href="~/css/est_org.css">
     <link rel="stylesheet" href="~/css/estructuraOrg/PuestoParcialView.css">
-
 </head>
 
 @Html.Partial("LayoutNombreEmpresa")
 
-<div id="contenido-puestos-pestañas">   
-    @*se llama al componente reazor dinamico que contiene lado del cliente de agregar puestos y beneficios*@
-    <div style="width: 100%; display: flex;">
-        @(
-            await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model, fechaAnalasis = ViewBag.FechaAnalisis})
-            )
-    </div>
-</div>
+
+@(
+await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model[0],config = Model[1], fechaAnalasis = ViewBag.FechaAnalisis})
+         )
