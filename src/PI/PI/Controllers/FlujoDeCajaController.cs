@@ -19,7 +19,14 @@ namespace PI.Controllers
 
             ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
 
-            ViewBag.Meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
+            List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
+
+            ViewBag.Meses = meses;
+
+            List<string> flujoMensual = new();
+
+            FlujoCajaService.InicializarFlujosMensuales(meses, ref flujoMensual);
+            ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
 
             // Datos que ocupa la vista
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
@@ -29,7 +36,6 @@ namespace PI.Controllers
             ViewData["TituloPaso"] = ViewData["Title"];
             // Muestra el botón de regreso hacia el progreso (pasos) del análisis.
             ViewBag.BotonRetorno = "Progreso";
-
             ProductoHandler productoHandler = new ProductoHandler();
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);

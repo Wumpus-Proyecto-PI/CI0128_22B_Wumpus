@@ -56,7 +56,7 @@ namespace PI.Controllers
             PasosProgresoControl controlDePasos = new();
 
             ViewBag.pasoDisponibleMaximo = controlDePasos.EstaActivoMaximo(analisisActual);
-
+            
             return View(analisisActual);
         }
 
