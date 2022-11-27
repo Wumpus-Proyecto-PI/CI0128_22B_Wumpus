@@ -56,15 +56,6 @@ namespace PI.Controllers
             PasosProgresoControl controlDePasos = new();
 
             ViewBag.pasoDisponibleMaximo = controlDePasos.EstaActivoMaximo(analisisActual);
-
-            // Convierte los porcentajes a valores válidos (divide entre 100).
-            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            ConfigAnalisisModel configuracionAnalisis = handler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
-            decimal seguroSocial = configuracionAnalisis.PorcentajeSS / 100;
-            decimal prestaciones = configuracionAnalisis.PorcentajePL / 100;
-
-            // Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de gastos fijos.
-            gastoFijoHandler.actualizarGastosPredeterminados(fechaCreacionAnalisis, seguroSocial, prestaciones);
             
             return View(analisisActual);
         }
