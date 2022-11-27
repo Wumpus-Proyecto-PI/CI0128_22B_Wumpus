@@ -25,6 +25,7 @@ namespace PI.Controllers
 
             // creamos instancia del handler de la estrutura organizativa para cargar los puestos
             EstructuraOrgHandler estructura = new EstructuraOrgHandler();
+            AnalisisHandler AnalisisHandler = new AnalisisHandler();
 
             // convertimos a Datetime la fecha del análisis porque de esta forma lo utiliza la vista
             DateTime fechaAnalisis = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
@@ -37,8 +38,12 @@ namespace PI.Controllers
 
             // cargamos una lista con todos los puestos que existen en la base de datos
             List<PuestoModel> puestos = estructura.ObtenerListaDePuestos(fechaAnalisis);
+            ConfigAnalisisModel config = AnalisisHandler.ObtenerConfigAnalisis(fechaAnalisis);
+            List<Object> Models = new List<Object>();
+            Models.Add(puestos);
+            Models.Add(config);
 
-            return View(puestos);
+            return View(Models);
         }
     }
 }
