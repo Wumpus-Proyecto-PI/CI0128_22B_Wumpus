@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using functional_tests.Pages;
 
-namespace PiTests
+namespace PiTests.Fabian
 {
     [TestClass]
     public class NegociosTests
