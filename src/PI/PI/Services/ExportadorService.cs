@@ -97,8 +97,6 @@ namespace PI.Service
 
         public void InsertarEncabezadoFlujoDeCaja() {
             hojaFlujoCaja.Cell("A1").Value = "Flujo de caja";
-            hojaFlujoCaja.Cell("D1").Value = "Meta mensual de ventas";
-            hojaFlujoCaja.Cell("F1").Value = "Inversión inicial";
 
             hojaFlujoCaja.Cell("A3").Value = "Ingresos";
             hojaFlujoCaja.Cell("B3").Value = "Mes 1";
