@@ -2,6 +2,21 @@
 @using PI.Handlers
 @inject NavigationManager NavigationManager;
 
+<div style="display: flex; width: 100%; align-items: center; justify-content: center; margin-bottom: 30px">
+    <div id="form-parametros-rentabilidad">
+        <div class="pill-form">
+            <div><h4>Seguro social</h4></div>
+            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="config.PorcentajeSS" @onfocusout="ActualizarConfigAnalisis" />
+        </div>
+        <div class="pill-form">
+            <div><h4>Prestaciones laborales</h4></div>
+            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="config.PorcentajePL" @onfocusout="ActualizarConfigAnalisis" />
+        </div>
+    </div>
+</div>
+<div id="contenido-puestos-pestañas">   
+    @*se llama al componente reazor dinamico que contiene lado del cliente de agregar puestos y beneficios*@
+    <div style="width: 100%; display: flex;">
 <div class="altura-seccion" id="seccion-pestañas">
     @*Comienzo ventana izquierda de edición e ingreso de puestos*@
         <div id="titulo-contenido">
@@ -13,105 +28,113 @@
             *@
             @if (hayPuestoSeleccionado == false)
             {
-                <h2 class="mt-3 fw-bold">Nuevo puesto</h2>
-            } else {
-            <h2 class="mt-3 fw-bold">Editar puesto</h2>
-            }
+                    <h2 class="mt-3 fw-bold">Nuevo puesto</h2>
+                } else {
+                    <h2 class="mt-3 fw-bold">Editar puesto</h2>
+                }
 
 
-            @*
+                @*
                 Comienzo sección de ingreso de datos de un puesto
                 Ya se edición o creación de puesto
             *@
-            <div id="cuadro_configuracion">
+                <div id="cuadro_configuracion">
 
-                <form id="form_configuracion">
-                    @*Input del nombre del puesto*@
-                    <div class="fila-form-configuracion">
-                    <label>Nombre del puesto</label> <input name="" id="nombre_puesto" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
-                    </div>
+                    <form id="form_configuracion">
+                        @*Input del nombre del puesto*@
+                        <div class="fila-form-configuracion">
+                            <label>Nombre del puesto</label> <input name="" id="nombre_puesto" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                        </div>
 
-                     @((MarkupString)ErrorNombre) @*Mensaje de error*@
+                        @(
+                            (MarkupString)ErrorNombre
+                           ) @*Mensaje de error*@
 
-                    @*Input del salario del puesto*@
-                    <div class="fila-form-configuracion">
-                    <label>Salario Mensual</label> <input name="" id="salario_mensual" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
-                    </div>
-                    @((MarkupString)ErrorSalario) @*Mensaje de error*@
+                        @*Input del salario del puesto*@
+                        <div class="fila-form-configuracion">
+                            <label>Salario Mensual</label> <input name="" id="salario_mensual" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
+                        </div>
+                        @(
+                            (MarkupString)ErrorSalario
+                            ) @*Mensaje de error*@
 
-                    @*Input de las plazas del puesto*@
-                    <div class="fila-form-configuracion">
-                    <label>Plazas</label> <input name="" id="num-plazas" min="1" type="number" @bind="puestoActivo.Plazas">
-                    </div>
-                    @((MarkupString)ErrorPlaza) @*Mensaje de error*@
+                        @*Input de las plazas del puesto*@
+                        <div class="fila-form-configuracion">
+                            <label>Plazas</label> <input name="" id="num-plazas" min="1" type="number" @bind="puestoActivo.Plazas">
+                        </div>
+                        @(
+                            (MarkupString)ErrorPlaza
+                            ) @*Mensaje de error*@
 
-                    @*Input del monto de beneficios del puesto*@
-                    <div class="fila-form-configuracion">
-                        <label>Beneficios</label> <input name="" id="beneficios" min="1" type="number" @bind="puestoActivo.Beneficios">
-                    </div>
+                        @*Input del monto de beneficios del puesto*@
+                        <div class="fila-form-configuracion">
+                            <label>Beneficios</label> <input name="" id="beneficios" min="1" type="number" @bind="puestoActivo.Beneficios">
+                        </div>
                     </form>
                 </div>
-            @*
+                @*
                 Comienzo sección de ingreso de datos de un puesto
             *@
 
 
-        @*Botón de guardado*@
-        </div>
-        <div id="inferior-horizontal">
-            @if (hayPuestoSeleccionado == true) {
-                /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                <div id="eliminar-puesto"class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarPuesto(puestoActivo)">
+                @*Botón de guardado*@
+            </div>
+            <div id="inferior-horizontal">
+                @if (hayPuestoSeleccionado == true) {
+                    /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
+                    <div id="eliminar-puesto"class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarPuesto(puestoActivo)">
+                        <a>
+                            @if (hoverEliminar == false)
+                            {
+                                <img src="img/generic/trashCan.png" alt="">
+                            }
+                            @hoverTextEliminar
+                        </a>
+                    </div>
+                }
+                <div  class="est-org-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
                     <a>
-                        @if (hoverEliminar == false)
-                        {
-                            <img src="img/generic/trashCan.png" alt="">
+                        @if (hoverGuardar == false) {
+                            <img src="img/estructuraOrg/guardarPuesto.png" alt="">
                         }
-                        @hoverTextEliminar
+                        @hoverTextGuardar
                     </a>
                 </div>
-            }
-            <div  class="est-org-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
-                <a>
-                    @if (hoverGuardar == false) {
-                        <img src="img/estructuraOrg/guardarPuesto.png" alt="">
-                    }
-                    @hoverTextGuardar
-                </a>
             </div>
+            @*Fin ventana izquierda de edición e ingreso de puestos*@
         </div>
-    @*Fin ventana izquierda de edición e ingreso de puestos*@
-</div>
 
-@*Comienzo de seccion de puestos donde se ven los puestos en cajas con organigrama*@
-    <div class="altura-seccion" id="seccion-puestos">
-        <div id="mostrar-puestos">
+        @*Comienzo de seccion de puestos donde se ven los puestos en cajas con organigrama*@
+        <div class="altura-seccion" id="seccion-puestos">
+            <div id="mostrar-puestos">
 
-            @*Renderización de las tarjetas de los puestos, son componentes razor aparte*@
-            @foreach (PuestoModel puestoActual in puestos)
-            {
-                <div class="puesto-clickeable" @onclick="() => SeleccionarPuesto(puestoActual)" >
+                @*Renderización de las tarjetas de los puestos, son componentes razor aparte*@
+                @foreach (PuestoModel puestoActual in puestos)
+                {
+                    <div class="puesto-clickeable" @onclick="() => SeleccionarPuesto(puestoActual)" >
                         <div >
                             <PuestoParcialView puesto=puestoActual></PuestoParcialView>
                         </div>
                         <div class ="puesto-icono-editar">
                             <img src=img/generic/editPhoto.png>
                         </div>
-                </div>
-            }
-        </div>
-
-        @*Botón de agregar un puesto*@
-        <div class="transition est-org-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
-            <a>
-                @if (hoverAgregar == false)
-                {
-                    <img src="img/estructuraOrg/addPuesto.png" alt="">
+                    </div>
                 }
-                @hoverTextAgregar
+            </div>
+
+            @*Botón de agregar un puesto*@
+            <div class="transition est-org-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
+                <a>
+                    @if (hoverAgregar == false)
+                    {
+                        <img src="img/estructuraOrg/addPuesto.png" alt="">
+                    }
+                    @hoverTextAgregar
                 </a>
+            </div>
         </div>
     </div>
+</div>
 @*Fin de seccion de puestos donde se ven los puestos en cajas con organigrama*@
 
 
@@ -126,6 +149,9 @@
     // fecha del análisis al que pertenece la estructura organanizativa
     [Parameter]
     public DateTime fechaAnalasis { get; set; }
+
+    [Parameter]
+    public ConfigAnalisisModel config { get; set; }
 
     // booleano que indica si se está editanto un puesto o agregando
     public bool hayPuestoSeleccionado = false;
@@ -210,10 +236,10 @@
 
         // se asugnan variables de vista
         placeHolderNombre = puestoActivo.Nombre;
-        
+
         // se copia el nombre por si se va a actualizar este nombre
         copiaNombreOriginal = puestoActivo.Nombre;
-        
+
         // se indica que hay un puesto seleccionado
         hayPuestoSeleccionado = true;
 
@@ -256,7 +282,7 @@
             puestoGuardar.FechaAnalisis = fechaAnalasis;
             // se ingresa con el handler en la base de datos el puesto
             HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
-            
+
             // se resetean variables de vista y de control
             if (hayPuestoSeleccionado == false)
             {
@@ -351,6 +377,11 @@
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
+    public void ActualizarConfigAnalisis() {
+        AnalisisHandler analisisHandler = new AnalisisHandler();
+        analisisHandler.ActualizarConfiguracionAnalisis(config);
     }
 }
 
