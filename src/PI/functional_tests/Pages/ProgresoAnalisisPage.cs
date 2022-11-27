@@ -29,6 +29,15 @@ namespace functional_tests.Pages
             
         }
 
+        public void IngresarGastosFijos()
+        {
+            if (TarjetaEstructuraOrg.Text == "Gastos Fijos")
+            {
+                TarjetaEstructuraOrg.Click();
+            }
+
+        }
+
         public ProgresoAnalisisPage(IWebDriver driver)
         {
             Driver = driver;
