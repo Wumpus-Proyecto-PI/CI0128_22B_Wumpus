@@ -97,6 +97,31 @@ namespace unit_tests.Wilmer
             Assert.IsNotNull(gastoSalariosNetos, "El gasto de salarios netos no se encontró en la base de datos");
         }
 
+        [TestMethod]
+        public void ActualizarSeguroSocialNoTiraExpeciones()
+        {
+            // Preparacion
+            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            decimal seguroSocial = 0.05m;
+
+            // action
+            gastoFijoHandler.actualizarSeguroSocial(AnalisisFicticio.FechaCreacion, seguroSocial);
+
+            // assert
+
+            // leemos los gastos fijos
+            List<GastoFijoModel> gastosFijos = GastosFijosTesting.leerGastosFijosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // buscamos el gasto fijo correspondiente al seguro social
+            // solo buscamos por el nombre porque este es unico ya que es llave primaria en la base de datos
+            GastoFijoModel? gastoSeguroSocial = gastosFijos.Find(x => x.Nombre == "Seguridad social");
+
+            // si es nulo el gasto fijo significa que no se ingreso en la base de datos
+            Assert.IsNotNull(gastoSeguroSocial, "El gasto de seguro social no se encontró en la base de datos");
+
+            Assert.AreEqual(6669.30m, gastoSeguroSocial.Monto, "No se calculó correctamente el monto");
+        }
+
         #endregion
     }
 }
