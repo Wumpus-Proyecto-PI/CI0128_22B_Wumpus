@@ -29,6 +29,12 @@ namespace functional_tests.Pages
             
         }
 
+        public void IngresarGastosFijos()
+        {
+            Driver.FindElement(By.XPath("/html/body/main/div/div[2]/div[1]/div[2]/div")).Click();
+
+        }
+
         public ProgresoAnalisisPage(IWebDriver driver)
         {
             Driver = driver;

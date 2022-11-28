@@ -32,12 +32,12 @@
 
                     <form id="form_configuracion">
                         <div class="fila-form-configuracion">
-                            <label>Nombre</label> <input name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
+                            <label>Nombre</label> <input id="nombre-gasto" name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
                         </div>
                         @((MarkupString)CasoError_repetido)
 
                         <div class="fila-form-configuracion">
-                            <label>Monto anual</label> <input name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
+                            <label>Monto anual</label> <input id="monto-gasto" name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
                         </div>
                         @((MarkupString)CasoError_negativo)
                     </form>
@@ -63,7 +63,7 @@
                     </a>
                 </div>
             }
-            <div class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
+            <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
 
                     @if (hoverGuardar == false) {
                         <img src="img/estructuraOrg/guardarPuesto.png" alt="">
