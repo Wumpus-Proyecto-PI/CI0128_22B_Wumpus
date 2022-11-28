@@ -1,62 +1,52 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using PI.Handlers;
+﻿using PI.Handlers;
 using PI.Models;
 using unit_tests.SharedResources;
 
 namespace unit_tests.Fabian
 {
-    // class: clase de testing para el modelo gasto inicial y su interaccion con la base de datos
+    // Clase de testing para el modelo gasto inicial y su interaccion con la base de datos.
     [TestClass]
     public class GastoInicialTest
     {
-        // handler de testing que permite crear un negocio de pruebas
+        // Handler de negocio y análisis a probar.
         private NegocioTestingHandler? NegocioTestingHandler = null;
-
-        // handler de analisis que nos permite obtener analisis del negocio
         private AnalisisHandler? AnalisisHandler = null;
 
-        // negocio ficticio creado para la prueba
+        // negocio y análisis ficticios creados para la prueba
         private NegocioModel? NegocioFicticio = null;
-
-        // analisis ficticio creado para la prueba
         private AnalisisModel? AnalisisFicticio = null;
+        private InversionInicialHandler inversionInicialHandler = null;
 
-        // en la inicializacion creamos un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
+        // Crea un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
+        // para que el test exista debe existir el siguiente usuario en la base
+        // usuario: wumpustest@gmail.com 
+        // id del usuario: e690ef97-31c4-4064-bede-93aeedaf6857
         [TestInitialize]
         public void Setup()
         {
-
-            // creamos un negocio ficticio al usuario de testing de wumpus
+            // Negocio y analisis ficticios al usuario de testing de wumpus
             NegocioTestingHandler = new();
-
-            // tambien le creamos un analisis vacio para realizar las pruebas
             AnalisisHandler = new();
-
-            // para que el test exista debe existir el siguiente usuario en la base
-            // usuario: wumpustest@gmail.com 
-            // id del usuario: e690ef97-31c4-4064-bede-93aeedaf6857
             NegocioFicticio = NegocioTestingHandler.IngresarNegocioFicticio(TestingUserModel.UserId, "Emprendimiento");
             AnalisisFicticio = AnalisisHandler.ObtenerAnalisisMasReciente(NegocioFicticio.ID);
+            // Handler que será probado
+            inversionInicialHandler = new();
         }
 
-        // en el cleanup eliminamos el negocio que creamos
+        // Eliminamos el negocio de prueba y sus datos
         [TestCleanup]
         public void CleanUp()
         {
-            // eliminar el negocio elimina todos lso datos relacionados a el
             NegocioTestingHandler.EliminarNegocioFicticio();
         }
 
-        // este test prueba que al insertar un nuevo puesto no se modifiquen los puestos ya existentes
+        // Evalúa que al insertar un nuevo gasto inicial no se modifiquen los gastos iniciales ya existentes
         [TestMethod]
         public void InsertarGastoInicial_NoModificaOtrosGastosIniciales()
         {
             // arrange
-
-            // ingresamos una lista de puestos inicial
             List<GastoInicialModel> gastosPreInsercion = InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
 
-            // creamos gastoInicial que vamos a insertar de prueba
             GastoInicialModel gasto = new GastoInicialModel
             {
                 Nombre = "Nuevo gasto",
@@ -64,19 +54,15 @@ namespace unit_tests.Fabian
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
-            // creamos handler con el metodo que deseamos probar
-            InversionInicialHandler inversionInicialHandler = new();
-
             // action
             string fechaAnalisis = gasto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
             inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, gasto);
 
             // assert
-            // obtenemos los gastos de la base
             List<GastoInicialModel> gastosPostInsercion = inversionInicialHandler.ObtenerGastosIniciales(fechaAnalisis);
             bool FueInsertado = gastosPostInsercion.Exists(x => x.Nombre == gasto.Nombre);
 
-            // removemos de la lista el que insertamos para comparar si el resto de gastos se vieron afectados
+            // removemos de la lista el gasto que insertamos para comparar si el resto de gastos se vieron afectados
             gastosPostInsercion.RemoveAll(x => x.Nombre == gasto.Nombre);
 
             bool puestoIguales = SonListasIguales(gastosPreInsercion, gastosPostInsercion);
@@ -86,8 +72,7 @@ namespace unit_tests.Fabian
             Assert.IsTrue(FueInsertado, $"'{gasto.Nombre}' no se insertó en la base");
         }
 
-
-        // Evalúa que al insertar un nuevo puesto no se modifiquen los puestos ya existentes
+        // Evalúa que el buffer del nombre se desborde y genere excepción.
         [TestMethod]
         public void InsertarGastoInicial_ConNombreLargo_GeneraExcepcion()
         {
@@ -102,12 +87,12 @@ namespace unit_tests.Fabian
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
-            // creamos handler con el metodo que deseamos probar
-            InversionInicialHandler inversionInicialHandler = new();
+            
 
             // action
             string fechaAnalisis = gasto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
-
+            
+            // assert
             try
             {
                 inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, gasto);
@@ -117,14 +102,13 @@ namespace unit_tests.Fabian
             }
         }
 
-        // Evalúa que el buffer permitido se desborde y genere excepción.
+        // Evalúa que el buffer del monto se desborde y genere excepción.
         [TestMethod]
         public void InsertarGastoInicial_ConMontoLargo_GeneraExcepcion()
         {
             // arrange
             string excepcionEsperada = "Error converting data type numeric to decimal.";
 
-            // creamos gastoInicial que excede la cantidad de caracteres válidos
             GastoInicialModel gasto = new GastoInicialModel
             {
                 Nombre = "Monto se excede",
@@ -132,12 +116,12 @@ namespace unit_tests.Fabian
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
-            // creamos handler con el metodo que deseamos probar
-            InversionInicialHandler inversionInicialHandler = new();
+            
 
             // action
             string fechaAnalisis = gasto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
+            // assert
             try
             {
                 inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, gasto);
@@ -154,8 +138,6 @@ namespace unit_tests.Fabian
         public void InsertarGastoInicial_NombreConTildes()
         {
             // arrange
-
-            // creamos gastoInicial que excede la cantidad de caracteres válidos
             GastoInicialModel gastoNuevo = new GastoInicialModel
             {
                 Nombre = "áéíóú_ñ",
@@ -163,8 +145,7 @@ namespace unit_tests.Fabian
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             };
 
-            // creamos handler con el metodo que deseamos probar
-            InversionInicialHandler inversionInicialHandler = new();
+            
 
             // action
             string fechaAnalisis = AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -178,18 +159,14 @@ namespace unit_tests.Fabian
             Assert.IsTrue(FueInsertado, $"'{gastoNuevo.Nombre}' no se insertó en la base");
         }
 
-
-        // Evalúa que solamente se elimine el gasto inicial que corresponde dentro del mismo análisis.
+        // Evalúa que solamente se elimine el gasto inicial que corresponde, dentro del mismo análisis.
         [TestMethod]
         public void EliminarGastoInicialExistente()
         {
             // arrange
             List<GastoInicialModel> gastosPreInsercion = InsertarGastosInicialesSemillaEnBase(AnalisisFicticio.FechaCreacion);
-
             String nombreGastoFijoVictima = gastosPreInsercion[0].Nombre;
-
-            // creamos handler con el metodo que deseamos probar
-            InversionInicialHandler inversionInicialHandler = new();
+            
 
             // action
             string fechaAnalisis = AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -202,7 +179,6 @@ namespace unit_tests.Fabian
             // args: bool a evaluar, mensaje en caso de false.
             Assert.IsTrue(fueEliminado, $"'{nombreGastoFijoVictima}' no se borró en la base");
         }
-
 
         // Evalúa que se genera una excepción cuando se intenta eliminar un gasto inicial no existente.
         [TestMethod]
@@ -221,9 +197,10 @@ namespace unit_tests.Fabian
             // action
             string fechaAnalisis = AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
             filasAfectadasResultado = inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, nombreGastoFijoVictima);
+
+            // assert
             Assert.AreEqual(filasAfectadasEsperadas, filasAfectadasResultado);
         }
-
 
         // Evalúa que se genera una excepción cuando se intenta ingresar un valor negativo para el monto.
         [TestMethod]
@@ -242,11 +219,12 @@ namespace unit_tests.Fabian
             String excepcionEsperada = "El valor del monto debe ser un número positivo";
 
             // creamos handler con el metodo que deseamos probar
-            InversionInicialHandler inversionInicialHandler = new();
+            
 
             // action
             string fechaAnalisis = AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
+            // assert
             try
             {
                 inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, gastoNuevo);
@@ -269,16 +247,18 @@ namespace unit_tests.Fabian
             };
 
             // creamos handler con el metodo que deseamos probar
-            InversionInicialHandler inversionInicialHandler = new();
+            
 
             // action
             string fechaAnalisis = AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
             inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, gastoNuevo);
+            
+            // assert
             List<GastoInicialModel> gastosPostInsercion = inversionInicialHandler.ObtenerGastosIniciales(fechaAnalisis);
             bool fueInsertado = gastosPostInsercion.Exists(x => x.Nombre == gastoNuevo.Nombre);
-            
             Assert.IsTrue(fueInsertado, $"'{gastoNuevo.Nombre}' no se insertó en la base");
         }
+
 
         // metodos que asisten a los metodos de testing
 
@@ -316,7 +296,6 @@ namespace unit_tests.Fabian
         // brief: metodo que inserta en la base de datos una lista semilla de puestos
         public List<GastoInicialModel> InsertarGastosInicialesSemillaEnBase(DateTime fechaCreacion)
         {
-            InversionInicialHandler inversionInicialHandler = new();
             List<GastoInicialModel> gastosInicialesSemilla = new List<GastoInicialModel>();
             gastosInicialesSemilla.Add(new GastoInicialModel
             {

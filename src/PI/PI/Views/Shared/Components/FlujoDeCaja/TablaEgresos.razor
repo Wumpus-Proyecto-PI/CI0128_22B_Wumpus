@@ -152,6 +152,7 @@
     [Parameter]
     public List<MesModel> meses { get; set; }
 
+    // Lista con el monto monetario (decimal) del flujo mensual de cada mes.
     [Parameter]
     public List<string> flujoMensual { get; set; }
 
@@ -222,6 +223,7 @@
         else {
             mes.InversionPorMes = inversionActual; 
         }
+        // Actualiza la lista del flujo mensual.
         flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }
 
@@ -236,6 +238,7 @@
             egreso.Monto = 0;
             flujoDeCajaHandler.actualizarEgreso(egreso);
         }
+        // Actualiza la lista del flujo mensual.
         flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
 
     }

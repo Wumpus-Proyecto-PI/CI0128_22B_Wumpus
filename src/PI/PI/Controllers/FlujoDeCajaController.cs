@@ -20,12 +20,7 @@ namespace PI.Controllers
             ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
 
             List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
-
             ViewBag.Meses = meses;
-
-            List<string> flujoMensual = new();
-
-            FlujoCajaService.InicializarFlujosMensuales(meses, ref flujoMensual);
             ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
 
             // Datos que ocupa la vista
