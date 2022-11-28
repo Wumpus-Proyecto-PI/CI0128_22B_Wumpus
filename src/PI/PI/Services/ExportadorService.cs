@@ -17,7 +17,7 @@ namespace PI.Service
         IXLWorksheet? hojaAnalisisRentabilidad;
         IXLWorksheet? hojaFlujoCaja;
 
-        // Una columna del libro a cada caracteristica de un producto.
+        // Una columna del libro a cada caracteristica de un producto para el análisis de rentabilidad.
         const char NombreProductoRentabilidad = 'A';
         const char PorcentajeVentasRentabilidad = 'B';
         const char ComisionVentasRentabilidad = 'C';
@@ -35,7 +35,6 @@ namespace PI.Service
         {
             ReportarAnalisisDeRentabilidad(fechaAnalisis);
             ReportarFlujoDeCaja(fechaAnalisis);
-            // TODO agregar reporte de flujo de caja
             using (MemoryStream stream = new MemoryStream())
             {
                 libro.SaveAs(stream);
@@ -43,7 +42,7 @@ namespace PI.Service
             }
         }
 
-        // Crea la hoja referente al análisis de rentabilidad.
+        // Crea la hoja referente al análisis de rentabilidad y todos sus valores.
         public void ReportarAnalisisDeRentabilidad(string fechaAnalisis)
         {
             hojaAnalisisRentabilidad = libro.AddWorksheet("Analisis de Rentabilidad");
@@ -60,10 +59,10 @@ namespace PI.Service
             AgregarValoresDeProductos(ref productos);
             AgregarFormulasRentabilidad(cantidadProductos);
             AgregarTotalesRentabilidad(cantidadProductos);
-            FormatearCeldasRentabilidad(cantidadProductos); // 8: filas anteriores + 1 fila del total.
-            AñadirEstiloRentabilidad($"K{cantidadProductos + 8 + 1}");
+            FormatearCeldasRentabilidad(cantidadProductos); 
+            AñadirEstiloRentabilidad($"K{cantidadProductos + 8 + 1}"); // 8: filas anteriores + 1 fila del total.
 
-            hojaAnalisisRentabilidad.Columns().AdjustToContents();
+            hojaAnalisisRentabilidad.Columns().AdjustToContents();  // ajusta el ancho de la columna al contenido de la celda.
             libro.RecalculateAllFormulas();
         }
 
@@ -94,7 +93,7 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Cell($"{MetaVentasUnidadRentabilidad}8").Value = "Unidad";
             hojaAnalisisRentabilidad.Cell($"{MetaVentasMontoRentabilidad}8").Value = "Monto";
         }
-
+        // 
         public void InsertarEncabezadoFlujoDeCaja() {
             hojaFlujoCaja.Cell("A1").Value = "Flujo de caja";
 
@@ -366,9 +365,6 @@ namespace PI.Service
                 hojaAnalisisRentabilidad.Cell($"{columnaActual}{filaTotales}").FormulaA1 = $"SUM({columnaActual}9:{columnaActual}{filaTotales - 1})";
                 ++columnaActual;
             }
-            hojaAnalisisRentabilidad.Range($"A{filaTotales}", $"K{filaTotales}").Style.Font.SetBold();
-            hojaAnalisisRentabilidad.Range($"A{filaTotales}", $"K{filaTotales}").Style.Fill.BackgroundColor = XLColor.FromHtml("#8E8E8E");
-            hojaAnalisisRentabilidad.Range($"A{filaTotales}", $"K{filaTotales}").Style.Font.SetFontColor(XLColor.FromHtml("#FFFFFF"));
         }
 
         // Agrega el formato estadístico a cada celda que lo necesita.
@@ -391,38 +387,48 @@ namespace PI.Service
         // Agrega estilos (decoración visual) a la hoja de análisis de rentabilidad
         public void AñadirEstiloRentabilidad(string celdaFinal)
         {
+            // Agrego estilo a la primer celda del título.
             hojaAnalisisRentabilidad.Cell("A1").Style.Font.FontSize = 16;
             hojaAnalisisRentabilidad.Cell("A1").Style.Font.SetBold();
             hojaAnalisisRentabilidad.Cell("A1").Style.Font.SetFontColor(XLColor.FromHtml("#4472C4"));
             hojaAnalisisRentabilidad.Cell("A2").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             hojaAnalisisRentabilidad.Range("A1:K1").Merge();
             hojaAnalisisRentabilidad.Cell("A1").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+            // Agrego estilo a los títulos de la tabla.
             hojaAnalisisRentabilidad.Range("A8", "K8").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             hojaAnalisisRentabilidad.Range("A8", "K8").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             hojaAnalisisRentabilidad.Range("A8", "K8").Style.Font.SetBold();
             hojaAnalisisRentabilidad.Range("A8", "K8").Style.Fill.BackgroundColor = XLColor.FromHtml("#4472C4");
             hojaAnalisisRentabilidad.Range("A8", "K8").Style.Font.SetFontColor(XLColor.FromHtml("#FFFFFF"));
 
-
+            // Agrego borde a la ganancia mensual y gastos fijos.
             hojaAnalisisRentabilidad.Cell("A5").Style.Border.TopBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Cell("A6").Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-
             hojaAnalisisRentabilidad.Cell("B5").Style.Border.TopBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Cell("B5").Style.Border.RightBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Cell("B6").Style.Border.RightBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Cell("B6").Style.Border.BottomBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("A5", "B6").Style.Font.SetBold();
 
+            // Agrego bordes a la tabla.
             hojaAnalisisRentabilidad.Range("A8", celdaFinal).Style.Border.TopBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("A8", celdaFinal).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("A8", celdaFinal).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("A8", celdaFinal).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("A8", celdaFinal).Style.Border.RightBorder = XLBorderStyleValues.Thin;
 
+            // Agrego borde al punto de equilibrio y meta de ventas.
             hojaAnalisisRentabilidad.Range("H7", "K7").Style.Border.TopBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("H7", "K7").Style.Border.RightBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("H7", "K7").Style.Border.LeftBorder = XLBorderStyleValues.Thin;
             hojaAnalisisRentabilidad.Range("H7", "K7").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+            // celdaFinal = K{filaTotales}. Extraigo todo menos la columna para obtener la fila de los rubros totales.
+            int filaTotales = Convert.ToInt32(celdaFinal.Substring(1));
+            hojaAnalisisRentabilidad.Range($"A{filaTotales}", $"K{filaTotales}").Style.Font.SetBold();
+            hojaAnalisisRentabilidad.Range($"A{filaTotales}", $"K{filaTotales}").Style.Fill.BackgroundColor = XLColor.FromHtml("#8E8E8E");
+            hojaAnalisisRentabilidad.Range($"A{filaTotales}", $"K{filaTotales}").Style.Font.SetFontColor(XLColor.FromHtml("#FFFFFF"));
         }
     }
 }
