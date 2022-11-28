@@ -165,8 +165,10 @@
     // handler con el cual comunicarse con la base de datos
     public EstructuraOrgHandler HandlerPuesto = new EstructuraOrgHandler();
 
-
-    // string que almacena el nombre de un puesto antes de ser modificado para pdoer actualizarlo en la base de datos
+    // hanlder para manejar los porcenatjes de seguro social y de prestaciones laborales en la base
+    public AnalisisHandler AnalisisHandler = new AnalisisHandler();
+    
+    // string que almacena el nombre de un puesto antes de ser modificado para poder actualizarlo en la base de datos
     public string CopiaNombreOriginal = "";
 
     // placeholder indican que se debe ingresar en los campos
@@ -390,8 +392,7 @@
     }
 
     public void ActualizarConfigAnalisis() {
-        AnalisisHandler analisisHandler = new AnalisisHandler();
-        analisisHandler.ActualizarConfiguracionAnalisis(Config);
+        AnalisisHandler.ActualizarConfiguracionAnalisis(Config);
     }
 }
 
