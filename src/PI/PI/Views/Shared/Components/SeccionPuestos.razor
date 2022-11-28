@@ -6,19 +6,19 @@
     <div id="form-parametros-rentabilidad">
         <div class="pill-form">
             <div><h4>Seguro social</h4></div>
-            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="config.PorcentajeSS" @onfocusout="ActualizarConfigAnalisis" />
+            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajeSS" @onfocusout="ActualizarConfigAnalisis" />
         </div>
         <div class="pill-form">
             <div><h4>Prestaciones laborales</h4></div>
-            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="config.PorcentajePL" @onfocusout="ActualizarConfigAnalisis" />
+            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajePL" @onfocusout="ActualizarConfigAnalisis" />
         </div>
     </div>
 </div>
 <div id="contenido-puestos-pestañas">   
-    @*se llama al componente reazor dinamico que contiene lado del cliente de agregar puestos y beneficios*@
+    @*se llama al componente reazor dinamico que contiene lado del cliente de agregar Puestos y beneficios*@
     <div style="width: 100%; display: flex;">
 <div class="altura-seccion" id="seccion-pestañas">
-    @*Comienzo ventana izquierda de edición e ingreso de puestos*@
+    @*Comienzo ventana izquierda de edición e ingreso de Puestos*@
         <div id="titulo-contenido">
 
             @*
@@ -26,7 +26,7 @@
                 En caso de haber uno seleccionado, se está editando un puesto
                 Caso contrario se está agregando uno nuevo
             *@
-            @if (hayPuestoSeleccionado == false)
+            @if (HayPuestoSeleccionado == false)
             {
                     <h2 class="mt-3 fw-bold">Nuevo puesto</h2>
                 } else {
@@ -43,7 +43,7 @@
                     <form id="form_configuracion">
                         @*Input del nombre del puesto*@
                         <div class="fila-form-configuracion">
-                            <label>Nombre del puesto</label> <input name="" id="nombre_puesto" type="text" @bind="puestoActivo.Nombre" placeholder="@placeHolderNombre">
+                            <label>Nombre del puesto</label> <input name="" id="nombre_puesto" type="text" @bind="PuestoActivo.Nombre" placeholder="@PlaceHolderNombre">
                         </div>
 
                         @(
@@ -52,7 +52,7 @@
 
                         @*Input del salario del puesto*@
                         <div class="fila-form-configuracion">
-                            <label>Salario Mensual</label> <input name="" id="salario_mensual" min="0" type="number" step="any" @bind="puestoActivo.SalarioBruto">
+                            <label>Salario Mensual</label> <input name="" id="salario_mensual" min="0" type="number" step="any" @bind="PuestoActivo.SalarioBruto">
                         </div>
                         @(
                             (MarkupString)ErrorSalario
@@ -60,7 +60,7 @@
 
                         @*Input de las plazas del puesto*@
                         <div class="fila-form-configuracion">
-                            <label>Plazas</label> <input name="" id="num-plazas" min="1" type="number" @bind="puestoActivo.Plazas">
+                            <label>Plazas</label> <input name="" id="num-plazas" min="1" type="number" @bind="PuestoActivo.Plazas">
                         </div>
                         @(
                             (MarkupString)ErrorPlaza
@@ -68,7 +68,7 @@
 
                         @*Input del monto de beneficios del puesto*@
                         <div class="fila-form-configuracion">
-                            <label>Beneficios</label> <input name="" id="beneficios" min="1" type="number" @bind="puestoActivo.Beneficios">
+                            <label>Beneficios</label> <input name="" id="beneficios" min="1" type="number" @bind="PuestoActivo.Beneficios">
                         </div>
                     </form>
                 </div>
@@ -80,36 +80,36 @@
                 @*Botón de guardado*@
             </div>
             <div id="inferior-horizontal">
-                @if (hayPuestoSeleccionado == true) {
+                @if (HayPuestoSeleccionado == true) {
                     /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                    <div id="eliminar-puesto"class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarPuesto(puestoActivo)">
+                    <div id="eliminar-puesto"class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => EliminarPuesto(PuestoActivo)">
                         <a>
-                            @if (hoverEliminar == false)
+                            @if (HoverEliminar == false)
                             {
                                 <img src="img/generic/trashCan.png" alt="">
                             }
-                            @hoverTextEliminar
+                            @HoverTextEliminar
                         </a>
                     </div>
                 }
-                <div  class="est-org-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(puestoActivo)">
+                <div  class="est-org-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(PuestoActivo)">
                     <a>
-                        @if (hoverGuardar == false) {
+                        @if (HoverGuardar == false) {
                             <img src="img/estructuraOrg/guardarPuesto.png" alt="">
                         }
-                        @hoverTextGuardar
+                        @HoverTextGuardar
                     </a>
                 </div>
             </div>
-            @*Fin ventana izquierda de edición e ingreso de puestos*@
+            @*Fin ventana izquierda de edición e ingreso de Puestos*@
         </div>
 
-        @*Comienzo de seccion de puestos donde se ven los puestos en cajas con organigrama*@
+        @*Comienzo de seccion de Puestos donde se ven los Puestos en cajas con organigrama*@
         <div class="altura-seccion" id="seccion-puestos">
             <div id="mostrar-puestos">
 
-                @*Renderización de las tarjetas de los puestos, son componentes razor aparte*@
-                @foreach (PuestoModel puestoActual in puestos)
+                @*Renderización de las tarjetas de los Puestos, son componentes razor aparte*@
+                @foreach (PuestoModel puestoActual in Puestos)
                 {
                     <div class="puesto-clickeable" @onclick="() => SeleccionarPuesto(puestoActual)" >
                         <div >
@@ -125,39 +125,39 @@
             @*Botón de agregar un puesto*@
             <div class="transition est-org-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoPuesto">
                 <a>
-                    @if (hoverAgregar == false)
+                    @if (HoverAgregar == false)
                     {
                         <img src="img/estructuraOrg/addPuesto.png" alt="">
                     }
-                    @hoverTextAgregar
+                    @HoverTextAgregar
                 </a>
             </div>
         </div>
     </div>
 </div>
-@*Fin de seccion de puestos donde se ven los puestos en cajas con organigrama*@
+@*Fin de seccion de Puestos donde se ven los Puestos en cajas con organigrama*@
 
 
 
 
 
 @code {
-    // lista de puestos de la base de datos
+    // lista de Puestos de la base de datos
     [Parameter]
-    public List<PuestoModel> puestos { get; set; }
+    public List<PuestoModel> Puestos { get; set; }
 
     // fecha del análisis al que pertenece la estructura organanizativa
     [Parameter]
-    public DateTime fechaAnalasis { get; set; }
+    public DateTime FechaAnalisis { get; set; }
 
     [Parameter]
-    public ConfigAnalisisModel config { get; set; }
+    public ConfigAnalisisModel Config { get; set; }
 
     // booleano que indica si se está editanto un puesto o agregando
-    public bool hayPuestoSeleccionado = false;
+    public bool HayPuestoSeleccionado = false;
 
     // puesto seleccionado actualmente, puede ser nuevo o un existente
-    public PuestoModel puestoActivo = new PuestoModel();
+    public PuestoModel PuestoActivo = new PuestoModel();
 
     // bool que indica si se debe mostrar el popup de beneficios
     public bool PopupVisible { get; set; } = false;
@@ -167,20 +167,20 @@
 
 
     // string que almacena el nombre de un puesto antes de ser modificado para pdoer actualizarlo en la base de datos
-    public string copiaNombreOriginal = "";
+    public string CopiaNombreOriginal = "";
 
     // placeholder indican que se debe ingresar en los campos
-    public string placeHolderNombre = "Ingresar nombre";
+    public string PlaceHolderNombre = "Ingresar nombre";
 
     // variables para agregar y quitar texto al hacer hover en botones de guardar, agregar y eliminar
-    public string hoverTextAgregar = "";
-    public string hoverTextGuardar = "";
-    public string hoverTextEliminar = "";
+    public string HoverTextAgregar = "";
+    public string HoverTextGuardar = "";
+    public string HoverTextEliminar = "";
 
     // booleanos para el control de los hover en botones guardar y agregar
-    public bool hoverGuardar = false;
-    public bool hoverAgregar = false;
-    public bool hoverEliminar = false;
+    public bool HoverGuardar = false;
+    public bool HoverAgregar = false;
+    public bool HoverEliminar = false;
 
     // strings que muestran los mensajes de error con respecto al nombre y los números negativos
     public string ErrorNombre = "";
@@ -193,16 +193,16 @@
         // este metodo quita la imagen y agrega el texto correspondiente
         // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
         if (action == 1) {
-            hoverTextAgregar = "Agregar Puesto";
-            hoverAgregar = true;
+            HoverTextAgregar = "Agregar Puesto";
+            HoverAgregar = true;
         }
         else if (action == 2)
         {
-            hoverGuardar = true;
-            hoverTextGuardar = "Guardar datos";
+            HoverGuardar = true;
+            HoverTextGuardar = "Guardar datos";
         } else if (action == 3) {
-            hoverEliminar = true;
-            hoverTextEliminar = "Eliminar puesto";
+            HoverEliminar = true;
+            HoverTextEliminar = "Eliminar puesto";
         }
     }
 
@@ -213,15 +213,15 @@
         // recibe un int para diferenciar si es el quitar hover del botón de guardar (1) o de agregar (2)
         if (action == 1)
         {
-            hoverTextAgregar = "";
-            hoverAgregar = false;
+            HoverTextAgregar = "";
+            HoverAgregar = false;
         } else if (action == 2) {
-            hoverGuardar = false;
-            hoverTextGuardar = "";
+            HoverGuardar = false;
+            HoverTextGuardar = "";
         } else if (action == 3)
         {
-            hoverEliminar = false;
-            hoverTextEliminar = "";
+            HoverEliminar = false;
+            HoverTextEliminar = "";
         }
     }
 
@@ -232,16 +232,16 @@
     public void SeleccionarPuesto(PuestoModel puestoSeleccionado)
     {
         // se asigna el puesto activo
-        puestoActivo = puestoSeleccionado;
+        PuestoActivo = puestoSeleccionado;
 
         // se asugnan variables de vista
-        placeHolderNombre = puestoActivo.Nombre;
+        PlaceHolderNombre = PuestoActivo.Nombre;
 
         // se copia el nombre por si se va a actualizar este nombre
-        copiaNombreOriginal = puestoActivo.Nombre;
+        CopiaNombreOriginal = PuestoActivo.Nombre;
 
         // se indica que hay un puesto seleccionado
-        hayPuestoSeleccionado = true;
+        HayPuestoSeleccionado = true;
 
         // se resetean variables e error
         ErrorNombre = "";
@@ -253,16 +253,16 @@
     // este reseta la vista de la izquierda para poder ingresar los datos del nuevo puesto
     public void AgregarNuevoPuesto() {
         // se reseatean variables de control visual
-        placeHolderNombre = "Ingresar nombre";
+        PlaceHolderNombre = "Ingresar nombre";
 
         // se indica que no hay un puesto seleccionado
-        hayPuestoSeleccionado = false;
+        HayPuestoSeleccionado = false;
 
         // no hay un nombre por copiar porque es un puesto nuevo
-        copiaNombreOriginal = "";
+        CopiaNombreOriginal = "";
 
         // se crea un nuevo puesto
-        puestoActivo = new PuestoModel();
+        PuestoActivo = new PuestoModel();
 
         // se resetean variables de errores
         ErrorNombre = "";
@@ -276,17 +276,17 @@
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
 
         // se revisa que el nombre no este repetido y que no haya números negativo
-        if (revisarNombre(puestoGuardar) && revisarSalario(puestoGuardar) && revisarPlazasPuesto(puestoGuardar))
+        if (RevisarNombre(puestoGuardar) && RevisarSalario(puestoGuardar) && RevisarPlazasPuesto(puestoGuardar))
         {
             // se asigna el pueso la fecha del análisis por si es un puesto nuevo
-            puestoGuardar.FechaAnalisis = fechaAnalasis;
+            puestoGuardar.FechaAnalisis = FechaAnalisis;
             // se ingresa con el handler en la base de datos el puesto
-            HandlerPuesto.InsertarPuesto(copiaNombreOriginal, puestoGuardar);
+            HandlerPuesto.InsertarPuesto(CopiaNombreOriginal, puestoGuardar);
 
             // se resetean variables de vista y de control
-            if (hayPuestoSeleccionado == false)
+            if (HayPuestoSeleccionado == false)
             {
-                puestoActivo = new PuestoModel();
+                PuestoActivo = new PuestoModel();
             }
             ErrorNombre = "";
             ErrorSalario = "";
@@ -298,7 +298,7 @@
     }
 
     // método para revisar si el nombre está repetido y que no esté vacío
-    private bool revisarNombre(PuestoModel puestoGuardar)
+    private bool RevisarNombre(PuestoModel puestoGuardar)
     {
         bool valido = true;
         // se revisa que no esté vacío
@@ -308,24 +308,24 @@
             valido = false;
         }
 
-        if (!hayPuestoSeleccionado) {
+        if (!HayPuestoSeleccionado) {
             // si es un puesto nuevo solo revisamos que no esté en la lista
-            if (puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
+            if (Puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
             {
                 ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
         } else {
-            int index = puestos.IndexOf(puestoGuardar);
+            int index = Puestos.IndexOf(puestoGuardar);
             // si se seleccionó un puesto, debemos sacarlo de la lista y luego revisar si está repetido
-            puestos.Remove(puestoGuardar);
-            if (puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
+            Puestos.Remove(puestoGuardar);
+            if (Puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
             {
                 ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: el nombre del puesto ya existe. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
                 valido = false;
             }
             // resinertamos el peusto en la misma posición donde estaba
-            puestos.Insert(index, puestoGuardar);
+            Puestos.Insert(index, puestoGuardar);
         }
 
         // hacemos reseteo en variable de error del nombre
@@ -338,7 +338,7 @@
 
     // método que revisa si el número de plazas es válido
     // recibe el puesto que se está editando
-    private bool revisarPlazasPuesto(PuestoModel puestoGuardar)
+    private bool RevisarPlazasPuesto(PuestoModel puestoGuardar)
     {
         bool valido = true;
         // se revisa que no sea negativo
@@ -354,7 +354,7 @@
 
     // método que revisa que el salario sea válido
     // recibe el puesto que se está editando
-    private bool revisarSalario(PuestoModel puestoGuardar)
+    private bool RevisarSalario(PuestoModel puestoGuardar)
     {
         // se revisa que no sea negatvo el salario del puesto
         bool valido = true;
@@ -370,7 +370,7 @@
 
     // método para eliminar un puesto de la base de datos
     // recibe el puesto que se desea eliminar
-    public void eliminarPuesto(PuestoModel puestoEliminar)
+    public void EliminarPuesto(PuestoModel puestoEliminar)
     {
         // se utiliza el handler para eliminar el puesto
         HandlerPuesto.EliminarPuesto(puestoEliminar);
@@ -381,7 +381,7 @@
 
     public void ActualizarConfigAnalisis() {
         AnalisisHandler analisisHandler = new AnalisisHandler();
-        analisisHandler.ActualizarConfiguracionAnalisis(config);
+        analisisHandler.ActualizarConfiguracionAnalisis(Config);
     }
 }
 
