@@ -119,7 +119,7 @@ namespace unit_tests.Wilmer
             // si es nulo el gasto fijo significa que no se ingreso en la base de datos
             Assert.IsNotNull(gastoSeguroSocial, "El gasto de seguro social no se encontró en la base de datos");
 
-            Assert.AreEqual(6669.30m, gastoSeguroSocial.Monto, "No se calculó correctamente el monto");
+            Assert.AreEqual(80031.60m, gastoSeguroSocial.Monto, "No se calculó correctamente el monto");
         }
 
         [TestMethod]
@@ -144,7 +144,7 @@ namespace unit_tests.Wilmer
             // si es nulo el gasto fijo significa que no se ingreso en la base de datos
             Assert.IsNotNull(gastoPrestaciones, "El gasto de prestaciones laborales no se encontró en la base de datos");
 
-            Assert.AreEqual(6669.30m, gastoPrestaciones.Monto, "No se calculó correctamente el monto");
+            Assert.AreEqual(80031.60m, gastoPrestaciones.Monto, "No se calculó correctamente el monto");
         }
 
         [TestMethod]
@@ -168,8 +168,38 @@ namespace unit_tests.Wilmer
             // si es nulo el gasto fijo significa que no se ingreso en la base de datos
             Assert.IsNotNull(gastoBeneficios, "El gasto de beneficios no se encontró en la base de datos");
 
-            //Assert.AreEqual(51765m 1180299m, gastoBeneficios.Monto, "No se calculó correctamente el monto");
+            Assert.AreEqual(14163588.00m, gastoBeneficios.Monto, "No se calculó correctamente el monto");
         }
+        #endregion
+
+        #region Testing Producto Handler
+
+        //[TestMethod]
+        //public void ActualizarPorcentajeDeVentasNoTiraExpeciones()
+        //{
+        //    // Preparacion
+        //    ProductoHandler productoHandler = new ProductoHandler();
+        //    decimal porcentajeVentas = 0.2m;
+
+        //    // action
+        //    gastoFijoHandler.actualizarSeguroSocial(AnalisisFicticio.FechaCreacion, seguroSocial);
+        //    productoHandler.ActualizarPorcentajeVentas()
+
+        //    // assert
+
+        //    // leemos los gastos fijos
+        //    List<GastoFijoModel> gastosFijos = GastosFijosTesting.leerGastosFijosDeBase(AnalisisFicticio.FechaCreacion);
+
+        //    // buscamos el gasto fijo correspondiente al seguro social
+        //    // solo buscamos por el nombre porque este es unico ya que es llave primaria en la base de datos
+        //    GastoFijoModel? gastoSeguroSocial = gastosFijos.Find(x => x.Nombre == "Seguridad social");
+
+        //    // si es nulo el gasto fijo significa que no se ingreso en la base de datos
+        //    Assert.IsNotNull(gastoSeguroSocial, "El gasto de seguro social no se encontró en la base de datos");
+
+        //    Assert.AreEqual(6669.30m, gastoSeguroSocial.Monto, "No se calculó correctamente el monto");
+        //}
+
         #endregion
     }
 }
