@@ -30,9 +30,9 @@ namespace PI.Handlers
             int filasAfectadas = 0;
 
             // primero se revisa si ya existe el puesto en la base
-            if (existePuestoEnBase(nombrePuesto, puesotAInsertar.FechaAnalisis))
+            if (ExistePuestoEnBase(nombrePuesto, puesotAInsertar.FechaAnalisis))
             {
-                // si existe el peusto lo actualizamos
+                // si existe el puesto lo actualizamos
                 ActualizarPuesto(nombrePuesto, puesotAInsertar);
             } else
             {
@@ -58,11 +58,12 @@ namespace PI.Handlers
         // Método que permite revisar si ya existe un puesto en la base
         // Recibe el nombre el puesto y la fecha del análisis dodne buscarlo
         // Retorna verdadero si existe el puesto. Caso contrario, retorna false
-        public bool existePuestoEnBase(string nombrePuesto, DateTime fechaAnalisis)
+        public bool ExistePuestoEnBase(string nombrePuesto, DateTime fechaAnalisis)
         {
             // booleano para determinar si se encontró el peusto
             bool encontrado = false;
-            // consulta sql para determinar si el peusto existe
+
+            // consulta sql para determinar si el puesto existe
             string consulta = "SELECT * FROM PUESTO WHERE "
                 + "nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
