@@ -9,7 +9,8 @@ using unit_tests.SharedResources;
 
 namespace unit_tests.Chris
 {
-    public class GastoVariableTesting : HandlerGenerico
+    [TestClass]
+    public class GastoVariableTesting
     {
         // handler de testing que permite crear un negocio de pruebas
         private NegocioTestingHandler? NegocioTestingHandler = null;
@@ -59,8 +60,48 @@ namespace unit_tests.Chris
         public void InsertarGastoVariable_ParametrosCorrectos_ConComponentes()
         {
             //arrange
+
+            List<ComponenteModel> componentes = new List<ComponenteModel>();
+
+            componentes.Add(new ComponenteModel
+            {
+                NombreProducto = "producto-test",
+                Nombre = "componente-test",
+                Costo = 1,
+                Unidad = "Kilos",
+                Cantidad = 1,
+                FechaAnalisis = AnalisisFicticio.FechaCreacion
+            });
+
+            ProductoModel producto = new ProductoModel()
+            {
+                Nombre = "producto-test",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 1,
+                CostoVariable = 1,
+                ComisionDeVentas = 1,
+                PorcentajeDeVentas = 1,
+                Precio = 1,
+                Componentes = componentes
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            ProductoHandler productoHandler = new();
+            ComponenteHandler componenteHandler = new();
+
             //action
+            productoHandler.InsertarProducto(producto.Nombre, producto);
+            componenteHandler.AgregarComponente(componentes[0]);
+
             //assert
+            List<ProductoModel> productosPostInsercion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            List<ComponenteModel> componentesPostInsercion = GastosVariablesTestingHandler.leerComponentesDeBase(producto.Nombre, AnalisisFicticio.FechaCreacion);
+
+            bool? productoIngresado = productosPostInsercion.Exists(x => x.Nombre == producto.Nombre);
+            bool? componenteIngresado = componentesPostInsercion.Exists(x => x.Nombre == componentes[0].Nombre);
+            
+            Assert.IsTrue(productoIngresado, "El producto no se ingresó en la base de datos");
+            Assert.IsTrue(componenteIngresado, "El componente no se ingresó en la base de datos");
         }
 
         [TestMethod]
@@ -128,7 +169,7 @@ namespace unit_tests.Chris
         }
 
         [TestMethod]
-        public void EliminarGastoVAriable_NoExistente()
+        public void EliminarGastoVariable_NoExistente()
         {
             //arrange
             //action
