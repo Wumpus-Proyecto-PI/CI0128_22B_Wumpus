@@ -177,15 +177,26 @@ namespace PI.Service
         {
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis);
+            decimal divisor = 1;
             for (int i = 0; i < gastosFijos.Count; i += 1)
             {
+                if (gastosFijos[i].Nombre == "Beneficios de empleados"
+                    || gastosFijos[i].Nombre == "Prestaciones laborales"
+                    || gastosFijos[i].Nombre == "Salarios netos"
+                    || gastosFijos[i].Nombre == "Seguridad social")
+                {
+                    divisor = 1;
+                }
+                else {
+                    divisor = 12;
+                }
                 hojaFlujoCaja.Cell("A" + (i + 13)).Value = gastosFijos[i].Nombre;
-                hojaFlujoCaja.Cell("B" + (i + 13)).Value = gastosFijos[i].Monto;
-                hojaFlujoCaja.Cell("C" + (i + 13)).Value = gastosFijos[i].Monto;
-                hojaFlujoCaja.Cell("D" + (i + 13)).Value = gastosFijos[i].Monto;
-                hojaFlujoCaja.Cell("E" + (i + 13)).Value = gastosFijos[i].Monto;
-                hojaFlujoCaja.Cell("F" + (i + 13)).Value = gastosFijos[i].Monto;
-                hojaFlujoCaja.Cell("G" + (i + 13)).Value = gastosFijos[i].Monto;
+                hojaFlujoCaja.Cell("B" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
+                hojaFlujoCaja.Cell("C" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
+                hojaFlujoCaja.Cell("D" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
+                hojaFlujoCaja.Cell("E" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
+                hojaFlujoCaja.Cell("F" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
+                hojaFlujoCaja.Cell("G" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
             }
             hojaFlujoCaja.Cell("A" + (gastosFijos.Count + 12)).Value = "Total Egresos";
             hojaFlujoCaja.Cell("B" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(B" + (gastosFijos.Count + 11) + ":B10)";
