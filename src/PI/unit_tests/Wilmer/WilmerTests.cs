@@ -179,31 +179,39 @@ namespace unit_tests.Wilmer
 
         #region Testing Producto Handler
 
-        //[TestMethod]
-        //public void ActualizarPorcentajeDeVentasNoTiraExpeciones()
-        //{
-        //    // Preparacion
-        //    ProductoHandler productoHandler = new ProductoHandler();
-        //    decimal porcentajeVentas = 0.2m;
+        [TestMethod]
+        public void ActualizarPorcentajeDeVentasNoTiraExpeciones()
+        {
+            // Preparacion
+            ProductoModel productoPrueba = new ProductoModel 
+            { 
+                Nombre = "Empanadas",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 5,
+                PorcentajeDeVentas = 0.5m
+            };
 
-        //    // action
-        //    gastoFijoHandler.actualizarSeguroSocial(AnalisisFicticio.FechaCreacion, seguroSocial);
-        //    productoHandler.ActualizarPorcentajeVentas()
+            ProductoHandler productoHandler = new ProductoHandler();
+            // Se inserta el producto en la base de datos
+            productoHandler.InsertarProducto("Empanadas", productoPrueba);
 
-        //    // assert
+            // action
+            // Se cambia el porcentaje de ventas para probar la actualizacion
+            productoPrueba.PorcentajeDeVentas = 0.10m;
+            productoHandler.ActualizarPorcentajeVentas(productoPrueba, AnalisisFicticio.FechaCreacion);
 
-        //    // leemos los gastos fijos
-        //    List<GastoFijoModel> gastosFijos = GastosFijosTesting.leerGastosFijosDeBase(AnalisisFicticio.FechaCreacion);
+            // assert
+            // leemos los productos
+            List<ProductoModel> productos = productoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion);
 
-        //    // buscamos el gasto fijo correspondiente al seguro social
-        //    // solo buscamos por el nombre porque este es unico ya que es llave primaria en la base de datos
-        //    GastoFijoModel? gastoSeguroSocial = gastosFijos.Find(x => x.Nombre == "Seguridad social");
+            // buscamos el producto correspondiente
+            ProductoModel? productoResultado = productos.Find(x => x.Nombre == "Empanadas");
 
-        //    // si es nulo el gasto fijo significa que no se ingreso en la base de datos
-        //    Assert.IsNotNull(gastoSeguroSocial, "El gasto de seguro social no se encontró en la base de datos");
+            // si es nulo el gasto fijo significa que no se ingreso en la base de datos
+            Assert.IsNotNull(productoResultado, "El producto no se encontró en la base de datos");
 
-        //    Assert.AreEqual(6669.30m, gastoSeguroSocial.Monto, "No se calculó correctamente el monto");
-        //}
+            Assert.AreEqual(productoResultado.PorcentajeDeVentas, productoPrueba.PorcentajeDeVentas, "No se guardo correctamente el porcentaje");
+        }
 
         #endregion
 
