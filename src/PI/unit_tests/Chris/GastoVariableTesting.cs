@@ -24,6 +24,22 @@ namespace unit_tests.Chris
         private AnalisisModel? AnalisisFicticio = null;
 
         // handler de testing usado para manejar la creacion de puestos semilla
-        GastosVariablesTestingHandler? GastoVariableTestingHandler = null;
+        GastosVariablesTestingHandler? GastosVariablesTestingHandler = null;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            NegocioTestingHandler = new();
+
+            AnalisisHandler = new();
+
+            GastosVariablesTestingHandler = new(); 
+
+            // para que el test exista debe existir el siguiente usuario en la base
+            // usuario: wumpustest@gmail.com 
+            // id del usuario: e690ef97-31c4-4064-bede-93aeedaf6857
+            NegocioFicticio = NegocioTestingHandler.IngresarNegocioFicticio(TestingUserModel.UserId, "Emprendimiento");
+            AnalisisFicticio = AnalisisHandler.ObtenerAnalisisMasReciente(NegocioFicticio.ID);
+        }
     }
 }
