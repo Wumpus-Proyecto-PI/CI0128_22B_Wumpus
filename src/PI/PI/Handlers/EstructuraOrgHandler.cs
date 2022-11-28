@@ -23,7 +23,6 @@ namespace PI.Handlers
         // Recibe el string nombrePuesto a ingresar y un modelPuesto.
         // EL string nombrePuesto es el nombre antes de modificaciones. Esto se usa para actualizaciones.
         // El modelo es para acceder a todos los datos de tal puesto
-        // Este método retorna la cantidad de filas actualizadas
         public void InsertarPuesto(string nombrePuesto, PuestoModel puesotAInsertar)
         {
 
@@ -77,7 +76,6 @@ namespace PI.Handlers
 
         // Método que permite actualizar un puesto ya existente
         // Recibe el nombre el puesto anterior y el modelo a insertar
-        // Retorna true si se se dio un error en la consulta 
         public void ActualizarPuesto(string nombrePuesto, PuestoModel puestoInsertar)
         {
             // consulta sql con la cual actualizamos el puesto. Aquí támbien casteamos los decimales según si tiene punto o decimal
@@ -85,8 +83,8 @@ namespace PI.Handlers
                 + "nombre='" + puestoInsertar.Nombre + "', "
                 + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
                 + "salarioBruto= " + puestoInsertar.SalarioBruto.ToString().Replace(",", ".") + ", "
-                + "beneficios= " + puestoInsertar.Beneficios.ToString().Replace(",", ".") + " "
-                + "WHERE nombre='" + nombrePuesto + "' and "
+                + "beneficios= " + puestoInsertar.Beneficios.ToString().Replace(",", ".")
+                + " WHERE nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             base.enviarConsulta(update);
         }
@@ -115,7 +113,6 @@ namespace PI.Handlers
                 puesto.FechaAnalisis = Convert.ToDateTime(fila["fechaAnalisis"]);
                 puesto.Beneficios = Convert.ToDecimal(fila["beneficios"]);
 
-                // los beneficios se cargan con otro método que carga beneficios según el puesto y el análisis
                 puestos.Add(puesto);
             }
 
