@@ -12,31 +12,27 @@ namespace PI.Services
         public static decimal CalcularFlujoMensual(MesModel mesModel)
         {
             FlujoDeCajaHandler flujoDeCajaHandler = new();
+
+            // Obtiene los ingresos del mes.
             decimal totalIngresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
-
+            // Obtiene los egresos del mes.
             decimal totalEgresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mesModel);
-            GastoFijoHandler gastoFijoHandler = new();
-            
-            totalEgresoPorMes += gastoFijoHandler.obtenerTotalAnual(mesModel.FechaAnalisis) / 12;
 
+            // Suma los gastos fijos y la inversión inicial a los egresos.
+            GastoFijoHandler gastoFijoHandler = new();
+            totalEgresoPorMes += gastoFijoHandler.obtenerTotalAnual(mesModel.FechaAnalisis) / 12;
             totalEgresoPorMes += flujoDeCajaHandler.obtenerInversionDelMes(mesModel);
 
             return totalIngresoPorMes - totalEgresoPorMes;
         }
-        public static void InicializarFlujosMensuales(List<MesModel> meses, ref List<string> flujoMensual)
-        {
-            for (int mes = 0; mes < meses.Count; ++mes)
-            {
-                flujoMensual.Add((FormatManager.ToFormatoEstadistico(FlujoCajaService.CalcularFlujoMensual(meses[mes]))));
-            }
-        }
 
+        // Retorna una lista con el flujo mensual de cada mes recalculado.
         public static List<string> ActualizarFlujosMensuales(List<MesModel> meses)
         {
             List<string> flujoMensual = new();
             for (int mes = 0; mes < meses.Count; ++mes)
             {
-                flujoMensual.Add(FormatManager.ToFormatoEstadistico(FlujoCajaService.CalcularFlujoMensual(meses[mes])));
+                flujoMensual.Add(FormatManager.ToFormatoEstadistico(CalcularFlujoMensual(meses[mes])));
             }
             return flujoMensual;
         }

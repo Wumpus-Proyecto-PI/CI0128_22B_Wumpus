@@ -396,7 +396,7 @@ namespace unit_tests.DanielE
             EstructuraOrgHandler estructuraOrgHandler = new();
 
             // action
-            bool existeEnBase = estructuraOrgHandler.existePuestoEnBase(existePuesto.Nombre, existePuesto.FechaAnalisis);
+            bool existeEnBase = estructuraOrgHandler.ExistePuestoEnBase(existePuesto.Nombre, existePuesto.FechaAnalisis);
 
             // assert
 
@@ -422,7 +422,7 @@ namespace unit_tests.DanielE
             EstructuraOrgHandler estructuraOrgHandler = new();
 
             // action
-            bool existeEnBase = estructuraOrgHandler.existePuestoEnBase(noExistePuesto.Nombre, noExistePuesto.FechaAnalisis);
+            bool existeEnBase = estructuraOrgHandler.ExistePuestoEnBase(noExistePuesto.Nombre, noExistePuesto.FechaAnalisis);
 
             // assert
 

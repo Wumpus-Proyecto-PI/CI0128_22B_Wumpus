@@ -230,11 +230,13 @@
                 </div>
             </div>
 
-
+            @*Lógica del botón de descarga. Se habilita cuando el análisis de rentabilidad está disponible*@
             @{
+                @*La tarjeta es "no clicleable" en un inicio.*@
                 claseCarta = "card card-no-clickeable m-4 text-center justify-content-center align-items-center";
                 claseLink = "link-no-clikeable";
                 string descargaReporteTitleText = "Esta acción está disponible sólo cuando el análisis de rentabilidad ha sido creado";
+                @*Si el análisis de rentabilidad está disponible*@
                 if (4 <= ViewBag.pasoDisponibleMaximo)
                 {
                     descargaReporteTitleText = "";

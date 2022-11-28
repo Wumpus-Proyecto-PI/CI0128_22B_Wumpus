@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace PI.Controllers
 {
-    // Controlador del gasto fijo.  Administra el traspaso de acciones entre la vista y el modelo/bd referentes al gasto fijo.
+    // Controlador que se encarga de enviar el file result para que se descargue el reporte.
     public class ExportadorController : ManejadorUsuariosController
     {
+        // Retorna el archivo que resulta del servicio del exportador de acuerdo a la fecha de análisis enviada.
         public FileResult Exportar(string fechaAnalisis)
         {
             ExportadorService exportador = new ExportadorService();

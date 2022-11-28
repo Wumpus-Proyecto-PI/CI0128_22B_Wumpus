@@ -94,11 +94,10 @@ namespace PI.Controllers
             analisisHandler.ActualizarConfiguracionAnalisis(configAnalisis);
             return RedirectToAction("Index", "Analisis", new  { fechaAnalisis = fechaAnalisis});
         }
-        // método que redirige al progreso del análisis correspondiente.
+
+        // Redirige a la pantalla de "mis análisis" de un negocio
         public IActionResult EliminarAnalisis(string fechaAnalisis, int idNegocio)
         {
-            Console.WriteLine("idEliminar: " + idNegocio);
-
             AnalisisHandler analisisHandler = new();
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
             analisisHandler.EliminarAnalisis(fechaCreacionAnalisis);
