@@ -41,5 +41,18 @@ namespace unit_tests.Chris
             NegocioFicticio = NegocioTestingHandler.IngresarNegocioFicticio(TestingUserModel.UserId, "Emprendimiento");
             AnalisisFicticio = AnalisisHandler.ObtenerAnalisisMasReciente(NegocioFicticio.ID);
         }
+
+        // en el cleanup eliminamos el negocio que creamos
+        [TestCleanup]
+        public void CleanUp()
+        {
+            // eliminar el negocio elimina todos lso datos relacionados a el
+            NegocioTestingHandler.EliminarNegocioFicticio();
+            NegocioTestingHandler = null;
+            NegocioFicticio = null;
+            AnalisisHandler = null;
+            AnalisisFicticio = null;
+            GastosVariablesTestingHandler = null;
+        }
     }
 }
