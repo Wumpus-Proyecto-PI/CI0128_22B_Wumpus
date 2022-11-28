@@ -213,6 +213,41 @@ namespace unit_tests.Wilmer
             Assert.AreEqual(productoResultado.PorcentajeDeVentas, productoPrueba.PorcentajeDeVentas, "No se guardo correctamente el porcentaje");
         }
 
+        [TestMethod]
+        public void ActualizarPrecioNoTiraExpeciones()
+        {
+            // Preparacion
+            ProductoModel productoPrueba = new ProductoModel
+            {
+                Nombre = "Empanadas",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 5,
+                PorcentajeDeVentas = 0.5m,
+                Precio = 500m
+            };
+
+            ProductoHandler productoHandler = new ProductoHandler();
+            // Se inserta el producto en la base de datos
+            productoHandler.InsertarProducto("Empanadas", productoPrueba);
+
+            // action
+            // Se cambia el precio para probar la actualizacion
+            productoPrueba.Precio = 1000m;
+            productoHandler.ActualizarPrecio(productoPrueba, AnalisisFicticio.FechaCreacion);
+
+            // assert
+            // leemos los productos
+            List<ProductoModel> productos = productoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion);
+
+            // buscamos el producto correspondiente
+            ProductoModel? productoResultado = productos.Find(x => x.Nombre == "Empanadas");
+
+            // si es nulo el gasto fijo significa que no se ingreso en la base de datos
+            Assert.IsNotNull(productoResultado, "El producto no se encontró en la base de datos");
+
+            Assert.AreEqual(productoResultado.Precio, productoPrueba.Precio, "No se guardo correctamente el precio");
+        }
+
         #endregion
 
         #region Testing Flujo de caja Handler
