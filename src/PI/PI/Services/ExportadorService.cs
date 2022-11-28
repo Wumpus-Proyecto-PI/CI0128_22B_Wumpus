@@ -177,19 +177,10 @@ namespace PI.Service
         {
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis);
-            decimal divisor = 1;
+
+            decimal divisor = 12;
             for (int i = 0; i < gastosFijos.Count; i += 1)
             {
-                if (gastosFijos[i].Nombre == "Beneficios de empleados"
-                    || gastosFijos[i].Nombre == "Prestaciones laborales"
-                    || gastosFijos[i].Nombre == "Salarios netos"
-                    || gastosFijos[i].Nombre == "Seguridad social")
-                {
-                    divisor = 1;
-                }
-                else {
-                    divisor = 12;
-                }
                 hojaFlujoCaja.Cell("A" + (i + 13)).Value = gastosFijos[i].Nombre;
                 hojaFlujoCaja.Cell("B" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
                 hojaFlujoCaja.Cell("C" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
@@ -198,13 +189,13 @@ namespace PI.Service
                 hojaFlujoCaja.Cell("F" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
                 hojaFlujoCaja.Cell("G" + (i + 13)).Value = gastosFijos[i].Monto/divisor;
             }
-            hojaFlujoCaja.Cell("A" + (gastosFijos.Count + 12)).Value = "Total Egresos";
-            hojaFlujoCaja.Cell("B" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(B" + (gastosFijos.Count + 11) + ":B10)";
-            hojaFlujoCaja.Cell("C" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(C" + (gastosFijos.Count + 11) + ":C10)";
-            hojaFlujoCaja.Cell("D" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(D" + (gastosFijos.Count + 11) + ":D10)";
-            hojaFlujoCaja.Cell("E" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(E" + (gastosFijos.Count + 11) + ":E10)";
-            hojaFlujoCaja.Cell("F" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(F" + (gastosFijos.Count + 11) + ":F10)";
-            hojaFlujoCaja.Cell("G" + (gastosFijos.Count + 12)).FormulaA1 = "SUM(G" + (gastosFijos.Count + 11) + ":G10)";
+            hojaFlujoCaja.Cell("A" + (gastosFijos.Count + 13)).Value = "Total Egresos";
+            hojaFlujoCaja.Cell("B" + (gastosFijos.Count + 13)).FormulaA1 = "SUM(B" + (gastosFijos.Count + 12) + ":B10)";
+            hojaFlujoCaja.Cell("C" + (gastosFijos.Count + 13)).FormulaA1 = "SUM(C" + (gastosFijos.Count + 12) + ":C10)";
+            hojaFlujoCaja.Cell("D" + (gastosFijos.Count + 13)).FormulaA1 = "SUM(D" + (gastosFijos.Count + 12) + ":D10)";
+            hojaFlujoCaja.Cell("E" + (gastosFijos.Count + 13)).FormulaA1 = "SUM(E" + (gastosFijos.Count + 12) + ":E10)";
+            hojaFlujoCaja.Cell("F" + (gastosFijos.Count + 13)).FormulaA1 = "SUM(F" + (gastosFijos.Count + 12) + ":F10)";
+            hojaFlujoCaja.Cell("G" + (gastosFijos.Count + 13)).FormulaA1 = "SUM(G" + (gastosFijos.Count + 12) + ":G10)";
         }
 
         public void AgregarFlujoMensual(DateTime FechaAnalisis) {
@@ -212,18 +203,18 @@ namespace PI.Service
             int NumeroCeldaTotalEgresos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis).Count+14;
 
             hojaFlujoCaja.Cell("A"+NumeroCeldaTotalEgresos).Value = "Flujo Mensual";
-            hojaFlujoCaja.Cell("B" + NumeroCeldaTotalEgresos).FormulaA1 = "B7-"+"B" + (NumeroCeldaTotalEgresos - 2);
-            hojaFlujoCaja.Cell("C" + NumeroCeldaTotalEgresos).FormulaA1 = "C7-" + "C" + (NumeroCeldaTotalEgresos - 2);
-            hojaFlujoCaja.Cell("D" + NumeroCeldaTotalEgresos).FormulaA1 = "D7-" + "D" + (NumeroCeldaTotalEgresos - 2);
-            hojaFlujoCaja.Cell("E" + NumeroCeldaTotalEgresos).FormulaA1 = "E7-" + "E" + (NumeroCeldaTotalEgresos - 2);
-            hojaFlujoCaja.Cell("F" + NumeroCeldaTotalEgresos).FormulaA1 = "F7-" + "F" + (NumeroCeldaTotalEgresos - 2);
-            hojaFlujoCaja.Cell("G" + NumeroCeldaTotalEgresos).FormulaA1 = "G7-" + "G" + (NumeroCeldaTotalEgresos - 2);
+            hojaFlujoCaja.Cell("B" + NumeroCeldaTotalEgresos).FormulaA1 = "B7-"+"B" + (NumeroCeldaTotalEgresos - 1);
+            hojaFlujoCaja.Cell("C" + NumeroCeldaTotalEgresos).FormulaA1 = "C7-" + "C" + (NumeroCeldaTotalEgresos - 1);
+            hojaFlujoCaja.Cell("D" + NumeroCeldaTotalEgresos).FormulaA1 = "D7-" + "D" + (NumeroCeldaTotalEgresos - 1);
+            hojaFlujoCaja.Cell("E" + NumeroCeldaTotalEgresos).FormulaA1 = "E7-" + "E" + (NumeroCeldaTotalEgresos - 1);
+            hojaFlujoCaja.Cell("F" + NumeroCeldaTotalEgresos).FormulaA1 = "F7-" + "F" + (NumeroCeldaTotalEgresos - 1);
+            hojaFlujoCaja.Cell("G" + NumeroCeldaTotalEgresos).FormulaA1 = "G7-" + "G" + (NumeroCeldaTotalEgresos - 1);
         }
 
         public void AgregarEstiloFlujoDeCaja(DateTime FechaAnalisis) {
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             int FilaFlujoMensual = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis).Count + 14;
-            int FilaTotalEgresos = FilaFlujoMensual-2;
+            int FilaTotalEgresos = FilaFlujoMensual-1;
             char[] ColumnasExcel = { 'B', 'C', 'D', 'E', 'F', 'G' };
             for (int i = 0; i < 6; i+=1) {
                 hojaFlujoCaja.Column(ColumnasExcel[i]).Style.NumberFormat.Format = "#,##0.00";
