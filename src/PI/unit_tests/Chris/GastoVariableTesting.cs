@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Bibliography;
 using PI.Handlers;
 using PI.Models;
 using unit_tests.SharedResources;
@@ -108,16 +109,65 @@ namespace unit_tests.Chris
         public void InsertarGastoVariable_ParametrosCorrectos_SinComponentes()
         {
             //arrange
+
+            ProductoModel producto = new ProductoModel()
+            {
+                Nombre = "producto-test",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 1,
+                CostoVariable = 1,
+                ComisionDeVentas = 1,
+                PorcentajeDeVentas = 1,
+                Precio = 1
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            ProductoHandler productoHandler = new();
+            ComponenteHandler componenteHandler = new();
+
             //action
+            productoHandler.InsertarProducto(producto.Nombre, producto);
+
             //assert
+            List<ProductoModel> productosPostInsercion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            List<ComponenteModel> componentesPostInsercion = GastosVariablesTestingHandler.leerComponentesDeBase(producto.Nombre, AnalisisFicticio.FechaCreacion);
+
+            bool? productoIngresado = productosPostInsercion.Exists(x => x.Nombre == producto.Nombre);
+            bool? componentesVacios = componentesPostInsercion.Count() == 0;
+
+            Assert.IsTrue(productoIngresado, "El producto no se ingresó en la base de datos");
+            Assert.IsTrue(componentesVacios, "Si hay componentes en la base de datos");
         }
 
         [TestMethod]
         public void InsertarGastoVariable_NombreLargo()
         {
             //arrange
-            //action
-            //assert
+            string excepcionEsperada = "String or binary data would be truncated.\r\nThe statement has been terminated.";
+
+            ProductoModel producto = new ProductoModel()
+            {
+                Nombre = "producto-test-que-es-muy-largo-para-ingresarse",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 1,
+                CostoVariable = 1,
+                ComisionDeVentas = 1,
+                PorcentajeDeVentas = 1,
+                Precio = 1
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            ProductoHandler productoHandler = new();
+
+            //action y assert
+            try
+            {
+                productoHandler.InsertarProducto(producto.Nombre, producto);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(excepcionEsperada, e.Message);
+            }
         }
 
         [TestMethod]
