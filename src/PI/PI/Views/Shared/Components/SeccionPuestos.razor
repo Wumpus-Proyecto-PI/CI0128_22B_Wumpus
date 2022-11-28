@@ -192,17 +192,22 @@
     {
         // este metodo quita la imagen y agrega el texto correspondiente
         // recibe un int para diferenciar si es el hover del botón de guardar (1) o de agregar (2)
-        if (action == 1) {
-            HoverTextAgregar = "Agregar Puesto";
-            HoverAgregar = true;
-        }
-        else if (action == 2)
+        switch (action)
         {
-            HoverGuardar = true;
-            HoverTextGuardar = "Guardar datos";
-        } else if (action == 3) {
-            HoverEliminar = true;
-            HoverTextEliminar = "Eliminar puesto";
+            case 1:
+                HoverTextAgregar = "Agregar Puesto";
+                HoverAgregar = true;
+                break;
+
+            case 2:
+                HoverGuardar = true;
+                HoverTextGuardar = "Guardar datos";
+                break;
+
+            case 3:
+                HoverEliminar = true;
+                HoverTextEliminar = "Eliminar puesto";
+                break;
         }
     }
 
@@ -211,17 +216,22 @@
     {
         // este metodo agrega la imagen y quita el texto correspondiente
         // recibe un int para diferenciar si es el quitar hover del botón de guardar (1) o de agregar (2)
-        if (action == 1)
+        switch (action)
         {
-            HoverTextAgregar = "";
-            HoverAgregar = false;
-        } else if (action == 2) {
-            HoverGuardar = false;
-            HoverTextGuardar = "";
-        } else if (action == 3)
-        {
-            HoverEliminar = false;
-            HoverTextEliminar = "";
+            case 1:
+                HoverTextAgregar = "";
+                HoverAgregar = false;
+                break;
+
+            case 2:
+                HoverGuardar = false;
+                HoverTextGuardar = "";
+                break;
+
+            case 3:
+                HoverEliminar = false;
+                HoverTextEliminar = "";
+                break;
         }
     }
 
