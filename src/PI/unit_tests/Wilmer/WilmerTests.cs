@@ -122,6 +122,54 @@ namespace unit_tests.Wilmer
             Assert.AreEqual(6669.30m, gastoSeguroSocial.Monto, "No se calculó correctamente el monto");
         }
 
+        [TestMethod]
+        public void ActualizarPrestacionesNoTiraExpeciones()
+        {
+            // Preparacion
+            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+            decimal prestaciones = 0.05m;
+
+            // action
+            gastoFijoHandler.actualizarPrestaciones(AnalisisFicticio.FechaCreacion, prestaciones);
+
+            // assert
+
+            // leemos los gastos fijos
+            List<GastoFijoModel> gastosFijos = GastosFijosTesting.leerGastosFijosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // buscamos el gasto fijo correspondiente a las prestaciones laborales
+            // solo buscamos por el nombre porque este es unico ya que es llave primaria en la base de datos
+            GastoFijoModel? gastoPrestaciones = gastosFijos.Find(x => x.Nombre == "Prestaciones laborales");
+
+            // si es nulo el gasto fijo significa que no se ingreso en la base de datos
+            Assert.IsNotNull(gastoPrestaciones, "El gasto de prestaciones laborales no se encontró en la base de datos");
+
+            Assert.AreEqual(6669.30m, gastoPrestaciones.Monto, "No se calculó correctamente el monto");
+        }
+
+        [TestMethod]
+        public void ActualizarBeneficiosNoTiraExpeciones()
+        {
+            // Preparacion
+            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
+
+            // action
+            gastoFijoHandler.actualizarBeneficios(AnalisisFicticio.FechaCreacion);
+
+            // assert
+
+            // leemos los gastos fijos
+            List<GastoFijoModel> gastosFijos = GastosFijosTesting.leerGastosFijosDeBase(AnalisisFicticio.FechaCreacion);
+
+            // buscamos el gasto fijo correspondiente a los beneficios de los empleados
+            // solo buscamos por el nombre porque este es unico ya que es llave primaria en la base de datos
+            GastoFijoModel? gastoBeneficios = gastosFijos.Find(x => x.Nombre == "Beneficios de empleados");
+
+            // si es nulo el gasto fijo significa que no se ingreso en la base de datos
+            Assert.IsNotNull(gastoBeneficios, "El gasto de beneficios no se encontró en la base de datos");
+
+            //Assert.AreEqual(51765m 1180299m, gastoBeneficios.Monto, "No se calculó correctamente el monto");
+        }
         #endregion
     }
 }
