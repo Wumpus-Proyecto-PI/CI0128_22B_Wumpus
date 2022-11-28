@@ -19,14 +19,21 @@ namespace unit_tests.Gabriel
     public class UnitTestsGabriel
     {
         [TestMethod]
+
+        // Encargado de validar que el cálculo del punto de equilibrio se esté dando correctamente
+        // en el caso en el que todos los parámetros son números positivos entre 0 y 999999999999999999.99
+        // Este último se debe a que la base de datos está trabajando con números decimal 18,2
         public void CalcularPuntoEquilibrio_TodosParametrosValidos() {
+
             for (int i = 0; i < 1000; i += 1) {
+
                 decimal resultado = 0;
+                // Se hace que los tres parámetros que toma el método sean números aleatorios en el rango previamente mencionado.
                 decimal precio = GenerarDecimalAleatorio();
                 decimal costoVariable = GenerarDecimalAleatorio();
                 decimal montoGastosFijos = GenerarDecimalAleatorio();
-                decimal denominador = (precio - costoVariable);
 
+                decimal denominador = (precio - costoVariable);
                 if (denominador != 0)
                 {
                     resultado = montoGastosFijos / denominador;
@@ -37,8 +44,10 @@ namespace unit_tests.Gabriel
         }
 
         [TestMethod]
+        // Verifica que no se produzca una división entre 0 en caso de que los parámetros costoVariable y Precio sean iguales
         public void CalcularPuntoEquilibrio_DivisionEntreCero() {
             for (int i = 0; i < 1000; i += 1) {
+                // Se inicializan precio y costoVariables con el mismo valor, un número aleatorio entre 0 y 999999999999999999.99
                 decimal precio = GenerarDecimalAleatorio();
                 decimal costoVariable = precio;
                 decimal montoGastosFijos = GenerarDecimalAleatorio();
