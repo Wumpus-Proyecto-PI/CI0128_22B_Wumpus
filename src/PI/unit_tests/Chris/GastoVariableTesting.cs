@@ -54,5 +54,85 @@ namespace unit_tests.Chris
             AnalisisFicticio = null;
             GastosVariablesTestingHandler = null;
         }
+
+        [TestMethod]
+        public void InsertarGastoVariable_ParametrosCorrectos_ConComponentes()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void InsertarGastoVariable_ParametrosCorrectos_SinComponentes()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void InsertarGastoVariable_NombreLargo()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void InsertarGastoVariable_UnidadLarga()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void InsertarGastoVariable_MontoLargo()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void InsertarGastoVariable_CantidadLarga()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void InsertarGastoVariable_CantidadNegativa()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void InsertarGastoVariable_MontoNegativo()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void EliminarGastoVariable_Existente()
+        {
+            //arrange
+            //action
+            //assert
+        }
+
+        [TestMethod]
+        public void EliminarGastoVAriable_NoExistente()
+        {
+            //arrange
+            //action
+            //assert
+        }
     }
 }
