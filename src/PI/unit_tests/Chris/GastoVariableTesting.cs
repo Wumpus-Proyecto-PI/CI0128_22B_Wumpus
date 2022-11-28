@@ -267,8 +267,31 @@ namespace unit_tests.Chris
         public void InsertarGastoVariable_LoteNegativo()
         {
             //arrange
-            //action
-            //assert
+            string excepcionEsperada = "Error converting data type varchar to decimal.";
+
+            ProductoModel producto = new ProductoModel()
+            {
+                Nombre = "producto-test",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = -1,
+                CostoVariable = 1,
+                ComisionDeVentas = 1,
+                PorcentajeDeVentas = 1,
+                Precio = 1
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            ProductoHandler productoHandler = new();
+
+            //action y assert
+            try
+            {
+                productoHandler.InsertarProducto(producto.Nombre, producto);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(excepcionEsperada, e.Message);
+            }
         }
 
         [TestMethod]
