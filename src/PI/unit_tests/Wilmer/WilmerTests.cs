@@ -1,5 +1,6 @@
 ﻿using PI.Handlers;
 using PI.Models;
+using PI.Views.Shared.Components.GastoFijo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace unit_tests.Wilmer
         // handler de testing usado para manejar la lectura de gastos fijos en la base
         GastosFijosTestingHandler? GastosFijosTesting = null;
 
+        FlujoDeCajaTestingHandler? FlujoDeCajaTestingHandler = null;
+
         // en la inicializacion creamos un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
         [TestInitialize]
         public void Setup()
@@ -47,6 +50,8 @@ namespace unit_tests.Wilmer
 
             // Creamos handler para testing de gastos fijos
             GastosFijosTesting = new();
+
+            FlujoDeCajaTestingHandler = new();
 
             // para que el test exista debe existir el siguiente usuario en la base
             // usuario: wumpustest@gmail.com 
@@ -201,5 +206,137 @@ namespace unit_tests.Wilmer
         //}
 
         #endregion
+
+        #region Testing Flujo de caja Handler
+
+
+        [TestMethod]
+        public void CrearIngresosSeGuardanEnLaBase()
+        {
+            // Preparacion
+            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+            List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
+
+            // Action. Se llama al metodo del handler que crea los ingresos
+            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+
+            // assert
+            // Buscamos los ingresos en la base de datos
+            List<IngresoModel> ingresos = flujoDeCajaHandler.obtenerIngresos(AnalisisFicticio.FechaCreacion);
+
+            // Se busca un ingreso especifico para comparar
+            IngresoModel? ingresoResultado = ingresos.Find(x => x.Mes == "Mes 6");
+
+            // si es nula la lista de ingresos significa que no se ingreso en la base de datos
+            Assert.IsNotNull(ingresos, "El ingreso no se encontró en la base de datos");
+            Assert.AreEqual("Mes 6", ingresoResultado.Mes);
+
+        }
+
+        [TestMethod]
+        public void ActualizarIngresoDeContadoEnLaBase()
+        {
+            // Preparacion
+            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+            List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
+
+            // Se define el tipo de ingreso
+            string tipoIngreso = "contado";
+            decimal monto = 500m;
+
+            IngresoModel ingresoPrueba = new IngresoModel
+            {
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Mes = meses[0].NombreMes,
+                Monto = monto,
+                Tipo = tipoIngreso
+            };
+
+            // action. Se llama al metodo del handler que crea los ingresos
+            flujoDeCajaHandler.actualizarIngreso(ingresoPrueba);
+
+            // assert
+
+            // Buscamos el ingreso en la base de datos
+            IngresoModel ingreso = FlujoDeCajaTestingHandler.obtenerIngreso(ingresoPrueba.FechaAnalisis, ingresoPrueba.Mes, ingresoPrueba.Tipo);
+
+            // si es nulo el ingreso significa que no se ingreso en la base de datos
+            Assert.IsNotNull(ingreso, "El ingreso no se encontró en la base de datos");
+            Assert.AreEqual(monto, ingreso.Monto, "No se guardó correctamente el monto");
+            Assert.AreEqual(tipoIngreso, ingreso.Tipo, "No se guardó correctamente el tipo");
+        }
+        
+        
+        [TestMethod]
+        public void ActualizarIngresoACreditoEnLaBase()
+        {
+            // Preparacion
+            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+            List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
+
+            // Se define el tipo de ingreso
+            string tipoIngreso = "credito";
+            decimal monto = 10000m;
+
+            IngresoModel ingresoPrueba = new IngresoModel
+            {
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Mes = meses[0].NombreMes,
+                Monto = monto,
+                Tipo = tipoIngreso
+            };
+
+            // action. Se llama al metodo del handler que crea los ingresos
+            flujoDeCajaHandler.actualizarIngreso(ingresoPrueba);
+
+            // assert
+
+            // Buscamos el ingreso en la base de datos
+            IngresoModel ingreso = FlujoDeCajaTestingHandler.obtenerIngreso(ingresoPrueba.FechaAnalisis, ingresoPrueba.Mes, ingresoPrueba.Tipo);
+
+            // si es nulo el ingreso significa que no se ingreso en la base de datos
+            Assert.IsNotNull(ingreso, "El ingreso no se encontró en la base de datos");
+            Assert.AreEqual(monto, ingreso.Monto, "No se guardó correctamente el monto");
+            Assert.AreEqual(tipoIngreso, ingreso.Tipo, "No se guardó correctamente el tipo");
+        }
+
+        [TestMethod]
+        public void ActualizarOtrosIngresoEnLaBase()
+        {
+            // Preparacion
+            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+            List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
+
+            // Se define el tipo de ingreso
+            string tipoIngreso = "otros";
+            decimal monto = 50000m;
+
+            IngresoModel ingresoPrueba = new IngresoModel
+            {
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Mes = meses[0].NombreMes,
+                Monto = monto,
+                Tipo = tipoIngreso
+            };
+
+            // action. Se llama al metodo del handler que crea los ingresos
+            flujoDeCajaHandler.actualizarIngreso(ingresoPrueba);
+
+            // assert
+
+            // Buscamos el ingreso en la base de datos
+            IngresoModel ingreso = FlujoDeCajaTestingHandler.obtenerIngreso(ingresoPrueba.FechaAnalisis, ingresoPrueba.Mes, ingresoPrueba.Tipo);
+
+            // si es nulo el ingreso significa que no se ingreso en la base de datos
+            Assert.IsNotNull(ingreso, "El ingreso no se encontró en la base de datos");
+            Assert.AreEqual(monto, ingreso.Monto, "No se guardó correctamente el monto");
+            Assert.AreEqual(tipoIngreso, ingreso.Tipo, "No se guardó correctamente el tipo");
+        }
+
+        #endregion
     }
 }
+
