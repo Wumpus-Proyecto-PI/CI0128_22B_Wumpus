@@ -5,44 +5,41 @@ using unit_tests.SharedResources;
 
 namespace unit_tests.Fabian
 {
-    // class: clase de testing para el modelo gasto fijo y su interaccion con la base de datos
+    // Clase de testing para el modelo gasto fijo y su interaccion con la base de datos
     [TestClass]
     public class GastoFijoTest
     {
-        // handler de testing que permite crear un negocio de pruebas
+        // Handler de negocio y análisis a probar.
         private NegocioTestingHandler? NegocioTestingHandler = null;
-
-        // handler de analisis que nos permite obtener analisis del negocio
         private AnalisisHandler? AnalisisHandler = null;
 
-        // negocio ficticio creado para la prueba
+        // negocio y análisis ficticios creados para la prueba
         private NegocioModel? NegocioFicticio = null;
-
-        // analisis ficticio creado para la prueba
         private AnalisisModel? AnalisisFicticio = null;
 
-        // en la inicializacion creamos un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
+        private GastoFijoHandler gastoFijoHandler = new();
+
+        // Crea un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
+        // para que el test exista debe existir el siguiente usuario en la base
+        // usuario: wumpustest@gmail.com 
+        // id del usuario: e690ef97-31c4-4064-bede-93aeedaf6857
         [TestInitialize]
         public void Setup()
         {
-            // creamos un negocio ficticio al usuario de testing de wumpus
+            // creamos un negocio y analisis ficticios al usuario de testing de wumpus
             NegocioTestingHandler = new();
-
-            // tambien le creamos un analisis vacio para realizar las pruebas
             AnalisisHandler = new();
-
-            // para que el test exista debe existir el siguiente usuario en la base
-            // usuario: wumpustest@gmail.com 
-            // id del usuario: e690ef97-31c4-4064-bede-93aeedaf6857
             NegocioFicticio = NegocioTestingHandler.IngresarNegocioFicticio(TestingUserModel.UserId, "Emprendimiento");
             AnalisisFicticio = AnalisisHandler.ObtenerAnalisisMasReciente(NegocioFicticio.ID);
+
+            // Handler que será probado
+            gastoFijoHandler = new();
         }
 
-        // en el cleanup eliminamos el negocio que creamos
+        // Eliminamos el negocio de prueba y sus datos
         [TestCleanup]
         public void CleanUp()
         {
-            // eliminar el negocio elimina todos los datos relacionados a el
             NegocioTestingHandler.EliminarNegocioFicticio();
         }
 
@@ -62,12 +59,10 @@ namespace unit_tests.Fabian
                 orden = 0,
             };
 
-            // creamos handler con el metodo que deseamos probar
-            GastoFijoHandler gastoFijoHandler = new();
-
             // action
             string fechaAnalisis = AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
+            // assert
             try
             {
                 gastoFijoHandler.ingresarGastoFijo(gasto.Nombre, gasto.Nombre, gasto.Monto.ToString(), gasto.FechaAnalisis);
@@ -76,10 +71,8 @@ namespace unit_tests.Fabian
                 Assert.AreEqual(excepcionEsperada, e.Message);
             }
 
-            // assert
             List<GastoFijoModel> gastosPostInsercion = gastoFijoHandler.ObtenerGastosFijos(AnalisisFicticio.FechaCreacion);
             bool fueInsertado = gastosPostInsercion.Exists(x => x.Nombre == gasto.Nombre);
-
             // args: bool a evaluar, mensaje en caso de false.
             Assert.IsFalse(fueInsertado, $"'{gasto.Nombre}' se insertó en la base");
         }
@@ -89,7 +82,6 @@ namespace unit_tests.Fabian
         public void IngresarGastoFijo_ConMontoNegativo_GeneraExcepcion()
         {
             // arrange
-
             GastoFijoModel gastoNuevo = new GastoFijoModel
             {
                 Nombre = "Negativo",
@@ -100,12 +92,10 @@ namespace unit_tests.Fabian
 
             String excepcionEsperada = "El valor del monto debe ser un número positivo";
 
-            // creamos handler con el metodo que deseamos probar
-            GastoFijoHandler gastoFijoHandler = new();
-
             // action
             string fechaAnalisis = AnalisisFicticio.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff");
-
+            
+            // assert
             try
             {
                 gastoFijoHandler.ingresarGastoFijo(gastoNuevo.Nombre, gastoNuevo.Nombre, gastoNuevo.Monto.ToString(), gastoNuevo.FechaAnalisis);
@@ -115,10 +105,8 @@ namespace unit_tests.Fabian
                 Assert.AreEqual(excepcionEsperada, e.Message);
             }
 
-            // assert
             List<GastoFijoModel> gastosPostInsercion = gastoFijoHandler.ObtenerGastosFijos(AnalisisFicticio.FechaCreacion);
             bool fueInsertado = gastosPostInsercion.Exists(x => x.Nombre == gastoNuevo.Nombre);
-
             // args: bool a evaluar, mensaje en caso de false.
             Assert.IsFalse(fueInsertado, $"'{gastoNuevo.Nombre}' se insertó en la base");
         }
