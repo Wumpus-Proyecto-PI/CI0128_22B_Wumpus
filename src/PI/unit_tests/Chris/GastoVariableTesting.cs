@@ -233,15 +233,38 @@ namespace unit_tests.Chris
         }
 
         [TestMethod]
-        public void InsertarGastoVariable_CantidadLarga()
+        public void InsertarGastoVariable_CostoVariableLargo()
         {
             //arrange
-            //action
-            //assert
+            string excepcionEsperada = "Error converting data type varchar to decimal.";
+
+            ProductoModel producto = new ProductoModel()
+            {
+                Nombre = "producto-test",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 1,
+                CostoVariable = 11212121212121212112,
+                ComisionDeVentas = 1,
+                PorcentajeDeVentas = 1,
+                Precio = 1
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            ProductoHandler productoHandler = new();
+
+            //action y assert
+            try
+            {
+                productoHandler.InsertarProducto(producto.Nombre, producto);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(excepcionEsperada, e.Message);
+            }
         }
 
         [TestMethod]
-        public void InsertarGastoVariable_CantidadNegativa()
+        public void InsertarGastoVariable_LoteNegativo()
         {
             //arrange
             //action
