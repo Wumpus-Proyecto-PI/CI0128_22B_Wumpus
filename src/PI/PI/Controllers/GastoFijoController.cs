@@ -39,6 +39,7 @@ namespace PI.Controllers
             gastoFijoHandler.actualizarSeguroSocial(fechaConversion, seguroSocial);
             gastoFijoHandler.actualizarPrestaciones(fechaConversion, prestaciones);
             gastoFijoHandler.actualizarBeneficios(fechaConversion);
+
             // Actualiza la sumatoria de los gastos fijos. (anual)
             ViewBag.totalAnual = gastoFijoHandler.obtenerTotalAnual(fechaConversion);
             ViewData["NombreNegocio"] = gastoFijoHandler.obtenerNombreNegocio(fechaConversion);

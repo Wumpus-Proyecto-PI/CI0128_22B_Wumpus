@@ -23,8 +23,7 @@ namespace PI.Handlers
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
             AnalisisHandler analisisHandler = new AnalisisHandler();
-
-            string consulta = $"SELECT * FROM Negocio where idUsuario = '{idUsuario}' ORDER BY FechaCreacion DESC";
+            string consulta = $"exec ObtenerNegocios @idUsuario = '{idUsuario}'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
 
             // Crea los modelos de negocio correspondientes segun la tabla obtenida de la base de datos
@@ -77,10 +76,9 @@ namespace PI.Handlers
             string sqlFormattedDate = myDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
             
             int nextID = getNextID();
-            
+
             // String con la consulta para insertar el negocio en la base de datos 
-            string consulta = "INSERT INTO Negocio (ID,Nombre,idUsuario,FechaCreacion) VALUES ("
-                + nextID + ",'" + Nombre + "', '" + idUsuario + "', '" + sqlFormattedDate + "');";
+            string consulta = $"exec IngresarNegocio @nextID = {nextID}, @nombre = '{Nombre}', @idUsuario = '{idUsuario}', @fechaCreacion = '{sqlFormattedDate}'";
             enviarConsultaVoid(consulta);
 
             // Le ingresa un analisis por defecto al negocio recien creado 
@@ -101,7 +99,7 @@ namespace PI.Handlers
         // (Parametros: id del negocio que se desea eliminar)
         public void EliminarNegocio(string idNegocio) 
         { 
-            string consulta = "DELETE FROM NEGOCIO WHERE id =" + idNegocio + "";
+            string consulta = "exec BorrarNegocio @idNegocio =" + idNegocio + "";
             enviarConsultaVoid(consulta);
         }
     }

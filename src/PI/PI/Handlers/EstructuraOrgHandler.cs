@@ -44,7 +44,7 @@ namespace PI.Handlers
                 + "'" + puesotAInsertar.Nombre + "', "
                 + "'" + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
                 + puesotAInsertar.Plazas.ToString() + ", "
-                + "dbo.convertTOdecimal ( @salarioTemp)," + puesotAInsertar.Beneficios + ")"  ;
+                + "dbo.convertTOdecimal ( @salarioTemp), dbo.ConvertToDecimal(@beneficiosTemp))";
 
                 Console.WriteLine(insert);
 
@@ -93,7 +93,7 @@ namespace PI.Handlers
                 + "' SET @beneficiosTemp = REPLACE(@beneficiosTemp, ',' , '.') UPDATE PUESTO SET "
                 + "nombre='" + puestoInsertar.Nombre + "', "
                 + "cantidadPlazas='" + puestoInsertar.Plazas.ToString() + "', "
-                + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp), beneficios=" + puestoInsertar.Beneficios
+                + "salarioBruto= dbo.convertTOdecimal ( @salarioTemp), beneficios= dbo.ConvertToDecimal(@beneficiosTemp)"
                 + "WHERE "
                 + "nombre='" + nombrePuesto + "' and "
                 + "fechaAnalisis='" + puestoInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "';";

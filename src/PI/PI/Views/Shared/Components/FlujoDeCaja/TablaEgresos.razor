@@ -126,21 +126,11 @@
             <div class="col col-1">
                 <p class="datos-calculados texto-nombres">@gasto.Nombre</p>
             </div>
-            @if (gastosEstructura.Any(gasto.Nombre.Contains))
+            @for (var mes = 0; mes < meses.Count; mes++)
             {
-                 @for (var mes = 0; mes < meses.Count; mes++)
-                {
-                    <div class="col col-1">
-                        <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto))</p>
-                    </div>
-                }
-            } else {
-                @for (var mes = 0; mes < meses.Count; mes++)
-                {
-                    <div class="col col-1">
-                        <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
-                    </div>
-                }
+                <div class="col col-1">
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico((gasto.Monto/12))</p>
+                </div>
             }
         </li>
     }
@@ -176,15 +166,9 @@
         decimal total = 0; 
         foreach (GastoFijoModel gasto in gastosFijos)
         {
-            if (gastosEstructura.Any(gasto.Nombre.Contains))
-            {
-                total += gasto.Monto;
-            }
-            else
-            {
-                total += gasto.Monto / 12;
 
-            }
+            total += gasto.Monto / 12;
+
         }
         return total; 
     }
@@ -238,6 +222,7 @@
         else {
             mes.InversionPorMes = inversionActual; 
         }
+        flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }
 
     public void actualizarEgreso(EgresoModel egreso)
@@ -251,5 +236,6 @@
             egreso.Monto = 0;
         }
         flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
+
     }
 }

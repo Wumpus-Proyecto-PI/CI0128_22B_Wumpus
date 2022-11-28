@@ -15,6 +15,11 @@ namespace PI.Services
             decimal totalIngresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
 
             decimal totalEgresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mesModel);
+            GastoFijoHandler gastoFijoHandler = new();
+            
+            totalEgresoPorMes += gastoFijoHandler.obtenerTotalAnual(mesModel.FechaAnalisis) / 12;
+
+            totalEgresoPorMes += flujoDeCajaHandler.obtenerInversionDelMes(mesModel);
 
             return totalIngresoPorMes - totalEgresoPorMes;
         }

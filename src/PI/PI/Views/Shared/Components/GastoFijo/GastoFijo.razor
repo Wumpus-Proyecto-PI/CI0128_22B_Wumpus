@@ -9,8 +9,8 @@
 }
 @if (nombresEstOrg.Contains(gastoFijo.Nombre)) {
     tipoGasto = "gastoFijo gastoFijo-NoEditable";
-    montoAnual = gastoFijo.Monto * 12;
-    montoMensual = gastoFijo.Monto;
+    montoAnual = gastoFijo.Monto;
+    montoMensual = gastoFijo.Monto / 12;
 }
 <div class=@((MarkupString)tipoGasto)>
     <div class="top-gastoFijo">
