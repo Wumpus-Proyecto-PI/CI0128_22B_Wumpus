@@ -10,6 +10,11 @@ namespace PI.Handlers
         // Inserta el modelo del producto que se le pasa por parametro a la base de datos
         public int InsertarProducto(string nombreProducto, ProductoModel producto)
         {
+            if (producto.Lote < 0m)
+            {
+                throw new Exception("El valor del lote debe ser un número positivo", new ArgumentOutOfRangeException());
+            }
+
             int filasAfectadas = 0;
             string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
                 ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "',@costoVariable='" + producto.CostoVariable.ToString() + "',@comisionDeVentas='" + producto.ComisionDeVentas.ToString() + "'";
