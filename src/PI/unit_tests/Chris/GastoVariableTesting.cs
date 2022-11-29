@@ -329,8 +329,33 @@ namespace unit_tests.Chris
         public void EliminarGastoVariable_Existente()
         {
             //arrange
+            ProductoModel producto = new ProductoModel()
+            {
+                Nombre = "producto-test",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 1,
+                CostoVariable = 1,
+                ComisionDeVentas = 1,
+                PorcentajeDeVentas = 1,
+                Precio = 1
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            ProductoHandler productoHandler = new();
+            // Se inserta el producto para luego eliminarlo
+            productoHandler.InsertarProducto(producto.Nombre, producto);
+
+            List<ProductoModel> productosPostInsercion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            int cantidadAntesDeBorrar = productosPostInsercion.Count();
+
             //action
+            productoHandler.EliminarProducto(producto);
+
+            List<ProductoModel> productosPostEliminado = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            int cantidadDespuesDeBorrar = productosPostEliminado.Count();
+
             //assert
+            Assert.AreNotEqual(cantidadAntesDeBorrar, cantidadDespuesDeBorrar);
         }
 
         [TestMethod]
