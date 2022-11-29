@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace PI.Services
 {
@@ -34,16 +33,6 @@ namespace PI.Services
                 valido = false;
             }
             return valido;
-        }
-
-        public static bool EsAlfanumerico(string str) {
-            bool es = false;
-            Regex regex = new Regex("^[a-zA-Z0-9]*$");
-            if (regex.IsMatch(str))
-            {
-                es = false;
-            }
-            return es;
         }
     }
 }
