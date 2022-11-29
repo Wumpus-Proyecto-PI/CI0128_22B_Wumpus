@@ -53,13 +53,16 @@ namespace unit_tests.Chris
             NegocioTestingHandler.EliminarNegocioFicticio();
         }
 
+        // Prueba la insecion de un puesto con atributos correctos y que posea componentes 
         [TestMethod]
         public void InsertarGastoVariable_ParametrosCorrectos_ConComponentes()
         {
             //arrange
 
+            // Crea lista de componentes que se va a insertar en el producto
             List<ComponenteModel> componentes = new List<ComponenteModel>();
 
+            // Se agrega un componente a la lista
             componentes.Add(new ComponenteModel
             {
                 NombreProducto = "producto-test",
@@ -70,6 +73,7 @@ namespace unit_tests.Chris
                 FechaAnalisis = AnalisisFicticio.FechaCreacion
             });
 
+            // Se crea un producto de prueba 
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test",
@@ -83,13 +87,18 @@ namespace unit_tests.Chris
             };
 
             //action
+
+            // Se inserta el producto y su componente a la base de datos
             ProductoHandler.InsertarProducto(producto.Nombre, producto);
             ComponenteHandler.AgregarComponente(componentes[0]);
 
             //assert
+
+            // Listas que contienen los productos y componentes despues de la insercion 
             List<ProductoModel> productosPostInsercion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion);
             List<ComponenteModel> componentesPostInsercion = ComponenteHandler.ObtenerComponentes(producto.Nombre, AnalisisFicticio.FechaCreacion);
-
+            
+            // Variable booleanas que comprueban si existe el componente y el producto en la lista
             bool? productoIngresado = productosPostInsercion.Exists(x => x.Nombre == producto.Nombre);
             bool? componenteIngresado = componentesPostInsercion.Exists(x => x.Nombre == componentes[0].Nombre);
             
