@@ -335,10 +335,13 @@ namespace unit_tests.Chris
             }
         }
 
+        // Prueba la eliminacion de un producto que si se encuentra almacenado en la base de datos 
         [TestMethod]
         public void EliminarGastoVariable_Existente()
         {
             //arrange
+
+            // Se crea un producto de prueba
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test",
@@ -353,12 +356,16 @@ namespace unit_tests.Chris
             // Se inserta el producto para luego eliminarlo
             ProductoHandler.InsertarProducto(producto.Nombre, producto);
 
+            // Lista con los productos antes de la eliminacion 
             List<ProductoModel> productosPostInsercion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadAntesDeBorrar = productosPostInsercion.Count();
 
             //action
+
+            // Se elimina el producto
             ProductoHandler.EliminarProducto(producto);
 
+            // Lista con los productos luego de ser eliminado
             List<ProductoModel> productosPostEliminado = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadDespuesDeBorrar = productosPostEliminado.Count();
 
