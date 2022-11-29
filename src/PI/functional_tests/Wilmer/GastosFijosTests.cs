@@ -1,14 +1,8 @@
 ﻿using functional_tests.Pages;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Bibliography;
 
-namespace PiTests
+namespace PiTests.Wilmer
 {
     [TestClass]
     public class GastosFijosTests
@@ -69,7 +63,6 @@ namespace PiTests
             // accion
             GastosFijosPage.CrearGastoFijo(gasto, monto);
 
-            // verificacion
             // verificacion
             string texto = GastosFijosPage.TextoGastoCreado;
             Assert.AreEqual("Electricidad", texto);

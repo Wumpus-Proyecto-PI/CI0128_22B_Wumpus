@@ -8,42 +8,46 @@ namespace PI.Controllers
 {
     public class FlujoDeCajaController : Controller
     {
+        // Recibe la fecha del análisis que se quiere consultar en flujo de caja
+        // Retorna la vista de la pantalla correspondiente al flujo de caja
         public IActionResult IndexFlujoDeCaja(string fechaAnalisis)
         {
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-
+            // Handlers necesarios para consultar la base de datos
             FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
-            flujoDeCajaHandler.crearFlujoDeCaja(fechaCreacionAnalisis);
-
-            ViewBag.Ingresos = flujoDeCajaHandler.obtenerIngresos(fechaCreacionAnalisis);
-
-            ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
-
-            List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
-            ViewBag.Meses = meses;
-            ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
-
-            // Datos que ocupa la vista
-            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-            // Título de la pestaña en el navegador.
-            ViewData["Title"] = "Flujo de caja";
-            // Título del paso en el que se está en el layout
-            ViewData["TituloPaso"] = ViewData["Title"];
-            // Muestra el botón de regreso hacia el progreso (pasos) del análisis.
-            ViewBag.BotonRetorno = "Progreso";
             ProductoHandler productoHandler = new ProductoHandler();
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
             AnalisisHandler analisisHandler = new AnalisisHandler();
+            InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
 
+            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+
+            // Acciones para calcular datos que se envian a la vista
+            flujoDeCajaHandler.CrearFlujoDeCaja(fechaCreacionAnalisis);
+            List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
             List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaCreacionAnalisis);
             decimal totalGastosFijos = gastoFijoHandler.obtenerTotalAnual(fechaCreacionAnalisis);
             decimal gananciaMensual = analisisHandler.ObtenerGananciaMensual(fechaCreacionAnalisis);
+
+            // Convierte los porcentajes a valores válidos (divide entre 100).
+            ConfigAnalisisModel configuracionAnalisis = analisisHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
+            decimal seguroSocial = configuracionAnalisis.PorcentajeSS / 100;
+            decimal prestaciones = configuracionAnalisis.PorcentajePL / 100;
+
+            // Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
+            gastoFijoHandler.actualizarGastosPredeterminados(fechaCreacionAnalisis, seguroSocial, prestaciones);
+
+            // Datos enviados a la vista
+            ViewData["Title"] = "Flujo de caja";
+            ViewData["TituloPaso"] = ViewData["Title"];
+            ViewBag.Ingresos = flujoDeCajaHandler.ObtenerIngresos(fechaCreacionAnalisis);
+            ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
+            ViewBag.Meses = meses;
+            ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
+            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
+            ViewBag.BotonRetorno = "Progreso";
+            ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
             ViewBag.Iniciado = analisisHandler.ObtenerTipoAnalisis(fechaCreacionAnalisis);
-
             ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
-
-            InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
             ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
             ViewBag.InversionInicial = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
 

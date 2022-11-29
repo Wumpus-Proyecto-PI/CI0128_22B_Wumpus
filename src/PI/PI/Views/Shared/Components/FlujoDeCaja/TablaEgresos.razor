@@ -236,6 +236,7 @@
         else 
         {
             egreso.Monto = 0;
+            flujoDeCajaHandler.actualizarEgreso(egreso);
         }
         // Actualiza la lista del flujo mensual.
         flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
