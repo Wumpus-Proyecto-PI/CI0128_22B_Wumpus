@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Bibliography;
-using PI.Handlers;
+﻿using PI.Handlers;
 using PI.Models;
 using unit_tests.SharedResources;
 
