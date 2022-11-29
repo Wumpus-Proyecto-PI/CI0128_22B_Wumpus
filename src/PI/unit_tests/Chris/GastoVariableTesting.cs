@@ -362,8 +362,33 @@ namespace unit_tests.Chris
         public void EliminarGastoVariable_NoExistente()
         {
             //arrange
+            ProductoModel producto = new ProductoModel()
+            {
+                Nombre = "producto-test",
+                FechaAnalisis = AnalisisFicticio.FechaCreacion,
+                Lote = 1,
+                CostoVariable = 1,
+                ComisionDeVentas = 1,
+                PorcentajeDeVentas = 1,
+                Precio = 1
+            };
+
+            // creamos handler con el metodo que deseamos probar
+            ProductoHandler productoHandler = new();
+
+            // No se inserta ya que lo que se va a probar es cuando no esta en la base
+
+            List<ProductoModel> productosPreEliminacion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            int cantidadAntesDeBorrar = productosPreEliminacion.Count();
+
             //action
+            productoHandler.EliminarProducto(producto);
+
+            List<ProductoModel> productosPostEliminado = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            int cantidadDespuesDeBorrar = productosPostEliminado.Count();
+
             //assert
+            Assert.AreEqual(cantidadAntesDeBorrar, cantidadDespuesDeBorrar);
         }
     }
 }
