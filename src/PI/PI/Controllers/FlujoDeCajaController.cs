@@ -40,7 +40,7 @@ namespace PI.Controllers
             ViewData["Title"] = "Flujo de caja";
             ViewData["TituloPaso"] = ViewData["Title"];
             ViewBag.Ingresos = flujoDeCajaHandler.ObtenerIngresos(fechaCreacionAnalisis);
-            ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
+            ViewBag.Egresos = flujoDeCajaHandler.ObtenerEgresos(fechaCreacionAnalisis);
             ViewBag.Meses = meses;
             ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
