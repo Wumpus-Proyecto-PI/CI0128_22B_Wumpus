@@ -21,6 +21,7 @@ namespace PiTests.Wilmer
         {
             Driver = new ChromeDriver();
             Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            Driver.Manage().Window.Maximize();
             Driver.Url = url;
             Driver.Navigate().GoToUrl(url);
 

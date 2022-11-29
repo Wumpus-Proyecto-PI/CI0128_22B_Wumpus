@@ -22,6 +22,7 @@ namespace PiTests.Chris
         {
             Driver = new ChromeDriver();
             Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            Driver.Manage().Window.Maximize();
             Driver.Url = url;
             Driver.Navigate().GoToUrl(url);
 
@@ -59,7 +60,10 @@ namespace PiTests.Chris
 
             // verificacion
             string texto = EstructuraOrgPage.TextoConBeneficios;
-            Assert.AreEqual("1.00", texto);
+
+            bool tieneBeneficios = texto.Contains("1");
+
+            Assert.IsTrue(tieneBeneficios);
         }
 
         [TestMethod]

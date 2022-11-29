@@ -22,6 +22,7 @@ namespace functional_tests.Gabriel
             Driver = new ChromeDriver();
             Driver.Url = URL;
             Driver.Navigate().GoToUrl(Driver.Url);
+            Driver.Manage().Window.Maximize();
 
             AutenticacionPage = new AutenticacionPage(Driver);
             AutenticacionPage.IniciarSesionUsuarioDefault();

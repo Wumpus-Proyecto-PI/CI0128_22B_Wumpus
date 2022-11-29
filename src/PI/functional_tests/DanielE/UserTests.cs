@@ -17,6 +17,7 @@ namespace PiTests.DanielE
         {
             Driver = new ChromeDriver();
             Driver.Url = url;
+            Driver.Manage().Window.Maximize();
             Driver.Navigate().GoToUrl(url);
             authenticatingPage = new(Driver);
         }

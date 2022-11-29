@@ -18,6 +18,7 @@ namespace PiTests.Fabian
         {
             Driver = new ChromeDriver();
             Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            Driver.Manage().Window.Maximize();
 
             Driver.Navigate().GoToUrl(URL);
             this.AutenticacionPage = new AutenticacionPage(Driver);
