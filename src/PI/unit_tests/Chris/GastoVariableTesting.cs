@@ -271,12 +271,16 @@ namespace unit_tests.Chris
             }
         }
 
+        // Prueba la insercion fallida de un producto cuando el lote es un valor negativo 
         [TestMethod]
         public void InsertarGastoVariable_LoteNegativo()
         {
             //arrange
+
+            // String con la excepcion que se espera
             string excepcionEsperada = "El valor del lote debe ser un número positivo";
 
+            // Se crea un producto de prueba
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test",
