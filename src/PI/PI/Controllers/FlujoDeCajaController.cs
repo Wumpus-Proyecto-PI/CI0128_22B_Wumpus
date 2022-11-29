@@ -28,6 +28,14 @@ namespace PI.Controllers
             decimal totalGastosFijos = gastoFijoHandler.obtenerTotalAnual(fechaCreacionAnalisis);
             decimal gananciaMensual = analisisHandler.ObtenerGananciaMensual(fechaCreacionAnalisis);
 
+            // Convierte los porcentajes a valores válidos (divide entre 100).
+            ConfigAnalisisModel configuracionAnalisis = analisisHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
+            decimal seguroSocial = configuracionAnalisis.PorcentajeSS / 100;
+            decimal prestaciones = configuracionAnalisis.PorcentajePL / 100;
+
+            // Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
+            gastoFijoHandler.actualizarGastosPredeterminados(fechaCreacionAnalisis, seguroSocial, prestaciones);
+
             // Datos enviados a la vista
             ViewData["Title"] = "Flujo de caja";
             ViewData["TituloPaso"] = ViewData["Title"];
