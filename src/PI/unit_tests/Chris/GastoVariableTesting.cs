@@ -19,8 +19,10 @@ namespace unit_tests.Chris
         // analisis ficticio creado para la prueba
         private AnalisisModel? AnalisisFicticio = null;
 
+        // handler de productos
         ProductoHandler? ProductoHandler = null;
 
+        // handler de componentes
         ComponenteHandler? ComponenteHandler = null; 
 
         [TestInitialize]
