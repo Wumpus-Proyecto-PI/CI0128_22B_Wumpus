@@ -143,12 +143,16 @@ namespace unit_tests.Chris
             Assert.IsTrue(componentesVacios, "Si hay componentes en la base de datos");
         }
 
+        // Prueba la insercion fallida de un producto cuando su nombre es muy largo
         [TestMethod]
         public void InsertarGastoVariable_NombreLargo()
         {
             //arrange
+
+            // String con la excepcion que se genera al ingresar un producto con nombre muy largo 
             string excepcionEsperada = "String or binary data would be truncated.\r\nThe statement has been terminated.";
 
+            // Se crea un producto de prueba
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test-que-es-muy-largo-para-ingresarse",
