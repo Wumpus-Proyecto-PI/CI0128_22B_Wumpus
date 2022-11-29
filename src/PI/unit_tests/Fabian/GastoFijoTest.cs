@@ -22,7 +22,7 @@ namespace unit_tests.Fabian
         // Crea un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
         // para que el test exista debe existir el siguiente usuario en la base
         // usuario: wumpustest@gmail.com 
-        // id del usuario: e690ef97-31c4-4064-bede-93aeedaf6857
+        // id del usuario: 81727ffe-84fc-4263-b7e4-e763664968d9
         [TestInitialize]
         public void Setup()
         {
