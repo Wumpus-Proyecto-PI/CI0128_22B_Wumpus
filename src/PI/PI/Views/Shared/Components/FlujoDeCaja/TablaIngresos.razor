@@ -131,19 +131,19 @@
 
     public string calcularIngresoMensualTotal(string mes)
     {
-        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mes, ingresos[0].FechaAnalisis));
+        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mes, ingresos[0].FechaAnalisis));
     }
 
     public void actualizarIngreso(IngresoModel ingreso)
     {
         if (ingreso.Monto >= 0)
         {
-            flujoDeCajaHandler.actualizarIngreso(ingreso);
+            flujoDeCajaHandler.ActualizarIngreso(ingreso);
         }
         else
         {
             ingreso.Monto = 0.0m;
-            flujoDeCajaHandler.actualizarIngreso(ingreso);
+            flujoDeCajaHandler.ActualizarIngreso(ingreso);
         }
         flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }

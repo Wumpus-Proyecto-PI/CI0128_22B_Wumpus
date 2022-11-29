@@ -14,14 +14,14 @@ namespace PI.Services
             FlujoDeCajaHandler flujoDeCajaHandler = new();
 
             // Obtiene los ingresos del mes.
-            decimal totalIngresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
+            decimal totalIngresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
             // Obtiene los egresos del mes.
-            decimal totalEgresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mesModel);
+            decimal totalEgresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeEgresosPorMes(mesModel);
 
             // Suma los gastos fijos y la inversión inicial a los egresos.
             GastoFijoHandler gastoFijoHandler = new();
             totalEgresoPorMes += gastoFijoHandler.obtenerTotalAnual(mesModel.FechaAnalisis) / 12;
-            totalEgresoPorMes += flujoDeCajaHandler.obtenerInversionDelMes(mesModel);
+            totalEgresoPorMes += flujoDeCajaHandler.ObtenerInversionDelMes(mesModel);
 
             return totalIngresoPorMes - totalEgresoPorMes;
         }

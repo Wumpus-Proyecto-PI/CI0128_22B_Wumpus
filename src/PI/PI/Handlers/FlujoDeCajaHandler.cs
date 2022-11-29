@@ -93,26 +93,26 @@ namespace PI.Handlers
         //    enviarConsultaVoid(consulta);
         //}
 
-        public void crearIngresos(DateTime fechaAnalisis)
+        public void CrearIngresos(DateTime fechaAnalisis)
         {
             string consulta = "EXEC crearIngresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsultaVoid(consulta);
         }
 
-        public void crearEgresos(DateTime fechaAnalisis)
+        public void CrearEgresos(DateTime fechaAnalisis)
         {
             string consulta = "EXEC crearEgresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsultaVoid(consulta);
         }
 
-        public void crearFlujoDeCaja(DateTime fechaAnalisis)
+        public void CrearFlujoDeCaja(DateTime fechaAnalisis)
         {
             //this.crearMeses(fechaAnalisis);
-            this.crearIngresos(fechaAnalisis);
-            this.crearEgresos(fechaAnalisis);
+            this.CrearIngresos(fechaAnalisis);
+            this.CrearEgresos(fechaAnalisis);
         }
 
-        public List<IngresoModel> obtenerIngresos(DateTime fechaAnalisis)
+        public List<IngresoModel> ObtenerIngresos(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM INGRESO WHERE fechaAnalisis = '" +  fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
@@ -132,7 +132,7 @@ namespace PI.Handlers
             return ingresos;
         }
 
-        public void actualizarIngreso(IngresoModel ingreso)
+        public void ActualizarIngreso(IngresoModel ingreso)
         {
             string consulta = "UPDATE INGRESO" +
                               " SET monto = " + ingreso.Monto +
@@ -142,7 +142,7 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
-        public decimal obtenerMontoTotalDeIngresosPorMes(string mes, DateTime fechaAnalisis)
+        public decimal ObtenerMontoTotalDeIngresosPorMes(string mes, DateTime fechaAnalisis)
         {
             decimal total = 0.0m;
 
@@ -160,7 +160,7 @@ namespace PI.Handlers
             return total;
         }
 
-        public List<EgresoModel> obtenerEgresos(DateTime fechaAnalisis)
+        public List<EgresoModel> ObtenerEgresos(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM EGRESO WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
@@ -180,7 +180,7 @@ namespace PI.Handlers
             return egresos;
         }
 
-        public void actualizarEgreso(EgresoModel egreso)
+        public void ActualizarEgreso(EgresoModel egreso)
         {
             string consulta = "UPDATE EGRESO" +
                               " SET monto = " + egreso.Monto +
@@ -190,7 +190,7 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
-        public decimal obtenerMontoTotalDeEgresosPorMes(MesModel mes)
+        public decimal ObtenerMontoTotalDeEgresosPorMes(MesModel mes)
         {
             decimal total = 0.0m;
 
@@ -208,7 +208,7 @@ namespace PI.Handlers
             return total;
         }
 
-        public decimal obtenerInversionDelMes(MesModel mes)
+        public decimal ObtenerInversionDelMes(MesModel mes)
         {
             decimal inversion = 0.0m;
 
@@ -225,7 +225,7 @@ namespace PI.Handlers
             return inversion;
         }
 
-        public decimal obtenerMontoTotalInversiones(DateTime fechaAnalisis)
+        public decimal ObtenerMontoTotalInversiones(DateTime fechaAnalisis)
         {
             decimal total = 0.0m;
 
@@ -242,7 +242,7 @@ namespace PI.Handlers
             return total;
         }
 
-        public void actualizarInversionPorMes(MesModel mes)
+        public void ActualizarInversionPorMes(MesModel mes)
         {
             string consulta = "UPDATE MES" +
                              " SET inversionPorMes = " + mes.InversionPorMes +

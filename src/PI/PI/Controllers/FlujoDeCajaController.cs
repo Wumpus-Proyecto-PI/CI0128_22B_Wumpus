@@ -13,11 +13,11 @@ namespace PI.Controllers
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
             FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
-            flujoDeCajaHandler.crearFlujoDeCaja(fechaCreacionAnalisis);
+            flujoDeCajaHandler.CrearFlujoDeCaja(fechaCreacionAnalisis);
 
-            ViewBag.Ingresos = flujoDeCajaHandler.obtenerIngresos(fechaCreacionAnalisis);
+            ViewBag.Ingresos = flujoDeCajaHandler.ObtenerIngresos(fechaCreacionAnalisis);
 
-            ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
+            ViewBag.Egresos = flujoDeCajaHandler.ObtenerEgresos(fechaCreacionAnalisis);
 
             List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
             ViewBag.Meses = meses;
