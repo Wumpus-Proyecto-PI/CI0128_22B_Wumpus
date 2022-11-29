@@ -117,21 +117,23 @@
     public FlujoDeCajaHandler FlujoDeCajaHandler = new FlujoDeCajaHandler();
 
 
+    // Método que retorna un string con el total del monto de ingresos de un determinado mes
     public string CalcularIngresoMensualTotal(string mes)
     {
-        return FormatManager.ToFormatoEstadistico(FlujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mes, Ingresos[0].FechaAnalisis));
+        return FormatManager.ToFormatoEstadistico(FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mes, Ingresos[0].FechaAnalisis));
     }
 
+    // Método que actualiza un ingreso en la base de datos
     public void ActualizarIngreso(IngresoModel ingreso)
     {
         if (ingreso.Monto >= 0)
         {
-            FlujoDeCajaHandler.actualizarIngreso(ingreso);
+            FlujoDeCajaHandler.ActualizarIngreso(ingreso);
         }
         else
         {
             ingreso.Monto = 0.0m;
-            FlujoDeCajaHandler.actualizarIngreso(ingreso);
+            FlujoDeCajaHandler.ActualizarIngreso(ingreso);
         }
         FlujoMensual = FlujoCajaService.ActualizarFlujosMensuales(Meses);
     }

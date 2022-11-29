@@ -88,27 +88,27 @@ namespace PI.Handlers
         }
 
         // Llama procedure de la base de datos que crea todos los ingresos de un analisis con monto en 0
-        public void crearIngresos(DateTime fechaAnalisis)
+        public void CrearIngresos(DateTime fechaAnalisis)
         {
             string consulta = "EXEC crearIngresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsultaVoid(consulta);
         }
 
-        public void crearEgresos(DateTime fechaAnalisis)
+        public void CrearEgresos(DateTime fechaAnalisis)
         {
             string consulta = "EXEC crearEgresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsultaVoid(consulta);
         }
 
         // Crea todos los ingresos y egresos de un análisis
-        public void crearFlujoDeCaja(DateTime fechaAnalisis)
+        public void CrearFlujoDeCaja(DateTime fechaAnalisis)
         {
-            this.crearIngresos(fechaAnalisis);
-            this.crearEgresos(fechaAnalisis);
+            this.CrearIngresos(fechaAnalisis);
+            this.CrearEgresos(fechaAnalisis);
         }
 
         // Obtiene todos los ingresos de un análisis desde la base de datos
-        public List<IngresoModel> obtenerIngresos(DateTime fechaAnalisis)
+        public List<IngresoModel> ObtenerIngresos(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM INGRESO WHERE fechaAnalisis = '" +  fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
@@ -129,7 +129,7 @@ namespace PI.Handlers
         }
 
         // Actualiza el monto de un ingreso existente en la base de datos
-        public void actualizarIngreso(IngresoModel ingreso)
+        public void ActualizarIngreso(IngresoModel ingreso)
         {
             string consulta = "UPDATE INGRESO" +
                               " SET monto = " + ingreso.Monto +
@@ -140,7 +140,7 @@ namespace PI.Handlers
         }
 
         // Retorna el monto total de los ingresos en un determinado mes de un análisis
-        public decimal obtenerMontoTotalDeIngresosPorMes(string mes, DateTime fechaAnalisis)
+        public decimal ObtenerMontoTotalDeIngresosPorMes(string mes, DateTime fechaAnalisis)
         {
             decimal total = 0.0m;
 

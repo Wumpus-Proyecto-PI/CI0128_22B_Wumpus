@@ -22,7 +22,7 @@ namespace PI.Controllers
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
             // Acciones para calcular datos que se envian a la vista
-            flujoDeCajaHandler.crearFlujoDeCaja(fechaCreacionAnalisis);
+            flujoDeCajaHandler.CrearFlujoDeCaja(fechaCreacionAnalisis);
             List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(fechaCreacionAnalisis);
             List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaCreacionAnalisis);
             decimal totalGastosFijos = gastoFijoHandler.obtenerTotalAnual(fechaCreacionAnalisis);
@@ -31,7 +31,7 @@ namespace PI.Controllers
             // Datos enviados a la vista
             ViewData["Title"] = "Flujo de caja";
             ViewData["TituloPaso"] = ViewData["Title"];
-            ViewBag.Ingresos = flujoDeCajaHandler.obtenerIngresos(fechaCreacionAnalisis);
+            ViewBag.Ingresos = flujoDeCajaHandler.ObtenerIngresos(fechaCreacionAnalisis);
             ViewBag.Egresos = flujoDeCajaHandler.obtenerEgresos(fechaCreacionAnalisis);
             ViewBag.Meses = meses;
             ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);

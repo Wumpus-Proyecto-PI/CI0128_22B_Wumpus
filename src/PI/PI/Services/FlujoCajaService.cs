@@ -14,7 +14,7 @@ namespace PI.Services
             FlujoDeCajaHandler flujoDeCajaHandler = new();
 
             // Obtiene los ingresos del mes.
-            decimal totalIngresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
+            decimal totalIngresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
             // Obtiene los egresos del mes.
             decimal totalEgresoPorMes = flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mesModel);
 
