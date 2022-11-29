@@ -93,18 +93,21 @@ namespace PI.Handlers
         //    enviarConsultaVoid(consulta);
         //}
 
+        // Metodo que crea los ingresos en la base de datos
         public void CrearIngresos(DateTime fechaAnalisis)
         {
             string consulta = "EXEC crearIngresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsultaVoid(consulta);
         }
 
+        // Metodo que crea los egresos en la base de datos
         public void CrearEgresos(DateTime fechaAnalisis)
         {
             string consulta = "EXEC crearEgresosPorMes @fechaAnalisis='" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsultaVoid(consulta);
         }
 
+        // Metodo que crea el flujo de caja (ingresos y egresos)
         public void CrearFlujoDeCaja(DateTime fechaAnalisis)
         {
             //this.crearMeses(fechaAnalisis);
@@ -112,6 +115,7 @@ namespace PI.Handlers
             this.CrearEgresos(fechaAnalisis);
         }
 
+        // Metodo que obtiene los ingresos de la base de datos segun una fecha del analisis
         public List<IngresoModel> ObtenerIngresos(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM INGRESO WHERE fechaAnalisis = '" +  fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
@@ -132,6 +136,7 @@ namespace PI.Handlers
             return ingresos;
         }
 
+        // Metodo que actualiza un ingreso
         public void ActualizarIngreso(IngresoModel ingreso)
         {
             string consulta = "UPDATE INGRESO" +
@@ -142,6 +147,7 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
+        // Metodo que obtiene el monto total de los ingresos de un mes 
         public decimal ObtenerMontoTotalDeIngresosPorMes(string mes, DateTime fechaAnalisis)
         {
             decimal total = 0.0m;
@@ -160,6 +166,7 @@ namespace PI.Handlers
             return total;
         }
 
+        // Metodo que obtiene los egresos segun una fecha de analisis
         public List<EgresoModel> ObtenerEgresos(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM EGRESO WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
@@ -180,6 +187,7 @@ namespace PI.Handlers
             return egresos;
         }
 
+        // Metodo que actualiza un egreso
         public void ActualizarEgreso(EgresoModel egreso)
         {
             string consulta = "UPDATE EGRESO" +
@@ -190,6 +198,7 @@ namespace PI.Handlers
             enviarConsultaVoid(consulta);
         }
 
+        // Metodo que obtiene el monto total de los egresos de un mes 
         public decimal ObtenerMontoTotalDeEgresosPorMes(MesModel mes)
         {
             decimal total = 0.0m;
@@ -208,6 +217,7 @@ namespace PI.Handlers
             return total;
         }
 
+        // Metodo que obtiene la fraccion de la inversion inicial que posee el mes 
         public decimal ObtenerInversionDelMes(MesModel mes)
         {
             decimal inversion = 0.0m;
@@ -225,6 +235,7 @@ namespace PI.Handlers
             return inversion;
         }
 
+        // Metodo que obtiene el monto total de las inversiones de todos los meses 
         public decimal ObtenerMontoTotalInversiones(DateTime fechaAnalisis)
         {
             decimal total = 0.0m;
@@ -242,6 +253,7 @@ namespace PI.Handlers
             return total;
         }
 
+        // Metodo que actualiza la fraccion de la inversion inicial que posee el mes 
         public void ActualizarInversionPorMes(MesModel mes)
         {
             string consulta = "UPDATE MES" +
