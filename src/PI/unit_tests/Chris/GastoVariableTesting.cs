@@ -106,11 +106,13 @@ namespace unit_tests.Chris
             Assert.IsTrue(componenteIngresado, "El componente no se ingresó en la base de datos");
         }
 
+        // Prueba la insecion de un puesto con atributos correctos y que no posea componentes
         [TestMethod]
         public void InsertarGastoVariable_ParametrosCorrectos_SinComponentes()
         {
             //arrange
 
+            // Se crea un producto de prueba
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test",
@@ -123,12 +125,17 @@ namespace unit_tests.Chris
             };
 
             //action
+
+            // Se inserta el producto creado a la base de datos
             ProductoHandler.InsertarProducto(producto.Nombre, producto);
 
             //assert
+
+            // Lista con los componentes y los productos de la base despues de la insercion. 
             List<ProductoModel> productosPostInsercion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion);
             List<ComponenteModel> componentesPostInsercion = ComponenteHandler.ObtenerComponentes(producto.Nombre, AnalisisFicticio.FechaCreacion);
 
+            // Variables booleana que comprueban que el producto exista y que no posea componentes
             bool? productoIngresado = productosPostInsercion.Exists(x => x.Nombre == producto.Nombre);
             bool? componentesVacios = componentesPostInsercion.Count() == 0;
 
