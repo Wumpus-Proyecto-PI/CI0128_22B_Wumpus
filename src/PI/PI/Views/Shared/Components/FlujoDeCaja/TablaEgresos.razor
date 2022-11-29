@@ -42,7 +42,7 @@
         </div>
         @foreach (var mes in meses) {      
             <div class="col col-1">
-                @calcularEgresoMensualTotal(mes)
+                @CalcularEgresoMensualTotal(mes)
             </div>
         }
         
@@ -61,7 +61,7 @@
                         <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                         class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(mes.InversionPorMes)"
                         @onchange="n => mes.InversionPorMes = Convert.ToDecimal(n.Value.ToString())"
-                        @onfocusout="() => actualizarInversionPorMes(mes)" />
+                        @onfocusout="() => ActualizarInversionPorMes(mes)" />
                         <span class="focus-border"></span>
                 </div>
             }
@@ -79,7 +79,7 @@
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(egresoActual.Monto)"
                     @onchange="n => egresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => actualizarEgreso(egresoActual)" />
+                    @onfocusout="() => ActualizarEgreso(egresoActual)" />
                 <span class="focus-border"></span>
             </div>
         }
@@ -96,7 +96,7 @@
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(egresoActual.Monto)"
                     @onchange="n => egresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => actualizarEgreso(egresoActual)" />
+                    @onfocusout="() => ActualizarEgreso(egresoActual)" />
                 <span class="focus-border"></span>
             </div>
         }
@@ -113,7 +113,7 @@
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(egresoActual.Monto)"
                     @onchange="n => egresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => actualizarEgreso(egresoActual)" />
+                    @onfocusout="() => ActualizarEgreso(egresoActual)" />
                 <span class="focus-border"></span>
             </div>
         }
@@ -171,7 +171,7 @@
     public string[] gastosEstructura = new string[] { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
 
     // Metodo que calcula el total de los montos de los gastos fijos
-    public decimal calcularTotalGastosFijos() 
+    public decimal CalcularTotalGastosFijos() 
     {
         decimal total = 0; 
         foreach (GastoFijoModel gasto in gastosFijos)
@@ -184,13 +184,13 @@
     }
 
     // Metodo que calcula el egreso mensual total segun el mes
-    public string calcularEgresoMensualTotal(MesModel mes)
+    public string CalcularEgresoMensualTotal(MesModel mes)
     {
         decimal total = 0;
 
         decimal totalEgresos = flujoDeCajaHandler.obtenerMontoTotalDeEgresosPorMes(mes);
         decimal inversionInicialDelMes = mes.InversionPorMes;
-        decimal totalGastosFijos = calcularTotalGastosFijos();
+        decimal totalGastosFijos = CalcularTotalGastosFijos();
 
         total = totalEgresos + inversionInicialDelMes + totalGastosFijos;
 
@@ -198,31 +198,31 @@
     }
 
     // Metodo que obtiene el total de las inversiones iniciales
-    public decimal obtenerTotalInversiones()
+    public decimal ObtenerTotalInversiones()
     {
         return flujoDeCajaHandler.obtenerMontoTotalInversiones(egresos[0].FechaAnalisis);
     }
 
     // Metodo que obtiene a diferencia entre el valor anterior y el valor actual de la inversion por mes 
-    public decimal obtenerDiferencia(decimal ingresado, decimal actual) {
+    public decimal ObtenerDiferencia(decimal ingresado, decimal actual) {
         decimal diferencia = ingresado - actual;
 
         return diferencia;
     }
 
     // Metodo que actualiza la inversion por mes 
-    public void actualizarInversionPorMes(MesModel mes) {
+    public void ActualizarInversionPorMes(MesModel mes) {
 
         decimal inversionActual = flujoDeCajaHandler.obtenerInversionDelMes(mes);
 
         decimal totalInversiones = 0; 
 
         if (inversionActual > 0) {
-            decimal diferencia = obtenerDiferencia(mes.InversionPorMes, inversionActual);
-            totalInversiones = obtenerTotalInversiones() + diferencia; 
+            decimal diferencia = ObtenerDiferencia(mes.InversionPorMes, inversionActual);
+            totalInversiones = ObtenerTotalInversiones() + diferencia; 
         }
         else if (inversionActual == 0 && mes.InversionPorMes>=0) {
-            totalInversiones = obtenerTotalInversiones() + mes.InversionPorMes;
+            totalInversiones = ObtenerTotalInversiones() + mes.InversionPorMes;
         }
 
         if (mes.InversionPorMes < 0){
@@ -241,7 +241,7 @@
     }
 
     // Metodo que actualiza un egreso
-    public void actualizarEgreso(EgresoModel egreso)
+    public void ActualizarEgreso(EgresoModel egreso)
     {
         if (egreso.Monto >= 0)
         {
