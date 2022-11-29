@@ -373,10 +373,13 @@ namespace unit_tests.Chris
             Assert.AreNotEqual(cantidadAntesDeBorrar, cantidadDespuesDeBorrar);
         }
 
+        // Prueba la eliminacion de un producto que no se encuentra almacenado en la base de datos
         [TestMethod]
         public void EliminarGastoVariable_NoExistente()
         {
             //arrange
+
+            // Se crea un producto de prueba 
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test",
@@ -390,12 +393,14 @@ namespace unit_tests.Chris
 
             // No se inserta ya que lo que se va a probar es cuando no esta en la base
 
+            // Lista con los productos antes de la eliminacion
             List<ProductoModel> productosPreEliminacion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadAntesDeBorrar = productosPreEliminacion.Count();
 
             //action
             ProductoHandler.EliminarProducto(producto);
 
+            // Lista con los productos despues de la eliminacion
             List<ProductoModel> productosPostEliminado = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadDespuesDeBorrar = productosPostEliminado.Count();
 
