@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using PI.Models;
 using PI.Handlers;
+using PI.Services;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
@@ -25,26 +26,26 @@ namespace PI.Handlers
         // El modelo es para acceder a todos los datos de tal puesto
         public void InsertarPuesto(string nombrePuesto, PuestoModel puesotAInsertar)
         {
+            if (FormatManager.EsAlfanumerico(nombrePuesto) && FormatManager.EsAlfanumerico(puesotAInsertar.Nombre)) {
+                // primero se revisa si ya existe el puesto en la base
+                if (ExistePuestoEnBase(nombrePuesto, puesotAInsertar.FechaAnalisis))
+                {
+                    // si existe el puesto lo actualizamos
+                    ActualizarPuesto(nombrePuesto, puesotAInsertar);
+                } else {
+                    // en caso de no existir lo insertamos como un nuevo puesto
+                    // en estaconsulta de sql convertimos los decimales según si es con coma o punto para evitar errores
+                    string insert = "INSERT INTO PUESTO values ('"
+                    + puesotAInsertar.Nombre + "', '"
+                    + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
+                    + puesotAInsertar.Plazas.ToString() + ", "
+                    + puesotAInsertar.SalarioBruto.ToString().Replace(",", ".") + ", "
+                    + puesotAInsertar.Beneficios.ToString().Replace(",", ".") + ")";
 
-            // primero se revisa si ya existe el puesto en la base
-            if (ExistePuestoEnBase(nombrePuesto, puesotAInsertar.FechaAnalisis))
-            {
-                // si existe el puesto lo actualizamos
-                ActualizarPuesto(nombrePuesto, puesotAInsertar);
-            } else
-            {
-                // en caso de no existir lo insertamos como un nuevo puesto
-                // en estaconsulta de sql convertimos los decimales según si es con coma o punto para evitar errores
-                string insert = "INSERT INTO PUESTO values ('"
-                + puesotAInsertar.Nombre + "', '"
-                + puesotAInsertar.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', "
-                + puesotAInsertar.Plazas.ToString() + ", "
-                + puesotAInsertar.SalarioBruto.ToString().Replace(",", ".") + ", "
-                + puesotAInsertar.Beneficios.ToString().Replace(",", ".") + ")";
-
-                // realizamos la consulta
-                // este método es heredado del padre y permite enviar consultas de actualización, borrado e inserción   
-                base.enviarConsulta(insert);
+                    // realizamos la consulta
+                    // este método es heredado del padre y permite enviar consultas de actualización, borrado e inserción   
+                    base.enviarConsulta(insert);
+                }
             }
         }
 
