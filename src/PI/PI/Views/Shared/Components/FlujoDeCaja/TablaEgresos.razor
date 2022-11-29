@@ -170,6 +170,7 @@
     // Array con la lista de gastos que pertenecen a la estructura organizativa
     public string[] gastosEstructura = new string[] { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
 
+    // Metodo que calcula el total de los montos de los gastos fijos
     public decimal calcularTotalGastosFijos() 
     {
         decimal total = 0; 
@@ -182,6 +183,7 @@
         return total; 
     }
 
+    // Metodo que calcula el egreso mensual total segun el mes
     public string calcularEgresoMensualTotal(MesModel mes)
     {
         decimal total = 0;
@@ -195,17 +197,20 @@
         return FormatManager.ToFormatoEstadistico(total);
     }
 
+    // Metodo que obtiene el total de las inversiones iniciales
     public decimal obtenerTotalInversiones()
     {
         return flujoDeCajaHandler.obtenerMontoTotalInversiones(egresos[0].FechaAnalisis);
     }
 
+    // Metodo que obtiene a diferencia entre el valor anterior y el valor actual de la inversion por mes 
     public decimal obtenerDiferencia(decimal ingresado, decimal actual) {
         decimal diferencia = ingresado - actual;
 
         return diferencia;
     }
 
+    // Metodo que actualiza la inversion por mes 
     public void actualizarInversionPorMes(MesModel mes) {
 
         decimal inversionActual = flujoDeCajaHandler.obtenerInversionDelMes(mes);
@@ -235,6 +240,7 @@
         flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }
 
+    // Metodo que actualiza un egreso
     public void actualizarEgreso(EgresoModel egreso)
     {
         if (egreso.Monto >= 0)
