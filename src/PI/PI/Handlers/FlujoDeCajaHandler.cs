@@ -71,22 +71,6 @@ namespace PI.Handlers
             return meses;
         }
 
-        // Agrega un Egreso a la base de datos
-        public void AgregarEgreso(EgresoModel Egreso) 
-        {
-            string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Egreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")
-                + "', @nombreMes ='" + Egreso.Mes + "', @tipo=" + Egreso.Tipo + ", @monto=" + Egreso.Monto;
-            enviarConsultaVoid(consulta);
-        }
-
-        // Agrego un Ingreso a la base de datos
-        public void AgregarIngreso(IngresoModel Ingreso)
-        {
-            string consulta = "EXEC AgregarEgresoMes @fechaAnalisis='" + Ingreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff")
-                + "', @nombreMes ='" + Ingreso.Mes + "', @tipo=" + Ingreso.Tipo + ", @monto=" + Ingreso.Monto;
-            enviarConsultaVoid(consulta);
-        }
-
         // Llama procedure de la base de datos que crea todos los ingresos de un analisis con monto en 0
         public void CrearIngresos(DateTime fechaAnalisis)
         {
