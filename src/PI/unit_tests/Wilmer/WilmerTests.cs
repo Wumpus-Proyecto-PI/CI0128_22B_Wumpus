@@ -1,11 +1,5 @@
 ﻿using PI.Handlers;
 using PI.Models;
-using PI.Views.Shared.Components.GastoFijo;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using unit_tests.SharedResources;
 
 namespace unit_tests.Wilmer
