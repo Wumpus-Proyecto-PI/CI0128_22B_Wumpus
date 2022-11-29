@@ -207,12 +207,16 @@ namespace unit_tests.Chris
             }
         }
 
+        // Prueba la insercion fallida de un producto cuando el monto o precio es muy grande
         [TestMethod]
         public void InsertarGastoVariable_MontoLargo()
         {
             //arrange
+
+            // String con la excepcion que se espera
             string excepcionEsperada = "Error converting data type varchar to decimal.";
 
+            // Se crea un producto de prueba
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test",
