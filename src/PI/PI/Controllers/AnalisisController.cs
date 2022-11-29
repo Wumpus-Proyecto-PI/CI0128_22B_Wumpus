@@ -60,40 +60,8 @@ namespace PI.Controllers
             return View(analisisActual);
         }
 
-        // Devuelve la vista de la configuracion de un analisis especifico 
-        // (Retorna la vista de la configuracion | Parametros: la fecha del analisis cuya configuracion se quiere revisar)
-        public IActionResult ConfiguracionAnalisis(string fechaAnalisis)
-        {
-            ViewBag.FechaAnalisis = fechaAnalisis;
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-
-            ConfigAnalisisModel configAnalisis = analisisHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
-            ViewData["fechaFormateada"] = fechaCreacionAnalisis.ToString("dd/MMM/yyyy - hh:mm tt", CultureInfo.InvariantCulture);
-            ViewData["TituloPaso"] = "Configuración del análisis";
-            return View(configAnalisis);
-        }
-
         // Guarda la configuracion del analisis y devuelve a la vista del analisis
         // (Retorna la vista del analisis que se estaba configurando | Parametros: fecha del analisis, Porcentaje del seguro social, Porcentaje de prestaciones laborales)
-        public IActionResult GuardarConfiguracion(string fechaAnalisis, decimal porcentajeSS = -1.0m, decimal porcentajePL = -1.0m)
-        {
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-
-            // Crea una instancia de clase con la configuracion establecida
-            ConfigAnalisisModel configAnalisis = new ConfigAnalisisModel
-            {
-                fechaAnalisis = fechaCreacionAnalisis,
-                PorcentajePL = porcentajePL,
-                PorcentajeSS = porcentajeSS
-            };
-            // Actualiza la configuracion del analisis
-            analisisHandler.ActualizarConfiguracionAnalisis(configAnalisis);
-            return RedirectToAction("Index", "Analisis", new  { fechaAnalisis = fechaAnalisis});
-        }
 
         // Redirige a la pantalla de "mis análisis" de un negocio
         public IActionResult EliminarAnalisis(string fechaAnalisis, int idNegocio)
