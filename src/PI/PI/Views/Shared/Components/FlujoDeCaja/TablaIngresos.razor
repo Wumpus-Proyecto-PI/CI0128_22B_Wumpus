@@ -136,9 +136,15 @@
 
     public void actualizarIngreso(IngresoModel ingreso)
     {
-        flujoDeCajaHandler.actualizarIngreso(ingreso);
-
-        // Actualiza la lista del flujo mensual.
+        if (ingreso.Monto >= 0)
+        {
+            flujoDeCajaHandler.actualizarIngreso(ingreso);
+        }
+        else
+        {
+            ingreso.Monto = 0.0m;
+            flujoDeCajaHandler.actualizarIngreso(ingreso);
+        }
         flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
     }
 }

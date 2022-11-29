@@ -33,8 +33,17 @@ namespace PI.Controllers
             ViewBag.BotonRetorno = "Progreso";
             ProductoHandler productoHandler = new ProductoHandler();
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
             AnalisisHandler analisisHandler = new AnalisisHandler();
+
+            // Convierte los porcentajes a valores válidos (divide entre 100).
+            ConfigAnalisisModel configuracionAnalisis = analisisHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
+            decimal seguroSocial = configuracionAnalisis.PorcentajeSS / 100;
+            decimal prestaciones = configuracionAnalisis.PorcentajePL / 100;
+
+            // Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
+            gastoFijoHandler.actualizarGastosPredeterminados(fechaCreacionAnalisis, seguroSocial, prestaciones);
+
+            ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
 
             List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaCreacionAnalisis);
             decimal totalGastosFijos = gastoFijoHandler.obtenerTotalAnual(fechaCreacionAnalisis);

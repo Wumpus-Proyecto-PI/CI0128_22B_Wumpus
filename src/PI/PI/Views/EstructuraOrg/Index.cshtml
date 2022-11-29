@@ -20,5 +20,5 @@
 
 
 @(
-await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { puestos = Model[0],config = Model[1], fechaAnalasis = ViewBag.FechaAnalisis})
+await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { Puestos = Model[0], Config = Model[1], FechaAnalisis = ViewBag.FechaAnalisis})
          )
