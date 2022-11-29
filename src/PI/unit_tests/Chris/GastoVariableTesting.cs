@@ -24,10 +24,12 @@ namespace unit_tests.Chris
 
         // handler de componentes
         ComponenteHandler? ComponenteHandler = null; 
-
+        
+        // en la inicializacion creamos un negocio de testing en nuestro usuario de testing y extraemos el analisis que genera
         [TestInitialize]
         public void Setup()
         {
+            // Se inicializan los handlers 
             NegocioTestingHandler = new();
 
             AnalisisHandler = new();
