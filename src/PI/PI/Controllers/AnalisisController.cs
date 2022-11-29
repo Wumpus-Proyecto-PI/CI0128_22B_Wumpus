@@ -77,23 +77,6 @@ namespace PI.Controllers
 
         // Guarda la configuracion del analisis y devuelve a la vista del analisis
         // (Retorna la vista del analisis que se estaba configurando | Parametros: fecha del analisis, Porcentaje del seguro social, Porcentaje de prestaciones laborales)
-        public IActionResult GuardarConfiguracion(string fechaAnalisis, decimal porcentajeSS = -1.0m, decimal porcentajePL = -1.0m)
-        {
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-
-            // Crea una instancia de clase con la configuracion establecida
-            ConfigAnalisisModel configAnalisis = new ConfigAnalisisModel
-            {
-                fechaAnalisis = fechaCreacionAnalisis,
-                PorcentajePL = porcentajePL,
-                PorcentajeSS = porcentajeSS
-            };
-            // Actualiza la configuracion del analisis
-            analisisHandler.ActualizarConfiguracionAnalisis(configAnalisis);
-            return RedirectToAction("Index", "Analisis", new  { fechaAnalisis = fechaAnalisis});
-        }
 
         // Redirige a la pantalla de "mis análisis" de un negocio
         public IActionResult EliminarAnalisis(string fechaAnalisis, int idNegocio)
