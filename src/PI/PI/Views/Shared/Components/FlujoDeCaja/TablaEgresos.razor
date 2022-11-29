@@ -137,18 +137,23 @@
 </ul>
 
 @code {
+    // lista con gastos fijos de la base
     [Parameter]
     public List<GastoFijoModel> gastosFijos { get; set; }
 
+    // lista con egresos de la base
     [Parameter]
     public List<EgresoModel> egresos { get; set; }
 
+    // Variable booleana que verifica el estado del analisis
     [Parameter]
     public bool estadoIniciado { get; set; }
 
+    // Variable que contiene el valor total de la inversion inicial
     [Parameter]
     public decimal inversionInicial { get; set; }
 
+    // Lista con los meses de la base 
     [Parameter]
     public List<MesModel> meses { get; set; }
 
@@ -156,10 +161,13 @@
     [Parameter]
     public List<string> flujoMensual { get; set; }
 
+    // Handler del flujo de caja
     public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
 
+    // Handler de la estructura organizativa
     public EstructuraOrgHandler estructuraOrgHandler = new EstructuraOrgHandler();
 
+    // Array con la lista de gastos que pertenecen a la estructura organizativa
     public string[] gastosEstructura = new string[] { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
 
     public decimal calcularTotalGastosFijos() 
