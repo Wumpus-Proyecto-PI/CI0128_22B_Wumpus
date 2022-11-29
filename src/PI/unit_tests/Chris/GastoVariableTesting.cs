@@ -25,8 +25,9 @@ namespace unit_tests.Chris
         // analisis ficticio creado para la prueba
         private AnalisisModel? AnalisisFicticio = null;
 
-        // handler de testing usado para manejar la creacion de puestos semilla
-        GastosVariablesTestingHandler? GastosVariablesTestingHandler = null;
+        ProductoHandler? ProductoHandler = null;
+
+        ComponenteHandler? ComponenteHandler = null; 
 
         [TestInitialize]
         public void Setup()
@@ -35,7 +36,9 @@ namespace unit_tests.Chris
 
             AnalisisHandler = new();
 
-            GastosVariablesTestingHandler = new(); 
+            ProductoHandler = new(); 
+
+            ComponenteHandler = new();
 
             // para que el test exista debe existir el siguiente usuario en la base
             // usuario: wumpustest@gmail.com 
@@ -50,11 +53,6 @@ namespace unit_tests.Chris
         {
             // eliminar el negocio elimina todos lso datos relacionados a el
             NegocioTestingHandler.EliminarNegocioFicticio();
-            NegocioTestingHandler = null;
-            NegocioFicticio = null;
-            AnalisisHandler = null;
-            AnalisisFicticio = null;
-            GastosVariablesTestingHandler = null;
         }
 
         [TestMethod]
@@ -86,17 +84,13 @@ namespace unit_tests.Chris
                 Componentes = componentes
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-            ComponenteHandler componenteHandler = new();
-
             //action
-            productoHandler.InsertarProducto(producto.Nombre, producto);
-            componenteHandler.AgregarComponente(componentes[0]);
+            ProductoHandler.InsertarProducto(producto.Nombre, producto);
+            ComponenteHandler.AgregarComponente(componentes[0]);
 
             //assert
-            List<ProductoModel> productosPostInsercion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
-            List<ComponenteModel> componentesPostInsercion = GastosVariablesTestingHandler.leerComponentesDeBase(producto.Nombre, AnalisisFicticio.FechaCreacion);
+            List<ProductoModel> productosPostInsercion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion);
+            List<ComponenteModel> componentesPostInsercion = ComponenteHandler.ObtenerComponentes(producto.Nombre, AnalisisFicticio.FechaCreacion);
 
             bool? productoIngresado = productosPostInsercion.Exists(x => x.Nombre == producto.Nombre);
             bool? componenteIngresado = componentesPostInsercion.Exists(x => x.Nombre == componentes[0].Nombre);
@@ -121,16 +115,12 @@ namespace unit_tests.Chris
                 Precio = 1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-            ComponenteHandler componenteHandler = new();
-
             //action
-            productoHandler.InsertarProducto(producto.Nombre, producto);
+            ProductoHandler.InsertarProducto(producto.Nombre, producto);
 
             //assert
-            List<ProductoModel> productosPostInsercion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
-            List<ComponenteModel> componentesPostInsercion = GastosVariablesTestingHandler.leerComponentesDeBase(producto.Nombre, AnalisisFicticio.FechaCreacion);
+            List<ProductoModel> productosPostInsercion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion);
+            List<ComponenteModel> componentesPostInsercion = ComponenteHandler.ObtenerComponentes(producto.Nombre, AnalisisFicticio.FechaCreacion);
 
             bool? productoIngresado = productosPostInsercion.Exists(x => x.Nombre == producto.Nombre);
             bool? componentesVacios = componentesPostInsercion.Count() == 0;
@@ -156,13 +146,10 @@ namespace unit_tests.Chris
                 Precio = 1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-
             //action y assert
             try
             {
-                productoHandler.InsertarProducto(producto.Nombre, producto);
+                ProductoHandler.InsertarProducto(producto.Nombre, producto);
             }
             catch (Exception e)
             {
@@ -187,13 +174,10 @@ namespace unit_tests.Chris
                 Precio = 1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-
             //action y assert
             try
             {
-                productoHandler.InsertarProducto(producto.Nombre, producto);
+                ProductoHandler.InsertarProducto(producto.Nombre, producto);
             }
             catch (Exception e)
             {
@@ -218,13 +202,10 @@ namespace unit_tests.Chris
                 Precio = 11221212121212121212
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-
             //action y assert
             try
             {
-                productoHandler.InsertarProducto(producto.Nombre, producto);
+                ProductoHandler.InsertarProducto(producto.Nombre, producto);
             }
             catch (Exception e)
             {
@@ -249,13 +230,10 @@ namespace unit_tests.Chris
                 Precio = 1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-
             //action y assert
             try
             {
-                productoHandler.InsertarProducto(producto.Nombre, producto);
+                ProductoHandler.InsertarProducto(producto.Nombre, producto);
             }
             catch (Exception e)
             {
@@ -267,7 +245,7 @@ namespace unit_tests.Chris
         public void InsertarGastoVariable_LoteNegativo()
         {
             //arrange
-            string excepcionEsperada = "Error converting data type varchar to decimal.";
+            string excepcionEsperada = "El valor del lote debe ser un número positivo";
 
             ProductoModel producto = new ProductoModel()
             {
@@ -280,13 +258,10 @@ namespace unit_tests.Chris
                 Precio = 1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-
             //action y assert
             try
             {
-                productoHandler.InsertarProducto(producto.Nombre, producto);
+                ProductoHandler.InsertarProducto(producto.Nombre, producto);
             }
             catch (Exception e)
             {
@@ -311,13 +286,10 @@ namespace unit_tests.Chris
                 Precio = -1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-
             //action y assert
             try
             {
-                productoHandler.InsertarProducto(producto.Nombre, producto);
+                ProductoHandler.InsertarProducto(producto.Nombre, producto);
             }
             catch (Exception e)
             {
@@ -340,18 +312,16 @@ namespace unit_tests.Chris
                 Precio = 1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
             // Se inserta el producto para luego eliminarlo
-            productoHandler.InsertarProducto(producto.Nombre, producto);
+            ProductoHandler.InsertarProducto(producto.Nombre, producto);
 
-            List<ProductoModel> productosPostInsercion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            List<ProductoModel> productosPostInsercion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadAntesDeBorrar = productosPostInsercion.Count();
 
             //action
-            productoHandler.EliminarProducto(producto);
+            ProductoHandler.EliminarProducto(producto);
 
-            List<ProductoModel> productosPostEliminado = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            List<ProductoModel> productosPostEliminado = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadDespuesDeBorrar = productosPostEliminado.Count();
 
             //assert
@@ -373,18 +343,15 @@ namespace unit_tests.Chris
                 Precio = 1
             };
 
-            // creamos handler con el metodo que deseamos probar
-            ProductoHandler productoHandler = new();
-
             // No se inserta ya que lo que se va a probar es cuando no esta en la base
 
-            List<ProductoModel> productosPreEliminacion = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            List<ProductoModel> productosPreEliminacion = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadAntesDeBorrar = productosPreEliminacion.Count();
 
             //action
-            productoHandler.EliminarProducto(producto);
+            ProductoHandler.EliminarProducto(producto);
 
-            List<ProductoModel> productosPostEliminado = GastosVariablesTestingHandler.leerProductosDeBase(AnalisisFicticio.FechaCreacion);
+            List<ProductoModel> productosPostEliminado = ProductoHandler.ObtenerProductos(AnalisisFicticio.FechaCreacion); 
             int cantidadDespuesDeBorrar = productosPostEliminado.Count();
 
             //assert
