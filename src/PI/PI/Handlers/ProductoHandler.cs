@@ -14,6 +14,10 @@ namespace PI.Handlers
             {
                 throw new Exception("El valor del lote debe ser un número positivo", new ArgumentOutOfRangeException());
             }
+            if (producto.Precio < 0m)
+            {
+                throw new Exception("El valor del monto debe ser un número positivo", new ArgumentOutOfRangeException());
+            }
 
             int filasAfectadas = 0;
             string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +

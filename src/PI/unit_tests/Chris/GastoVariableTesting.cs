@@ -310,7 +310,7 @@ namespace unit_tests.Chris
             //arrange
 
             // String con la excepcion que se espera
-            string excepcionEsperada = "Error converting data type varchar to decimal.";
+            string excepcionEsperada = "El valor del monto debe ser un número positivo";
 
             // Se crea un producto de prueba
             ProductoModel producto = new ProductoModel()
