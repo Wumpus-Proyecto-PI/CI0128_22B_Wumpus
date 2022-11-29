@@ -303,12 +303,16 @@ namespace unit_tests.Chris
             }
         }
 
+        // Prueba la insercion fallida de un producto cuando el precio o monto es negativo
         [TestMethod]
         public void InsertarGastoVariable_MontoNegativo()
         {
             //arrange
+
+            // String con la excepcion que se espera
             string excepcionEsperada = "Error converting data type varchar to decimal.";
 
+            // Se crea un producto de prueba
             ProductoModel producto = new ProductoModel()
             {
                 Nombre = "producto-test",
