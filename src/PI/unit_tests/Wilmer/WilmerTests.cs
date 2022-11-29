@@ -1,11 +1,5 @@
 ﻿using PI.Handlers;
 using PI.Models;
-using PI.Views.Shared.Components.GastoFijo;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using unit_tests.SharedResources;
 
 namespace unit_tests.Wilmer
@@ -261,11 +255,11 @@ namespace unit_tests.Wilmer
             List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
 
             // Action. Se llama al metodo del handler que crea los ingresos
-            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+            flujoDeCajaHandler.CrearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
 
             // assert
             // Buscamos los ingresos en la base de datos
-            List<IngresoModel> ingresos = flujoDeCajaHandler.obtenerIngresos(AnalisisFicticio.FechaCreacion);
+            List<IngresoModel> ingresos = flujoDeCajaHandler.ObtenerIngresos(AnalisisFicticio.FechaCreacion);
 
             // Se busca un ingreso especifico para comparar
             IngresoModel? ingresoResultado = ingresos.Find(x => x.Mes == "Mes 6");
@@ -281,7 +275,7 @@ namespace unit_tests.Wilmer
         {
             // Preparacion
             FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
-            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+            flujoDeCajaHandler.CrearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
             List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
 
             // Se define el tipo de ingreso
@@ -297,7 +291,7 @@ namespace unit_tests.Wilmer
             };
 
             // action. Se llama al metodo del handler que crea los ingresos
-            flujoDeCajaHandler.actualizarIngreso(ingresoPrueba);
+            flujoDeCajaHandler.ActualizarIngreso(ingresoPrueba);
 
             // assert
 
@@ -316,7 +310,7 @@ namespace unit_tests.Wilmer
         {
             // Preparacion
             FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
-            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+            flujoDeCajaHandler.CrearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
             List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
 
             // Se define el tipo de ingreso
@@ -332,7 +326,7 @@ namespace unit_tests.Wilmer
             };
 
             // action. Se llama al metodo del handler que crea los ingresos
-            flujoDeCajaHandler.actualizarIngreso(ingresoPrueba);
+            flujoDeCajaHandler.ActualizarIngreso(ingresoPrueba);
 
             // assert
 
@@ -350,7 +344,7 @@ namespace unit_tests.Wilmer
         {
             // Preparacion
             FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
-            flujoDeCajaHandler.crearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
+            flujoDeCajaHandler.CrearFlujoDeCaja(AnalisisFicticio.FechaCreacion);
             List<MesModel> meses = flujoDeCajaHandler.ObtenerMeses(AnalisisFicticio.FechaCreacion);
 
             // Se define el tipo de ingreso
@@ -366,7 +360,7 @@ namespace unit_tests.Wilmer
             };
 
             // action. Se llama al metodo del handler que crea los ingresos
-            flujoDeCajaHandler.actualizarIngreso(ingresoPrueba);
+            flujoDeCajaHandler.ActualizarIngreso(ingresoPrueba);
 
             // assert
 

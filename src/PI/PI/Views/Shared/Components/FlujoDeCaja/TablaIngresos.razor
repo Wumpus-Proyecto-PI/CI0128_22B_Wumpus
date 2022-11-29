@@ -33,31 +33,19 @@
     </li>
 
     @*Flujo de caja mensual*@
-    <FilaFlujoMensual flujoMensual=flujoMensual />
+    <FilaFlujoMensual flujoMensual=FlujoMensual />
 
     @*Totales*@
     <li class="table-row-totales">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Totales</p>
         </div>
-        <div class="col col-1">
-            @calcularIngresoMensualTotal("mes 1")
-        </div>
-        <div class="col col-1">
-            @calcularIngresoMensualTotal("mes 2")
-        </div>
-        <div class="col col-1">
-            @calcularIngresoMensualTotal("mes 3")
-        </div>
-        <div class="col col-1">
-            @calcularIngresoMensualTotal("mes 4")
-        </div>
-        <div class="col col-1">
-            @calcularIngresoMensualTotal("mes 5")
-        </div>
-        <div class="col col-1">
-            @calcularIngresoMensualTotal("mes 6")
-        </div>
+        @foreach (var mes in Meses)
+        {
+            <div class="col col-1">
+                @CalcularIngresoMensualTotal(mes.NombreMes)
+            </div>
+        }
     </li>
 
     @*Ventas de contado*@
@@ -65,13 +53,13 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Ventas de contado</p>
         </div>
-        @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "contado"))
+        @foreach (var ingresoActual in Ingresos.Where(t => t.Tipo == "contado"))
         {
             <div class="col col-1">
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)" 
                     @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => actualizarIngreso(ingresoActual)"
+                    @onfocusout="() => ActualizarIngreso(ingresoActual)"
                  />
                     <span class="focus-border"></span>
             </div>
@@ -83,13 +71,13 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Ventas a crédito</p>
         </div>
-        @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "credito"))
+        @foreach (var ingresoActual in Ingresos.Where(t => t.Tipo == "credito"))
         {
             <div class="col col-1">
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)"
                     @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => actualizarIngreso(ingresoActual)" />
+                    @onfocusout="() => ActualizarIngreso(ingresoActual)" />
                 <span class="focus-border"></span>
             </div>
         }
@@ -100,13 +88,13 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Otros ingresos</p>
         </div>
-        @foreach (var ingresoActual in ingresos.Where(t => t.Tipo == "otros"))
+        @foreach (var ingresoActual in Ingresos.Where(t => t.Tipo == "otros"))
         {
             <div class="col col-1">
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)"
                     @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => actualizarIngreso(ingresoActual)" />
+                    @onfocusout="() => ActualizarIngreso(ingresoActual)" />
                 <span class="focus-border"></span>
             </div>
         }
@@ -117,34 +105,36 @@
 @code {
 
     [Parameter]
-    public List<IngresoModel> ingresos { get; set; }
+    public List<IngresoModel> Ingresos { get; set; }
 
     [Parameter]
-    public List<MesModel> meses { get; set; }
+    public List<MesModel> Meses { get; set; }
 
     // Lista con el monto monetario (decimal) del flujo mensual de cada mes.
     [Parameter]
-    public List<string> flujoMensual { get; set; }
+    public List<string> FlujoMensual { get; set; }
 
-    public FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
+    public FlujoDeCajaHandler FlujoDeCajaHandler = new FlujoDeCajaHandler();
 
 
-    public string calcularIngresoMensualTotal(string mes)
+    // Método que retorna un string con el total del monto de ingresos de un determinado mes
+    public string CalcularIngresoMensualTotal(string mes)
     {
-        return FormatManager.ToFormatoEstadistico(flujoDeCajaHandler.obtenerMontoTotalDeIngresosPorMes(mes, ingresos[0].FechaAnalisis));
+        return FormatManager.ToFormatoEstadistico(FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mes, Ingresos[0].FechaAnalisis));
     }
 
-    public void actualizarIngreso(IngresoModel ingreso)
+    // Método que actualiza un ingreso en la base de datos
+    public void ActualizarIngreso(IngresoModel ingreso)
     {
         if (ingreso.Monto >= 0)
         {
-            flujoDeCajaHandler.actualizarIngreso(ingreso);
+            FlujoDeCajaHandler.ActualizarIngreso(ingreso);
         }
         else
         {
             ingreso.Monto = 0.0m;
-            flujoDeCajaHandler.actualizarIngreso(ingreso);
+            FlujoDeCajaHandler.ActualizarIngreso(ingreso);
         }
-        flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
+        FlujoMensual = FlujoCajaService.ActualizarFlujosMensuales(Meses);
     }
 }
