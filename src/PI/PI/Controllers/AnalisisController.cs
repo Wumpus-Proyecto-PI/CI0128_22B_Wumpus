@@ -60,21 +60,6 @@ namespace PI.Controllers
             return View(analisisActual);
         }
 
-        // Devuelve la vista de la configuracion de un analisis especifico 
-        // (Retorna la vista de la configuracion | Parametros: la fecha del analisis cuya configuracion se quiere revisar)
-        public IActionResult ConfiguracionAnalisis(string fechaAnalisis)
-        {
-            ViewBag.FechaAnalisis = fechaAnalisis;
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-
-            ConfigAnalisisModel configAnalisis = analisisHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
-            ViewData["fechaFormateada"] = fechaCreacionAnalisis.ToString("dd/MMM/yyyy - hh:mm tt", CultureInfo.InvariantCulture);
-            ViewData["TituloPaso"] = "Configuración del análisis";
-            return View(configAnalisis);
-        }
-
         // Guarda la configuracion del analisis y devuelve a la vista del analisis
         // (Retorna la vista del analisis que se estaba configurando | Parametros: fecha del analisis, Porcentaje del seguro social, Porcentaje de prestaciones laborales)
 
