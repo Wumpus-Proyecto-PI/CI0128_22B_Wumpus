@@ -190,12 +190,12 @@ namespace PI.Service
                 hojaFlujoCaja.Cell("G" + (i + 14)).Value = gastosFijos[i].Monto/divisor;
             }
             hojaFlujoCaja.Cell("A" + (gastosFijos.Count + 14)).Value = "Total Egresos";
-            hojaFlujoCaja.Cell("B" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(B" + (gastosFijos.Count + 12) + ":B10)";
-            hojaFlujoCaja.Cell("C" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(C" + (gastosFijos.Count + 12) + ":C10)";
-            hojaFlujoCaja.Cell("D" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(D" + (gastosFijos.Count + 12) + ":D10)";
-            hojaFlujoCaja.Cell("E" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(E" + (gastosFijos.Count + 12) + ":E10)";
-            hojaFlujoCaja.Cell("F" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(F" + (gastosFijos.Count + 12) + ":F10)";
-            hojaFlujoCaja.Cell("G" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(G" + (gastosFijos.Count + 12) + ":G10)";
+            hojaFlujoCaja.Cell("B" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(B" + (gastosFijos.Count + 13) + ":B10)";
+            hojaFlujoCaja.Cell("C" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(C" + (gastosFijos.Count + 13) + ":C10)";
+            hojaFlujoCaja.Cell("D" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(D" + (gastosFijos.Count + 13) + ":D10)";
+            hojaFlujoCaja.Cell("E" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(E" + (gastosFijos.Count + 13) + ":E10)";
+            hojaFlujoCaja.Cell("F" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(F" + (gastosFijos.Count + 13) + ":F10)";
+            hojaFlujoCaja.Cell("G" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(G" + (gastosFijos.Count + 13) + ":G10)";
         }
 
         public void AgregarFlujoMensual(DateTime FechaAnalisis) {
