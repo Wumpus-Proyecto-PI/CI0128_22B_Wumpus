@@ -348,6 +348,7 @@ td {
     border-color: lightgray;
     border-style: solid;
     width: 12rem;
+    padding: 15px;
 }
 
 #container-input-nombre-componente {
