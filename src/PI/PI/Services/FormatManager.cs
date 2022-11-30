@@ -38,7 +38,7 @@ namespace PI.Services
 
         public static bool EsAlfanumerico(string str) {
             bool es = false;
-            Regex regex = new Regex("^[a-zA-Z0-9]*$");
+            Regex regex = new Regex("^[A-zÀ-ú-a-zA-Z0-9 ]*$");
             if (regex.IsMatch(str))
             {
                 es = true;
