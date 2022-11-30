@@ -13,7 +13,7 @@ namespace PI.Handlers
             int filasAfectadas = 0;
             string consulta = "EXEC AgregarComponente @nombreComponente='" + componente.Nombre.ToString() + "'" +
                 ",@nombreProducto='" + componente.NombreProducto.ToString() + "',@fechaAnalisis='" +componente.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"'" +
-                ",@monto='" + componente.Costo.ToString() + "',@cantidad='" + componente.Cantidad.ToString() + "'" +
+                ",@monto='" + componente.Costo.ToString().Replace(",",".") + "',@cantidad='" + componente.Cantidad.ToString().Replace(",", ".") + "'" +
                 ",@unidad='" + componente.Unidad.ToString()+ "'";
 
             filasAfectadas = enviarConsulta(consulta);

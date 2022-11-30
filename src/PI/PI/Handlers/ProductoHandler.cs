@@ -21,7 +21,7 @@ namespace PI.Handlers
 
             int filasAfectadas = 0;
             string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
-                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "',@costoVariable='" + producto.CostoVariable.ToString() + "',@comisionDeVentas='" + producto.ComisionDeVentas.ToString() + "'";
+                ",@lote='" + producto.Lote.ToString().Replace(",", ".") + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString().Replace(",", ".") + "',@precio='" + producto.Precio.ToString().Replace(",", ".") + "',@costoVariable='" + producto.CostoVariable.ToString().Replace(",", ".") + "',@comisionDeVentas='" + producto.ComisionDeVentas.ToString().Replace(",", ".") + "'";
 
             filasAfectadas = enviarConsulta(consulta);
             return filasAfectadas;
@@ -84,7 +84,7 @@ namespace PI.Handlers
         public void ActualizarPorcentajeVentas(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
-                              "SET porcentajeDeVentas = " + producto.PorcentajeDeVentas.ToString() +
+                              "SET porcentajeDeVentas = " + producto.PorcentajeDeVentas.ToString().Replace(",", ".") +
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
@@ -93,7 +93,7 @@ namespace PI.Handlers
         public void ActualizarPrecio(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
-                              "SET precio = " + producto.Precio.ToString() +
+                              "SET precio = " + producto.Precio.ToString().Replace(",", ".") +
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
@@ -129,7 +129,7 @@ namespace PI.Handlers
         public void ActualizarComision(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
-                              "SET comisionDeVentas = " + producto.ComisionDeVentas.ToString() +
+                              "SET comisionDeVentas = " + producto.ComisionDeVentas.ToString().Replace(",", ".") +
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
