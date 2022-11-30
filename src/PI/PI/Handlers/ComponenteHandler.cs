@@ -1,4 +1,5 @@
 ﻿using PI.Models;
+using PI.Services;
 using System.Data;
 
 namespace PI.Handlers
@@ -11,10 +12,13 @@ namespace PI.Handlers
         public int AgregarComponente(ComponenteModel componente)
         {
             int filasAfectadas = 0;
-            string consulta = "EXEC AgregarComponente @nombreComponente='" + componente.Nombre.ToString() + "'" +
+            string consulta = "";
+            if (FormatManager.EsAlfanumerico(componente.Nombre) && FormatManager.EsAlfanumerico(componente.Unidad)) {
+                consulta = "EXEC AgregarComponente @nombreComponente='" + componente.Nombre.ToString() + "'" +
                 ",@nombreProducto='" + componente.NombreProducto.ToString() + "',@fechaAnalisis='" +componente.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"'" +
                 ",@monto='" + componente.Costo.ToString().Replace(",",".") + "',@cantidad='" + componente.Cantidad.ToString().Replace(",", ".") + "'" +
                 ",@unidad='" + componente.Unidad.ToString()+ "'";
+            }
 
             filasAfectadas = enviarConsulta(consulta);
             return filasAfectadas;
