@@ -41,7 +41,7 @@ namespace PI.Services
             Regex regex = new Regex("^[a-zA-Z0-9]*$");
             if (regex.IsMatch(str))
             {
-                es = false;
+                es = true;
             }
             return es;
         }

@@ -480,6 +480,10 @@
             // resinertamos el peusto en la misma posición donde estaba
             productos.Insert(index, gastoGuardar);
         }
+        if (!FormatManager.EsAlfanumerico(gastoGuardar.Nombre)) { 
+            ErrorNombre = "<p class=\"mensaje-error\"> Error: el nombre del producto debe ser alfanumerico. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+            valido = false;
+        }
 
         // hacemos reseteo en variable de error del nombre
         if (valido)
