@@ -18,9 +18,9 @@ namespace PI.Handlers
                 ",@nombreProducto='" + componente.NombreProducto.ToString() + "',@fechaAnalisis='" +componente.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +"'" +
                 ",@monto='" + componente.Costo.ToString().Replace(",",".") + "',@cantidad='" + componente.Cantidad.ToString().Replace(",", ".") + "'" +
                 ",@unidad='" + componente.Unidad.ToString()+ "'";
+                filasAfectadas = enviarConsulta(consulta);
             }
 
-            filasAfectadas = enviarConsulta(consulta);
             return filasAfectadas;
         }
 
