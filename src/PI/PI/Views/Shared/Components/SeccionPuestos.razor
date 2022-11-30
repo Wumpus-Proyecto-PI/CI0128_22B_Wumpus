@@ -1,5 +1,6 @@
 ﻿@using PI.Models
 @using PI.Handlers
+@using PI.Services
 @inject NavigationManager NavigationManager;
 
 <div style="display: flex; width: 100%; align-items: center; justify-content: center; margin-bottom: 30px">
@@ -167,7 +168,7 @@
 
     // hanlder para manejar los porcenatjes de seguro social y de prestaciones laborales en la base
     public AnalisisHandler AnalisisHandler = new AnalisisHandler();
-    
+
     // string que almacena el nombre de un puesto antes de ser modificado para poder actualizarlo en la base de datos
     public string CopiaNombreOriginal = "";
 
@@ -288,7 +289,7 @@
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
 
         // se revisa que el nombre no este repetido y que no haya números negativo
-        if (RevisarNombre(puestoGuardar) && RevisarSalario(puestoGuardar) && RevisarPlazasPuesto(puestoGuardar))
+        if (RevisarNombre(puestoGuardar) && RevisarSalario(puestoGuardar) && RevisarPlazasPuesto(puestoGuardar) && FormatManager.EsAlfanumerico(puestoGuardar.Nombre))
         {
             // se asigna el pueso la fecha del análisis por si es un puesto nuevo
             puestoGuardar.FechaAnalisis = FechaAnalisis;
@@ -319,7 +320,6 @@
             ErrorNombre = "<p class=\"puesto-error-nombrevacio\">Error: ingrese un nombre para el puesto.</p>";
             valido = false;
         }
-
         if (!HayPuestoSeleccionado) {
             // si es un puesto nuevo solo revisamos que no esté en la lista
             if (Puestos.Exists(x => x.Nombre.ToLower() == puestoGuardar.Nombre.ToLower()))
@@ -338,6 +338,11 @@
             }
             // resinertamos el peusto en la misma posición donde estaba
             Puestos.Insert(index, puestoGuardar);
+        }
+        if (!FormatManager.EsAlfanumerico(puestoGuardar.Nombre))
+        {
+            ErrorNombre = "<p class=\"puesto-error-nombrevacio\"> Error: El nombre del puesto debe ser alfanumérico. <br> Cambie el nombre o seleccione y modifique el existente.</p>";
+            valido = false;
         }
 
         // hacemos reseteo en variable de error del nombre

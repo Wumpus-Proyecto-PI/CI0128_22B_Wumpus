@@ -6,6 +6,11 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+a:hover {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;

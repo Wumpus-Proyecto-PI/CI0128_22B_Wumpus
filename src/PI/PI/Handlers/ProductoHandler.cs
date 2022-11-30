@@ -1,4 +1,5 @@
 ﻿using PI.Models;
+using PI.Services;
 using System.Data;
 
 namespace PI.Handlers
@@ -10,20 +11,22 @@ namespace PI.Handlers
         // Inserta el modelo del producto que se le pasa por parametro a la base de datos
         public int InsertarProducto(string nombreProducto, ProductoModel producto)
         {
-            if (producto.Lote < 0m)
-            {
-                throw new Exception("El valor del lote debe ser un número positivo", new ArgumentOutOfRangeException());
-            }
-            if (producto.Precio < 0m)
-            {
-                throw new Exception("El valor del monto debe ser un número positivo", new ArgumentOutOfRangeException());
-            }
-
             int filasAfectadas = 0;
-            string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
-                ",@lote='" + producto.Lote.ToString() + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString() + "',@precio='" + producto.Precio.ToString() + "',@costoVariable='" + producto.CostoVariable.ToString() + "',@comisionDeVentas='" + producto.ComisionDeVentas.ToString() + "'";
+            if (FormatManager.EsAlfanumerico(nombreProducto) && FormatManager.EsAlfanumerico(producto.Nombre)) {
+                if (producto.Lote < 0m)
+                {
+                    throw new Exception("El valor del lote debe ser un número positivo", new ArgumentOutOfRangeException());
+                }
+                if (producto.Precio < 0m)
+                {
+                    throw new Exception("El valor del monto debe ser un número positivo", new ArgumentOutOfRangeException());
+                }
 
-            filasAfectadas = enviarConsulta(consulta);
+                string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
+                    ",@lote='" + producto.Lote.ToString().Replace(",", ".") + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString().Replace(",", ".") + "',@precio='" + producto.Precio.ToString().Replace(",", ".") + "',@costoVariable='" + producto.CostoVariable.ToString().Replace(",", ".") + "',@comisionDeVentas='" + producto.ComisionDeVentas.ToString().Replace(",", ".") + "'";
+
+                filasAfectadas = enviarConsulta(consulta);
+            }
             return filasAfectadas;
         }
 
@@ -84,7 +87,7 @@ namespace PI.Handlers
         public void ActualizarPorcentajeVentas(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
-                              "SET porcentajeDeVentas = " + producto.PorcentajeDeVentas.ToString() +
+                              "SET porcentajeDeVentas = " + producto.PorcentajeDeVentas.ToString().Replace(",", ".") +
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
@@ -93,7 +96,7 @@ namespace PI.Handlers
         public void ActualizarPrecio(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
-                              "SET precio = " + producto.Precio.ToString() +
+                              "SET precio = " + producto.Precio.ToString().Replace(",", ".") +
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }
@@ -129,7 +132,7 @@ namespace PI.Handlers
         public void ActualizarComision(ProductoModel producto, DateTime fechaAnalisis)
         {
             string consulta = "UPDATE PRODUCTO " +
-                              "SET comisionDeVentas = " + producto.ComisionDeVentas.ToString() +
+                              "SET comisionDeVentas = " + producto.ComisionDeVentas.ToString().Replace(",", ".") +
                               " WHERE nombre = '" + producto.Nombre.ToString() + "' AND fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             enviarConsulta(consulta);
         }

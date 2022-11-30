@@ -168,3 +168,8 @@ footer {
     cursor: pointer;
     margin-left: 15px;
 }
+
+
+.logout-button:hover {
+    color: #0d6efd; 
+}
