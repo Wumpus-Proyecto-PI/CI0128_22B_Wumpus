@@ -187,6 +187,10 @@
                 {
                     <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El numero ingresado es demasiado grande</p>
                 }
+                @if (CaracteresInvalidos == true) 
+                {
+                    <p style="color:red;  align-self:center; margin-bottom:10px;">ERROR: El nombre del componente debe ser alfanumerico</p>
+                }
             }
             @*Sección de botones en la parte inferior del popup de los componente*@
             <div id="botones-componentes">
@@ -551,7 +555,9 @@
 
     public bool EsNuevo { get; set; } = false;
 
-    public bool DecimalValido = true; 
+    public bool DecimalValido = true;
+
+    public bool CaracteresInvalidos = false;
 
     // Variable que indica si el componente que se esta tratando de agregar ya existe en la base de datos.
     public bool YaExisteComponente { get; set; }
@@ -578,10 +584,11 @@
         CantidadPositiva = cantidadPositiva;
         CostoPositivo = costoPositivo;
         NombreRepetido = nombreRepetido;
-        DecimalValido = decimalValido; 
+        DecimalValido = decimalValido;
+        CaracteresInvalidos = false;
 
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
-        if (hayNombre && hayUnidad && cantidadPositiva && costoPositivo && (nombreRepetido==false) && decimalValido)
+        if (hayNombre && hayUnidad && cantidadPositiva && costoPositivo && (nombreRepetido == false) && decimalValido && FormatManager.EsAlfanumerico(componentes[componenteActual].Nombre))
         {
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
@@ -616,6 +623,10 @@
             }
             if (decimalValido == false) {
                 DecimalValido = false; 
+            }
+            if (!FormatManager.EsAlfanumerico(componentes[componenteActual].Nombre))
+            {
+                CaracteresInvalidos = true;
             }
         }
     }
