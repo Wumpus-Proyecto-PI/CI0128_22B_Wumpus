@@ -53,10 +53,10 @@
                 <p class="datos-header">Porcentaje de ventas</p>
             </div>
             <div class="col col-1">
-                <p class="datos-header">Comision de ventas</p>
+                <p>Precio</p>
             </div>
             <div class="col col-1">
-                <p>Precio</p>
+                <p class="datos-header">Comision de ventas</p>
             </div>
             <div class="col col-1">
                 <p>Margen</p>
@@ -79,10 +79,10 @@
             <div class="col col-1" data-label="% Ventas">
                 @getPorcentajeVentasTotal() %
             </div>
-            <div class="col col-1" data-label="Comision">
+            <div class="col col-1" data-label="Precio">
                 -
             </div>
-            <div class="col col-1" data-label="Precio">
+            <div class="col col-1" data-label="Comision">
                 -
             </div>
             <div class="col col-1" data-label="Margen">
@@ -116,12 +116,12 @@
                     <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
-                <div class="col col-1" data-label="ComisionDeVentas">
-                    <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.ComisionDeVentas" @onfocusout="() => actualizarComisionDeVentas(productoActual)">%
-                    <span class="focus-border"></span>
-                </div>
                 <div class="col col-1" data-label="Precio">
                     <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.Precio" @onfocusout="() => actualizarPrecio(productoActual)">
+                    <span class="focus-border"></span>
+                </div>
+                <div class="col col-1" data-label="ComisionDeVentas">
+                    <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.ComisionDeVentas" @onfocusout="() => actualizarComisionDeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Margen">
