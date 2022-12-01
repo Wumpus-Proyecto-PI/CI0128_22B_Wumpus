@@ -44,7 +44,7 @@
                     <form id="form_configuracion">
                         @*Input del nombre del puesto*@
                         <div class="fila-form-configuracion">
-                            <label>Nombre del puesto</label> <input name="" id="nombre_puesto" type="text" @bind="PuestoActivo.Nombre" placeholder="@PlaceHolderNombre">
+                            <label>Nombre del puesto</label> <input name="" id="nombre_puesto" type="text" @bind="PuestoActivo.Nombre" placeholder="@PlaceHolderNombre" maxlength="30">
                         </div>
 
                         @(
@@ -290,7 +290,7 @@
     public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
 
         // se revisa que el nombre no este repetido y que no haya números negativo
-        if (RevisarNombre(puestoGuardar) && RevisarSalario(puestoGuardar) && RevisarPlazasPuesto(puestoGuardar) && FormatManager.EsAlfanumerico(puestoGuardar.Nombre))
+        if (RevisarNombre(puestoGuardar) && RevisarSalario(puestoGuardar) && RevisarPlazasPuesto(puestoGuardar))
         {
             // se asigna el pueso la fecha del análisis por si es un puesto nuevo
             puestoGuardar.FechaAnalisis = FechaAnalisis;
