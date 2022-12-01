@@ -151,6 +151,7 @@
     [Parameter]
     public DateTime FechaAnalisis { get; set; }
 
+    // Modelo que representa a la configuración del análisis de la fecha que se pasó por parámetro
     [Parameter]
     public ConfigAnalisisModel Config { get; set; }
 
@@ -396,6 +397,7 @@
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
+    // Método que actualiza los valores de la configuración de un análisis
     public void ActualizarConfigAnalisis() {
         AnalisisHandler.ActualizarConfiguracionAnalisis(Config);
     }

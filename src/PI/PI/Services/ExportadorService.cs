@@ -93,8 +93,8 @@ namespace PI.Service
             hojaAnalisisRentabilidad.Cell($"{MetaVentasUnidadRentabilidad}8").Value = "Unidad";
             hojaAnalisisRentabilidad.Cell($"{MetaVentasMontoRentabilidad}8").Value = "Monto";
         }
-        // 
-        public void InsertarEncabezadoFlujoDeCaja() {
+        // Encargado de insertar en la hoja Flujo de Caja, los diferentes títulos de la hoja
+        public void InsertarTitulosFlujoDeCaja() {
             hojaFlujoCaja.Cell("A1").Value = "Flujo de caja";
 
             hojaFlujoCaja.Cell("A3").Value = "Ingresos";
@@ -125,7 +125,8 @@ namespace PI.Service
 
         }
 
-        public void AgregarValoresDeEncabezadoFlujoDeCaja(DateTime FechaAnalisis)
+        // Encargado de ingresar los diferentes valores numéricos referentes a los ingresos y egresos sin tomar en cuanta los gastos fijos
+        public void AgregarValoresNumericosIngresosEgresos(DateTime FechaAnalisis)
         {
             FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
             decimal IngresosContado;
@@ -135,7 +136,6 @@ namespace PI.Service
             decimal EgresosCredito;
             decimal EgresosOtros;
             decimal TotalIngresos;
-            decimal TotalEgresos;
 
             List<EgresoModel> EgresosActuales;
             List<IngresoModel> IngresosActuales;
@@ -156,8 +156,6 @@ namespace PI.Service
                 EgresosContado = FlujoCajaService.CalcularEgresosTipo("contado", EgresosActuales);
                 EgresosCredito = FlujoCajaService.CalcularEgresosTipo("credito", EgresosActuales);
                 EgresosOtros = FlujoCajaService.CalcularEgresosTipo("otros", EgresosActuales);
-                TotalEgresos = EgresosContado + EgresosCredito;
-
 
                 hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "4").Value = IngresosContado;
                 hojaFlujoCaja.Cell("" + ColumnasExcel[i - 1] + "5").Value = IngresosCredito;
@@ -173,6 +171,7 @@ namespace PI.Service
 
         }
 
+        // Agrega a la hoja de Flujo de Caja, los diferentes gastos fijos y sus atributos.
         public void AgregarValoresDeGastosFijos(DateTime FechaAnalisis)
         {
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
@@ -198,6 +197,7 @@ namespace PI.Service
             hojaFlujoCaja.Cell("G" + (gastosFijos.Count + 14)).FormulaA1 = "SUM(G" + (gastosFijos.Count + 13) + ":G10)";
         }
 
+        // Agrega a la tabla Flujo de Caja los valores  y fórmulas referentes al flujo mensual.
         public void AgregarFlujoMensual(DateTime FechaAnalisis) {
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             int NumeroCeldaTotalEgresos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis).Count+16;
@@ -211,6 +211,7 @@ namespace PI.Service
             hojaFlujoCaja.Cell("G" + NumeroCeldaTotalEgresos).FormulaA1 = "G7-" + "G" + (NumeroCeldaTotalEgresos - 2);
         }
 
+        // Encargado de agregar estilo a la hoja de Flujo de Caja
         public void AgregarEstiloFlujoDeCaja(DateTime FechaAnalisis) {
             GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             int FilaFlujoMensual = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis).Count + 16;
@@ -240,14 +241,15 @@ namespace PI.Service
             hojaFlujoCaja.Cell("A"+FilaFlujoMensual).Style.Font.SetBold();
         }
 
+        // Encargado de generar el reporte de flujo de caja
         public void ReportarFlujoDeCaja(string fechaAnalisis)
         {
             hojaFlujoCaja = libro.AddWorksheet("Flujo de Caja");
-            InsertarEncabezadoFlujoDeCaja();
+            InsertarTitulosFlujoDeCaja();
 
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
-            AgregarValoresDeEncabezadoFlujoDeCaja(fechaCreacionAnalisis);
+            AgregarValoresNumericosIngresosEgresos(fechaCreacionAnalisis);
             AgregarValoresDeGastosFijos(fechaCreacionAnalisis);
             AgregarFlujoMensual(fechaCreacionAnalisis);
             AgregarEstiloFlujoDeCaja(fechaCreacionAnalisis);
