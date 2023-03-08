@@ -12,10 +12,20 @@ namespace PI.Handlers
 {
     // Clase handler generalizada para uso de handlers
     // De esta clase heredan los otros handlers para usar métodos comunes y atributos comunes
-    public class Handler
+    public class Handler : IDisposable
     {
-        protected SqlConnection conexion; // objeto que conecta con la base de datos
+        protected SqlConnection? conexion = null; // objeto que conecta con la base de datos
         protected string rutaConexion; // connection string que indica a cual base conectarse
+
+        public void Dispose()
+        {
+            if (conexion != null)
+            {
+                conexion.Close();
+                conexion.Dispose();
+                conexion = null;
+            }
+        }
 
         // Constructor
         // Recibe e nombre del conexi´´on string a utlizar
@@ -44,26 +54,57 @@ namespace PI.Handlers
             conexion = new SqlConnection(rutaConexion);
         }
 
+        ~Handler()
+        {
+            this.Dispose();
+        }
+        
+
         // Método que realiza un consulta y retorna la tabla con el resultado
         // Recibe la la consulta sql a realizar
         protected DataTable CrearTablaConsulta(string consulta)
         {
-            // se genera la consulta
-            SqlCommand comandoParaConsulta = new SqlCommand(consulta,
-            conexion);
-
-            // se crea una tabla para el resultado
-            SqlDataAdapter adaptadorParaTabla = new
-            SqlDataAdapter(comandoParaConsulta);
-            DataTable consultaFormatoTabla = new DataTable();
             
-            // abrimos conexión y enviamos la consulta
-            conexion.Open();
-            adaptadorParaTabla.Fill(consultaFormatoTabla);
+            using (SqlCommand comandoParaConsulta = new SqlCommand(consulta,
+                conexion))
+            using (SqlDataAdapter adaptadorParaTabla = new
+                SqlDataAdapter(comandoParaConsulta))
+            {
 
-            // cerramos conexión
-            conexion.Close();
-            return consultaFormatoTabla;
+                // se genera la consulta
+
+                // se crea una tabla para el resultado
+                DataTable consultaFormatoTabla = new DataTable();
+                // abrimos conexión y enviamos la consulta
+                conexion.Open();
+                adaptadorParaTabla.Fill(consultaFormatoTabla);
+
+                // cerramos conexión
+                conexion.Close();
+                return consultaFormatoTabla;
+            }
+        }
+
+        // Método que realiza un consulta y retorna la tabla con el resultado
+        // Recibe la la consulta sql a realizar
+        protected void LlenarDataConsulta(string consulta, DataTable consultaFormatoTabla)
+        {
+
+            using (SqlCommand comandoParaConsulta = new SqlCommand(consulta,
+                conexion))
+            using (SqlDataAdapter adaptadorParaTabla = new
+                SqlDataAdapter(comandoParaConsulta))
+            {
+
+                // se genera la consulta
+
+                // abrimos conexión y enviamos la consulta
+                conexion.Open();
+                adaptadorParaTabla.Fill(consultaFormatoTabla);
+
+                // cerramos conexión
+                conexion.Close();
+            }
         }
 
         // Método para ennviar consultas como update, insert y delete
@@ -72,31 +113,34 @@ namespace PI.Handlers
         protected int enviarConsulta(string insert)
         {
             int filasAfectadas = 0;
-            // se genera la consulta
-            SqlCommand comando = new SqlCommand(insert, conexion);
+            using (SqlCommand comando = new SqlCommand(insert, conexion))
+            {
+                // se genera la consulta
 
-            // abrimos conexión y enviamos la consulta
-            conexion.Open();
-            filasAfectadas = comando.ExecuteNonQuery();
+                // abrimos conexión y enviamos la consulta
+                conexion.Open();
+                filasAfectadas = comando.ExecuteNonQuery();
 
-            // cerramos conexión
-            conexion.Close();
-            return filasAfectadas;
+                // cerramos conexión
+                conexion.Close();
+
+                return filasAfectadas;
+            }
         }
 
         // Método para ennviar consultas como update, insert y delete pero no retorna nada
         // Recibe la la consulta sql a realizar
         protected void enviarConsultaVoid(string insert)
         {
-            // se genera la consulta
-            SqlCommand comando = new SqlCommand(insert, conexion);
+            using (SqlCommand comando = new SqlCommand(insert, conexion))
+            {
+                // abrimos conexión y enviamos la consulta
+                conexion.Open();
+                comando.ExecuteNonQuery();
 
-            // abrimos conexión y enviamos la consulta
-            conexion.Open();
-            comando.ExecuteNonQuery();
-
-            // cerramos conexión
-            conexion.Close();
+                // cerramos conexión
+                conexion.Close();
+            }
         }
 
         // Método que retirna el nombre de un negocio a partir de un análisis
@@ -111,21 +155,24 @@ namespace PI.Handlers
             string nombreNegocio = "";
 
             // se realiza la consulta
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-            // Se revisa si la consulta retorno algo
-            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+            using (DataTable tablaResultado = CrearTablaConsulta(consulta))
             {
-                // si tiene algo la tabla resultado, se asigna el nombre del negocio
-                nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
-            }
-            else
-            {
-                // existe el caso de que un negocio no tenga nombre en nuestro producto
-                nombreNegocio = "Sin nombre";
+
+                // Se revisa si la consulta retorno algo
+                if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+                {
+                    // si tiene algo la tabla resultado, se asigna el nombre del negocio
+                    nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+                }
+                else
+                {
+                    // existe el caso de que un negocio no tenga nombre en nuestro producto
+                    nombreNegocio = "Sin nombre";
+                }
+
+                return nombreNegocio;
             }
 
-            return nombreNegocio;
         }
 
         public NegocioModel obtenerNegocioDeAnalisis(DateTime fechaAnalisis)
@@ -134,22 +181,23 @@ namespace PI.Handlers
             string consulta = "EXEC ObtenerNegocioDeAnalisis '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
 
             // NegocioModel a retornar
-            NegocioModel negocioObtenido = new NegocioModel(); 
+            NegocioModel negocioObtenido = new NegocioModel();
 
             // se realiza la consulta
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-            // Se revisa si la consulta retorno algo
-            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+            using (DataTable tablaResultado = CrearTablaConsulta(consulta))
             {
-                // si tiene algo la tabla resultado, se asigna el nombre del negocio
-                negocioObtenido.Nombre = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
-                negocioObtenido.idUsuario = Convert.ToString(tablaResultado.Rows[0]["idUsuario"]);
-                negocioObtenido.ID = Convert.ToInt32(tablaResultado.Rows[0]["id"]);
-                negocioObtenido.FechaCreacion = DateOnly.FromDateTime((DateTime) tablaResultado.Rows[0]["FechaCreacion"]);
-            }
+                // Se revisa si la consulta retorno algo
+                if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+                {
+                    // si tiene algo la tabla resultado, se asigna el nombre del negocio
+                    negocioObtenido.Nombre = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+                    negocioObtenido.idUsuario = Convert.ToString(tablaResultado.Rows[0]["idUsuario"]);
+                    negocioObtenido.ID = Convert.ToInt32(tablaResultado.Rows[0]["id"]);
+                    negocioObtenido.FechaCreacion = DateOnly.FromDateTime((DateTime)tablaResultado.Rows[0]["FechaCreacion"]);
+                }
 
-            return negocioObtenido;
+                return negocioObtenido;
+            }
         }
 
         public string obtenerNombreNegocio(int IDNegocio)
@@ -161,22 +209,24 @@ namespace PI.Handlers
             string nombreNegocio = "";
 
             // se realiza la consulta
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-
-            // Se revisa si la consulta retorno algo
-            if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+            using (DataTable tablaResultado = CrearTablaConsulta(consulta))
             {
-                // si tiene algo la tabla resultado, se asigna el nombre del negocio
-                nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
-            }
-            else
-            {
-                // existe el caso de que un negocio no tenga nombre en nuestro producto
-                nombreNegocio = "Sin nombre";
-            }
+                // Se revisa si la consulta retorno algo
+                if (tablaResultado.Rows.Count > 0 && !tablaResultado.Rows[0].IsNull("nombre"))
+                {
+                    // si tiene algo la tabla resultado, se asigna el nombre del negocio
+                    nombreNegocio = Convert.ToString(tablaResultado.Rows[0]["nombre"]);
+                }
+                else
+                {
+                    // existe el caso de que un negocio no tenga nombre en nuestro producto
+                    nombreNegocio = "Sin nombre";
+                }
 
-            return nombreNegocio;
+                return nombreNegocio;
+            }
         }
+
+       
     }
 }

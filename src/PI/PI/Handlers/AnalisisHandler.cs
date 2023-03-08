@@ -65,21 +65,30 @@ namespace PI.Handlers
             string consulta = "SELECT IDNegocio, A.fechaCreacion, A.gananciaMensual, A.estadoAnalisis from ANALISIS as A inner join Negocio as N " +
 
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + " ORDER BY A.fechaCreacion desc";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            foreach (DataRow columna in tablaResultado.Rows)
+            
+            using (DataTable tablaResultado = new DataTable())
             {
-                // Crea la instancia de clase para los analisis obtenidos 
-                DateTime fechaAnalisisActual = (DateTime)columna["fechaCreacion"];
-                bool tipoAnalisisActual = Convert.ToBoolean(ObtenerTipoAnalisis(fechaAnalisisActual));
-                analisisDelNegocio.Add(
-                new AnalisisModel
+
+                base.LlenarDataConsulta(consulta, tablaResultado);
+
+
+                foreach (DataRow columna in tablaResultado.Rows)
                 {
-                    FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
-                    GananciaMensual = Convert.ToDecimal(columna["gananciaMensual"]),
-                    EstadoAnalisis = Convert.ToInt32(columna["estadoAnalisis"]),
-                    Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                    // Crea la instancia de clase para los analisis obtenidos 
+                    DateTime fechaAnalisisActual = (DateTime)columna["fechaCreacion"];
+                    bool tipoAnalisisActual = Convert.ToBoolean(ObtenerTipoAnalisis(fechaAnalisisActual));
+                    analisisDelNegocio.Add(
+                    new AnalisisModel
+                    {
+                        FechaCreacion = Convert.ToDateTime(fechaAnalisisActual),
+                        GananciaMensual = Convert.ToDecimal(columna["gananciaMensual"]),
+                        EstadoAnalisis = Convert.ToInt32(columna["estadoAnalisis"]),
+                        Configuracion = { EstadoNegocio = tipoAnalisisActual, fechaAnalisis = fechaAnalisisActual }
+                    }
+                    );
                 }
-                );
+                tablaResultado.Clear();
+
             }
 
             return analisisDelNegocio;
@@ -91,13 +100,18 @@ namespace PI.Handlers
             // String con la consulta para obtener la fehca mas reciente de los analisis dentro de un negocio especifico 
             string consulta = "SELECT Max(A.fechaCreacion) as UltimoAnalisis from ANALISIS as A inner join Negocio as N " +
                 "on A.IDNegocio = N.ID Where IDNegocio = " + IDNegocio + "";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (tablaResultado.Rows[0].IsNull("UltimoAnalisis") == false)
+            
+            using (DataTable tablaResultado = new DataTable())
             {
-                return (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
-            } else
-            {
-                return DateTime.Now;
+                base.LlenarDataConsulta(consulta, tablaResultado);
+                if (tablaResultado.Rows[0].IsNull("UltimoAnalisis") == false)
+                {
+                    return (DateTime)tablaResultado.Rows[0]["UltimoAnalisis"];
+                } else
+                {
+                    return DateTime.Now;
+                }
+                tablaResultado.Clear();
             }
         }
 
@@ -112,10 +126,17 @@ namespace PI.Handlers
             // string con la consulta que obtiene el tipo que posee el analisis indicado de la base de datos
             string consulta = "SELECT tipoNegocio FROM CONFIGURACION as C join ANALISIS as A on C.fechaAnalisis = A.FechaCreacion " +
                 "WHERE C.FechaAnalisis = '" + fecha + "' ";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (tablaResultado.Rows.Count > 0)
+
+            using (DataTable tablaResultado = new DataTable())
             {
-                tipo = Convert.ToBoolean(tablaResultado.Rows[0]["tipoNegocio"]);
+
+                base.LlenarDataConsulta(consulta, tablaResultado);
+
+                if (tablaResultado.Rows.Count > 0)
+                {
+                    tipo = Convert.ToBoolean(tablaResultado.Rows[0]["tipoNegocio"]);
+                }
+                tablaResultado.Clear();
             }
 
             return tipo;
@@ -189,12 +210,8 @@ namespace PI.Handlers
         public bool ActualizarGananciaMensual(decimal monto, DateTime fechaAnalisis) {
             Console.WriteLine(fechaAnalisis);
             var consulta = @"EXEC ActualizarGananciaMensual @ganancia = " + monto + ", @fecha = " + "'" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
-            var cmdParaConsulta = new SqlCommand(consulta, conexion);
-
-            conexion.Open();
-            bool exito = cmdParaConsulta.ExecuteNonQuery() >= 1;
-            conexion.Close();
-            return exito;
+            this.enviarConsulta(consulta);
+            return true;
         }
         public decimal ObtenerGananciaMensual(DateTime FechaCreacion)
         {

@@ -13,17 +13,27 @@ namespace PI.Controllers
     // Controlador del negocio. Administra el traspaso de acciones entre la vista y el modelo/bd referentes al negocio
     public class NegocioController : ManejadorUsuariosController
     {
+        private NegocioHandler? _handler = null;
+
+        public NegocioController (NegocioHandler handler)
+        {
+            _handler = handler;
+        }
+
+        ~NegocioController() {
+            _handler.Dispose();
+            _handler = null;
+        }
+
         // Retorna una lista con todos los modelos de negocio existentes y el título del paso.
         public IActionResult Index()
         {
-            NegocioHandler handler = new NegocioHandler();
-
             // obtenemos el id del user de identity asp.net
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // con el user id buscamos los negocios en nuestras tablas
-            var negocios = handler.ObtenerNegocios(userId);
-
+            var negocios = _handler.ObtenerNegocios(userId);
+            
             ViewData["Title"] = "Mis negocios";
             ViewData["TituloPaso"] = "Mis negocios";
             return View(negocios);

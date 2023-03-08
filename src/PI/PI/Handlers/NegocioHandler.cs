@@ -24,23 +24,28 @@ namespace PI.Handlers
             List<NegocioModel> negocios = new List<NegocioModel>();
             AnalisisHandler analisisHandler = new AnalisisHandler();
             string consulta = $"exec ObtenerNegocios @idUsuario = '{idUsuario}'";
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-
-            // Crea los modelos de negocio correspondientes segun la tabla obtenida de la base de datos
-            foreach (DataRow columna in tablaResultado.Rows)
+            
+            using (DataTable tablaResultado = new DataTable())
             {
-                DateTime fechaUltAnalisis = analisisHandler.UltimaFechaCreacion(Convert.ToString(columna["id"]));
-                negocios.Add(
-                new NegocioModel
+                LlenarDataConsulta(consulta, tablaResultado);
+
+                // Crea los modelos de negocio correspondientes segun la tabla obtenida de la base de datos
+                foreach (DataRow columna in tablaResultado.Rows)
                 {
-                    Nombre = Convert.ToString(columna["nombre"]),
-                    ID = Convert.ToInt32(columna["id"]),
-                    idUsuario = Convert.ToString(columna["idUsuario"]),
-                    Analisis = analisisHandler.ObtenerAnalisis(Convert.ToInt32(columna["id"])),
-                    FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]),
-                    TipoUltimoAnalisis = analisisHandler.ObtenerTipoAnalisis(fechaUltAnalisis)
+                    DateTime fechaUltAnalisis = analisisHandler.UltimaFechaCreacion(Convert.ToString(columna["id"]));
+                    negocios.Add(
+                    new NegocioModel
+                    {
+                        Nombre = Convert.ToString(columna["nombre"]),
+                        ID = Convert.ToInt32(columna["id"]),
+                        idUsuario = Convert.ToString(columna["idUsuario"]),
+                        Analisis = analisisHandler.ObtenerAnalisis(Convert.ToInt32(columna["id"])),
+                        FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]),
+                        TipoUltimoAnalisis = analisisHandler.ObtenerTipoAnalisis(fechaUltAnalisis)
+                    }
+                    );
                 }
-                );
+                tablaResultado.Clear();
             }
             return negocios;
         }
