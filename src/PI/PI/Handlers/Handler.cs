@@ -65,10 +65,8 @@ namespace PI.Handlers
         protected DataTable CrearTablaConsulta(string consulta)
         {
             
-            using (SqlCommand comandoParaConsulta = new SqlCommand(consulta,
-                conexion))
-            using (SqlDataAdapter adaptadorParaTabla = new
-                SqlDataAdapter(comandoParaConsulta))
+            using (SqlCommand comandoParaConsulta = new SqlCommand(consulta, conexion))
+            using (SqlDataAdapter adaptadorParaTabla = new SqlDataAdapter(comandoParaConsulta))
             {
 
                 // se genera la consulta

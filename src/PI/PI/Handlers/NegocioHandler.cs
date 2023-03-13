@@ -22,7 +22,7 @@ namespace PI.Handlers
         public List<NegocioModel> ObtenerNegocios(string idUsuario)
         {
             List<NegocioModel> negocios = new List<NegocioModel>();
-            AnalisisHandler analisisHandler = new AnalisisHandler();
+            // AnalisisHandler analisisHandler = new AnalisisHandler(); 
             string consulta = $"exec ObtenerNegocios @idUsuario = '{idUsuario}'";
             
             using (DataTable tablaResultado = new DataTable())
@@ -32,16 +32,17 @@ namespace PI.Handlers
                 // Crea los modelos de negocio correspondientes segun la tabla obtenida de la base de datos
                 foreach (DataRow columna in tablaResultado.Rows)
                 {
-                    DateTime fechaUltAnalisis = analisisHandler.UltimaFechaCreacion(Convert.ToString(columna["id"]));
+                    // DateTime fechaUltAnalisis = analisisHandler.UltimaFechaCreacion(Convert.ToString(columna["id"]));
                     negocios.Add(
                     new NegocioModel
                     {
                         Nombre = Convert.ToString(columna["nombre"]),
                         ID = Convert.ToInt32(columna["id"]),
                         idUsuario = Convert.ToString(columna["idUsuario"]),
-                        Analisis = analisisHandler.ObtenerAnalisis(Convert.ToInt32(columna["id"])),
+                        // Analisis = analisisHandler.ObtenerAnalisis(Convert.ToInt32(columna["id"])),
                         FechaCreacion = DateOnly.FromDateTime((DateTime)columna["fechacreacion"]),
-                        TipoUltimoAnalisis = analisisHandler.ObtenerTipoAnalisis(fechaUltAnalisis)
+                        TipoUltimoAnalisis = true,
+                        // TipoUltimoAnalisis = analisisHandler.ObtenerTipoAnalisis(fechaUltAnalisis)
                     }
                     );
                 }
