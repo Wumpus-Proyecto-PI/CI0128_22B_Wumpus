@@ -10,6 +10,6 @@ namespace PI.EntityModels
         public decimal? Monto { get; set; }
         public int Orden { get; set; }
 
-        public virtual Analisi FechaAnalisisNavigation { get; set; } = null!;
+        public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
     }
 }

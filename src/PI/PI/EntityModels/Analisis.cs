@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace PI.EntityModels
 {
-    public partial class Analisi
+    public partial class Analisis 
     {
-        public Analisi()
+        public Analisis()
         {
             Egresos = new HashSet<Egreso>();
             GastoFijos = new HashSet<GastoFijo>();
             InversionInicials = new HashSet<InversionInicial>();
-            Mes = new HashSet<Me>();
+            Mes = new HashSet<Mes>();
             Productos = new HashSet<Producto>();
             Puestos = new HashSet<Puesto>();
         }
@@ -27,7 +27,7 @@ namespace PI.EntityModels
         public virtual ICollection<Egreso> Egresos { get; set; }
         public virtual ICollection<GastoFijo> GastoFijos { get; set; }
         public virtual ICollection<InversionInicial> InversionInicials { get; set; }
-        public virtual ICollection<Me> Mes { get; set; }
+        public virtual ICollection<Mes> Mes { get; set; }
         public virtual ICollection<Producto> Productos { get; set; }
         public virtual ICollection<Puesto> Puestos { get; set; }
     }

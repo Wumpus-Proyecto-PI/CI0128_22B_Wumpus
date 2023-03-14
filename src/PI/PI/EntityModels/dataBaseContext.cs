@@ -18,7 +18,7 @@ namespace PI.EntityModels
 
         public virtual DbSet<AjustesGastofijo> AjustesGastofijos { get; set; } = null!;
         public virtual DbSet<AjustesUsuario> AjustesUsuarios { get; set; } = null!;
-        public virtual DbSet<Analisi> Analises { get; set; } = null!;
+        public virtual DbSet<Analisis> Analisis { get; set; } = null!;
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
@@ -32,7 +32,7 @@ namespace PI.EntityModels
         public virtual DbSet<GastoFijo> GastoFijos { get; set; } = null!;
         public virtual DbSet<Ingreso> Ingresos { get; set; } = null!;
         public virtual DbSet<InversionInicial> InversionInicials { get; set; } = null!;
-        public virtual DbSet<Me> Mes { get; set; } = null!;
+        public virtual DbSet<Mes> Mes { get; set; } = null!;
         public virtual DbSet<Negocio> Negocios { get; set; } = null!;
         public virtual DbSet<Producto> Productos { get; set; } = null!;
         public virtual DbSet<Puesto> Puestos { get; set; } = null!;
@@ -104,7 +104,7 @@ namespace PI.EntityModels
                     .HasColumnName("nombre");
             });
 
-            modelBuilder.Entity<Analisi>(entity =>
+            modelBuilder.Entity<Analisis>(entity =>
             {
                 entity.HasKey(e => e.FechaCreacion)
                     .HasName("PK__ANALISIS__19DE4892862EBA95");
@@ -456,7 +456,7 @@ namespace PI.EntityModels
                     .HasConstraintName("FK__INVERSION__FECHA");
             });
 
-            modelBuilder.Entity<Me>(entity =>
+            modelBuilder.Entity<Mes>(entity =>
             {
                 entity.HasKey(e => new { e.Nombre, e.FechaAnalisis })
                     .HasName("PK__MES__0532FD6FC344EF0E");

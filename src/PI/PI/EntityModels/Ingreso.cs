@@ -10,6 +10,6 @@ namespace PI.EntityModels
         public string Tipo { get; set; } = null!;
         public decimal Monto { get; set; }
 
-        public virtual Me Me { get; set; } = null!;
+        public virtual Mes Me { get; set; } = null!;
     }
 }

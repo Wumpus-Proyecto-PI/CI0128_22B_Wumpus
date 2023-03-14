@@ -7,7 +7,7 @@ namespace PI.EntityModels
     {
         public Negocio()
         {
-            Analisis = new HashSet<Analisi>();
+            Analisis = new HashSet<Analisis>();
         }
 
         public int Id { get; set; }
@@ -16,6 +16,6 @@ namespace PI.EntityModels
         public string? IdUsuario { get; set; }
 
         public virtual AspNetUser? IdUsuarioNavigation { get; set; }
-        public virtual ICollection<Analisi> Analisis { get; set; }
+        public virtual ICollection<Analisis> Analisis { get; set; }
     }
 }

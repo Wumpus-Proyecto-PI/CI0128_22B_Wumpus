@@ -10,7 +10,7 @@ namespace PI.EntityModels
         public string Tipo { get; set; } = null!;
         public decimal Monto { get; set; }
 
-        public virtual Analisi FechaAnalisisNavigation { get; set; } = null!;
-        public virtual Me Me { get; set; } = null!;
+        public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
+        public virtual Mes Me { get; set; } = null!;
     }
 }

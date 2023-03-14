@@ -17,7 +17,7 @@ namespace PI.EntityModels
         public long Orden { get; set; }
         public decimal? Beneficios { get; set; }
 
-        public virtual Analisi FechaAnalisisNavigation { get; set; } = null!;
+        public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
         public virtual ICollection<EsEmpleadoDe> EsEmpleadoDes { get; set; }
     }
 }

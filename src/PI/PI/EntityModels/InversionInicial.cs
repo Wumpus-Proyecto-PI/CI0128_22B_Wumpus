@@ -9,6 +9,6 @@ namespace PI.EntityModels
         public string Nombre { get; set; } = null!;
         public decimal? Valor { get; set; }
 
-        public virtual Analisi FechaAnalisisNavigation { get; set; } = null!;
+        public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
     }
 }

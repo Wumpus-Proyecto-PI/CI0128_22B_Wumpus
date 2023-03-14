@@ -18,7 +18,7 @@ namespace PI.EntityModels
         public decimal CostoVariable { get; set; }
         public decimal? ComisionDeVentas { get; set; }
 
-        public virtual Analisi FechaAnalisisNavigation { get; set; } = null!;
+        public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
         public virtual ICollection<Componente> Componentes { get; set; }
     }
 }

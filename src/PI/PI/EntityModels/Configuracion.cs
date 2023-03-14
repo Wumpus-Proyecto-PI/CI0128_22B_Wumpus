@@ -10,6 +10,6 @@ namespace PI.EntityModels
         public decimal? PorcentajeSs { get; set; }
         public decimal? PorcentajePl { get; set; }
 
-        public virtual Analisi FechaAnalisisNavigation { get; set; } = null!;
+        public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
     }
 }
