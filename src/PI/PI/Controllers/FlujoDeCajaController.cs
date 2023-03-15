@@ -12,10 +12,12 @@ namespace PI.Controllers
 	public class FlujoDeCajaController : Controller
 	{
 		private DataBaseContext? DataBaseContext;
+		private ProceduresServices? Procedures;
 
-		public FlujoDeCajaController(DataBaseContext context)
+		public FlujoDeCajaController(DataBaseContext context, ProceduresServices procedures)
 		{
 			DataBaseContext = context;
+			Procedures = procedures;
 		}
 		// Recibe la fecha del análisis que se quiere consultar en flujo de caja
 		// Retorna la vista de la pantalla correspondiente al flujo de caja
@@ -40,16 +42,16 @@ namespace PI.Controllers
 			// Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
 			int escrituras = await ActualizarGastosPredeterminadosAsync(fechaCreacionAnalisis, seguroSocial, prestaciones);
 
-			//         // Datos enviados a la vista
-			//         ViewData["Title"] = "Flujo de caja";
-			//         ViewData["TituloPaso"] = ViewData["Title"];
-			//         ViewBag.Ingresos = flujoDeCajaHandler.ObtenerIngresos(fechaCreacionAnalisis);
-			//         ViewBag.Egresos = flujoDeCajaHandler.ObtenerEgresos(fechaCreacionAnalisis);
-			//         ViewBag.Meses = meses;
-			//         ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
-			//         ViewBag.fechaAnalisis = fechaCreacionAnalisis;
-			//         ViewBag.BotonRetorno = "Progreso";
-			//         ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
+			// Datos enviados a la vista
+			ViewData["Title"] = "Flujo de caja";
+			ViewData["TituloPaso"] = ViewData["Title"];
+			ViewBag.Ingresos = Procedures.ObtenerIngresosAsync(fechaCreacionAnalisis);
+			ViewBag.Egresos = Procedures.ObtenerEgresosAsync(fechaCreacionAnalisis);
+			ViewBag.Meses = meses;
+			// ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
+			ViewBag.fechaAnalisis = fechaCreacionAnalisis;
+			ViewBag.BotonRetorno = "Progreso";
+			// ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
 			//         ViewBag.Iniciado = analisisHandler.ObtenerTipoAnalisis(fechaCreacionAnalisis);
 			//         ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
 			//         ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
