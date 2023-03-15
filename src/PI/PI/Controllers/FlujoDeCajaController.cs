@@ -6,23 +6,22 @@ using PI.Views.Shared.Components.Producto;
 using PI.EntityModels;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using PI.Views.Shared.Components.GastoFijo;
 
 namespace PI.Controllers
 {
-    public class FlujoDeCajaController : Controller
-    {
-        private DataBaseContext? DataBaseContext;
+	public class FlujoDeCajaController : Controller
+	{
+		private DataBaseContext? DataBaseContext;
 
-        public FlujoDeCajaController(DataBaseContext context) 
-        {
+		public FlujoDeCajaController(DataBaseContext context)
+		{
 			DataBaseContext = context;
 		}
-        // Recibe la fecha del análisis que se quiere consultar en flujo de caja
-        // Retorna la vista de la pantalla correspondiente al flujo de caja
-        public async Task<IActionResult> IndexFlujoDeCaja(string fechaAnalisis)
-        {
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+		// Recibe la fecha del análisis que se quiere consultar en flujo de caja
+		// Retorna la vista de la pantalla correspondiente al flujo de caja
+		public async Task<IActionResult> IndexFlujoDeCaja(string fechaAnalisis)
+		{
+			DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
 			// Acciones para calcular datos que se envian a la vista
 			CrearIngresoPorMesAsync(fechaCreacionAnalisis);
@@ -35,11 +34,11 @@ namespace PI.Controllers
 
 			// Convierte los porcentajes a valores válidos (divide entre 100).
 			Configuracion configuracionAnalisis = await ObtenerConfigAnalisis(fechaCreacionAnalisis);
-			//         decimal seguroSocial = configuracionAnalisis.PorcentajeSS / 100;
-			//         decimal prestaciones = configuracionAnalisis.PorcentajePL / 100;
+			decimal seguroSocial = configuracionAnalisis.PorcentajeSs / 100 ?? 0.0m;
+			decimal prestaciones = configuracionAnalisis.PorcentajePl / 100 ?? 0.0m;
 
-			//         // Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
-			//         gastoFijoHandler.actualizarGastosPredeterminados(fechaCreacionAnalisis, seguroSocial, prestaciones);
+			// Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
+			int escrituras = await ActualizarGastosPredeterminadosAsync(fechaCreacionAnalisis, seguroSocial, prestaciones);
 
 			//         // Datos enviados a la vista
 			//         ViewData["Title"] = "Flujo de caja";
@@ -57,9 +56,9 @@ namespace PI.Controllers
 			//         ViewBag.InversionInicial = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
 
 			return View();
-        }
-        public void GenerarMesesIngresos(string tipoIngreso, DateTime fechaAnalisis, List<Ingreso> ingresos)
-        {
+		}
+		public void GenerarMesesIngresos(string tipoIngreso, DateTime fechaAnalisis, List<Ingreso> ingresos)
+		{
 			for (int i = 1; i < 7; ++i)
 			{
 				ingresos.Add(
@@ -87,9 +86,9 @@ namespace PI.Controllers
 		}
 		public async void CrearIngresoPorMesAsync(DateTime fechaAnalisis)
 		{
-            var ingresos = await DataBaseContext.Ingresos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
-            if (ingresos.Any() == false)
-            {
+			var ingresos = await DataBaseContext.Ingresos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
+			if (ingresos.Any() == false)
+			{
 				GenerarMesesIngresos("contado", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("credito", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("otros", fechaAnalisis, ingresos);
@@ -126,8 +125,8 @@ namespace PI.Controllers
 		public async Task<decimal> ObtenerTotalAnualAsync(DateTime fechaAnalisis)
 		{
 			decimal totalAnual = 0.0m;
-			
-			var suma = await DataBaseContext.GastoFijos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).SumAsync(i => i.Monto);
+
+			var suma = await DataBaseContext.GastosFijos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).SumAsync(i => i.Monto);
 
 			return suma ?? 0.0m;
 		}
@@ -144,6 +143,160 @@ namespace PI.Controllers
 			Configuracion config = await DataBaseContext.Configuracion.FindAsync(fechaAnalisis);
 			return config;
 		}
+
+		public async Task<int> ActualizarGastosPredeterminadosAsync(DateTime fechaConversion, decimal seguroSocial, decimal prestaciones)
+		{
+			int escrituras = 0;
+			escrituras += await ActualizarSalariosNetoAsync(fechaConversion, seguroSocial, prestaciones);
+			escrituras += await ActualizarSeguroSocialAsync(fechaConversion, seguroSocial);
+			escrituras += await ActualizarPrestacionesAsync(fechaConversion, prestaciones);
+			escrituras += await ActualizarBeneficiosAsync(fechaConversion);
+			return escrituras;
+		}
+
+		// Crea o actualiza el gasto fijo de salarios netos
+		public async Task<int> ActualizarSalariosNetoAsync(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)
+		{
+			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Salarios netos");
+			if (gastoFijo != null) { 
+				gastoFijo.Monto = await ObtenerTotalSalariosNetoAsync(fechaAnalisis, seguroSocial, prestaciones);
+			} else
+			{
+				GastoFijo gastoNuevo = new GastoFijo
+				{
+					Nombre = "Salarios netos",
+					FechaAnalisis = fechaAnalisis,
+					Monto = await ObtenerTotalSalariosNetoAsync(fechaAnalisis, seguroSocial, prestaciones),
+					Orden = 1
+				};
+				DataBaseContext.GastosFijos.Add(gastoNuevo);
+			}
+			return await DataBaseContext.SaveChangesAsync();
+		}
+
+		// procedure reemplazado
+		public async Task<decimal> ObtenerTotalSalariosNetoAsync(DateTime fechaAnalisis, decimal seguroSocial, decimal Prestaciones)
+		{
+
+			decimal sumaSalarios = await ObtenerSumaSalarios(fechaAnalisis);
+			decimal gastoSs = await ObtenerGastoSeguroSocial(fechaAnalisis, sumaSalarios, seguroSocial);
+			decimal gastoPl = await ObtenerGastoPrestaciones(fechaAnalisis, sumaSalarios, Prestaciones);
+
+			return sumaSalarios - gastoSs - gastoPl;
+		}
+		// procedure reemplazado
+		public async Task<decimal> ObtenerSumaSalarios(DateTime fechaAnalisis)
+		{
+			List<Puesto> puestos = await DataBaseContext.Puestos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
+			decimal totalSalarios = 0.0m;
+            foreach (var puesto in puestos)
+            {
+				totalSalarios = (puesto.CantidadPlazas * puesto.SalarioBruto) ?? 0.0m;
+            }
+			return totalSalarios * 12;
+		}
+		// procedure reemplazado
+		public async Task<decimal> ObtenerGastoSeguroSocial(DateTime fechaAnalisis, decimal sumaSalarios, decimal porcentajeSs)
+		{
+			return sumaSalarios * porcentajeSs;
+		}
+		// procedure reemplazado
+		public async Task<decimal> ObtenerGastoPrestaciones(DateTime fechaAnalisis, decimal sumaSalarios, decimal porcentajePl)
+		{
+			return sumaSalarios * porcentajePl;
+		}
+
+
+		// Crea o actualiza el gasto fijo de seguro social
+		public async Task<int> ActualizarSeguroSocialAsync(DateTime fechaAnalisis, decimal seguroSocial)
+		{
+			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Seguridad social");
+			if (gastoFijo != null)
+			{
+				gastoFijo.Monto = await ObtenerGastoSeguroSocialAsync(fechaAnalisis, seguroSocial);
+			}
+			else
+			{
+				GastoFijo gastoNuevo = new GastoFijo
+				{
+					Nombre = "Seguridad social",
+					FechaAnalisis = fechaAnalisis,
+					Monto = await ObtenerGastoSeguroSocialAsync(fechaAnalisis, seguroSocial),
+					Orden = 2
+				};
+				DataBaseContext.GastosFijos.Add(gastoNuevo);
+			}
+			return await DataBaseContext.SaveChangesAsync();
+		}
+
+		// procedure reemplazado
+		public async Task<decimal> ObtenerGastoSeguroSocialAsync(DateTime fechaAnalisis, decimal seguroSocial)
+		{
+			return await ObtenerSumaSalarios(fechaAnalisis) * seguroSocial;
+		}
+
+		// Crea o actualiza el gasto fijo de salarios netos
+		public async Task<int> ActualizarPrestacionesAsync(DateTime fechaAnalisis, decimal prestaciones)
+		{
+			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Prestaciones laborales");
+			if (gastoFijo != null)
+			{
+				gastoFijo.Monto = await ObtenerGastoPrestacionesAsync(fechaAnalisis, prestaciones);
+			}
+			else
+			{
+				GastoFijo gastoNuevo = new GastoFijo
+				{
+					Nombre = "Prestaciones laborales",
+					FechaAnalisis = fechaAnalisis,
+					Monto = await ObtenerGastoPrestacionesAsync(fechaAnalisis, prestaciones),
+					Orden = 3
+				};
+				DataBaseContext.GastosFijos.Add(gastoNuevo);
+			}
+			return await DataBaseContext.SaveChangesAsync();
+		}
+
+		// procedure reemplazado
+		public async Task<decimal> ObtenerGastoPrestacionesAsync(DateTime fechaAnalisis, decimal prestaciones)
+		{
+			return await ObtenerSumaSalarios(fechaAnalisis) * prestaciones;
+		}
+
+		// Crea o actualiza el gasto fijo de salarios netos
+		public async Task<int> ActualizarBeneficiosAsync(DateTime fechaAnalisis)
+		{
+			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Beneficios de empleados");
+			if (gastoFijo != null)
+			{
+				gastoFijo.Monto = await ObtenerTotalBeneficiosAsync(fechaAnalisis);
+			}
+			else
+			{
+				GastoFijo gastoNuevo = new GastoFijo
+				{
+					Nombre = "Beneficios de empleados",
+					FechaAnalisis = fechaAnalisis,
+					Monto = await ObtenerTotalBeneficiosAsync(fechaAnalisis),
+					Orden = 4
+				};
+				DataBaseContext.GastosFijos.Add(gastoNuevo);
+			}
+			return await DataBaseContext.SaveChangesAsync();
+		}
+
+		// procedure reemplazado
+		public async Task<decimal> ObtenerTotalBeneficiosAsync(DateTime fechaAnalisis)
+		{
+			List<Puesto> puestos = await DataBaseContext.Puestos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
+			decimal totalSalarios = 0.0m;
+			foreach (var puesto in puestos)
+			{
+				totalSalarios = (puesto.CantidadPlazas * puesto.Beneficios) ?? 0.0m;
+			}
+			return totalSalarios * 12;
+		}
+			
 
 	}
 }

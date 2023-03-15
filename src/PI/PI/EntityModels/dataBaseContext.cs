@@ -29,7 +29,7 @@ namespace PI.EntityModels
         public virtual DbSet<Configuracion> Configuracion { get; set; } = null!;
         public virtual DbSet<Egreso> Egresos { get; set; } = null!;
         public virtual DbSet<EsEmpleadoDe> EsEmpleadoDes { get; set; } = null!;
-        public virtual DbSet<GastoFijo> GastoFijos { get; set; } = null!;
+        public virtual DbSet<GastoFijo> GastosFijos { get; set; } = null!;
         public virtual DbSet<Ingreso> Ingresos { get; set; } = null!;
         public virtual DbSet<InversionInicial> InversionInicials { get; set; } = null!;
         public virtual DbSet<Mes> Mes { get; set; } = null!;
