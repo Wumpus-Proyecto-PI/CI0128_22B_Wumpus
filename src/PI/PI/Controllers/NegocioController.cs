@@ -43,26 +43,25 @@ namespace PI.Controllers
         public async Task<IActionResult> AgregarNegocio_BD(string nombreNegocio, string tipoNegocio)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
-            await Contexto.Negocios.AddAsync(new Negocio
+            Negocio nuevoNegocio = new Negocio
             {
                 Nombre = nombreNegocio,
                 FechaCreacion = DateTime.Now,
                 Id = await Contexto.Negocios.MaxAsync(x => x.Id) + 1,
                 IdUsuario = userId
-            });
+            };
 
+            await Contexto.Negocios.AddAsync(nuevoNegocio);
             await Contexto.SaveChangesAsync();
+
             // Redirecciona al analisis por defecto
             // TODO redireccionar a la página de análisis creados (que contiene las opciones de visualizar, descargar, comparar, crear y crear copia)
-            // return RedirectToAction("MisAnalisis", "Analisis", new { IDNegocio = nuevoNegocio.Id });
-            return RedirectToAction("Index", "Negocio");
+            return RedirectToAction("MisAnalisis", "Analisis", new { IDNegocio = nuevoNegocio.Id });
         }
 
         // Elimina el negocio indicado por parámetro (mediante el ID) de la base de datos
         public async Task<IActionResult> EliminarNegocio_BD(int IdNegocio)
         {
-
             Contexto.Negocios.Remove(await Contexto.Negocios.FindAsync(IdNegocio));
 
             await Contexto.SaveChangesAsync();
