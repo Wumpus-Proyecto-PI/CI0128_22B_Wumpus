@@ -31,10 +31,10 @@ namespace PI.Controllers
 			List<Mes> meses = await ObtenerMesesAsync(fechaCreacionAnalisis);
 			List<PI.EntityModels.Producto> productos = await ObtenerProductosAsync(fechaCreacionAnalisis);
 			decimal totalGastosFijos = await ObtenerTotalAnualAsync(fechaCreacionAnalisis);
-			//         decimal gananciaMensual = analisisHandler.ObtenerGananciaMensual(fechaCreacionAnalisis);
+			decimal gananciaMensual = await ObtenerGananciaMensual(fechaCreacionAnalisis);
 
-			//         // Convierte los porcentajes a valores válidos (divide entre 100).
-			//         ConfigAnalisisModel configuracionAnalisis = analisisHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
+			// Convierte los porcentajes a valores válidos (divide entre 100).
+			Configuracion configuracionAnalisis = await ObtenerConfigAnalisis(fechaCreacionAnalisis);
 			//         decimal seguroSocial = configuracionAnalisis.PorcentajeSS / 100;
 			//         decimal prestaciones = configuracionAnalisis.PorcentajePL / 100;
 
@@ -131,5 +131,19 @@ namespace PI.Controllers
 
 			return suma ?? 0.0m;
 		}
+
+		public async Task<decimal> ObtenerGananciaMensual(DateTime fechaAnalisis)
+		{
+			return (await DataBaseContext.Analisis.FindAsync(fechaAnalisis)).GananciaMensual ?? 0.0m;
+		}
+
+		// Obtiene la configuracion del analisis especificado
+		// (Retorna una clase con la configuracion del analisis | Parametros: fecha del analisis)
+		public async Task<Configuracion> ObtenerConfigAnalisis(DateTime fechaAnalisis)
+		{
+			Configuracion config = await DataBaseContext.Configuracion.FindAsync(fechaAnalisis);
+			return config;
+		}
+
 	}
 }

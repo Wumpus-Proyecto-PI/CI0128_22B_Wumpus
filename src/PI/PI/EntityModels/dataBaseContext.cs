@@ -26,7 +26,7 @@ namespace PI.EntityModels
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
         public virtual DbSet<Componente> Componentes { get; set; } = null!;
-        public virtual DbSet<Configuracion> Configuracions { get; set; } = null!;
+        public virtual DbSet<Configuracion> Configuracion { get; set; } = null!;
         public virtual DbSet<Egreso> Egresos { get; set; } = null!;
         public virtual DbSet<EsEmpleadoDe> EsEmpleadoDes { get; set; } = null!;
         public virtual DbSet<GastoFijo> GastoFijos { get; set; } = null!;
