@@ -5,6 +5,7 @@ using PI.Data;
 using Microsoft.ApplicationInsights.AspNetCore;
 using PI.Handlers;
 using PI.EntityModels;
+using PI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BaseDeDatos") ?? throw new InvalidOperationException("Connection string 'BaseDeDatos' not found.");
@@ -36,6 +37,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddScoped<DataBaseContext>();
 builder.Services.AddScoped<UserDbApplicationContext>();
+builder.Services.AddScoped<ProceduresServices>();
 
 
 var app = builder.Build();
