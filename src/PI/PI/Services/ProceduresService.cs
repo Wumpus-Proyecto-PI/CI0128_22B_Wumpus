@@ -32,13 +32,13 @@ namespace PI.Services
             return (await Contexto.Configuracion.FindAsync(fechaAnalisis)).TipoNegocio;
         }
 
-        public async Task<List<GastoFijo>> ObtenerGastosFijos(DateTime fechaAnalisis)
+        public async Task<List<GastoFijo>> ObtenerGastosFijosAsync(DateTime fechaAnalisis)
         {
             return await Contexto.GastosFijos.Where(gastoFijo => gastoFijo.FechaAnalisis == fechaAnalisis).ToListAsync();
         }
 
         // TODO: Cambiar nombre del metodo a ObtenerNegocioDeAnalisis
-        public async Task<string> ObtenerNombreNegocio(DateTime fechaAnalisis)
+        public async Task<string> ObtenerNombreNegocioAsync(DateTime fechaAnalisis)
         {
             var nombreNegocio = from negocio in Contexto.Negocios
                                 join analisis in Contexto.Analisis
@@ -49,7 +49,7 @@ namespace PI.Services
         }
 
         // metodo que retorna un negocio segun la fecha de una analisis
-        public async Task<Negocio> ObtenerNegocioDeAnalisis(DateTime fechaAnalisis)
+        public async Task<Negocio> ObtenerNegocioDeAnalisisAsync(DateTime fechaAnalisis)
         {
             var nombreNegocio = from negocio in Contexto.Negocios
                                 join analisis in Contexto.Analisis
@@ -60,7 +60,7 @@ namespace PI.Services
         }
 
         // TODO: Renombrar metodo. Este obtiene el total de la inversion inicial.
-        public async Task<decimal> ObtenerMontoTotal(DateTime fechaAnalisis)
+        public async Task<decimal> ObtenerMontoTotalAsync(DateTime fechaAnalisis)
         {
             return await Contexto.InversionInicial.Where(inversionInicial => inversionInicial.FechaAnalisis == fechaAnalisis)
                 .SumAsync(inversionInicial => inversionInicial.Valor) ?? 0.0m;
