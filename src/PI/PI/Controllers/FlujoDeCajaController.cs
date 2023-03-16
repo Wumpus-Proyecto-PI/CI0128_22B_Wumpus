@@ -26,8 +26,8 @@ namespace PI.Controllers
 			DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
 			// Acciones para calcular datos que se envian a la vista
-			CrearIngresoPorMesAsync(fechaCreacionAnalisis);
-			CrearEgresoPorMesAsync(fechaCreacionAnalisis);
+			await CrearIngresoPorMesAsync(fechaCreacionAnalisis);
+			await CrearEgresoPorMesAsync(fechaCreacionAnalisis);
 
 			List<Mes> meses = await ObtenerMesesAsync(fechaCreacionAnalisis);
 			List<PI.EntityModels.Producto> productos = await ObtenerProductosAsync(fechaCreacionAnalisis);
@@ -86,7 +86,7 @@ namespace PI.Controllers
 					});
 			}
 		}
-		public async void CrearIngresoPorMesAsync(DateTime fechaAnalisis)
+		public async Task<int> CrearIngresoPorMesAsync(DateTime fechaAnalisis)
 		{
 			var ingresos = await DataBaseContext.Ingresos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
 			if (ingresos.Any() == false)
@@ -94,11 +94,12 @@ namespace PI.Controllers
 				GenerarMesesIngresos("contado", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("credito", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("otros", fechaAnalisis, ingresos);
-				await DataBaseContext.SaveChangesAsync();
+				return await DataBaseContext.SaveChangesAsync();
 			}
+			return 0;
 		}
 
-		public async void CrearEgresoPorMesAsync(DateTime fechaAnalisis)
+		public async Task<int> CrearEgresoPorMesAsync(DateTime fechaAnalisis)
 		{
 			var egresos = await DataBaseContext.Egresos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
 			if (egresos.Any() == false)
@@ -106,12 +107,13 @@ namespace PI.Controllers
 				GenerarMesesEgresos("contado", fechaAnalisis, egresos);
 				GenerarMesesEgresos("credito", fechaAnalisis, egresos);
 				GenerarMesesEgresos("otros", fechaAnalisis, egresos);
-				await DataBaseContext.SaveChangesAsync();
+                return await DataBaseContext.SaveChangesAsync();
 			}
-		}
+            return 0;
+        }
 
-		// obtiene los meses segun una fecha de analisis
-		public async Task<List<Mes>> ObtenerMesesAsync(DateTime fechaAnalisis)
+        // obtiene los meses segun una fecha de analisis
+        public async Task<List<Mes>> ObtenerMesesAsync(DateTime fechaAnalisis)
 		{
 			return await DataBaseContext.Mes.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
 		}
