@@ -1,4 +1,4 @@
-﻿using PI.EntityModels;
+﻿using PI.Models;
 using PI.Handlers;
 
 namespace PI.Services
@@ -7,12 +7,12 @@ namespace PI.Services
     {
 
         // Método para calcular el flujo mensual del negocio
-        public static decimal CalcularFlujoMensual(Mes mesModel)
+        public static decimal CalcularFlujoMensual(MesModel mesModel)
         {
             FlujoDeCajaHandler flujoDeCajaHandler = new();
 
             // Obtiene los ingresos del mes.
-            decimal totalIngresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mesModel.Nombre, mesModel.FechaAnalisis);
+            decimal totalIngresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
             // Obtiene los egresos del mes.
             decimal totalEgresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeEgresosPorMes(mesModel);
 
@@ -25,7 +25,7 @@ namespace PI.Services
         }
 
         // Retorna una lista con el flujo mensual de cada mes recalculado.
-        public static List<string> ActualizarFlujosMensuales(List<Mes> meses)
+        public static List<string> ActualizarFlujosMensuales(List<MesModel> meses)
         {
             List<string> flujoMensual = new();
             for (int mes = 0; mes < meses.Count; ++mes)
@@ -35,7 +35,7 @@ namespace PI.Services
             return flujoMensual;
         }
 
-        public static decimal CalcularEgresosTipo(string Tipo, List<Egreso> Egresos)
+        public static decimal CalcularEgresosTipo(string Tipo, List<EgresoModel> Egresos)
         {
             decimal total = 0;
             for (int i = 0; i < Egresos.Count; i += 1) {
@@ -46,7 +46,7 @@ namespace PI.Services
             return total;
         }
 
-        public static decimal CalcularIngresosTipo(string Tipo, List<Ingreso> Ingresos)
+        public static decimal CalcularIngresosTipo(string Tipo, List<IngresoModel> Ingresos)
         {
             decimal total = 0;
             for (int i = 0; i < Ingresos.Count; i += 1)

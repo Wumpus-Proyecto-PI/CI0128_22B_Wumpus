@@ -1,4 +1,4 @@
-﻿using PI.EntityModels;
+﻿using PI.Models;
 using System.Data;
 
 namespace PI.Handlers
@@ -8,15 +8,15 @@ namespace PI.Handlers
         public FlujoDeCajaHandler() : base() { }
 
         // Obtiene los Egresos de un determinado mes en un análisis
-        public List<Egreso> ObtenerEgresosMes(string NombreMes, DateTime FechaAnalisis) 
+        public List<EgresoModel> ObtenerEgresosMes(string NombreMes, DateTime FechaAnalisis) 
         {
             string consulta = "EXEC ObtenerEgresosMes @fechaAnalisis ='" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @nombreMes ='" + NombreMes +"';";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            List<Egreso> egresos = new List<Egreso>();
+            List<EgresoModel> egresos = new List<EgresoModel>();
             foreach (DataRow columna in tablaResultado.Rows)
             {
                 egresos.Add(
-                new Egreso
+                new EgresoModel
                 {
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Tipo = Convert.ToString(columna["tipo"]),
@@ -29,16 +29,16 @@ namespace PI.Handlers
         }
 
         // Obtiene los Ingresos de un determinado mes en un análisis
-        public List<Ingreso> ObtenerIngresosMes(string NombreMes, DateTime FechaAnalisis)
+        public List<IngresoModel> ObtenerIngresosMes(string NombreMes, DateTime FechaAnalisis)
         {
             string consulta = "EXEC ObtenerIngresosMes @fechaAnalisis ='" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', @nombreMes ='" + NombreMes + "';";
             Console.WriteLine(consulta);
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            List<Ingreso> ingresos = new List<Ingreso>();
+            List<IngresoModel> ingresos = new List<IngresoModel>();
             foreach (DataRow columna in tablaResultado.Rows)
             {
                 ingresos.Add(
-                new Ingreso
+                new IngresoModel
                 {
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Tipo = Convert.ToString(columna["tipo"]),
@@ -51,17 +51,17 @@ namespace PI.Handlers
         }
 
         // obtiene los meses segun una fecha de analisis
-        public List<Mes> ObtenerMeses(DateTime fechaAnalisis)
+        public List<MesModel> ObtenerMeses(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM MES WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            List<Mes> meses = new List<Mes>();
+            List<MesModel> meses = new List<MesModel>();
             foreach (DataRow columna in tablaResultado.Rows)
             {
                 meses.Add(
-                new Mes
+                new MesModel
                 {
-                    Nombre = Convert.ToString(columna["nombre"]),
+                    NombreMes = Convert.ToString(columna["nombre"]),
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     InversionPorMes = Convert.ToDecimal(columna["inversionPorMes"]),
  
@@ -93,15 +93,15 @@ namespace PI.Handlers
         }
 
         // Obtiene todos los ingresos de un análisis desde la base de datos
-        public List<Ingreso> ObtenerIngresos(DateTime fechaAnalisis)
+        public List<IngresoModel> ObtenerIngresos(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM INGRESO WHERE fechaAnalisis = '" +  fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            List<Ingreso> ingresos = new List<Ingreso>();
+            List<IngresoModel> ingresos = new List<IngresoModel>();
             foreach (DataRow columna in tablaResultado.Rows)
             {
                 ingresos.Add(
-                new Ingreso
+                new IngresoModel
                 {
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Tipo = Convert.ToString(columna["tipo"]),
@@ -114,7 +114,7 @@ namespace PI.Handlers
         }
 
         // Actualiza el monto de un ingreso existente en la base de datos
-        public void ActualizarIngreso(Ingreso ingreso)
+        public void ActualizarIngreso(IngresoModel ingreso)
         {
             string consulta = "UPDATE INGRESO" +
                               " SET monto = " + ingreso.Monto +
@@ -144,15 +144,15 @@ namespace PI.Handlers
         }
 
         // Metodo que obtiene los egresos segun una fecha de analisis
-        public List<Egreso> ObtenerEgresos(DateTime fechaAnalisis)
+        public List<EgresoModel> ObtenerEgresos(DateTime fechaAnalisis)
         {
             string consulta = "SELECT * FROM EGRESO WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             DataTable tablaResultado = CrearTablaConsulta(consulta);
-            List<Egreso> egresos = new List<Egreso>();
+            List<EgresoModel> egresos = new List<EgresoModel>();
             foreach (DataRow columna in tablaResultado.Rows)
             {
                 egresos.Add(
-                new Egreso
+                new EgresoModel
                 {
                     FechaAnalisis = Convert.ToDateTime(columna["fechaAnalisis"]),
                     Tipo = Convert.ToString(columna["tipo"]),
@@ -165,7 +165,7 @@ namespace PI.Handlers
         }
 
         // Metodo que actualiza un egreso
-        public void ActualizarEgreso(Egreso egreso)
+        public void ActualizarEgreso(EgresoModel egreso)
         {
             string consulta = "UPDATE EGRESO" +
                               " SET monto = " + egreso.Monto +
@@ -176,14 +176,14 @@ namespace PI.Handlers
         }
 
         // Metodo que obtiene el monto total de los egresos de un mes 
-        public decimal ObtenerMontoTotalDeEgresosPorMes(Mes mes)
+        public decimal ObtenerMontoTotalDeEgresosPorMes(MesModel mes)
         {
             decimal total = 0.0m;
 
             string consulta = "SELECT SUM(monto) as total" +
                              " FROM EGRESO" +
                              " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
-                             "' AND mes = '" + mes.Nombre + "'";
+                             "' AND mes = '" + mes.NombreMes + "'";
 
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             if (!tablaResultado.Rows[0].IsNull("total"))
@@ -195,13 +195,13 @@ namespace PI.Handlers
         }
 
         // Metodo que obtiene la fraccion de la inversion inicial que posee el mes 
-        public decimal ObtenerInversionDelMes(Mes mes)
+        public decimal ObtenerInversionDelMes(MesModel mes)
         {
             decimal inversion = 0.0m;
 
             string consulta = "SELECT inversionPorMes as inversion" +
                              " FROM MES" +
-                             " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND nombre = '" + mes.Nombre + "'";
+                             " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND nombre = '" + mes.NombreMes + "'";
 
             DataTable tablaResultado = CrearTablaConsulta(consulta);
             if (!tablaResultado.Rows[0].IsNull("inversion"))
@@ -231,12 +231,12 @@ namespace PI.Handlers
         }
 
         // Metodo que actualiza la fraccion de la inversion inicial que posee el mes 
-        public void ActualizarInversionPorMes(Mes mes)
+        public void ActualizarInversionPorMes(MesModel mes)
         {
             string consulta = "UPDATE MES" +
                              " SET inversionPorMes = " + mes.InversionPorMes +
                              " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
-                             "' AND nombre = '" + mes.Nombre + "'";
+                             "' AND nombre = '" + mes.NombreMes + "'";
             enviarConsultaVoid(consulta);
         }
     }
