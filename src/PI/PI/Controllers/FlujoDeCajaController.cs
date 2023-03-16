@@ -115,7 +115,7 @@ namespace PI.Controllers
         // obtiene los meses segun una fecha de analisis
         public async Task<List<Mes>> ObtenerMesesAsync(DateTime fechaAnalisis)
 		{
-			return await DataBaseContext.Mes.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
+			return await DataBaseContext.Meses.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
 		}
 
 		// Método que obtiene los productos de un analisis
