@@ -16,8 +16,6 @@ namespace PI.EntityModels
         {
         }
 
-        public virtual DbSet<AjustesGastofijo> AjustesGastofijos { get; set; } = null!;
-        public virtual DbSet<AjustesUsuario> AjustesUsuarios { get; set; } = null!;
         public virtual DbSet<Analisis> Analisis { get; set; } = null!;
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
@@ -48,61 +46,6 @@ namespace PI.EntityModels
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AjustesGastofijo>(entity =>
-            {
-                entity.HasKey(e => new { e.CorreoUsuario, e.Nombre })
-                    .HasName("PK__AJUSTES___4B9B8F427FBFB951");
-
-                entity.ToTable("AJUSTES_GASTOFIJO");
-
-                entity.Property(e => e.CorreoUsuario)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("correoUsuario");
-
-                entity.Property(e => e.Nombre)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("nombre");
-
-                entity.HasOne(d => d.CorreoUsuarioNavigation)
-                    .WithMany(p => p.AjustesGastofijos)
-                    .HasForeignKey(d => d.CorreoUsuario)
-                    .HasConstraintName("FK_correoUsuario_delete");
-            });
-
-            modelBuilder.Entity<AjustesUsuario>(entity =>
-            {
-                entity.HasKey(e => e.CorreoUsuario)
-                    .HasName("PK__AJUSTES___2CB1748E8E17B91D");
-
-                entity.ToTable("AJUSTES_USUARIO");
-
-                entity.Property(e => e.CorreoUsuario)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("correoUsuario");
-
-                entity.Property(e => e.Apellido1)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("apellido1");
-
-                entity.Property(e => e.Apellido2)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("apellido2");
-
-                entity.Property(e => e.Contrasenya)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("contrasenya");
-
-                entity.Property(e => e.Nombre)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("nombre");
-            });
 
             modelBuilder.Entity<Analisis>(entity =>
             {
