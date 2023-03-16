@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PI.EntityModels;
+using System.Linq;
 
 namespace PI.Services
 {
@@ -17,25 +18,36 @@ namespace PI.Services
             Contexto = null;
         }
 
-        public async Task<List<Ingreso>> ObtenerIngresosAsync(DateTime fechaAnalisis)
+        public void Dispose()
         {
-            return await Contexto.Ingresos.AsNoTracking().Where(ingreso => ingreso.FechaAnalisis == fechaAnalisis).ToListAsync();
+            Contexto?.Dispose();
+            Contexto = null;
         }
 
-        public async Task<List<Egreso>> ObtenerEgresosAsync(DateTime fechaAnalisis)
+        #region GastoFijoHandler
+        public async Task<List<GastoFijo>> ObtenerGastosFijosAsync(DateTime fechaAnalisis)
         {
-            return await Contexto.Egresos.AsNoTracking().Where(ingreso => ingreso.FechaAnalisis == fechaAnalisis).ToListAsync();
+            return await Contexto.GastosFijos.Where(gastoFijo => gastoFijo.FechaAnalisis == fechaAnalisis).ToListAsync();
         }
+
+        public async Task<decimal> ObtenerTotalAnualAsync(string nombreMes, DateTime fechaAnalisis)
+        {
+            return await Contexto.GastosFijos.Where(gastoFijo => gastoFijo.FechaAnalisis == fechaAnalisis).SumAsync(gastoFijo => gastoFijo.Monto) ?? 0.0m;
+        }
+
+        #endregion
+
+        #region AnalisisHandler
+
 
         public async Task<int> ObtenerTipoAnalisisAsync(DateTime fechaAnalisis)
         {
             return (await Contexto.Configuracion.FindAsync(fechaAnalisis)).TipoNegocio;
         }
 
-        public async Task<List<GastoFijo>> ObtenerGastosFijosAsync(DateTime fechaAnalisis)
-        {
-            return await Contexto.GastosFijos.Where(gastoFijo => gastoFijo.FechaAnalisis == fechaAnalisis).ToListAsync();
-        }
+        #endregion
+
+        #region NegocioHandler
 
         // TODO: Cambiar nombre del metodo a ObtenerNegocioDeAnalisis
         public async Task<string> ObtenerNombreNegocioAsync(DateTime fechaAnalisis)
@@ -47,7 +59,6 @@ namespace PI.Services
                                 select negocio.Nombre;
             return await nombreNegocio.FirstOrDefaultAsync() ?? "Sin nombre";
         }
-
         // metodo que retorna un negocio segun la fecha de una analisis
         public async Task<Negocio> ObtenerNegocioDeAnalisisAsync(DateTime fechaAnalisis)
         {
@@ -58,18 +69,49 @@ namespace PI.Services
                                 select negocio;
             return await nombreNegocio.FirstOrDefaultAsync();
         }
+        #endregion
 
+        #region InversionInicialHandler
         // TODO: Renombrar metodo. Este obtiene el total de la inversion inicial.
         public async Task<decimal> ObtenerMontoTotalAsync(DateTime fechaAnalisis)
         {
             return await Contexto.InversionInicial.Where(inversionInicial => inversionInicial.FechaAnalisis == fechaAnalisis)
                 .SumAsync(inversionInicial => inversionInicial.Valor) ?? 0.0m;
         }
+        #endregion
 
-        public void Dispose()
+        #region FlujoDeCajaHandler
+
+        public async Task<List<Ingreso>> ObtenerIngresosAsync(DateTime fechaAnalisis)
         {
-            Contexto?.Dispose();
-            Contexto = null;
+            return await Contexto.Ingresos.AsNoTracking().Where(ingreso => ingreso.FechaAnalisis == fechaAnalisis).ToListAsync();
         }
+
+        public async Task<List<Egreso>> ObtenerEgresosAsync(DateTime fechaAnalisis)
+        {
+            return await Contexto.Egresos.AsNoTracking().Where(ingreso => ingreso.FechaAnalisis == fechaAnalisis).ToListAsync();
+        }
+        public async Task<decimal> ObtenerMontoTotalDeIngresosPorMesAsync(string nombreMes, DateTime fechaAnalisis)
+        {
+            return await Contexto.Ingresos
+                .Where(ingreso => ingreso.Mes == nombreMes 
+                && ingreso.FechaAnalisis == fechaAnalisis)
+                .SumAsync(Ingreso => Ingreso.Monto);
+        }
+
+        public async Task<decimal> ObtenerMontoTotalDeEgresosPorMesAsync(string nombreMes, DateTime fechaAnalisis)
+        {
+            return await Contexto.Egresos
+                .Where(egreso => egreso.Mes == nombreMes
+                && egreso.FechaAnalisis == fechaAnalisis)
+                .SumAsync(egreso => egreso.Monto);
+        }
+
+        public async Task<decimal> ObtenerInversionDeMesAsync(string nombreMes, DateTime fechaAnalisis)
+        {
+            return (await Contexto.Meses.FindAsync(nombreMes, fechaAnalisis)).InversionPorMes ?? 0.0m;
+        }
+
+        #endregion
     }
 }
