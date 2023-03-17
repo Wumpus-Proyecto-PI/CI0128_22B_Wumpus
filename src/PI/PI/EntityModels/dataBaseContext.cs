@@ -435,7 +435,7 @@ namespace PI.EntityModels
                 entity.HasIndex(e => e.FechaCreacion, "id_negocio");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
