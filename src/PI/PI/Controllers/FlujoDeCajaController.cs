@@ -45,8 +45,8 @@ namespace PI.Controllers
 			// Datos enviados a la vista
 			ViewData["Title"] = "Flujo de caja";
 			ViewData["TituloPaso"] = ViewData["Title"];
-			ViewBag.Ingresos = Procedures.ObtenerIngresosAsync(fechaCreacionAnalisis);
-			ViewBag.Egresos = Procedures.ObtenerEgresosAsync(fechaCreacionAnalisis);
+			ViewBag.Ingresos = await Procedures.ObtenerIngresosAsync(fechaCreacionAnalisis);
+			ViewBag.Egresos = await Procedures.ObtenerEgresosAsync(fechaCreacionAnalisis);
 			ViewBag.Meses = meses;
 			// ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
 			ViewBag.fechaAnalisis = fechaCreacionAnalisis;
@@ -57,13 +57,14 @@ namespace PI.Controllers
 			//         ViewBag.Iniciado = analisisHandler.ObtenerTipoAnalisis(fechaCreacionAnalisis);
 			ViewBag.Iniciado = await Procedures.ObtenerTipoAnalisisAsync(fechaCreacionAnalisis);
 
-            //         ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
+			//         ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
+			ViewBag.MetaDeVentasMensual = 0.0m;
 
             //         ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
-            ViewData["NombreNegocio"] = Procedures.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
+            ViewData["NombreNegocio"] = await Procedures.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
 
             //         ViewBag.InversionInicial = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
-            ViewBag.InversionInicial = Procedures.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
+            ViewBag.InversionInicial = await Procedures.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
 
             return View();
 		}
@@ -169,7 +170,7 @@ namespace PI.Controllers
 		// Crea o actualiza el gasto fijo de salarios netos
 		public async Task<int> ActualizarSalariosNetoAsync(DateTime fechaAnalisis, decimal seguroSocial, decimal prestaciones)
 		{
-			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Salarios netos");
+			PI.EntityModels.GastoFijo gastoFijo = await this.DataBaseContext.GastosFijos.Where(x => x.FechaAnalisis == fechaAnalisis && x.Nombre == "Salarios netos").FirstOrDefaultAsync();
 			if (gastoFijo != null) { 
 				gastoFijo.Monto = await ObtenerTotalSalariosNetoAsync(fechaAnalisis, seguroSocial, prestaciones);
 			} else
@@ -222,7 +223,7 @@ namespace PI.Controllers
 		// Crea o actualiza el gasto fijo de seguro social
 		public async Task<int> ActualizarSeguroSocialAsync(DateTime fechaAnalisis, decimal seguroSocial)
 		{
-			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Seguridad social");
+			PI.EntityModels.GastoFijo gastoFijo = await this.DataBaseContext.GastosFijos.Where(x => x.FechaAnalisis == fechaAnalisis && x.Nombre == "Seguridad social").FirstOrDefaultAsync();
 			if (gastoFijo != null)
 			{
 				gastoFijo.Monto = await ObtenerGastoSeguroSocialAsync(fechaAnalisis, seguroSocial);
@@ -250,7 +251,7 @@ namespace PI.Controllers
 		// Crea o actualiza el gasto fijo de salarios netos
 		public async Task<int> ActualizarPrestacionesAsync(DateTime fechaAnalisis, decimal prestaciones)
 		{
-			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Prestaciones laborales");
+			PI.EntityModels.GastoFijo gastoFijo = await this.DataBaseContext.GastosFijos.Where(x => x.FechaAnalisis == fechaAnalisis && x.Nombre == "Prestaciones laborales").FirstOrDefaultAsync();
 			if (gastoFijo != null)
 			{
 				gastoFijo.Monto = await ObtenerGastoPrestacionesAsync(fechaAnalisis, prestaciones);
@@ -278,7 +279,7 @@ namespace PI.Controllers
 		// Crea o actualiza el gasto fijo de salarios netos
 		public async Task<int> ActualizarBeneficiosAsync(DateTime fechaAnalisis)
 		{
-			PI.EntityModels.GastoFijo gastoFijo = this.DataBaseContext.GastosFijos.Find(fechaAnalisis, "Beneficios de empleados");
+			PI.EntityModels.GastoFijo gastoFijo = await this.DataBaseContext.GastosFijos.Where(x => x.FechaAnalisis == fechaAnalisis && x.Nombre == "Beneficios de empleados").FirstOrDefaultAsync();
 			if (gastoFijo != null)
 			{
 				gastoFijo.Monto = await ObtenerTotalBeneficiosAsync(fechaAnalisis);
