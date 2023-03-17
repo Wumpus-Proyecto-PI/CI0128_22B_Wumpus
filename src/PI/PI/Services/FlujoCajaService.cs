@@ -24,6 +24,16 @@ namespace PI.Services
             return totalIngresoPorMes - totalEgresoPorMes;
         }
 
+        /// <param>totalIngresoPorMes</param> el código que llama a la funcion envía el valor leído de la base de datos.
+        /// <param>totalEgresoPorMes</param> el código que llama a la funcion envía el valor leído de la base de datos.
+        public static string CalcularFlujoMensual(decimal totalIngresoPorMes, decimal totalEgresoPorMes, decimal gastosFijosTotalMensual, decimal totalInversionInicialMes)
+        {
+            totalEgresoPorMes += gastosFijosTotalMensual;
+            totalEgresoPorMes += totalInversionInicialMes;
+
+            return FormatManager.ToFormatoEstadistico(totalIngresoPorMes - totalEgresoPorMes);
+        }
+
         // Retorna una lista con el flujo mensual de cada mes recalculado.
         public static List<string> ActualizarFlujosMensuales(List<MesModel> meses)
         {
