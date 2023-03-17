@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PI.EntityModels;
 
@@ -11,9 +12,10 @@ using PI.EntityModels;
 namespace PI.Migrations.DataBase
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230317041912_DroppedFKAnalasis")]
+    partial class DroppedFKAnalasis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,10 +71,13 @@ namespace PI.Migrations.DataBase
                         .HasColumnType("int")
                         .HasColumnName("idNegocio");
 
+                    b.Property<int>("IdNegocioNavigationId")
+                        .HasColumnType("int");
+
                     b.HasKey("FechaCreacion")
                         .HasName("PK__ANALISIS__19DE4892862EBA95");
 
-                    b.HasIndex("IdNegocio");
+                    b.HasIndex("IdNegocioNavigationId");
 
                     b.ToTable("ANALISIS", (string)null);
                 });
@@ -99,7 +104,7 @@ namespace PI.Migrations.DataBase
                         .IsUnique()
                         .HasFilter("([NormalizedName] IS NOT NULL)");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("PI.EntityModels.AspNetRoleClaim", b =>
@@ -124,7 +129,7 @@ namespace PI.Migrations.DataBase
 
                     b.HasIndex(new[] { "RoleId" }, "IX_AspNetRoleClaims_RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("PI.EntityModels.AspNetUser", b =>
@@ -186,7 +191,7 @@ namespace PI.Migrations.DataBase
                         .IsUnique()
                         .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("PI.EntityModels.AspNetUserClaim", b =>
@@ -211,7 +216,7 @@ namespace PI.Migrations.DataBase
 
                     b.HasIndex(new[] { "UserId" }, "IX_AspNetUserClaims_UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims");
                 });
 
             modelBuilder.Entity("PI.EntityModels.AspNetUserLogin", b =>
@@ -235,7 +240,7 @@ namespace PI.Migrations.DataBase
 
                     b.HasIndex(new[] { "UserId" }, "IX_AspNetUserLogins_UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("PI.EntityModels.AspNetUserToken", b =>
@@ -256,7 +261,7 @@ namespace PI.Migrations.DataBase
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("PI.EntityModels.Componente", b =>
@@ -496,11 +501,8 @@ namespace PI.Migrations.DataBase
             modelBuilder.Entity("PI.EntityModels.Negocio", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime?>("FechaCreacion")
                         .HasColumnType("datetime");
@@ -630,10 +632,9 @@ namespace PI.Migrations.DataBase
                 {
                     b.HasOne("PI.EntityModels.Negocio", "IdNegocioNavigation")
                         .WithMany("Analisis")
-                        .HasForeignKey("IdNegocio")
+                        .HasForeignKey("IdNegocioNavigationId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__ANALISIS__idNegocio");
+                        .IsRequired();
 
                     b.Navigation("IdNegocioNavigation");
                 });
