@@ -35,6 +35,11 @@ namespace PI.Services
             return await Contexto.GastosFijos.Where(gastoFijo => gastoFijo.FechaAnalisis == fechaAnalisis).SumAsync(gastoFijo => gastoFijo.Monto) ?? 0.0m;
         }
 
+        public async Task<decimal> ObtenerTotalMensualAsync(string nombreMes, DateTime fechaAnalisis)
+        {
+            return await ObtenerTotalAnualAsync(nombreMes, fechaAnalisis) / 12;
+        }
+
         #endregion
 
         #region AnalisisHandler
