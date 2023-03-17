@@ -45,9 +45,10 @@ namespace PI.Services
         #region AnalisisHandler
 
 
-        public async Task<int> ObtenerTipoAnalisisAsync(DateTime fechaAnalisis)
+        public async Task<bool> ObtenerTipoAnalisisAsync(DateTime fechaAnalisis)
         {
-            return (await Contexto.Configuracion.FindAsync(fechaAnalisis)).TipoNegocio;
+            bool tipo = Convert.ToBoolean((await Contexto.Configuracion.FindAsync(fechaAnalisis)).TipoNegocio);
+            return tipo;
         }
 
         #endregion
