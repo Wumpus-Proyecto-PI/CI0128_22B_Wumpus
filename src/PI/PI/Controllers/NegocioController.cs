@@ -43,11 +43,19 @@ namespace PI.Controllers
         public async Task<IActionResult> AgregarNegocio_BD(string nombreNegocio, string tipoNegocio)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int id = 0;
+            try
+            {
+                id = await Contexto.Negocios.MaxAsync(x => x.Id) + 1;
+            } catch
+            {
+                id = 0;
+            }
             Negocio nuevoNegocio = new Negocio
             {
                 Nombre = nombreNegocio,
                 FechaCreacion = DateTime.Now,
-                Id = await Contexto.Negocios.MaxAsync(x => x.Id) + 1,
+                Id = id,
                 IdUsuario = userId
             };
 
