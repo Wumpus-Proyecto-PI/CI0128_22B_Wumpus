@@ -52,12 +52,20 @@ namespace PI.Controllers
 			ViewBag.fechaAnalisis = fechaCreacionAnalisis;
 			ViewBag.BotonRetorno = "Progreso";
 			// ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
+			ViewBag.GastosFijos = await Procedures.ObtenerGastosFijosAsync(fechaCreacionAnalisis);
+            
 			//         ViewBag.Iniciado = analisisHandler.ObtenerTipoAnalisis(fechaCreacionAnalisis);
-			//         ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
-			//         ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
-			//         ViewBag.InversionInicial = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
+			ViewBag.Iniciado = await Procedures.ObtenerTipoAnalisisAsync(fechaCreacionAnalisis);
 
-			return View();
+            //         ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
+
+            //         ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
+            ViewData["NombreNegocio"] = Procedures.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
+
+            //         ViewBag.InversionInicial = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
+            ViewBag.InversionInicial = Procedures.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
+
+            return View();
 		}
 		public void GenerarMesesIngresos(string tipoIngreso, DateTime fechaAnalisis, List<Ingreso> ingresos)
 		{
