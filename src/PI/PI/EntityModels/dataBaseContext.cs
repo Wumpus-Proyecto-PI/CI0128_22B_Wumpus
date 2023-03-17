@@ -314,7 +314,7 @@ namespace PI.EntityModels
 
             modelBuilder.Entity<GastoFijo>(entity =>
             {
-                entity.HasKey(e => new { e.Orden, e.Nombre, e.FechaAnalisis })
+                entity.HasKey(e => new { e.Nombre, e.FechaAnalisis })
                     .HasName("PK__GASTO_FI__C10BC2E58A2E7E29");
 
                 entity.ToTable("GASTO_FIJO");
