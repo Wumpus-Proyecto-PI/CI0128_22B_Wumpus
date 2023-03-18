@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PI.Handlers;
 using System.Security.Claims;
 using PI.EntityModels;
 using Microsoft.EntityFrameworkCore;
+using PI.EntityHandlers;
 
 namespace PI.Controllers
 {
     // Controlador del negocio. Administra el traspaso de acciones entre la vista y el modelo/bd referentes al negocio
     public class NegocioController : ManejadorUsuariosController
     {
-        private DataBaseContext? Contexto = null;
+        private NegocioHandler? NegocioHandler = null;
         public NegocioController (DataBaseContext contexto)
         {
-            Contexto = contexto;
+            NegocioHandler = new(contexto);
         }
 
         // Retorna una lista con todos los modelos de negocio existentes y el título del paso.
@@ -24,7 +24,7 @@ namespace PI.Controllers
             // con el user id buscamos los negocios en nuestras tablas
             // var negocios = _handler.ObtenerNegocios(userId);
 
-            var negocios = await Contexto.Negocios.AsNoTracking().Where(x => x.IdUsuario == userId).ToListAsync();
+            var negocios = await NegocioHandler.ObtenerNegociosAsync(userId);
 
             ViewData["Title"] = "Mis negocios";
             ViewData["TituloPaso"] = "Mis negocios";
@@ -43,36 +43,25 @@ namespace PI.Controllers
         public async Task<IActionResult> AgregarNegocio_BD(string nombreNegocio, string tipoNegocio)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int id = 0;
-            try
-            {
-                id = await Contexto.Negocios.MaxAsync(x => x.Id) + 1;
-            } catch
-            {
-                id = 0;
-            }
             Negocio nuevoNegocio = new Negocio
             {
                 Nombre = nombreNegocio,
                 FechaCreacion = DateTime.Now,
-                Id = id,
                 IdUsuario = userId
             };
 
-            await Contexto.Negocios.AddAsync(nuevoNegocio);
-            await Contexto.SaveChangesAsync();
+            await NegocioHandler.AgregarNegocioAsync(nuevoNegocio);
 
             // Redirecciona al analisis por defecto
             // TODO redireccionar a la página de análisis creados (que contiene las opciones de visualizar, descargar, comparar, crear y crear copia)
             return RedirectToAction("MisAnalisis", "Analisis", new { IDNegocio = nuevoNegocio.Id });
+            // return RedirectToAction("Index", "Negocio");
         }
 
         // Elimina el negocio indicado por parámetro (mediante el ID) de la base de datos
         public async Task<IActionResult> EliminarNegocio_BD(int IdNegocio)
         {
-            Contexto.Negocios.Remove(await Contexto.Negocios.FindAsync(IdNegocio));
-
-            await Contexto.SaveChangesAsync();
+            await NegocioHandler.EliminarNegocioAsync(IdNegocio);
             // Redirecciona a la pantalla de negocios 
             return RedirectToAction("Index", "Negocio");
         }
