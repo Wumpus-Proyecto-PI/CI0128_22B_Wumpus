@@ -52,7 +52,24 @@ namespace PI.Controllers
             ViewBag.totalAnual = await GastoFijoHandler.ObtenerTotalAnualAsync(fechaConversion);
             ViewData["NombreNegocio"] = await NegocioHandler.ObtenerNombreNegocioAsync(fechaConversion);
 
-            List<GastoFijo> gastosFijos = await GastoFijoHandler.ObtenerGastosFijosAsync(fechaConversion);
+            List<GastoFijo> gastos = await GastoFijoHandler.ObtenerGastosFijosAsync(fechaConversion);
+
+            string[] nombresEstOrg = { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
+
+            List<GastoFijo> gastosFijos = new List<GastoFijo>();
+
+            gastosFijos.Add(gastos.Find(x => x.Nombre == "Salarios netos"));
+            gastosFijos.Add(gastos.Find(x => x.Nombre == "Prestaciones laborales"));
+            gastosFijos.Add(gastos.Find(x => x.Nombre == "Seguridad social"));
+            gastosFijos.Add(gastos.Find(x => x.Nombre == "Beneficios de empleados"));
+
+            foreach (GastoFijo gastoFijo in gastos)
+            {
+                if (!nombresEstOrg.Contains(gastoFijo.Nombre))
+                {
+                    gastosFijos.Add(gastoFijo);
+                }
+            }
 
             return View(gastosFijos);
         }
