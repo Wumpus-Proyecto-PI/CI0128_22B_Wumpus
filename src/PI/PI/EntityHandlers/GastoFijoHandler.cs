@@ -35,8 +35,15 @@ namespace PI.EntityHandlers
 
             if (gastoFijo != null)
             {
-                gastoFijo.Nombre = Nombre;
-                gastoFijo.Monto = monto;
+                Contexto.GastosFijos.Remove(gastoFijo);
+
+                GastoFijo gastoNuevo = new GastoFijo
+                {
+                    Nombre = Nombre,
+                    FechaAnalisis = fechaAnalisis,
+                    Monto = monto,
+                };
+                await base.Contexto.GastosFijos.AddAsync(gastoNuevo);
             }
             else
             {
@@ -46,7 +53,7 @@ namespace PI.EntityHandlers
                     FechaAnalisis = fechaAnalisis,
                     Monto = monto,
                 };
-                base.Contexto.GastosFijos.Add(gastoNuevo);
+                await base.Contexto.GastosFijos.AddAsync(gastoNuevo);
             }
 
             return await base.Contexto.SaveChangesAsync();
@@ -83,7 +90,6 @@ namespace PI.EntityHandlers
                     Nombre = "Salarios netos",
                     FechaAnalisis = fechaAnalisis,
                     Monto = await ObtenerTotalSalariosNetoAsync(fechaAnalisis, seguroSocial, prestaciones),
-                    Orden = 1
                 };
                 base.Contexto.GastosFijos.Add(gastoNuevo);
             }
@@ -138,7 +144,6 @@ namespace PI.EntityHandlers
                     Nombre = "Seguridad social",
                     FechaAnalisis = fechaAnalisis,
                     Monto = await ObtenerGastoSeguroSocialAsync(fechaAnalisis, seguroSocial),
-                    Orden = 2
                 };
                 base.Contexto.GastosFijos.Add(gastoNuevo);
             }
@@ -166,7 +171,6 @@ namespace PI.EntityHandlers
                     Nombre = "Prestaciones laborales",
                     FechaAnalisis = fechaAnalisis,
                     Monto = await ObtenerGastoPrestacionesAsync(fechaAnalisis, prestaciones),
-                    Orden = 3
                 };
                 base.Contexto.GastosFijos.Add(gastoNuevo);
             }
@@ -194,7 +198,6 @@ namespace PI.EntityHandlers
                     Nombre = "Beneficios de empleados",
                     FechaAnalisis = fechaAnalisis,
                     Monto = await ObtenerTotalBeneficiosAsync(fechaAnalisis),
-                    Orden = 4
                 };
                 base.Contexto.GastosFijos.Add(gastoNuevo);
             }
