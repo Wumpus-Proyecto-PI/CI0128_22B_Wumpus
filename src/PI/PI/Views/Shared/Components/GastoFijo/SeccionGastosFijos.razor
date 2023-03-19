@@ -8,7 +8,7 @@
 
 <!-- Sección de edición (lado izquierdo) -->
 @*Comienzo ventana izquierda de edición e ingreso de gastos fijos*@
-    <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoAnual">
+    <div class="altura-seccion" id="seccion-pestañas">
 
         <div id="titulo-contenido">
             @*TODO: quitar. Aqui se agrega lo de las pestanas*@
@@ -54,7 +54,7 @@
             @if (hayGastoFijoSeleccionado == true)
             {
                 /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGastoFijo(gastoFijoActivo)">
+                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await eliminarGastoFijo(gastoFijoActivo)">
                     <a>
                         @if (hoverEliminar == false)
                         {
@@ -64,7 +64,7 @@
                     </a>
                 </div>
             }
-            <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
+            <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await GuardarDatosGastoFijo(gastoFijoActivo)">
 
                     @if (hoverGuardar == false) {
                         <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -270,8 +270,9 @@
 
     // método que permitir guardar en la base de datos un gasto fijo
     // recibe el puesto a guadar
-    public async Task GuardarDatosGastoFijo(PI.EntityModels.GastoFijo gastoFijoGuardar)
+    public async Task<int> GuardarDatosGastoFijo(PI.EntityModels.GastoFijo gastoFijoGuardar)
     {
+        int agregado = 0; 
 
         if (gastosFijos.Exists(x => x.Nombre == gastoFijoGuardar.Nombre) && hayGastoFijoSeleccionado == false)
         {  // ya existe el gasto fijo
@@ -286,7 +287,7 @@
             gastoFijoGuardar.FechaAnalisis = fechaAnalasis;
 
             // se ingresa con el handler en la base de datos el puesto
-            await HandlerGastoFijo.IngresarGastoFijoAsync(copiaNombreOriginal, gastoFijoGuardar.Nombre, (gastoFijoGuardar.Monto)?? 0.0m, gastoFijoGuardar.FechaAnalisis);
+            agregado = await HandlerGastoFijo.IngresarGastoFijoAsync(copiaNombreOriginal, gastoFijoGuardar.Nombre, (gastoFijoGuardar.Monto)?? 0.0m, gastoFijoGuardar.FechaAnalisis);
 
             // se resetean variables de vista y de control
             if (hayGastoFijoSeleccionado == false)
@@ -299,27 +300,31 @@
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
+        return agregado; 
     }
 
     // método para eliminar un gasto fijo de la base de datos
     // recibe el gasto fijo que se desea eliminar
-    public async Task eliminarGastoFijo(PI.EntityModels.GastoFijo gastoFijoEliminar)
+    public async Task<int> eliminarGastoFijo(PI.EntityModels.GastoFijo gastoFijoEliminar)
     {
         // reseteo de variabels de error
         CasoError_negativo = "";
         CasoError_repetido = "";
 
         // se utiliza el handler para eliminar el puesto
-        await HandlerGastoFijo.EliminarGastoFijoAsync(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
+        int eliminado = await HandlerGastoFijo.EliminarGastoFijoAsync(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
 
         await actualizarMontoAnual();
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+
+        return eliminado; 
     }
 
     // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total anual es actualizado.
-    public async Task actualizarMontoAnual () {
+    public async Task<decimal> actualizarMontoAnual () {
         this.totalAnual = await HandlerGastoFijo.ObtenerTotalAnualAsync(this.fechaAnalasis);
+        return this.totalAnual; 
     }
 }
