@@ -1,16 +1,16 @@
-﻿@using PI.Models
+﻿@using PI.EntityModels
 @using System.Globalization
 <!-- Representa una carta/tarjeta de gasto fijo: nombre, monto anual y monto mensual -->
 
 <!-- Verifica si el nombre de gasto fijo pertenece a la estructura organizativa o no. Esto para asignarle la clase y en consecuencia, el estilo css correspondiente.-->
 @{
-    montoMensual = gastoFijo.Monto / 12;
-    montoAnual = gastoFijo.Monto;
+    montoMensual = (gastoFijo.Monto / 12)?? 0.0m;
+    montoAnual = (gastoFijo.Monto)?? 0.0m;
 }
 @if (nombresEstOrg.Contains(gastoFijo.Nombre)) {
     tipoGasto = "gastoFijo gastoFijo-NoEditable";
-    montoAnual = gastoFijo.Monto;
-    montoMensual = gastoFijo.Monto / 12;
+    montoAnual = (gastoFijo.Monto)?? 0.0m;
+    montoMensual = (gastoFijo.Monto / 12)?? 0.0m;
 }
 <div class=@((MarkupString)tipoGasto)>
     <div class="top-gastoFijo">
@@ -33,7 +33,7 @@
 @code {
     // Recibe el objeto de gasto fijo para ser mostrado.
     [Parameter]
-    public GastoFijoModel gastoFijo { get; set; }
+    public PI.EntityModels.GastoFijo gastoFijo { get; set; }
 
     // MarkupString que sirve para asignar una u otra clase dependiendo de si el gasto fijo es de la estructura organizativa o no. 
     // Sección estOrg: NoEditable. 

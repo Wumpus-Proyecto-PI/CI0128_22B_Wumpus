@@ -1,13 +1,14 @@
-﻿@using PI.Models
-@using PI.Handlers
+﻿@using PI.EntityModels
+@using PI.EntityHandlers
 @using System.Globalization
 @inject NavigationManager NavigationManager;
+@inject PI.EntityHandlers.GastoFijoHandler HandlerGastoFijo;
 
 <!-- Razor que representa la sección de gastos fijos -->
 
 <!-- Sección de edición (lado izquierdo) -->
 @*Comienzo ventana izquierda de edición e ingreso de gastos fijos*@
-    <div class="altura-seccion" id="seccion-pestañas" @onmouseover="actualizarMontoAnual">
+    <div class="altura-seccion" id="seccion-pestañas">
 
         <div id="titulo-contenido">
             @*TODO: quitar. Aqui se agrega lo de las pestanas*@
@@ -53,7 +54,7 @@
             @if (hayGastoFijoSeleccionado == true)
             {
                 /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => eliminarGastoFijo(gastoFijoActivo)">
+                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await eliminarGastoFijo(gastoFijoActivo)">
                     <a>
                         @if (hoverEliminar == false)
                         {
@@ -63,7 +64,7 @@
                     </a>
                 </div>
             }
-            <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosGastoFijo(gastoFijoActivo)">
+            <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await GuardarDatosGastoFijo(gastoFijoActivo)">
 
                     @if (hoverGuardar == false) {
                         <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -97,7 +98,7 @@
         @*Comienzo de sección de totales*@
 
             <!-- Carga cada gasto fijo en la vista -->
-            @foreach (GastoFijoModel gastoFijoActual in gastosFijos)
+            @foreach (PI.EntityModels.GastoFijo gastoFijoActual in gastosFijos)
             {
             @*
                 Renderización de las tarjetas de los gastos fijos, son componentes razor aparte
@@ -137,7 +138,7 @@
 @code {
     // lista de gastos fijos  de la base de datos
     [Parameter]
-    public List<GastoFijoModel> gastosFijos { get; set; }
+    public List<PI.EntityModels.GastoFijo> gastosFijos { get; set; }
 
     // fecha del análisis al que pertenece la estructura organanizativa
     [Parameter]
@@ -151,10 +152,7 @@
     public bool hayGastoFijoSeleccionado = false;
 
     // gasto fijo seleccionado actualmente, puede ser nuevo o un existente
-    public GastoFijoModel gastoFijoActivo = new GastoFijoModel();
-
-    // handler con el cual comunicarse con la base de datos
-    public GastoFijoHandler HandlerGastoFijo = new GastoFijoHandler();
+    public PI.EntityModels.GastoFijo gastoFijoActivo = new PI.EntityModels.GastoFijo();
 
     // string que almacena el nombre del gasto fijo seleccionado antes de ser modificado para pdoer actualizarlo en la base de datos
     public string copiaNombreOriginal = "";
@@ -226,7 +224,7 @@
 
     // método para asignar el gasto fijo activo según el que se clickeó
     // recibe el gasto fijo al que se le hizo click
-    public void SeleccionarGastoFijo(GastoFijoModel gastoFijoSeleccionado)
+    public void SeleccionarGastoFijo(PI.EntityModels.GastoFijo gastoFijoSeleccionado)
     {
         // se resetean variables e error
         CasoError_negativo = "";
@@ -267,12 +265,14 @@
         copiaNombreOriginal = "";
 
         // se crea un nuevo gasti fijo
-        gastoFijoActivo = new GastoFijoModel();
+        gastoFijoActivo = new PI.EntityModels.GastoFijo();
     }
 
     // método que permitir guardar en la base de datos un gasto fijo
     // recibe el puesto a guadar
-    public void GuardarDatosGastoFijo(GastoFijoModel gastoFijoGuardar) {
+    public async Task<int> GuardarDatosGastoFijo(PI.EntityModels.GastoFijo gastoFijoGuardar)
+    {
+        int agregado = 0; 
 
         if (gastosFijos.Exists(x => x.Nombre == gastoFijoGuardar.Nombre) && hayGastoFijoSeleccionado == false)
         {  // ya existe el gasto fijo
@@ -287,40 +287,44 @@
             gastoFijoGuardar.FechaAnalisis = fechaAnalasis;
 
             // se ingresa con el handler en la base de datos el puesto
-            HandlerGastoFijo.ingresarGastoFijo(copiaNombreOriginal, gastoFijoGuardar.Nombre, gastoFijoGuardar.Monto.ToString(), gastoFijoGuardar.FechaAnalisis);
+            agregado = await HandlerGastoFijo.IngresarGastoFijoAsync(copiaNombreOriginal, gastoFijoGuardar.Nombre, (gastoFijoGuardar.Monto)?? 0.0m, gastoFijoGuardar.FechaAnalisis);
 
             // se resetean variables de vista y de control
             if (hayGastoFijoSeleccionado == false)
             {
-                gastoFijoActivo = new GastoFijoModel();
+                gastoFijoActivo = new PI.EntityModels.GastoFijo();
             }
             copiaNombreOriginal = string.Empty;
-            actualizarMontoAnual();
+            await actualizarMontoAnual();
 
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
+        return agregado; 
     }
 
     // método para eliminar un gasto fijo de la base de datos
     // recibe el gasto fijo que se desea eliminar
-    public void eliminarGastoFijo(GastoFijoModel gastoFijoEliminar)
+    public async Task<int> eliminarGastoFijo(PI.EntityModels.GastoFijo gastoFijoEliminar)
     {
         // reseteo de variabels de error
         CasoError_negativo = "";
         CasoError_repetido = "";
 
         // se utiliza el handler para eliminar el puesto
-        HandlerGastoFijo.eliminarGastoFijo(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
+        int eliminado = await HandlerGastoFijo.EliminarGastoFijoAsync(gastoFijoEliminar.Nombre, gastoFijoEliminar.FechaAnalisis);
 
-        actualizarMontoAnual();
+        await actualizarMontoAnual();
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+
+        return eliminado; 
     }
 
     // ante un cambio (ingreso, borrado) de un gasto fijo, el monto del total anual es actualizado.
-    public void actualizarMontoAnual () {
-        this.totalAnual = HandlerGastoFijo.obtenerTotalAnual(this.fechaAnalasis);
+    public async Task<decimal> actualizarMontoAnual () {
+        this.totalAnual = await HandlerGastoFijo.ObtenerTotalAnualAsync(this.fechaAnalasis);
+        return this.totalAnual; 
     }
 }

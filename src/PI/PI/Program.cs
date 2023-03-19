@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PI.Areas.Identity.Data;
 using PI.Data;
 using Microsoft.ApplicationInsights.AspNetCore;
-using PI.Handlers;
+using PI.EntityHandlers;
 using PI.EntityModels;
 using PI.Services;
 
@@ -38,6 +38,8 @@ builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddScoped<DataBaseContext>();
 builder.Services.AddScoped<UserDbApplicationContext>();
 builder.Services.AddScoped<ProceduresServices>();
+builder.Services.AddScoped<PI.EntityHandlers.GastoFijoHandler>();
+
 
 
 var app = builder.Build();
