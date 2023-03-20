@@ -37,7 +37,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddScoped<DataBaseContext>();
 builder.Services.AddScoped<UserDbApplicationContext>();
-builder.Services.AddScoped<ProceduresServices>();
+builder.Services.AddScoped<NegocioHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.GastoFijoHandler>();
 
 
