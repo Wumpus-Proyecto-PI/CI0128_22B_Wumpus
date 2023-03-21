@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.InkML;
+using Microsoft.EntityFrameworkCore;
 using PI.EntityModels;
 using PI.Services;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace PI.EntityHandlers
 {
@@ -8,6 +11,7 @@ namespace PI.EntityHandlers
     {
         public ProductoHandler(DataBaseContext context) : base(context) { }
 
+        // Inserta el modelo del producto que se le pasa por parametro a la base de datos
         public async Task<int> InsertarProductoAsync(string nombreProducto, Producto producto)
         {
 
@@ -22,20 +26,47 @@ namespace PI.EntityHandlers
                     throw new Exception("El valor del monto debe ser un número positivo", new ArgumentOutOfRangeException());
                 }
 
-                await base.Contexto.Productos.AddAsync(producto);
-                //string consulta = "EXEC InsertarProducto @nombreProducto='" + producto.Nombre.ToString() + "',@nombreAnterior='" + nombreProducto.ToString() + "',@fechaAnalisis='" + producto.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'" +
-                //    ",@lote='" + producto.Lote.ToString().Replace(",", ".") + "',@porcentajeDeVentas='" + producto.PorcentajeDeVentas.ToString().Replace(",", ".") + "',@precio='" + producto.Precio.ToString().Replace(",", ".") + "',@costoVariable='" + producto.CostoVariable.ToString().Replace(",", ".") + "',@comisionDeVentas='" + producto.ComisionDeVentas.ToString().Replace(",", ".") + "'";
+                Producto productoEnBase = await base.Contexto.Productos.Where(p => p.Nombre == producto.Nombre && p.FechaAnalisis == producto.FechaAnalisis).FirstOrDefaultAsync();
 
-                //filasAfectadas = enviarConsulta(consulta);
+                if ( productoEnBase == null )
+                {
+                    await base.Contexto.Productos.AddAsync(producto);
+                }
+                else
+                {
+                    Contexto.Productos.Remove(productoEnBase);
+                    await base.Contexto.SaveChangesAsync();
+                    await base.Contexto.Productos.AddAsync(producto);
+                }
             }
 
             return await base.Contexto.SaveChangesAsync();
         }
 
+        // Elimina el modelo del producto que se le pasa por parametro a la base de datos
         public async Task<int> EliminarProductoAsync(string nombre, DateTime fechaAnalisis)
         {
             base.Contexto.Productos.Remove(await base.Contexto.Productos.Where(x => x.FechaAnalisis == fechaAnalisis && x.Nombre == nombre).FirstOrDefaultAsync());
             return await base.Contexto.SaveChangesAsync();
         }
+
+
+        // Método que obtiene los productos de un analisis
+        // Devuele una lista de ProductoModel
+        public async Task<List<Producto>> ObtenerProductosAsync(DateTime fechaAnalisis)
+        {
+            List<Producto> productos = await base.Contexto.Productos
+                .Where(p => p.FechaAnalisis == fechaAnalisis)
+                .ToListAsync();
+
+            // Carga los componentes para cada producto
+            foreach (Producto producto in productos)
+            {
+                await base.Contexto.Entry(producto).Collection(p => p.Componentes).LoadAsync();
+            }
+
+            return productos;
+        }
+
     }
 }
