@@ -1,8 +1,9 @@
-﻿@using PI.Models
+﻿@using PI.EntityModels
+@using PI.EntityHandlers
 @using PI.Services
-@using PI.Handlers
 @using System.Globalization
 @inject NavigationManager NavigationManager;
+@inject PI.EntityHandlers.ProductoHandler HandlerProducto;
 
 
 @*Comienzo de seccion de gastos variables*@
@@ -10,7 +11,7 @@
     <h1 class="fw-bold mt-3">Productos</h1>
     <div id="mostrar-gastosVar">
         @*Renderización de las tarjetas de los gastos variables, son componentes razor aparte*@
-        @foreach (ProductoModel gastoActual in productos)
+        @foreach (PI.EntityModels.Producto gastoActual in productos)
         {
             <div class="gasto-clickeable" @onclick="() => SeleccionarGastoVariable(gastoActual)">
                 <div>
@@ -115,12 +116,12 @@
                         int index = i;
 
                         <tr class="filas-tabla-componente">
-                            <td> @productoActivo.Componentes[index].Nombre</td>
-                            <td> @productoActivo.Componentes[index].Unidad</td>
-                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Cantidad)))</td>
-                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes[index].Costo)))</td>
+                            <td> @productoActivo.Componentes.ToList()[index].NombreComponente</td>
+                            <td> @productoActivo.Componentes.ToList()[index].Unidad</td>
+                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes.ToList()[index].Cantidad)))</td>
+                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes.ToList()[index].Monto)))</td>
                             @*Botón para borrar un beenficio*@
-                            <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>BorrarComponente(productoActivo.Componentes[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
+                            <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>BorrarComponente(productoActivo.Componentes.ToList()[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
                         </tr>
                     }
                 </table>
@@ -129,7 +130,7 @@
             @if (formVisible)
             {
                 @*Se agrega a los comodines un nuevo beneficio*@
-                componentes.Add(new ComponenteModel());
+                componentes.Add(new PI.EntityModels.Componente());
                 <div class="form-componentes">
                     <h2 class="titulo-componente">Nuevo Componente</h2>
                     @*Sección de forms para ingresar los datos de un nuevo componente*@
@@ -137,7 +138,7 @@
                         @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo componente*@
                         <div id="container-input-nombre-componente">
                             <label for="nombreComponente">Nombre:</label>
-                            <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].Nombre" maxlength="30">
+                            <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].NombreComponente" maxlength="30">
                         </div>
                         @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
                         <div id="container-input-unidad-componente">
@@ -152,7 +153,7 @@
                         @*Sección donde se encuentra el form donde se ingresa la costo del nuevo componente*@
                         <div id="container-input-costo-componente">
                             <label for="costoComponente">Costo:</label>
-                            <input class="input-componente" id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Costo" step="any">
+                            <input class="input-componente" id="costoComponente" min="1" name="costoComponente" type="number" @bind="componentes[componenteActual].Monto" step="any">
                         </div>
                         @*Sección donde se encuentra el botón para guardar el beneficio con los datos ingresados*@
                         <div id="seccion-guardar-componente">
@@ -243,7 +244,7 @@
 @code {
     // lista de gastos variables de la base de datos
     [Parameter]
-    public List<ProductoModel> productos { get; set; }
+    public List<PI.EntityModels.Producto> productos { get; set; }
 
     // fecha del análisis al que pertenecen los gastos variables 
     [Parameter]
@@ -253,16 +254,14 @@
     public bool hayGastoSeleccionado = false;
 
     // producto seleccionado actualmente, puede ser nuevo o un existente
-    public ProductoModel productoActivo = new ProductoModel();
+    public PI.EntityModels.Producto productoActivo = new PI.EntityModels.Producto();
 
     // bool que indica si se debe mostrar el popup de componente
     public bool PopupVisible { get; set; } = false;
 
     // handler con el cual comunicarse con la base de datos
-    public ProductoHandler HandlerGasto = new ProductoHandler();
+    public PI.Handlers.ProductoHandler HandlerGasto = new PI.Handlers.ProductoHandler();
 
-    // handler con el cual comunicarse con los componentes en la base de datos
-    public ComponenteHandler HandlerComponente = new ComponenteHandler();
 
 
     // string que almacena el nombre de un producto antes de ser modificado para pdoer actualizarlo en la base de datos
@@ -367,7 +366,7 @@
 
     // método para asignar el producto activo según el que se clickeó
     // recibe el producto al que se le hizo click
-    public void SeleccionarGastoVariable(ProductoModel gastoSeleccionado)
+    public void SeleccionarGastoVariable(PI.EntityModels.Producto gastoSeleccionado)
     {
         // se asigna el puesto activo
         productoActivo = gastoSeleccionado;
@@ -405,7 +404,7 @@
         copiaNombreOriginal = "";
 
         // se crea un nuevo producto
-        productoActivo = new ProductoModel();
+        productoActivo = new PI.EntityModels.Producto();
 
         // se resetean variables de errores
         ErrorNombre = "";
@@ -415,9 +414,9 @@
 
     // método que permitir guardar en la base de datos un gasto variable
     // recibe el gasto variable a guardar
-    public void GuardarDatosGasto(ProductoModel gastoGuardar)
+    public async Task<int> GuardarDatosGasto(PI.EntityModels.Producto gastoGuardar)
     {
-
+        int resultado = 0;
         // se revisa que el nombre no este repetido y que no haya números negativo
         if (RevisarNombre(gastoGuardar) && RevisarLote(gastoGuardar))
         {
@@ -425,23 +424,15 @@
             // se asigna la fecha del análisis por si es un gasto variable nuevo
             gastoGuardar.FechaAnalisis = fechaAnalisis;
             // se ingresa con el handler en la base de datos el gasto variable
-            HandlerGasto.InsertarProducto(copiaNombreOriginal, gastoGuardar);
 
-            // Se eliminan los componentes de la base de datos
-            EliminarComponenteBD();
 
-            // Se ingresan los componentes del producto que se va a guardar
-            foreach (ComponenteModel componente in componentesNuevos)
-            {
-                componente.NombreProducto = productoActivo.Nombre;
-                HandlerComponente.AgregarComponente(componente);
-            }
+            resultado = await HandlerProducto.InsertarProductoAsync(copiaNombreOriginal, gastoGuardar);
 
 
             // se resetean variables de vista y de control
             if (hayGastoSeleccionado == false)
             {
-                productoActivo = new ProductoModel();
+                productoActivo = new PI.EntityModels.Producto();
             }
             ErrorNombre = "";
             ErrorLote = "";
@@ -450,10 +441,11 @@
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
+        return resultado;
     }
 
     // método para revisar si el nombre está repetido y que no esté vacío
-    private bool RevisarNombre(ProductoModel gastoGuardar)
+    private bool RevisarNombre(PI.EntityModels.Producto gastoGuardar)
     {
         bool valido = true;
         // se revisa que no esté vacío
@@ -499,7 +491,7 @@
 
     // método que revisa si el número de plazas es válido
     // recibe el producto que se está editando
-    private bool RevisarLote(ProductoModel gastoGuardar)
+    private bool RevisarLote(PI.EntityModels.Producto gastoGuardar)
     {
         bool valido = true;
         // se revisa que no sea negativo
@@ -517,24 +509,28 @@
 
     // método para eliminar un producto de la base de datos
     // recibe el producto que se desea eliminar
-    public void EliminarGasto(ProductoModel gastoEliminar)
+    public async Task<int> EliminarGasto(PI.EntityModels.Producto gastoEliminar)
     {
+        int result = 0;
+
         // se utiliza el handler para eliminar el producto
-        HandlerGasto.EliminarProducto(gastoEliminar);
+        result = await HandlerProducto.EliminarProductoAsync(gastoEliminar.Nombre, gastoEliminar.FechaAnalisis);
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+
+        return result;
     }
 
 
     // Componentes utilizados dan la seccion de componentes
     // Cada uno de ellos está "bindeado" al form que lo creó.
     // Se agregan a la lista de componentes del gastoActivo.
-    public List<ComponenteModel> componentes = new List<ComponenteModel>();
+    public List<Componente> componentes = new List<Componente>();
 
-    public List<ComponenteModel> componentesNuevos = new List<ComponenteModel>();
+    public List<Componente> componentesNuevos = new List<Componente>();
 
-    public List<ComponenteModel> componentesEliminados = new List<ComponenteModel>();
+    public List<Componente> componentesEliminados = new List<Componente>();
 
     // El índice del comodín sobre el cual se está operando en determinado momento
     int componenteActual = 0;
@@ -566,12 +562,12 @@
     public void AgregarComponenteNuevo()
     {
 
-        bool hayNombre = !(string.IsNullOrWhiteSpace(componentes[componenteActual].Nombre));
+        bool hayNombre = !(string.IsNullOrWhiteSpace(componentes[componenteActual].NombreComponente));
         bool hayUnidad = !(string.IsNullOrWhiteSpace(componentes[componenteActual].Unidad));
         bool cantidadPositiva = componentes[componenteActual].Cantidad >= 0;
-        bool costoPositivo = componentes[componenteActual].Costo >= 0;
+        bool costoPositivo = componentes[componenteActual].Monto >= 0;
         bool nombreRepetido = false;
-        bool decimalValido = FormatManager.ValidarInputDecimal(componentes[componenteActual].Cantidad) && FormatManager.ValidarInputDecimal(componentes[componenteActual].Costo);
+        bool decimalValido = FormatManager.ValidarInputDecimal(componentes[componenteActual].Cantidad) && FormatManager.ValidarInputDecimal(componentes[componenteActual].Monto);
 
         // Verifica que haya nombre para revisar si esta repetido
         if (hayNombre) 
@@ -588,7 +584,7 @@
         CaracteresInvalidos = false;
 
         // En caso de que todos los datos ingresados en el form del beneficio nuevo sean válidos
-        if (hayNombre && hayUnidad && cantidadPositiva && costoPositivo && (nombreRepetido == false) && decimalValido && FormatManager.EsAlfanumerico(componentes[componenteActual].Nombre))
+        if (hayNombre && hayUnidad && cantidadPositiva && costoPositivo && (nombreRepetido == false) && decimalValido && FormatManager.EsAlfanumerico(componentes[componenteActual].NombreComponente))
         {
             componentes[componenteActual].FechaAnalisis = fechaAnalisis;
             componentes[componenteActual].NombreProducto = productoActivo.Nombre;
@@ -596,8 +592,8 @@
             componentesNuevos.Add(componentes[componenteActual]);
             productoActivo.Componentes.Add(componentes[componenteActual]);
 
-            componentes.Add(new ComponenteModel());
-            componenteActual += 1; 
+            componentes.Add(new PI.EntityModels.Componente());
+            componenteActual += 1;
         }
         // En caso de que los datos ingresados en el form de los componente sean incorrectos, se verifica uno por uno para indicarlo en las variables correspondientes.
         else
@@ -606,7 +602,7 @@
             {
                 CantidadPositiva = false;
             }
-            if (string.IsNullOrWhiteSpace(componentes[componenteActual].Nombre))
+            if (string.IsNullOrWhiteSpace(componentes[componenteActual].NombreComponente))
             {
                 NombreVacio = true;
             }
@@ -614,7 +610,7 @@
             {
                 UnidadVacia = true;
             }
-            if (componentes[componenteActual].Costo < 0)
+            if (componentes[componenteActual].Monto < 0)
             {
                 CostoPositivo = false;
             }
@@ -624,7 +620,7 @@
             if (decimalValido == false) {
                 DecimalValido = false; 
             }
-            if (!FormatManager.EsAlfanumerico(componentes[componenteActual].Nombre))
+            if (!FormatManager.EsAlfanumerico(componentes[componenteActual].NombreComponente))
             {
                 CaracteresInvalidos = true;
             }
@@ -632,11 +628,11 @@
     }
 
     // Revisa si el nombre ingresado para el componente esta repetido (ya existe en la base)
-    public bool RevisarNombreRepetido(ComponenteModel componente) {
+    public bool RevisarNombreRepetido(PI.EntityModels.Componente componente) {
 
         bool esRepetido = false; 
 
-        if (productoActivo.Componentes.Exists(x => x.Nombre.ToLower() == componente.Nombre.ToLower()))
+        if (productoActivo.Componentes.ToList().Exists(x => x.NombreComponente.ToLower() == componente.NombreComponente.ToLower()))
         {
             esRepetido = true;
         }
@@ -645,7 +641,7 @@
     }
 
     // Método que borra un componente de la lista de componentes.
-    public void BorrarComponente(ComponenteModel componente)
+    public void BorrarComponente(PI.EntityModels.Componente componente)
     {
         componente.FechaAnalisis = productoActivo.FechaAnalisis;
         componente.NombreProducto = productoActivo.Nombre;
@@ -654,18 +650,20 @@
     }
 
     // Método que borra un componente de la base de datos.
-    public void EliminarComponenteBD()
-    {
-        ComponenteHandler handler = new ComponenteHandler();
-        foreach (ComponenteModel componente in componentesEliminados) {
-            if (componentesNuevos.Contains(componente) == false) {  
-                handler.BorrarComponente(componente);
-            }
-            else {
-                componentesNuevos.Remove(componente);
-            }
-        }
-    }
+    //public async Task<int> EliminarComponenteBD()
+    //{
+    //    int resultado = 0;
+    //    foreach (PI.EntityModels.Componente componente in componentesEliminados) {
+    //        if (componentesNuevos.Contains(componente) == false) {
+    //            componente.Producto = productoActivo;
+    //            resultado = await HandlerComponente.BorrarComponenteAsync(componente);
+    //        }
+    //        else {
+    //            componentesNuevos.Remove(componente);
+    //        }
+    //    }
+    //    return resultado;
+    //}
 
     // Método que cambia el valor de la variable que indica la visibilidad del form de ingresar un nuevo beneficio.
     public void CambiarVisibilidadForm()
