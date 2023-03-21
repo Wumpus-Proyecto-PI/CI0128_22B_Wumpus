@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 
 namespace PI.EntityModels
@@ -12,6 +13,7 @@ namespace PI.EntityModels
         public decimal? Cantidad { get; set; }
         public string? Unidad { get; set; }
 
+        [JsonIgnore]
         public virtual Producto Producto { get; set; } = null!;
     }
 }

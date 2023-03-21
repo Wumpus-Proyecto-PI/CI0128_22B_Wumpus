@@ -1,14 +1,28 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PI.Handlers;
-using PI.Models;
+using PI.EntityModels;
+using PI.EntityHandlers;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace PI.Controllers
 {
     public class ProductoController : ManejadorUsuariosController
     {
-        // GET: GastosVariables
-        public IActionResult Index(string fecha)
+
+        private ProductoHandler? ProductoHandler = null;
+        private AnalisisHandler? AnalisisHandler = null;
+        private NegocioHandler? NegocioHandler = null;
+
+        public ProductoController(NegocioHandler negocioHandler, ProductoHandler productoHandler, AnalisisHandler analisisHandler)
+        {
+            ProductoHandler = productoHandler;
+            AnalisisHandler = analisisHandler;
+            NegocioHandler = negocioHandler;
+        }
+
+
+        public async Task<IActionResult> Index(string fecha)
         {
             // para que se muestre el boton de volver al analisis
             ViewBag.BotonRetorno = "Progreso";
@@ -19,8 +33,6 @@ namespace PI.Controllers
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];
 
-            ProductoHandler productoHandler = new ProductoHandler();
-
             // convertimos a Datetime la fecha del análisis porque de esta forma lo utiliza la vista
             DateTime fechaAnalisis = DateTime.ParseExact(fecha, "yyyy-MM-dd HH:mm:ss.fff", null);
             // enviamos la fecha a la vista con viewbag
@@ -28,10 +40,10 @@ namespace PI.Controllers
 
             // asignamos el nombre del negocio en la vista
             // este se extrae de la base de datos con la fecha del análisis
-            ViewData["NombreNegocio"] = productoHandler.obtenerNombreNegocio(fechaAnalisis);
+            ViewData["NombreNegocio"] = await NegocioHandler.ObtenerNombreNegocioAsync(fechaAnalisis);
 
             // cargamos una lista con todos los productos que existen en la base de datos
-            List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaAnalisis);
+            List<Producto> productos = await ProductoHandler.ObtenerProductosAsync(fechaAnalisis);
             return View(productos);
         }
 

@@ -10,9 +10,9 @@ namespace PI.Controllers
     public class NegocioController : ManejadorUsuariosController
     {
         private NegocioHandler? NegocioHandler = null;
-        public NegocioController (DataBaseContext contexto)
+        public NegocioController (NegocioHandler negocioHandler)
         {
-            NegocioHandler = new(contexto);
+            NegocioHandler = negocioHandler;
         }
 
         // Retorna una lista con todos los modelos de negocio existentes y el título del paso.

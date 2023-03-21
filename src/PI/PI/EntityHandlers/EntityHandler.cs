@@ -3,7 +3,7 @@ using PI.EntityModels;
 
 namespace PI.EntityHandlers
 {
-    public class EntityHandler: IDisposable
+    public abstract class EntityHandler: IDisposable
     {
         protected DataBaseContext? Contexto = null;
 

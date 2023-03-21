@@ -319,7 +319,9 @@ namespace PI.EntityModels
 
                 entity.ToTable("GASTO_FIJO");
 
-                entity.Property(e => e.Orden).HasColumnName("orden");
+                entity.Property(e => e.Orden)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("orden");
 
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(30)
