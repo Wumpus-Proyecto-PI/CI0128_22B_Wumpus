@@ -1,14 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PI.Handlers;
-using PI.Models;
+using PI.EntityHandlers;
+using PI.EntityModels;
 
 namespace PI.Controllers
-{
+{ 
     public class InversionInicialController : ManejadorUsuariosController
     {
+        public InversionInicialHandler? InversionInicialHandler = null; 
+        public InversionInicialController(InversionInicialHandler? inversionInicialHandler)
+        {
+            InversionInicialHandler = inversionInicialHandler;  
+        }
+
         // Recibe la fecha del análisis del que se quiere obtener los gastos iniciales.
         // Retorna una lista de gastos iniciales que pertenecen al análisis con la fecha pasada por parámetro.
-        public IActionResult InversionInicial(string fechaAnalisis)
+        public async Task<IActionResult> InversionInicial(string fechaAnalisis)
         {
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
@@ -21,11 +27,13 @@ namespace PI.Controllers
             // Muestra el botón de regreso hacia el progreso (pasos) del análisis.
             ViewBag.BotonRetorno = "Progreso";
 
-            InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
-            ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
-            ViewBag.montoTotal = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
+           
+            ViewData["NombreNegocio"] = InversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
+            ViewBag.montoTotal = await InversionInicialHandler.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
+
+            List<InversionInicial> inversionInicialList = await InversionInicialHandler.ObtenerGastosInicialesAsync(fechaCreacionAnalisis);
             
-            return View(inversionInicialHandler.ObtenerGastosIniciales(fechaAnalisis));
+            return View(inversionInicialList);
         }
     }
 }
