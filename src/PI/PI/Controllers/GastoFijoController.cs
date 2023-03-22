@@ -12,7 +12,7 @@ using PI.EntityHandlers;
 namespace PI.Controllers
 {
     // Controlador del gasto fijo.  Administra el traspaso de acciones entre la vista y el modelo/bd referentes al gasto fijo.
-    public class GastoFijoController : Controller
+    public class GastoFijoController : ManejadorUsuariosController
     {
 
         private GastoFijoHandler? GastoFijoHandler = null;
