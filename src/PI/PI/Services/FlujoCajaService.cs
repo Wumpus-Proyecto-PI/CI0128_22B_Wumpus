@@ -1,28 +1,37 @@
-﻿using PI.Models;
-using PI.Handlers;
+﻿using PI.EntityModels;
+using PI.EntityHandlers;
 
 namespace PI.Services
 {
     public class FlujoCajaService
     {
-
-        // Método para calcular el flujo mensual del negocio
-        public static decimal CalcularFlujoMensual(MesModel mesModel)
+        FlujoDeCajaHandler? FlujoDeCajaHandler = null;
+        GastoFijoHandler? GastoFijoHandler = null;
+        public FlujoCajaService(FlujoDeCajaHandler flujoDeCajaHandler, GastoFijoHandler gastoFijoHandler) 
         {
-            FlujoDeCajaHandler flujoDeCajaHandler = new();
-
-            // Obtiene los ingresos del mes.
-            decimal totalIngresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mesModel.NombreMes, mesModel.FechaAnalisis);
-            // Obtiene los egresos del mes.
-            decimal totalEgresoPorMes = flujoDeCajaHandler.ObtenerMontoTotalDeEgresosPorMes(mesModel);
-
-            // Suma los gastos fijos y la inversión inicial a los egresos.
-            GastoFijoHandler gastoFijoHandler = new();
-            totalEgresoPorMes += gastoFijoHandler.obtenerTotalAnual(mesModel.FechaAnalisis) / 12;
-            totalEgresoPorMes += flujoDeCajaHandler.ObtenerInversionDelMes(mesModel);
-
-            return totalIngresoPorMes - totalEgresoPorMes;
+            FlujoDeCajaHandler = flujoDeCajaHandler;
+            GastoFijoHandler = gastoFijoHandler;
         }
+
+        public async Task ActualizarFlujoMensualAsync(List<Mes> meses, List<string> flujosMensuales)
+        {
+            for (int mes = 0; mes < meses.Count; ++mes)
+            {
+                // Obtiene los ingresos del mes.
+                decimal totalIngresoPorMes = await FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMesAsync(meses[mes].Nombre, meses[mes].FechaAnalisis);
+
+                // Obtiene los egresos del mes.
+                decimal totalEgresoPorMes = await FlujoDeCajaHandler.ObtenerMontoTotalDeEgresosPorMesAsync(meses[mes].Nombre, meses[mes].FechaAnalisis);
+
+                // Suma los gastos fijos y la inversión inicial a los egresos.
+                decimal gastosFijosTotalMensual = await GastoFijoHandler.ObtenerTotalMensualAsync(meses[mes].Nombre, meses[mes].FechaAnalisis);
+                decimal totalInversionInicialMes = meses[mes].InversionPorMes ?? 0.0m;
+
+                string flujoActual = FlujoCajaService.CalcularFlujoMensual(totalIngresoPorMes, totalEgresoPorMes, gastosFijosTotalMensual, totalInversionInicialMes);
+                flujosMensuales[mes] = flujoActual;
+            }
+        }
+
 
         /// <param>totalIngresoPorMes</param> el código que llama a la funcion envía el valor leído de la base de datos.
         /// <param>totalEgresoPorMes</param> el código que llama a la funcion envía el valor leído de la base de datos.
@@ -34,18 +43,7 @@ namespace PI.Services
             return FormatManager.ToFormatoEstadistico(totalIngresoPorMes - totalEgresoPorMes);
         }
 
-        // Retorna una lista con el flujo mensual de cada mes recalculado.
-        public static List<string> ActualizarFlujosMensuales(List<MesModel> meses)
-        {
-            List<string> flujoMensual = new();
-            for (int mes = 0; mes < meses.Count; ++mes)
-            {
-                flujoMensual.Add(FormatManager.ToFormatoEstadistico(CalcularFlujoMensual(meses[mes])));
-            }
-            return flujoMensual;
-        }
-
-        public static decimal CalcularEgresosTipo(string Tipo, List<EgresoModel> Egresos)
+        public static decimal CalcularEgresosTipo(string Tipo, List<Egreso> Egresos)
         {
             decimal total = 0;
             for (int i = 0; i < Egresos.Count; i += 1) {
@@ -56,7 +54,7 @@ namespace PI.Services
             return total;
         }
 
-        public static decimal CalcularIngresosTipo(string Tipo, List<IngresoModel> Ingresos)
+        public static decimal CalcularIngresosTipo(string Tipo, List<Ingreso> Ingresos)
         {
             decimal total = 0;
             for (int i = 0; i < Ingresos.Count; i += 1)

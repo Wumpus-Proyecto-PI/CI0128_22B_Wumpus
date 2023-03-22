@@ -1,6 +1,4 @@
-﻿using PI.Models;
-using PI.Handlers;
-using System;
+﻿using PI.EntityModels;
 namespace PI.Services
 {
     public class AnalisisRentabilidadService
@@ -94,12 +92,12 @@ namespace PI.Services
 
         #region Total meta de ventas para flujo de caja
         // Metodo que calcula la meta en moneda en la base de datos
-        public static decimal calcularTotalMetaMoneda(List<ProductoModel> productos, decimal montoGastosFijos, decimal GananciaMensual)
+        public static decimal calcularTotalMetaMoneda(List<Producto> productos, decimal montoGastosFijos, decimal GananciaMensual)
         {
             decimal margenPonderadoTotal = calcularMargenPonderadoTotal(productos);
             decimal total = 0.0m;
 
-            foreach (ProductoModel productActual in productos)
+            foreach (Producto productActual in productos)
             {
                 total += calcularMetaMoneda(productActual, montoGastosFijos, GananciaMensual, margenPonderadoTotal);
             }
@@ -107,23 +105,23 @@ namespace PI.Services
         }
 
         // Metodo que calcula y retorna la meta en moneda de un producto
-        public static decimal calcularMetaMoneda(ProductoModel productoActual, decimal montoGastosFijosMensuales, decimal GananciaMensual, decimal margenPonderadoTotal)
+        public static decimal calcularMetaMoneda(Producto productoActual, decimal montoGastosFijosMensuales, decimal GananciaMensual, decimal margenPonderadoTotal)
         {
-            decimal metaVentasUnidad = CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, montoGastosFijosMensuales, GananciaMensual, margenPonderadoTotal);
+            decimal metaVentasUnidad = CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas ?? 0.0m, montoGastosFijosMensuales, GananciaMensual, margenPonderadoTotal);
 
-            return CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
+            return CalcularMetaVentasMoneda(productoActual.Precio ?? 0.0m, metaVentasUnidad);
         }
 
         // Se encarga de calcular el maregn ponderado total de todos los proudcto
-        public static decimal calcularMargenPonderadoTotal(List<ProductoModel> productos)
+        public static decimal calcularMargenPonderadoTotal(List<Producto> productos)
         {
             decimal result = 0.0m;
             decimal margenActual = 0.0m;
             foreach (var productoActual in productos)
             {
-                margenActual = CalcularMargen(productoActual.Precio, productoActual.CostoVariable);
+                margenActual = CalcularMargen(productoActual.Precio ?? 0.0m, productoActual.CostoVariable);
 
-                result += CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margenActual);
+                result += CalcularMargenPonderado(productoActual.PorcentajeDeVentas ?? 0.0m, margenActual);
             }
             return result;
         }

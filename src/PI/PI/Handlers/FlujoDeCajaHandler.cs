@@ -113,17 +113,6 @@ namespace PI.Handlers
             return ingresos;
         }
 
-        // Actualiza el monto de un ingreso existente en la base de datos
-        public void ActualizarIngreso(IngresoModel ingreso)
-        {
-            string consulta = "UPDATE INGRESO" +
-                              " SET monto = " + ingreso.Monto +
-                              " WHERE fechaAnalisis = '" + ingreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
-                              "' AND mes = '" + ingreso.Mes +
-                              "' AND tipo = '" + ingreso.Tipo + "'";
-            enviarConsultaVoid(consulta);
-        }
-
         // Retorna el monto total de los ingresos en un determinado mes de un análisis
         public decimal ObtenerMontoTotalDeIngresosPorMes(string mes, DateTime fechaAnalisis)
         {
@@ -164,16 +153,7 @@ namespace PI.Handlers
             return egresos;
         }
 
-        // Metodo que actualiza un egreso
-        public void ActualizarEgreso(EgresoModel egreso)
-        {
-            string consulta = "UPDATE EGRESO" +
-                              " SET monto = " + egreso.Monto +
-                              " WHERE fechaAnalisis = '" + egreso.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
-                              "' AND mes = '" + egreso.Mes +
-                              "' AND tipo = '" + egreso.Tipo + "'";
-            enviarConsultaVoid(consulta);
-        }
+
 
         // Metodo que obtiene el monto total de los egresos de un mes 
         public decimal ObtenerMontoTotalDeEgresosPorMes(MesModel mes)
@@ -194,50 +174,9 @@ namespace PI.Handlers
             return total;
         }
 
-        // Metodo que obtiene la fraccion de la inversion inicial que posee el mes 
-        public decimal ObtenerInversionDelMes(MesModel mes)
-        {
-            decimal inversion = 0.0m;
+        
 
-            string consulta = "SELECT inversionPorMes as inversion" +
-                             " FROM MES" +
-                             " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "' AND nombre = '" + mes.NombreMes + "'";
 
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (!tablaResultado.Rows[0].IsNull("inversion"))
-            {
-                inversion = Convert.ToDecimal(tablaResultado.Rows[0]["inversion"]);
-            }
 
-            return inversion;
-        }
-
-        // Metodo que obtiene el monto total de las inversiones de todos los meses 
-        public decimal ObtenerMontoTotalInversiones(DateTime fechaAnalisis)
-        {
-            decimal total = 0.0m;
-
-            string consulta = "SELECT SUM(inversionPorMes) as total" +
-                             " FROM MES" +
-                             " WHERE fechaAnalisis = '" + fechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
-
-            DataTable tablaResultado = CrearTablaConsulta(consulta);
-            if (!tablaResultado.Rows[0].IsNull("total"))
-            {
-                total = Convert.ToDecimal(tablaResultado.Rows[0]["total"]);
-            }
-
-            return total;
-        }
-
-        // Metodo que actualiza la fraccion de la inversion inicial que posee el mes 
-        public void ActualizarInversionPorMes(MesModel mes)
-        {
-            string consulta = "UPDATE MES" +
-                             " SET inversionPorMes = " + mes.InversionPorMes +
-                             " WHERE fechaAnalisis = '" + mes.FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff") +
-                             "' AND nombre = '" + mes.NombreMes + "'";
-            enviarConsultaVoid(consulta);
-        }
     }
 }
