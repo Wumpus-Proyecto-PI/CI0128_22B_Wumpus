@@ -7,7 +7,7 @@ namespace PI.Services
     {
         FlujoDeCajaHandler? FlujoDeCajaHandler = null;
         GastoFijoHandler? GastoFijoHandler = null;
-        FlujoCajaService(FlujoDeCajaHandler flujoDeCajaHandler, GastoFijoHandler gastoFijoHandler) 
+        public FlujoCajaService(FlujoDeCajaHandler flujoDeCajaHandler, GastoFijoHandler gastoFijoHandler) 
         {
             FlujoDeCajaHandler = flujoDeCajaHandler;
             GastoFijoHandler = gastoFijoHandler;
