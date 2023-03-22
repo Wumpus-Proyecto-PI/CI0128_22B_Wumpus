@@ -7,11 +7,12 @@ namespace PI.Controllers
 {
 	public class FlujoDeCajaController : Controller
 	{
-		private FlujoDeCajaHandler? FlujoDeCajaHandler;
-
-		public FlujoDeCajaController(DataBaseContext context)
+		FlujoDeCajaHandler? FlujoDeCajaHandler = null;
+		GastoFijoHandler? GastoFijoHandler = null;
+		public FlujoDeCajaController(FlujoDeCajaHandler? flujoDeCajaHandler, GastoFijoHandler? gastoFijoHandler)
 		{
-			FlujoDeCajaHandler = new FlujoDeCajaHandler(context);
+			FlujoDeCajaHandler = flujoDeCajaHandler;
+			GastoFijoHandler = gastoFijoHandler;
 		}
 		// Recibe la fecha del análisis que se quiere consultar en flujo de caja
 		// Retorna la vista de la pantalla correspondiente al flujo de caja
@@ -29,9 +30,9 @@ namespace PI.Controllers
 			decimal gananciaMensual = await FlujoDeCajaHandler.ObtenerGananciaMensual(fechaCreacionAnalisis);
 
 			// Convierte los porcentajes a valores válidos (divide entre 100).
-			Configuracion configuracionAnalisis = await FlujoDeCajaHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
-			decimal seguroSocial = configuracionAnalisis.PorcentajeSs / 100 ?? 0.0m;
-			decimal prestaciones = configuracionAnalisis.PorcentajePl / 100 ?? 0.0m;
+			// Configuracion configuracionAnalisis = await FlujoDeCajaHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
+			decimal seguroSocial =  2.0m;
+			decimal prestaciones = 3.0m;
 
 			// Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
 			int escrituras = await FlujoDeCajaHandler.ActualizarGastosPredeterminadosAsync(fechaCreacionAnalisis, seguroSocial, prestaciones);
@@ -42,22 +43,16 @@ namespace PI.Controllers
 			ViewBag.Ingresos = await FlujoDeCajaHandler.ObtenerIngresosAsync(fechaCreacionAnalisis);
 			ViewBag.Egresos = await FlujoDeCajaHandler.ObtenerEgresosAsync(fechaCreacionAnalisis);
 			ViewBag.Meses = meses;
-			// ViewBag.flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
+			ViewBag.flujoMensual = new List<string>(6);
 			ViewBag.fechaAnalisis = fechaCreacionAnalisis;
 			ViewBag.BotonRetorno = "Progreso";
-			// ViewBag.GastosFijos = gastoFijoHandler.ObtenerGastosFijos(fechaCreacionAnalisis);
+			ViewBag.GastosFijos = await GastoFijoHandler.ObtenerGastosFijosAsync(fechaCreacionAnalisis);
 			ViewBag.GastosFijos = await FlujoDeCajaHandler.ObtenerGastosFijosAsync(fechaCreacionAnalisis);
-            
-			//         ViewBag.Iniciado = analisisHandler.ObtenerTipoAnalisis(fechaCreacionAnalisis);
 			ViewBag.Iniciado = await FlujoDeCajaHandler.ObtenerTipoAnalisisAsync(fechaCreacionAnalisis);
 
-			//         ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
+			ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
 			ViewBag.MetaDeVentasMensual = 0.0m;
-
-            //         ViewData["NombreNegocio"] = inversionInicialHandler.obtenerNombreNegocio(fechaCreacionAnalisis);
             ViewData["NombreNegocio"] = await FlujoDeCajaHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
-
-            //         ViewBag.InversionInicial = inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
             ViewBag.InversionInicial = await FlujoDeCajaHandler.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
 
             return View();

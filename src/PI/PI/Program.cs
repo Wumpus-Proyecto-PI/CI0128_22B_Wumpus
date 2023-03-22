@@ -43,8 +43,7 @@ builder.Services.AddScoped<PI.EntityHandlers.AnalisisHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.NegocioHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.GastoFijoHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.ProductoHandler>();
-
-
+builder.Services.AddScoped<PI.EntityHandlers.FlujoDeCajaHandler>();
 
 var app = builder.Build();
 

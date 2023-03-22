@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PI.EntityModels;
+using PI.Models;
 
 namespace PI.EntityHandlers
 {
@@ -249,5 +250,41 @@ namespace PI.EntityHandlers
 			}
 			return totalSalarios * 12;
 		}
-	}
+
+        // Actualiza el monto de un ingreso existente en la base de datos
+        public async Task ActualizarIngresoAsync(Ingreso ingreso)
+        {
+			var ingresoBD = await base.Contexto.Ingresos.FindAsync(ingreso);
+			ingresoBD.Monto = ingreso.Monto;
+			await base.Contexto.SaveChangesAsync();
+        }
+
+        // Metodo que actualiza un egreso
+        public async Task ActualizarEgresoAsync(Egreso egreso)
+        {
+            var egresoBD = await base.Contexto.Egresos.FindAsync(egreso);
+            egresoBD.Monto = egreso.Monto;
+            await base.Contexto.SaveChangesAsync();
+        }
+
+        // Metodo que obtiene el monto total de las inversiones de todos los meses 
+        public async Task<decimal> ObtenerMontoTotalInversionesAsync(DateTime fechaAnalisis)
+        {
+			return await base.Contexto.Meses.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).SumAsync(x => x.InversionPorMes) ?? 0.0m;
+        }
+
+        // Metodo que obtiene la fraccion de la inversion inicial que posee el mes 
+        public async Task<decimal> ObtenerInversionDelMesAsync(Mes mes)
+        {
+            return (await base.Contexto.Meses.FindAsync(mes.FechaAnalisis, mes.Nombre)).InversionPorMes ?? 0.0m;
+        }
+
+        // Metodo que actualiza la fraccion de la inversion inicial que posee el mes 
+        public async Task ActualizarInversionPorMesAsync(Mes mes)
+        {
+			Mes mesBD = await base.Contexto.Meses.FindAsync(mes.FechaAnalisis, mes.Nombre);
+			mesBD.InversionPorMes = mes.InversionPorMes;
+            await base.Contexto.SaveChangesAsync();
+        }
+    }
 }
