@@ -1,7 +1,9 @@
-﻿@using PI.Handlers
-@using PI.Models
+﻿@using PI.EntityModels
+@using PI.EntityHandlers
 @using PI.Services
 @using System.Globalization
+@inject PI.EntityHandlers.ProductoHandler HandlerProducto;
+@inject PI.EntityHandlers.AnalisisHandler HandlerAnalisis;
 
 
 <div class="container text-center mt-5">
@@ -77,7 +79,7 @@
                 <p class="datos-calculados texto-nombres">Totales</p>
             </div>
             <div class="col col-1" data-label="% Ventas">
-                @getPorcentajeVentasTotal() %
+                @porcentajeVentasTotal %
             </div>
             <div class="col col-1" data-label="Precio">
                 -
@@ -113,7 +115,7 @@
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
                 </div>
                 <div class="col col-1" data-label="% Ventas">
-                    <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.PorcentajeDeVentas" @onfocusout="() => actualizarPorcentajeVentas(productoActual)">%
+                    <input class="effect-1 text-center" type="text" maxlength=16 @bind="productoActual.PorcentajeDeVentas" @onfocusout=" async () => await actualizarPorcentajeVentas(productoActual)">%
                     <span class="focus-border"></span>
                 </div>
                 <div class="col col-1" data-label="Precio">
@@ -131,7 +133,7 @@
                     <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularMargenPonderado(productoActual))</p>
                 </div>
                 <div class="col col-1" data-label="Punto Eq">
-                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijosMensuales,productoActual.Precio,actualizarCostoVariable(productoActual)))</p>
+                    <p class="datos-calculados">@FormatManager.ToFormatoEstadistico(calcularPuntoEquilibrio(montoGastosFijosMensuales,(decimal)productoActual.Precio,actualizarCostoVariable(productoActual)))</p>
                 </div>
                 <div class="col col-1" data-label="Meta">
                     @if (@opcionSwitchBool)
@@ -151,10 +153,10 @@
 @code {
     // Lista de productos de la base de datos
     [Parameter]
-    public List<ProductoModel> productos { get; set; }
+    public List<Producto> productos { get; set; }
 
     [Parameter]
-    public AnalisisModel analisis { get; set; }
+    public Analisis analisis { get; set; }
 
     [Parameter]
     public decimal montoGastosFijosMensuales { get; set; }
@@ -167,7 +169,12 @@
 
     public decimal puntoEquilibrio { get; set; }
 
-    public ProductoHandler productoHandler = new ProductoHandler();
+    private decimal porcentajeVentasTotal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        porcentajeVentasTotal = await getPorcentajeVentasTotal();
+    }
 
     // Se cambia el estado del switch de la representacion de la meta de ventas
     public void switchMetaVentas()
@@ -183,13 +190,12 @@
     }
 
     // Metodo que actualiza la ganancia mensual en la base de datos
-    public void actualizarGananciaMensual()
-    {   
-        AnalisisHandler handler = new AnalisisHandler();
+    public async Task actualizarGananciaMensual()
+    {
         if (FormatManager.ValidarInputDecimal(analisis.GananciaMensual))
         {
             gananciaMensualValida = true;
-            handler.ActualizarGananciaMensual(analisis.GananciaMensual, analisis.FechaCreacion);
+            await HandlerAnalisis.ActualizarGanaciaMensual( Convert.ToDecimal(analisis.GananciaMensual), analisis.FechaCreacion);
         }
         else
         {
@@ -199,40 +205,40 @@
     }
 
     // Metodo que actualiza el porcentaje de ventas de un producto en la base de datos
-    public void actualizarPorcentajeVentas(ProductoModel producto)
+    public async Task actualizarPorcentajeVentas(Producto producto)
     {
-        decimal porcentajeActual = producto.PorcentajeDeVentas;
-        decimal disponible = getPorcentajeVentasDisponible(producto);
+        decimal porcentajeActual = (decimal) producto.PorcentajeDeVentas;
+        decimal disponible = await getPorcentajeVentasDisponible(producto);
 
         if (porcentajeActual >= 0 && porcentajeActual <= disponible)
         {
-            productoHandler.ActualizarPorcentajeVentas(producto, producto.FechaAnalisis);
-
+            await HandlerProducto.ActualizarPorcentajeVentas(producto, producto.FechaAnalisis);
+            porcentajeVentasTotal = await getPorcentajeVentasTotal();
         }
         else
         {
-            producto.PorcentajeDeVentas = productoHandler.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
+            producto.PorcentajeDeVentas = await HandlerProducto.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
         }
     }
 
     // Metodo que retorna el porcentaje de ventas total de un analisis
-    public decimal getPorcentajeVentasTotal()
+    public async Task<decimal> getPorcentajeVentasTotal()
     {
-        return productoHandler.ObtenerPorcentajeVentasTotal(analisis.FechaCreacion);
+        return await HandlerProducto.ObtenerPorcentajeVentasTotal(analisis.FechaCreacion);
     }
 
     // Metodo que calcula y retorna el porcentaje de ventas disponible
-    public decimal getPorcentajeVentasDisponible(ProductoModel producto)
+    public async Task<decimal> getPorcentajeVentasDisponible(Producto producto)
     {
-        return 100 - getPorcentajeVentasTotal() + productoHandler.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
+        return 100 - await getPorcentajeVentasTotal() + await HandlerProducto.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
     }
 
-    public void actualizarComisionDeVentas(ProductoModel producto)
+    public async Task actualizarComisionDeVentas(Producto producto)
     {
-        decimal comisionActual = producto.ComisionDeVentas;
+        decimal comisionActual = (decimal) producto.ComisionDeVentas;
         if (comisionActual >= 0 && comisionActual <=100)
         {
-            productoHandler.ActualizarComision(producto, producto.FechaAnalisis);
+            await HandlerProducto.ActualizarComision(producto, producto.FechaAnalisis);
         }
         else
         {
@@ -240,9 +246,9 @@
         }
     }
 
-    public decimal actualizarCostoVariable(ProductoModel producto) 
+    public decimal actualizarCostoVariable(Producto producto) 
     {
-        decimal comisionSegunPrecio = AnalisisRentabilidadService.CalcularComision(producto.Precio, producto.ComisionDeVentas);
+        decimal comisionSegunPrecio = AnalisisRentabilidadService.CalcularComision((decimal)producto.Precio, (decimal)producto.ComisionDeVentas);
         decimal nuevoCosto = producto.CostoVariable + comisionSegunPrecio;
 
         return nuevoCosto;
@@ -250,12 +256,12 @@
     }
 
     // Metodo que actualiza el precio de un producto en la base de datos
-    public void actualizarPrecio(ProductoModel producto)
+    public async Task actualizarPrecio(Producto producto)
     {  
-        decimal precioActual = producto.Precio;
+        decimal precioActual = (decimal) producto.Precio;
         if (precioActual >= 0)
         {
-            productoHandler.ActualizarPrecio(producto, producto.FechaAnalisis);
+            await HandlerProducto.ActualizarPrecio(producto, producto.FechaAnalisis);
         }
         else
         {
@@ -264,34 +270,34 @@
     }
 
     // Metodo que calcula y retorna el margen de un producto
-    public decimal calcularMargen(ProductoModel productoActual)
+    public decimal calcularMargen(Producto productoActual)
     {
-        return AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, actualizarCostoVariable(productoActual));
+        return AnalisisRentabilidadService.CalcularMargen((decimal)productoActual.Precio, actualizarCostoVariable(productoActual));
     }
 
     // Metodo que calcula y retorna el margen ponderado de un producto
-    public decimal calcularMargenPonderado(ProductoModel productoActual)
+    public decimal calcularMargenPonderado(Producto productoActual)
     {
-        decimal margen = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, actualizarCostoVariable(productoActual));
-        return AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margen);
+        decimal margen = AnalisisRentabilidadService.CalcularMargen((decimal)productoActual.Precio, actualizarCostoVariable(productoActual));
+        return AnalisisRentabilidadService.CalcularMargenPonderado((decimal)productoActual.PorcentajeDeVentas, margen);
     }
 
     // Metodo que calcula y retorna la meta en unidades de un producto
-    public decimal calcularMetaUnidades(ProductoModel productoActual)
+    public decimal calcularMetaUnidades(Producto productoActual)
     {
         decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
-        return AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
+        return AnalisisRentabilidadService.CalcularMetaVentasUnidad((decimal)productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, (decimal)this.analisis.GananciaMensual, margenPonderadoTotal);
     }
 
     // Metodo que calcula y retorna la meta en moneda de un producto
-    public decimal calcularMetaMoneda(ProductoModel productoActual)
+    public decimal calcularMetaMoneda(Producto productoActual)
     {
         decimal margenPonderadoTotal = this.calcularMargenPonderadoTotal();
 
-        decimal metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad(productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, this.analisis.GananciaMensual, margenPonderadoTotal);
+        decimal metaVentasUnidad = AnalisisRentabilidadService.CalcularMetaVentasUnidad((decimal)productoActual.PorcentajeDeVentas, this.montoGastosFijosMensuales, (decimal)this.analisis.GananciaMensual, margenPonderadoTotal);
 
-        return AnalisisRentabilidadService.CalcularMetaVentasMoneda(productoActual.Precio, metaVentasUnidad);
+        return AnalisisRentabilidadService.CalcularMetaVentasMoneda((decimal)productoActual.Precio, metaVentasUnidad);
     }
 
     // Metodo que actualiza la meta en unidades en la base de datos
@@ -299,7 +305,7 @@
     {
         decimal total = 0;
 
-        foreach (ProductoModel productActual in productos)
+        foreach (Producto productActual in productos)
         {
             total += this.calcularMetaUnidades(productActual);
         }
@@ -311,7 +317,7 @@
     {
         decimal total = 0.0m;
 
-        foreach (ProductoModel productActual in productos)
+        foreach (Producto productActual in productos)
         {
             total += this.calcularMetaMoneda(productActual);
         }
@@ -326,12 +332,12 @@
     }
 
     // Se encarga de calcular el punto de equilibrio total de todos los productos.
-    public decimal calcularPuntoEquilibrioTotal(decimal gastosFijos, List<ProductoModel> productos)
+    public decimal calcularPuntoEquilibrioTotal(decimal gastosFijos, List<Producto> productos)
     {
         decimal result = 0;
         for (int i = 0; i < productos.Count; i += 1)
         {
-            result += calcularPuntoEquilibrio(gastosFijos, productos[i].Precio, actualizarCostoVariable(productos[i]));
+            result += calcularPuntoEquilibrio(gastosFijos, (decimal)productos[i].Precio, actualizarCostoVariable(productos[i]));
         }
         return result;
     }
@@ -343,9 +349,9 @@
         decimal margenActual = 0.0m;
         foreach (var productoActual in productos)
         {
-            margenActual = AnalisisRentabilidadService.CalcularMargen(productoActual.Precio, actualizarCostoVariable(productoActual));
+            margenActual = AnalisisRentabilidadService.CalcularMargen((decimal)productoActual.Precio, actualizarCostoVariable(productoActual));
 
-            result += AnalisisRentabilidadService.CalcularMargenPonderado(productoActual.PorcentajeDeVentas, margenActual);
+            result += AnalisisRentabilidadService.CalcularMargenPonderado((decimal)productoActual.PorcentajeDeVentas, margenActual);
         }
         return result;
     }
