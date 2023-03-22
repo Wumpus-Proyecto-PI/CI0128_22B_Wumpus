@@ -19,11 +19,11 @@ namespace PI.Controllers
         private AnalisisHandler? AnalisisHandler = null;
         private NegocioHandler? NegocioHandler = null;
 
-        public GastoFijoController(DataBaseContext contexto)
+        public GastoFijoController(GastoFijoHandler gastoFijoHandler, AnalisisHandler analisisHandler, NegocioHandler negocioHandler)
         {
-            GastoFijoHandler = new(contexto);
-            AnalisisHandler = new(contexto);
-            NegocioHandler = new(contexto);
+            GastoFijoHandler = gastoFijoHandler;
+            AnalisisHandler = analisisHandler;
+            NegocioHandler = negocioHandler;
         }
 
         // Retorna una lista de gastos fijos que pertenecen al análisis con la fecha pasada por parámetro.

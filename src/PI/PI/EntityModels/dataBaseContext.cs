@@ -345,7 +345,7 @@ namespace PI.EntityModels
 
             modelBuilder.Entity<Ingreso>(entity =>
             {
-                entity.HasKey(e => new { e.Mes, e.FechaAnalisis, e.Tipo})
+                entity.HasKey(e => new { e.Mes, e.FechaAnalisis, e.Tipo })
                     .HasName("PK_Ingreso");
 
                 entity.ToTable("INGRESO");
