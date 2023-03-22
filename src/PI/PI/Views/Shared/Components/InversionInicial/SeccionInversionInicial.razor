@@ -1,8 +1,9 @@
-﻿@using PI.Models;
-@using PI.Handlers;
+﻿@using PI.EntityModels;
+@using PI.EntityHandlers;
 @using System.Globalization
 @using PI.Services
 @inject NavigationManager NavigationManager;
+@inject PI.EntityHandlers.InversionInicialHandler InversionInicialHandler; 
 
 <!-- Representa la sección de la inversión inicial -->
 
@@ -23,9 +24,9 @@
 
     <div class="container-fluid d-flex flex-wrap justify-content-center p-1">
 	    <!-- Crea las tarjetas -->
-        @foreach (GastoInicialModel gastoInicial in GastosIniciales)
+        @foreach (InversionInicial gastoInicial in GastosIniciales)
 	    {
-            <div class="gasto-clickeable" @onclick="() => AsignarGastoActivo(gastoInicial)">
+            <div class="gasto-clickeable" @onclick="async() => await AsignarGastoActivo(gastoInicial)">
 			    <div>
 				    <CardGastoInicial GastoInicial=gastoInicial></CardGastoInicial>
 			    </div>
@@ -37,7 +38,7 @@
         <div class="boton-agregar"     
             @onmouseover="() => Hover(1)" 
             @onmouseout="() => HoverOut(1)"
-            @onclick="AgregarNuevoGasto">
+            @onclick="async() => await AgregarNuevoGasto()">
             <a>
                 @if (hoverAgregar == false)
                 {
@@ -51,7 +52,7 @@
 @if (PopupVisible == true)
 {
     @* Background oscuro cuando abre popup *@
-    <div class="overlay position-absolute" @onclick="cambiarEstadoPopup"></div>
+    <div class="overlay position-absolute" @onclick="async() => await cambiarEstadoPopup()"></div>
 
     @* Tarjeta del popup *@
     <section class="card card-popup position-fixed d-flex justify-content-center align-items-center align-self-auto position-absolute p-3">
@@ -78,7 +79,7 @@
                     <div class="d-flex m-2">
                     @*Form para agregar el nombre del gasto variable*@
                     <label for="monto-gasto">Monto</label>
-                        <input id="monto-gasto" type="number" step="any" min="0" @bind="GastoInicialActivo.Monto" placeholder="Monto del gasto">
+                        <input id="monto-gasto" type="number" step="any" min="0" @bind="GastoInicialActivo.Valor" placeholder="Monto del gasto">
                     </div>
                     <span class="msg-error">
                         @((MarkupString)ErrorMonto) @*Mensaje de error*@
@@ -90,7 +91,7 @@
                     @*Botón borrar*@
                     @if (GastoEsSeleccionado)
                     {
-                        <div id="boton-eliminar" class="boton-guardar-eliminar" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="EliminarGastoInicial">
+                        <div id="boton-eliminar" class="boton-guardar-eliminar" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await EliminarGastoInicial()">
                             <a>
                                 @if (hoverEliminar == false)
                                 {
@@ -103,7 +104,7 @@
                     }
                     @*Botón guardar*@
 
-                    <div class="boton-guardar-eliminar" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="guardarGastoInicial">
+                    <div class="boton-guardar-eliminar" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await guardarGastoInicial()">
                         <a>
                             @if (hoverGuardar == false)
                             {
@@ -117,7 +118,7 @@
 			</div>
 			@* Permite cerrar al popup con una "x" *@
 			<div id="salir-popup">
-				<img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="cambiarEstadoPopup">
+				<img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="async() => await cambiarEstadoPopup()">
 			</div>
 		</div>
 	</section>
@@ -127,7 +128,7 @@
 @code {
     // Gastos iniciales del análisis.
     [Parameter]
-    public List<GastoInicialModel>? GastosIniciales { get; set; }
+    public List<InversionInicial>? GastosIniciales { get; set; }
 
     // Fecha del análisis al que pertenecen los gastos iniciales
     [Parameter]
@@ -137,9 +138,7 @@
     public decimal montoTotal { get; set; }
 
     // Gasto inicial que es accedido/clickeado.
-    public GastoInicialModel? GastoInicialActivo = null;
-
-    InversionInicialHandler inversionInicialHandler = new InversionInicialHandler();
+    public InversionInicial? GastoInicialActivo = null;
 
     // Strings que muestran los mensajes de error con respecto al nombre y monto
     public string ErrorNombre = "";
@@ -165,51 +164,57 @@
     public bool PopupVisible { get; set; } = false;
 
     // Cambia el popup de visible a invisible y viceversa
-    public void cambiarEstadoPopup(){
-        ActualizarMontoTotal();
+    public async Task<decimal> cambiarEstadoPopup(){
+        this.montoTotal = await ActualizarMontoTotal();
         PopupVisible = !PopupVisible;
         if (PopupVisible == false) {
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
+        return montoTotal; 
     }
 
     // Actualiza el monto total de los gastos iniciales.
-    public decimal ActualizarMontoTotal() {
-        return inversionInicialHandler.ObtenerMontoTotal(fechaAnalisis);
+    public async Task<decimal> ActualizarMontoTotal() {
+        DateTime fechaFormateada = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+        return await InversionInicialHandler.ObtenerMontoTotalAsync(fechaFormateada);
     }
     // Asigna al atributo gastoActivo el gasto que ha sido clickeado.
-    public void AsignarGastoActivo(GastoInicialModel GastoSeleccionado)
+    public async Task<decimal> AsignarGastoActivo(InversionInicial GastoSeleccionado)
     {
         GastoInicialActivo = GastoSeleccionado;
         NombreAnterior = GastoSeleccionado.Nombre;
         GastoEsSeleccionado = true;
         ErrorNombre = "";
         ErrorMonto = "";
-        cambiarEstadoPopup();
+        return await cambiarEstadoPopup();
     }
 
     // Se invoca cuando clickean el botón de agregar. Crea un nuevo modelo y abre el popup.
-    public void AgregarNuevoGasto()
+    public async Task<decimal> AgregarNuevoGasto()
     {
-        cambiarEstadoPopup();
-        GastoInicialActivo = new GastoInicialModel();
+        GastoInicialActivo = new InversionInicial();
+        return await cambiarEstadoPopup();
     }
 
     // Invoca la inserción a la base de datos del gasto activo.
-    public void guardarGastoInicial() {
+    public async Task<int> guardarGastoInicial() {
+        DateTime fechaFormateada = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+        int filasAfectadas = 0;
+
         if (SonDatosValidos()) {
             // Elimina el gasto de la base, de ser uno existente.
             if (GastoEsSeleccionado) {
-                inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
+                await InversionInicialHandler.EliminarGastoInicialAsync(fechaFormateada, NombreAnterior);
             }
-            GastoInicialActivo.FechaAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-            inversionInicialHandler.IngresarGastoInicial(GastoInicialActivo);
+            GastoInicialActivo.FechaAnalisis = fechaFormateada;
+            filasAfectadas = await InversionInicialHandler.IngresarGastoInicialAsync(GastoInicialActivo);
             
             GastoEsSeleccionado = false;
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
+        return filasAfectadas; 
     }
 
     // Realiza la validación de los datos ingresados por el usuario.
@@ -231,7 +236,7 @@
         }
 
         // Valida el número
-        if (!FormatManager.ValidarInputDecimal(GastoInicialActivo.Monto))
+        if (!FormatManager.ValidarInputDecimal(GastoInicialActivo.Valor))
         {
             resultado = false;
             ErrorMonto = "Error: el monto debe ser un número positivo y tener 18 dígitos como máximo";
@@ -241,10 +246,13 @@
     }
 
     // Invoca la eliminación a la base de datos del gasto activo.
-    public void EliminarGastoInicial() {
-        inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
+    public async Task<int> EliminarGastoInicial() {
+        DateTime fechaFormateada = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+        int filasAfectadas = await InversionInicialHandler.EliminarGastoInicialAsync(fechaFormateada, NombreAnterior);
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+
+        return filasAfectadas; 
     }
     // método para controlar el hover de los botones guardar y agregar
     public void Hover(int action)
