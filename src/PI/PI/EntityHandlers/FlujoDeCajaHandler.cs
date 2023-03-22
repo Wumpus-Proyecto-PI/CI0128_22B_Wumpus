@@ -248,7 +248,7 @@ namespace PI.EntityHandlers
         // Actualiza el monto de un ingreso existente en la base de datos
         public async Task ActualizarIngresoAsync(Ingreso ingreso)
         {
-			var ingresoBD = await base.Contexto.Ingresos.FindAsync(ingreso);
+			var ingresoBD = await base.Contexto.Ingresos.FindAsync(ingreso.Mes, ingreso.FechaAnalisis, ingreso.Tipo);
 			ingresoBD.Monto = ingreso.Monto;
 			await base.Contexto.SaveChangesAsync();
         }
