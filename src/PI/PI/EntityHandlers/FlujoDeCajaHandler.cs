@@ -42,7 +42,8 @@ namespace PI.EntityHandlers
 				GenerarMesesIngresos("contado", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("credito", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("otros", fechaAnalisis, ingresos);
-				return await base.Contexto.SaveChangesAsync();
+                await base.Contexto.Ingresos.AddRangeAsync(ingresos);
+                return await base.Contexto.SaveChangesAsync();
 			}
 			return 0;
 		}
@@ -55,7 +56,8 @@ namespace PI.EntityHandlers
 				GenerarMesesEgresos("contado", fechaAnalisis, egresos);
 				GenerarMesesEgresos("credito", fechaAnalisis, egresos);
 				GenerarMesesEgresos("otros", fechaAnalisis, egresos);
-				return await base.Contexto.SaveChangesAsync();
+                await base.Contexto.Egresos.AddRangeAsync(egresos);
+                return await base.Contexto.SaveChangesAsync();
 			}
 			return 0;
 		}
