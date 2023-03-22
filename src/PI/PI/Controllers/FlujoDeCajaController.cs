@@ -30,9 +30,9 @@ namespace PI.Controllers
 			decimal gananciaMensual = await FlujoDeCajaHandler.ObtenerGananciaMensual(fechaCreacionAnalisis);
 
 			// Convierte los porcentajes a valores válidos (divide entre 100).
-			// Configuracion configuracionAnalisis = await FlujoDeCajaHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
-			decimal seguroSocial =  2.0m;
-			decimal prestaciones = 3.0m;
+			Configuracion configuracionAnalisis = await FlujoDeCajaHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
+			decimal seguroSocial = configuracionAnalisis.PorcentajeSs / 12 ?? 0.0m;
+			decimal prestaciones = configuracionAnalisis.PorcentajePl / 12 ?? 0.0m ;
 
 			// Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
 			int escrituras = await FlujoDeCajaHandler.ActualizarGastosPredeterminadosAsync(fechaCreacionAnalisis, seguroSocial, prestaciones);
@@ -51,7 +51,6 @@ namespace PI.Controllers
 			ViewBag.Iniciado = await FlujoDeCajaHandler.ObtenerTipoAnalisisAsync(fechaCreacionAnalisis);
 
 			ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
-			ViewBag.MetaDeVentasMensual = 0.0m;
             ViewData["NombreNegocio"] = await FlujoDeCajaHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
             ViewBag.InversionInicial = await FlujoDeCajaHandler.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
 
