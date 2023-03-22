@@ -203,7 +203,8 @@
             if (GastoEsSeleccionado) {
                 inversionInicialHandler.EliminarGastoInicial(fechaAnalisis, NombreAnterior);
             }
-            inversionInicialHandler.IngresarGastoInicial(fechaAnalisis, GastoInicialActivo);
+            GastoInicialActivo.FechaAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+            inversionInicialHandler.IngresarGastoInicial(GastoInicialActivo);
             
             GastoEsSeleccionado = false;
             // se recarga la página para que se vean los cambios
