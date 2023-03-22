@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PI.EntityModels
 {
@@ -9,7 +10,7 @@ namespace PI.EntityModels
         public DateTime FechaAnalisis { get; set; }
         public decimal? Monto { get; set; }
         public int Orden { get; set; }
-
+        [JsonIgnore]
         public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
     }
 }
