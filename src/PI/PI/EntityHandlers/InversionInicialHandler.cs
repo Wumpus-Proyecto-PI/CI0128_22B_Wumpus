@@ -36,7 +36,7 @@ namespace PI.EntityHandlers
         // Recibe la fecha del análisis del que se quiere obtener la sumatoria de los valores de los gastos iniciales del análisis pasado por parámetro.
         public async Task<decimal> ObtenerMontoTotalAsync(DateTime fechaAnalisis)
         {
-            var total = await base.Contexto.InversionInicial.Where(x => x.FechaAnalisis == fechaAnalisis).SumAsync(x => x.Valor)??0.0m;
+            var total = await base.Contexto.InversionInicial.Where(x => x.FechaAnalisis == fechaAnalisis).SumAsync(x => x.Valor) ?? 0.0m;
 
             return total;
         }
