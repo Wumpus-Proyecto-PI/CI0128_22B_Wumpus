@@ -8,11 +8,9 @@ namespace PI.Controllers
     {
         public InversionInicialHandler? InversionInicialHandler = null;
 
-        public NegocioHandler? NegocioHandler = null; 
-        public InversionInicialController(InversionInicialHandler inversionInicialHandler, NegocioHandler negocioHandler)
+        public InversionInicialController(InversionInicialHandler inversionInicialHandler)
         {
-            InversionInicialHandler = inversionInicialHandler;
-            NegocioHandler = negocioHandler; 
+            InversionInicialHandler = inversionInicialHandler; 
         }
 
         // Recibe la fecha del análisis del que se quiere obtener los gastos iniciales.
@@ -31,7 +29,7 @@ namespace PI.Controllers
             ViewBag.BotonRetorno = "Progreso";
 
            
-            ViewData["NombreNegocio"] = await NegocioHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
+            ViewData["NombreNegocio"] = await InversionInicialHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
             ViewBag.montoTotal = await InversionInicialHandler.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
 
             List<InversionInicial> inversionInicialList = await InversionInicialHandler.ObtenerGastosInicialesAsync(fechaCreacionAnalisis);
