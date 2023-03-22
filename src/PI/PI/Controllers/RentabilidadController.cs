@@ -9,18 +9,10 @@ namespace PI.Controllers
     {
 
         private ProductoHandler? ProductoHandler = null;
-        private AnalisisHandler? AnalisisHandler = null;
-        private NegocioHandler? NegocioHandler = null;
-        private GastoFijoHandler? GastoFijoHandler = null;
 
-        public RentabilidadController(
-            NegocioHandler negocioHandler, ProductoHandler productoHandler,
-            AnalisisHandler analisisHandler, GastoFijoHandler gastoFijoHandler)
+        public RentabilidadController( ProductoHandler productoHandler )
         {
             ProductoHandler = productoHandler;
-            AnalisisHandler = analisisHandler;
-            NegocioHandler = negocioHandler;
-            GastoFijoHandler = gastoFijoHandler;
         }
 
         // // Retorna una lista con todos los modelos de producto existentes y el título del paso.
@@ -31,17 +23,17 @@ namespace PI.Controllers
 
 
             List<Producto> productos = await ProductoHandler.ObtenerProductosAsync(fechaConversion);
-            Analisis model = await AnalisisHandler.ObtenerUnAnalisis(ViewBag.fechaAnalisis);
+            Analisis model = await ProductoHandler.ObtenerUnAnalisis(ViewBag.fechaAnalisis);
             ViewBag.AnalisisActual = model;
 
-            decimal totalAnualGastosFijos = await GastoFijoHandler.ObtenerTotalAnualAsync(fechaConversion);
+            decimal totalAnualGastosFijos = await ProductoHandler.ObtenerTotalAnualAsync(fechaConversion);
             ViewBag.MontoGastosFijosMensuales = AnalisisRentabilidadService.CalcularGastosFijosTotalesMensuales(totalAnualGastosFijos);
             // para que se muestre el boton de volver al analisis
             ViewBag.BotonRetorno = "Progreso";
 
             // asignamos el nombre del negocio en la vista
             // este se extrae de la base de datos con la fecha del análisis
-            ViewData["NombreNegocio"] = await NegocioHandler.ObtenerNombreNegocioAsync(fechaConversion);
+            ViewData["NombreNegocio"] = await ProductoHandler.ObtenerNombreNegocioAsync(fechaConversion);
 
             ViewData["TituloPaso"] = "Análisis de rentabilidad";
             // se asigna el titulo en la pestaña del cliente
