@@ -1,9 +1,11 @@
 ﻿@using BlazorCleave.Data
 @using PI.Services;
-@using PI.Handlers
-@using PI.Models
+@using PI.EntityHandlers
+@using PI.EntityModels
 @using BlazorCleave
 @using System.Globalization
+@inject PI.EntityHandlers.FlujoDeCajaHandler FlujoDeCajaHandler;
+@inject FlujoCajaService FlujoCajaService;
 
 <ul class="responsive-table">
 
@@ -43,7 +45,7 @@
         @foreach (var mes in Meses)
         {
             <div class="col col-1">
-                @CalcularIngresoMensualTotal(mes.NombreMes)
+                @(async () => await CalcularIngresoMensualTotalAsync(mes.Nombre))
             </div>
         }
     </li>
@@ -59,8 +61,7 @@
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)" 
                     @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => ActualizarIngreso(ingresoActual)"
-                 />
+                    @onfocusout="async () => await ActualizarIngresoAsync(ingresoActual)" />
                     <span class="focus-border"></span>
             </div>
         }
@@ -77,7 +78,7 @@
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)"
                     @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => ActualizarIngreso(ingresoActual)" />
+                    @onfocusout="async () => await ActualizarIngresoAsync(ingresoActual)" />
                 <span class="focus-border"></span>
             </div>
         }
@@ -94,7 +95,7 @@
                 <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                     class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(ingresoActual.Monto)"
                     @onchange="n => ingresoActual.Monto = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="() => ActualizarIngreso(ingresoActual)" />
+                    @onfocusout="async () => await ActualizarIngresoAsync(ingresoActual)" />
                 <span class="focus-border"></span>
             </div>
         }
@@ -103,38 +104,30 @@
 </ul>
 
 @code {
+    [Parameter]
+    public List<Ingreso> Ingresos { get; set; }
 
     [Parameter]
-    public List<IngresoModel> Ingresos { get; set; }
-
-    [Parameter]
-    public List<MesModel> Meses { get; set; }
+    public List<Mes> Meses { get; set; }
 
     // Lista con el monto monetario (decimal) del flujo mensual de cada mes.
     [Parameter]
     public List<string> FlujoMensual { get; set; }
 
-    public FlujoDeCajaHandler FlujoDeCajaHandler = new FlujoDeCajaHandler();
-
-
     // Método que retorna un string con el total del monto de ingresos de un determinado mes
-    public string CalcularIngresoMensualTotal(string mes)
+    public async Task<string> CalcularIngresoMensualTotalAsync(string mes)
     {
-        return FormatManager.ToFormatoEstadistico(FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMes(mes, Ingresos[0].FechaAnalisis));
+        return FormatManager.ToFormatoEstadistico(await FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMesAsync(mes, Ingresos[0].FechaAnalisis));
     }
 
     // Método que actualiza un ingreso en la base de datos
-    public void ActualizarIngreso(IngresoModel ingreso)
+    public async Task ActualizarIngresoAsync(Ingreso ingreso)
     {
-        if (ingreso.Monto >= 0)
-        {
-            FlujoDeCajaHandler.ActualizarIngreso(ingreso);
-        }
-        else
+        if (ingreso.Monto < 0)
         {
             ingreso.Monto = 0.0m;
-            FlujoDeCajaHandler.ActualizarIngreso(ingreso);
         }
-        FlujoMensual = FlujoCajaService.ActualizarFlujosMensuales(Meses);
+        await FlujoDeCajaHandler.ActualizarIngresoAsync(ingreso);
+        await FlujoCajaService.ActualizarFlujoMensualAsync(Meses, FlujoMensual);
     }
 }

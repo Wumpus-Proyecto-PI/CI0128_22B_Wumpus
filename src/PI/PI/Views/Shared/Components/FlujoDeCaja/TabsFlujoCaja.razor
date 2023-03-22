@@ -1,22 +1,23 @@
-﻿@using PI.Handlers
-@using PI.Models
+﻿@using PI.EntityHandlers
+@using PI.EntityModels
 @using PI.Services
 @using BlazorCleave
 @using BlazorCleave.Data
 @using System.Globalization
 @using PI.Views.Shared.Components.FlujoDeCaja
+@inject FlujoCajaService FlujoCajaService;
 
 <div id="contenedor-tabs" class="my-5">
     <nav>
         <div class="nav nav-tabs tabs-tablas" id="nav-tab" role="tablist">
             <button class="nav-link active tab-flujo" id="nav-ingresos-tab" data-bs-toggle="tab"
                     data-bs-target="#ingresos" type="button" role="tab" aria-controls="nav-ingresos"
-                    aria-selected="true" @onclick="actualizarFlujoMensual">
+                    aria-selected="true" @onclick="async() => await ActualizarFlujoMensualAsync()">
                 Ingresos
             </button>
             <button class="nav-link tab-flujo mx-1" id="nav-egresos-tab" data-bs-toggle="tab"
                     data-bs-target="#egresos" type="button" role="tab" aria-controls="nav-egresos"
-                    aria-selected="false" @onclick="actualizarFlujoMensual">
+                    aria-selected="false" @onclick="async() => await ActualizarFlujoMensualAsync()">
                 Egresos
             </button>
         </div>
@@ -39,13 +40,13 @@
 </div>
 @code {
     [Parameter]
-    public List<GastoFijoModel> gastosFijos { get; set; }
+    public List<GastoFijo> gastosFijos { get; set; }
 
     [Parameter]
-    public List<EgresoModel> egresos { get; set; }
+    public List<Egreso> egresos { get; set; }
 
     [Parameter]
-    public List<IngresoModel> ingresos { get; set; }
+    public List<Ingreso> ingresos { get; set; }
 
     [Parameter]
     public bool estadoIniciado { get; set; }
@@ -54,12 +55,17 @@
     public decimal inversionInicial { get; set; }
 
     [Parameter]
-    public List<MesModel> meses { get; set; }
+    public List<Mes> meses { get; set; }
 
     [Parameter]
     public List<string> flujoMensual { get; set; }
 
-    public void actualizarFlujoMensual(){
-        flujoMensual = FlujoCajaService.ActualizarFlujosMensuales(meses);
+    public async Task ActualizarFlujoMensualAsync(){
+        await FlujoCajaService.ActualizarFlujoMensualAsync(meses, flujoMensual);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ActualizarFlujoMensualAsync();
     }
 }

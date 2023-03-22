@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PI.Areas.Identity.Data;
 using PI.Data;
-using Microsoft.ApplicationInsights.AspNetCore;
 using PI.EntityHandlers;
 using PI.EntityModels;
-using PI.Services;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +42,9 @@ builder.Services.AddScoped<PI.EntityHandlers.AnalisisHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.NegocioHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.GastoFijoHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.ProductoHandler>();
+builder.Services.AddScoped<PI.EntityHandlers.FlujoDeCajaHandler>();
+builder.Services.AddScoped<PI.Services.FlujoCajaService>();
+builder.Services.AddScoped<PI.EntityHandlers.InversionInicialHandler>();
 
 
 

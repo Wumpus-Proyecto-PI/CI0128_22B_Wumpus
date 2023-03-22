@@ -12,18 +12,14 @@ using PI.EntityHandlers;
 namespace PI.Controllers
 {
     // Controlador del gasto fijo.  Administra el traspaso de acciones entre la vista y el modelo/bd referentes al gasto fijo.
-    public class GastoFijoController : Controller
+    public class GastoFijoController : ManejadorUsuariosController
     {
 
         private GastoFijoHandler? GastoFijoHandler = null;
-        private AnalisisHandler? AnalisisHandler = null;
-        private NegocioHandler? NegocioHandler = null;
 
-        public GastoFijoController(GastoFijoHandler gastoFijoHandler, AnalisisHandler analisisHandler, NegocioHandler negocioHandler)
+        public GastoFijoController(GastoFijoHandler gastoFijoHandler)
         {
             GastoFijoHandler = gastoFijoHandler;
-            AnalisisHandler = analisisHandler;
-            NegocioHandler = negocioHandler;
         }
 
         // Retorna una lista de gastos fijos que pertenecen al análisis con la fecha pasada por parámetro.
@@ -41,7 +37,7 @@ namespace PI.Controllers
             ViewBag.fechaAnalisis = fechaConversion;
 
             // Convierte los porcentajes a valores válidos (divide entre 100).
-            Configuracion configuracionAnalisis = await AnalisisHandler.ObtenerConfigAnalisisAsync(fechaConversion);
+            Configuracion configuracionAnalisis = await GastoFijoHandler.ObtenerConfigAnalisisAsync(fechaConversion);
             decimal seguroSocial = (decimal)(configuracionAnalisis.PorcentajeSs / 100);
             decimal prestaciones = (decimal)(configuracionAnalisis.PorcentajePl / 100);
 
@@ -50,7 +46,7 @@ namespace PI.Controllers
 
             // Actualiza la sumatoria de los gastos fijos. (anual)
             ViewBag.totalAnual = await GastoFijoHandler.ObtenerTotalAnualAsync(fechaConversion);
-            ViewData["NombreNegocio"] = await NegocioHandler.ObtenerNombreNegocioAsync(fechaConversion);
+            ViewData["NombreNegocio"] = await GastoFijoHandler.ObtenerNombreNegocioAsync(fechaConversion);
 
             List<GastoFijo> gastos = await GastoFijoHandler.ObtenerGastosFijosAsync(fechaConversion);
 
