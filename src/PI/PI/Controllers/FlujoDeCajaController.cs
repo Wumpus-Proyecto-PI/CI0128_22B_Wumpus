@@ -35,7 +35,7 @@ namespace PI.Controllers
 			decimal prestaciones = configuracionAnalisis.PorcentajePl / 12 ?? 0.0m ;
 
 			// Actualiza los gastos fijos de la estructura organizativa para mostrarlos en la sección de flujo de caja.
-			int escrituras = await FlujoDeCajaHandler.ActualizarGastosPredeterminadosAsync(fechaCreacionAnalisis, seguroSocial, prestaciones);
+			await FlujoDeCajaHandler.ActualizarGastosPredeterminadosAsync(fechaCreacionAnalisis, seguroSocial, prestaciones);
 
 			// Datos enviados a la vista
 			ViewData["Title"] = "Flujo de caja";
@@ -47,7 +47,6 @@ namespace PI.Controllers
 			ViewBag.fechaAnalisis = fechaCreacionAnalisis;
 			ViewBag.BotonRetorno = "Progreso";
 			ViewBag.GastosFijos = await GastoFijoHandler.ObtenerGastosFijosAsync(fechaCreacionAnalisis);
-			ViewBag.GastosFijos = await FlujoDeCajaHandler.ObtenerGastosFijosAsync(fechaCreacionAnalisis);
 			ViewBag.Iniciado = await FlujoDeCajaHandler.ObtenerTipoAnalisisAsync(fechaCreacionAnalisis);
 
 			ViewBag.MetaDeVentasMensual = AnalisisRentabilidadService.calcularTotalMetaMoneda(productos, totalGastosFijos, gananciaMensual);
