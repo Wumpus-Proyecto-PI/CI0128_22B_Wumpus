@@ -269,11 +269,6 @@ namespace PI.EntityModels
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("monto");
 
-                entity.HasOne(d => d.FechaAnalisisNavigation)
-                    .WithMany(p => p.Egresos)
-                    .HasForeignKey(d => d.FechaAnalisis)
-                    .HasConstraintName("FK_EGRESO_FECHA_DELETE");
-
                 entity.HasOne(d => d.Me)
                     .WithMany(p => p.Egresos)
                     .HasForeignKey(d => new { d.Mes, d.FechaAnalisis })

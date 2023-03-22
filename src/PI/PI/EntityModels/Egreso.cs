@@ -9,8 +9,6 @@ namespace PI.EntityModels
         public DateTime FechaAnalisis { get; set; }
         public string Tipo { get; set; } = null!;
         public decimal Monto { get; set; }
-
-        public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
         public virtual Mes Me { get; set; } = null!;
     }
 }
