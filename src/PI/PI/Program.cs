@@ -31,13 +31,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 0;
 });
 
-/*builder.Services.Configure<JsonSerializer>(options =>
-{
-    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-});*/
-
-// builder.Services.Configure<JsonSerializerOptions>(options => options.ReferenceHandler = ReferenceHandler.Preserve);
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
@@ -50,6 +43,8 @@ builder.Services.AddScoped<PI.EntityHandlers.NegocioHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.GastoFijoHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.ProductoHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.FlujoDeCajaHandler>();
+builder.Services.AddScoped<PI.Services.FlujoCajaService>();
+
 
 var app = builder.Build();
 
