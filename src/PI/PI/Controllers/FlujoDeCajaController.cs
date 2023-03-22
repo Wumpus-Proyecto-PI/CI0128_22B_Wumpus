@@ -9,6 +9,8 @@ namespace PI.Controllers
 	{
 		FlujoDeCajaHandler? FlujoDeCajaHandler = null;
 		GastoFijoHandler? GastoFijoHandler = null;
+        public const int CantidadMeses = 6;
+
 		public FlujoDeCajaController(FlujoDeCajaHandler? flujoDeCajaHandler, GastoFijoHandler? gastoFijoHandler)
 		{
 			FlujoDeCajaHandler = flujoDeCajaHandler;
@@ -43,7 +45,7 @@ namespace PI.Controllers
 			ViewBag.Ingresos = await FlujoDeCajaHandler.ObtenerIngresosAsync(fechaCreacionAnalisis);
 			ViewBag.Egresos = await FlujoDeCajaHandler.ObtenerEgresosAsync(fechaCreacionAnalisis);
 			ViewBag.Meses = meses;
-			ViewBag.flujoMensual = new List<string>(6);
+			ViewBag.flujoMensual = Enumerable.Repeat(string.Empty, CantidadMeses).ToList();
 			ViewBag.fechaAnalisis = fechaCreacionAnalisis;
 			ViewBag.BotonRetorno = "Progreso";
 			ViewBag.GastosFijos = await GastoFijoHandler.ObtenerGastosFijosAsync(fechaCreacionAnalisis);
