@@ -30,7 +30,7 @@ namespace PI.Controllers
 			decimal gananciaMensual = await FlujoDeCajaHandler.ObtenerGananciaMensual(fechaCreacionAnalisis);
 
 			// Convierte los porcentajes a valores válidos (divide entre 100).
-			Configuracion configuracionAnalisis = await FlujoDeCajaHandler.ObtenerConfigAnalisis(fechaCreacionAnalisis);
+			Configuracion configuracionAnalisis = await FlujoDeCajaHandler.ObtenerConfigAnalisisAsync(fechaCreacionAnalisis);
 			decimal seguroSocial = configuracionAnalisis.PorcentajeSs / 12 ?? 0.0m;
 			decimal prestaciones = configuracionAnalisis.PorcentajePl / 12 ?? 0.0m ;
 

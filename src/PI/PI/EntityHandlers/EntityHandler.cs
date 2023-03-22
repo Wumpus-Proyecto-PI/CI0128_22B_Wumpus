@@ -50,12 +50,20 @@ namespace PI.EntityHandlers
 			return tipo;
 		}
 
-		#endregion
+        // Obtiene la configuracion del analisis especificado
+        // (Retorna una clase con la configuracion del analisis | Parametros: fecha del analisis)
+        public async Task<Configuracion> ObtenerConfigAnalisisAsync(DateTime fechaAnalisis)
+        {
+            Configuracion config = await Contexto.Configuracion.FindAsync(fechaAnalisis);
+            return config;
+        }
 
-		#region NegocioHandler
+        #endregion
 
-		// TODO: Cambiar nombre del metodo a ObtenerNegocioDeAnalisis
-		public async Task<string> ObtenerNombreNegocioAsync(DateTime fechaAnalisis)
+        #region NegocioHandler
+
+        // TODO: Cambiar nombre del metodo a ObtenerNegocioDeAnalisis
+        public async Task<string> ObtenerNombreNegocioAsync(DateTime fechaAnalisis)
 		{
 			var nombreNegocio = from negocio in Contexto.Negocios
 								join analisis in Contexto.Analisis

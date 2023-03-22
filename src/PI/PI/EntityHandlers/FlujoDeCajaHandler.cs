@@ -88,14 +88,6 @@ namespace PI.EntityHandlers
 			return (await base.Contexto.Analisis.FindAsync(fechaAnalisis)).GananciaMensual ?? 0.0m;
 		}
 
-		// Obtiene la configuracion del analisis especificado
-		// (Retorna una clase con la configuracion del analisis | Parametros: fecha del analisis)
-		public async Task<Configuracion> ObtenerConfigAnalisis(DateTime fechaAnalisis)
-		{
-			Configuracion config = await base.Contexto.Configuracion.FindAsync(fechaAnalisis);
-			return config;
-		}
-
 		public async Task<int> ActualizarGastosPredeterminadosAsync(DateTime fechaConversion, decimal seguroSocial, decimal prestaciones)
 		{
 			int escrituras = 0;
