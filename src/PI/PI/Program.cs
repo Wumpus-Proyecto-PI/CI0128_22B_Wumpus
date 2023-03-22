@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PI.Areas.Identity.Data;
 using PI.Data;
-using Microsoft.ApplicationInsights.AspNetCore;
 using PI.EntityHandlers;
 using PI.EntityModels;
-using PI.Services;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +30,13 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
 });
+
+/*builder.Services.Configure<JsonSerializer>(options =>
+{
+    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+});*/
+
+// builder.Services.Configure<JsonSerializerOptions>(options => options.ReferenceHandler = ReferenceHandler.Preserve);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
