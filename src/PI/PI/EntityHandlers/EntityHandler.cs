@@ -29,22 +29,26 @@ namespace PI.EntityHandlers
 			return await Contexto.GastosFijos.Where(gastoFijo => gastoFijo.FechaAnalisis == fechaAnalisis).ToListAsync();
 		}
 
-		public async Task<decimal> ObtenerTotalAnualAsync(string nombreMes, DateTime fechaAnalisis)
+		public async Task<decimal> ObtenerTotalAnualAsync(DateTime fechaAnalisis)
 		{
 			return await Contexto.GastosFijos.Where(gastoFijo => gastoFijo.FechaAnalisis == fechaAnalisis).SumAsync(gastoFijo => gastoFijo.Monto) ?? 0.0m;
 		}
 
 		public async Task<decimal> ObtenerTotalMensualAsync(string nombreMes, DateTime fechaAnalisis)
 		{
-			return await ObtenerTotalAnualAsync(nombreMes, fechaAnalisis) / 12;
+			return await ObtenerTotalAnualAsync(fechaAnalisis) / 12;
 		}
 
-		#endregion
+        #endregion
 
-		#region AnalisisHandler
+        #region AnalisisHandler
 
+        public async Task<Analisis> ObtenerUnAnalisis(DateTime fechaCreacion)
+        {
+            return await Contexto.Analisis.AsNoTracking().Where(x => x.FechaCreacion == fechaCreacion).FirstOrDefaultAsync();
+        }
 
-		public async Task<bool> ObtenerTipoAnalisisAsync(DateTime fechaAnalisis)
+        public async Task<bool> ObtenerTipoAnalisisAsync(DateTime fechaAnalisis)
 		{
 			bool tipo = Convert.ToBoolean((await Contexto.Configuracion.FindAsync(fechaAnalisis)).TipoNegocio);
 			return tipo;

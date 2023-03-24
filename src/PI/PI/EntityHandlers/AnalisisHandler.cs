@@ -9,11 +9,6 @@ namespace PI.EntityHandlers
     {
         public AnalisisHandler(DataBaseContext context) : base(context) { }
 
-        public async Task<Analisis> ObtenerUnAnalisis(DateTime fechaCreacion)
-        {
-            return await Contexto.Analisis.AsNoTracking().Where(x => x.FechaCreacion == fechaCreacion).FirstOrDefaultAsync();
-        }
-
         public async Task<Analisis> ObtenerAnalisisMasReciente(int idNegocio)
         {
 
