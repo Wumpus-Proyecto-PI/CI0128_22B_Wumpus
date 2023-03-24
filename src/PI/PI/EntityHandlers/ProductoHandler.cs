@@ -27,7 +27,7 @@ namespace PI.EntityHandlers
                     throw new Exception("El valor del monto debe ser un número positivo", new ArgumentOutOfRangeException());
                 }
 
-                Producto productoEnBase = await base.Contexto.Productos.Where(p => p.Nombre == producto.Nombre && p.FechaAnalisis == producto.FechaAnalisis).FirstOrDefaultAsync();
+                Producto productoEnBase = await base.Contexto.Productos.Where(p => p.Nombre == nombreProducto && p.FechaAnalisis == producto.FechaAnalisis).FirstOrDefaultAsync();
 
                 if ( productoEnBase == null )
                 {
