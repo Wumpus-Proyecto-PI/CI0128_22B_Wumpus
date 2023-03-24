@@ -26,14 +26,14 @@
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="ingresos" role="tabpanel" aria-labelledby="nav-ingresos-tab">
             <div class="mt-4">
-                <TablaIngresos Ingresos=ingresos Meses=meses FlujoMensual=flujoMensual />
+                <TablaIngresos Ingresos=ingresos Meses=meses FlujoMensual=flujoMensual IngresosTotales=ingresosTotales />
 
             </div>
         </div>
 
         <div class="tab-pane fade" id="egresos" role="tabpanel" aria-labelledby="nav-egresos-tab">
             <div class="mt-4">
-                <TablaEgresos gastosFijos=gastosFijos egresos=egresos estadoIniciado=estadoIniciado inversionInicial=inversionInicial meses=meses flujoMensual=flujoMensual />
+                <TablaEgresos gastosFijos=gastosFijos egresos=egresos estadoIniciado=estadoIniciado inversionInicial=inversionInicial meses=meses flujoMensual=flujoMensual egresosTotales=egresosTotales />
             </div>
         </div>
     </div>
@@ -59,6 +59,12 @@
 
     [Parameter]
     public List<string> flujoMensual { get; set; }
+
+    [Parameter]
+    public List<string> ingresosTotales { get; set; }
+
+    [Parameter]
+    public List<string> egresosTotales { get; set; }
 
     public async Task ActualizarFlujoMensualAsync(){
         await FlujoCajaService.ActualizarFlujoMensualAsync(meses, flujoMensual);

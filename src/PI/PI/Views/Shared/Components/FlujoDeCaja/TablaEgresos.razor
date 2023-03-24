@@ -43,9 +43,10 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Totales</p>
         </div>
-        @foreach (var mes in meses) {      
+        @foreach (var total in egresosTotales)
+        {
             <div class="col col-1">
-                @(async () => await CalcularEgresoMensualTotal(mes))
+                @total
             </div>
         }
         
@@ -164,6 +165,9 @@
     [Parameter]
     public List<string> flujoMensual { get; set; }
 
+    [Parameter]
+    public List<string> egresosTotales { get; set; }
+
 
     // Handler de la estructura organizativa
     // TODO reemplazar instancia por inyección
@@ -171,33 +175,6 @@
 
     // Array con la lista de gastos que pertenecen a la estructura organizativa
     public string[] gastosEstructura = new string[] { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
-
-    // Metodo que calcula el total de los montos de los gastos fijos
-    public decimal CalcularTotalGastosFijos() 
-    {
-        decimal total = 0; 
-        foreach (GastoFijo gasto in gastosFijos)
-        {
-
-            total += gasto.Monto / 12 ?? 0.0m;
-
-        }
-        return total; 
-    }
-
-    // Metodo que calcula el egreso mensual total segun el mes
-    public async Task<string> CalcularEgresoMensualTotal(Mes mes)
-    {
-        decimal total = 0;
-
-        decimal totalEgresos = await FlujoDeCajaHandler.ObtenerMontoTotalDeEgresosPorMesAsync(mes.Nombre, mes.FechaAnalisis);
-        decimal inversionInicialDelMes = mes.InversionPorMes ?? 0.0m;
-        decimal totalGastosFijos = CalcularTotalGastosFijos();
-
-        total = totalEgresos + inversionInicialDelMes + totalGastosFijos;
-
-        return FormatManager.ToFormatoEstadistico(total);
-    }
 
     // Metodo que obtiene el total de las inversiones iniciales
     public async Task<decimal> ObtenerTotalInversionesAsync()
@@ -238,6 +215,7 @@
         else {
             mes.InversionPorMes = inversionActual; 
         }
+        await FlujoCajaService.ActualizarTotalesEgresosAsync(meses, egresosTotales, await GastoFijoHandler.ObtenerTotalMensualAsync(mes.FechaAnalisis));
         // Actualiza la lista del flujo mensual.
         await FlujoCajaService.ActualizarFlujoMensualAsync(meses, flujoMensual);
     }
@@ -245,15 +223,12 @@
     // Metodo que actualiza un egreso
     public async Task ActualizarEgresoAsync(Egreso egreso)
     {
-        if (egreso.Monto >= 0)
-        {
-            await FlujoDeCajaHandler.ActualizarEgresoAsync(egreso);
-        }
-        else 
+        if (egreso.Monto <= 0)
         {
             egreso.Monto = 0;
-            await FlujoDeCajaHandler.ActualizarEgresoAsync(egreso);
         }
+        await FlujoDeCajaHandler.ActualizarEgresoAsync(egreso);
+        await FlujoCajaService.ActualizarTotalesEgresosAsync(meses, egresosTotales, await GastoFijoHandler.ObtenerTotalMensualAsync(egreso.FechaAnalisis));
         // Actualiza la lista del flujo mensual.
         await FlujoCajaService.ActualizarFlujoMensualAsync(meses, flujoMensual);
     }

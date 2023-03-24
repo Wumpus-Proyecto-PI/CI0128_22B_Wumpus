@@ -256,7 +256,7 @@ namespace PI.EntityHandlers
         // Metodo que actualiza un egreso
         public async Task ActualizarEgresoAsync(Egreso egreso)
         {
-            var egresoBD = await base.Contexto.Egresos.FindAsync(egreso);
+            var egresoBD = await base.Contexto.Egresos.FindAsync(egreso.Mes, egreso.FechaAnalisis, egreso.Tipo);
             egresoBD.Monto = egreso.Monto;
             await base.Contexto.SaveChangesAsync();
         }

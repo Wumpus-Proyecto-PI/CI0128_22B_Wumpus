@@ -114,8 +114,8 @@
     [Parameter]
     public List<string> FlujoMensual { get; set; }
 
+    [Parameter]
     public List<string> IngresosTotales { get; set; }
-
 
     public async Task ActualizarTotales()
     {
@@ -123,12 +123,6 @@
         {
             IngresosTotales[i] = FormatManager.ToFormatoEstadistico(await FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMesAsync(Meses[i].Nombre, Meses[i].FechaAnalisis));
         }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        IngresosTotales = Enumerable.Repeat(string.Empty, Meses.Count).ToList();
-        // await ActualizarTotales();
     }
 
     // Método que actualiza un ingreso en la base de datos

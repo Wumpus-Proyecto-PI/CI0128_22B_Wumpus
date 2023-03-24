@@ -53,7 +53,7 @@
         </div>
 
         @(
-            await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TabsFlujoCaja>(RenderMode.ServerPrerendered, new { ingresos = ViewBag.Ingresos, meses = ViewBag.Meses, egresos = ViewBag.Egresos, gastosFijos = ViewBag.GastosFijos, estadoIniciado, inversionInicial, flujoMensual = ViewBag.flujoMensual })
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TabsFlujoCaja>(RenderMode.ServerPrerendered, new { ingresos = ViewBag.Ingresos, meses = ViewBag.Meses, egresos = ViewBag.Egresos, gastosFijos = ViewBag.GastosFijos, estadoIniciado, inversionInicial, flujoMensual = ViewBag.flujoMensual, ingresosTotales = ViewBag.IngresosTotales, egresosTotales = ViewBag.EgresosTotales })
         )
     </div>
 </body>

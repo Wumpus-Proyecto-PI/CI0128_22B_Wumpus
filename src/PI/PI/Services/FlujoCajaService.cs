@@ -1,5 +1,6 @@
 ﻿using PI.EntityModels;
 using PI.EntityHandlers;
+using System.Diagnostics.Metrics;
 
 namespace PI.Services
 {
@@ -67,7 +68,32 @@ namespace PI.Services
             return total;
         }
 
+        public async Task ActualizarTotalesIngresosAsync(List<Mes> meses, List<string> ingresosTotales)
+        {
+            for (int i = 0; i < meses.Count; ++i)
+            {
+                ingresosTotales[i] = FormatManager.ToFormatoEstadistico(await FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMesAsync(meses[i].Nombre, meses[i].FechaAnalisis));
+            }
+        }
 
+        public async Task ActualizarTotalesEgresosAsync(List<Mes> meses, List<string> egresosTotales, decimal totalGastosFijosMensual)
+        {
+            for (int i = 0; i < meses.Count; ++i)
+            {
+                egresosTotales[i] = FormatManager.ToFormatoEstadistico(await CalcularEgresoMensualTotalAsync(meses[i], totalGastosFijosMensual));
+            }
+        }
 
+        public async Task<decimal> CalcularEgresoMensualTotalAsync(Mes mes, decimal totalGastosFijosMensual)
+        {
+            decimal total = 0;
+
+            decimal totalEgresos = await FlujoDeCajaHandler.ObtenerMontoTotalDeEgresosPorMesAsync(mes.Nombre, mes.FechaAnalisis);
+            decimal inversionInicialDelMes = mes.InversionPorMes ?? 0.0m;
+
+            total = totalEgresos + inversionInicialDelMes + totalGastosFijosMensual;
+
+            return total;
+        }
     }
 }
