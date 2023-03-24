@@ -1,6 +1,6 @@
-﻿@model List<AnalisisModel>
+﻿@model List<Analisis>
 @using Microsoft.AspNetCore.Components
-@using PI.Models
+@using PI.EntityModels
 @inject NavigationManager NavigationManager;
 
 @* Vista de los análisis que pertenecen a un negocio *@
@@ -26,7 +26,7 @@
 				await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.AgregarAnalisis>(RenderMode.ServerPrerendered, new { idNegocio = @ViewBag.idNegocio })
 			)
 			@* Invoca la creación de una tarjeta por cada análisis del negocio *@
-			@foreach(AnalisisModel analisisActual in Model) {
+			@foreach(Analisis analisisActual in Model) {
 				@(
 					await Html.RenderComponentAsync<PI.Views.Shared.Components.Analisis.CardAnalisis>(RenderMode.ServerPrerendered, new { analisis = analisisActual})
 				)

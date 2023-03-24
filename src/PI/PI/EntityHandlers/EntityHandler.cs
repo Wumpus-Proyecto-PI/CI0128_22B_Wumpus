@@ -72,8 +72,13 @@ namespace PI.EntityHandlers
 								select negocio.Nombre;
 			return await nombreNegocio.FirstOrDefaultAsync() ?? "Sin nombre";
 		}
-		// metodo que retorna un negocio segun la fecha de una analisis
-		public async Task<Negocio> ObtenerNegocioDeAnalisisAsync(DateTime fechaAnalisis)
+
+        public async Task<string> ObtenerNombreNegocioAsync(int idNegocio)
+        {
+            return await Contexto.Negocios.Where(x => x.Id == idNegocio).Select(x => x.Nombre).FirstOrDefaultAsync();
+        }
+        // metodo que retorna un negocio segun la fecha de una analisis
+        public async Task<Negocio> ObtenerNegocioDeAnalisisAsync(DateTime fechaAnalisis)
 		{
 			var nombreNegocio = from negocio in Contexto.Negocios
 								join analisis in Contexto.Analisis
@@ -124,6 +129,7 @@ namespace PI.EntityHandlers
 		{
 			return (await Contexto.Meses.FindAsync(nombreMes, fechaAnalisis)).InversionPorMes ?? 0.0m;
 		}
+
 
 		#endregion
 	}

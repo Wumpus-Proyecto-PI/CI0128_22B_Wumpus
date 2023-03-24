@@ -1,5 +1,7 @@
 ﻿using PI.Models;
 using PI.Handlers;
+using PI.EntityModels;
+using PI.EntityHandlers;
 
 namespace PI.Services
 {
@@ -23,7 +25,7 @@ namespace PI.Services
         // Brief: metodo director que llama al metodo plantilla de los hijos para determinar el paso maximo al que puede entrar el usuario
         // Param: recibe el analisis del cual determinar el paso maximo al que puede ingresar el usuario
         // Return: retorna el indice del paso maximo al que puede ingresar el usuario
-        public int EstaActivoMaximo(AnalisisModel analisis)
+        public int EstaActivoMaximo(Analisis analisis)
         {
             // construimos instancias de cada paso y se agregan a la lista de pasos
             ConstruirPasos();
@@ -54,7 +56,7 @@ namespace PI.Services
         // metodo plantilla que implementan los hijos para determinar si un paso esta activo
         // Param: recibe el analisis del cual determinar el paso maximo al que puede ingresar el usuario
         // Return: verdadero si el paso esta activo y se puede ingresar
-        protected virtual bool EstaActivo(AnalisisModel analisis)
+        protected virtual bool EstaActivo(Analisis analisis)
         {
             // nunca se llama este metodo desde una instancia del padre
             // como es virtual la funcion se debe implementar en el padre, no obstante no se va a usar
@@ -66,7 +68,7 @@ namespace PI.Services
     public class GastosFijosControl : PasosProgresoControl
     {
         // Se crea instancia del handler
-        private EstructuraOrgHandler EstructuraOrgHandler = new();
+        private PI.Handlers.EstructuraOrgHandler EstructuraOrgHandler = new();
         public GastosFijosControl()
         {
             base.NumeroPaso = 2;
@@ -75,7 +77,7 @@ namespace PI.Services
         // Indica si el analisis posee puestos
         // (Retorna un bool que indica si hay puestos o no | Parametros: modelo del analisis que se desea verificar)
         // Se encarga de verificar si existen puestos dentro de un análisis.
-        override protected bool EstaActivo(AnalisisModel analisis)
+        override protected bool EstaActivo(Analisis analisis)
         {
             bool resultado = false;
             
@@ -94,7 +96,7 @@ namespace PI.Services
     public class GastoVariableControl : PasosProgresoControl
     {
         // se crea instancia del handler
-        private GastoFijoHandler GastoFijoHandler = new();
+        private PI.Handlers.GastoFijoHandler GastoFijoHandler = new();
 
         public GastoVariableControl()
         {
@@ -104,7 +106,7 @@ namespace PI.Services
         // Indica si el analisis posee gastos fijos
         // (Retorna un bool que indica si hay gastos fijos o no | Parametros: modelo del analisis que se desea verificar)
         // Determina si un análisis contiene gastos fijos.
-        override protected bool EstaActivo(AnalisisModel analisis)
+        override protected bool EstaActivo(Analisis analisis)
         {
             bool resultado = false;
             
@@ -124,7 +126,7 @@ namespace PI.Services
 
     public class RentabilidadControl : PasosProgresoControl
     {
-        private ProductoHandler ProductoHandler = new();
+        private PI.Handlers.ProductoHandler ProductoHandler = new();
 
         public RentabilidadControl()
         {
@@ -134,7 +136,7 @@ namespace PI.Services
         // metodo que verifica si el paso de analisis rentabilidad esta disponible o no.
         // recibe el enalisis del cual determiar si el paso esta disponible
         // retorna true si el paso esta disponible
-        override protected bool EstaActivo(AnalisisModel analisis)
+        override protected bool EstaActivo(Analisis analisis)
         {
             bool resultado = false;
 
@@ -151,7 +153,7 @@ namespace PI.Services
 
     public class InversionInicialControl : PasosProgresoControl
     {
-        private ProductoHandler ProductoHandler = new();
+        private PI.Handlers.ProductoHandler ProductoHandler = new();
         public InversionInicialControl()
         {
             base.NumeroPaso = 5;
@@ -160,7 +162,7 @@ namespace PI.Services
         // método que verifica si es posible que exista una meta de ventas en el análisis de rentabilidad.
         // detalle: sirve para determinar si la tarjeta de la inversión inicial se debe habilitar.
         // se asume que si un producto tiene valores en algunos de sus atributos, la meta de ventas ha sido calculada.
-        override protected bool EstaActivo(AnalisisModel analisis)
+        override protected bool EstaActivo(Analisis analisis)
         {
             bool resultado = false;
 
@@ -181,8 +183,8 @@ namespace PI.Services
 
     public class FlujoDeCajaControl : PasosProgresoControl
     {
-        private InversionInicialHandler InversionInicialHandler = new();
-        private ProductoHandler ProductoHandler = new();
+        private PI.Handlers.InversionInicialHandler InversionInicialHandler = new();
+        private PI.Handlers.ProductoHandler ProductoHandler = new();
         public FlujoDeCajaControl()
         {
             base.NumeroPaso = 6;
@@ -191,12 +193,12 @@ namespace PI.Services
         // método que verifica si se puede acceder al paso de flujo de caja
         // detalle: si el negocio esta en marcha solo revisamos que hayan productos con precio o porcentaje
         // si no esta iniciado revisamos que haya al menos un gasto inicial
-        override protected bool EstaActivo(AnalisisModel analisis)
+        override protected bool EstaActivo(Analisis analisis)
         {
             bool resultado = false;
             // si el estado es false, el negocio no esta iniciado
             // es decir que si esta disponible el paso de inversion inicial
-            if (analisis.Configuracion.EstadoNegocio == false)
+            if (analisis.Configuracion.TipoNegocio == 0)
             {
                 List<GastoInicialModel> gastos = InversionInicialHandler.ObtenerGastosIniciales(analisis.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 if (gastos.Count > 0)

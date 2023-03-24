@@ -1,4 +1,4 @@
-﻿@using PI.Models
+﻿@using PI.EntityModels
 @using System.Globalization
 @inject NavigationManager NavigationManager;
 <!-- Representa una carta/tarjeta de análisis: fecha, tiempo, estado del negocio y estado del análisis -->
@@ -14,7 +14,7 @@
             <span class="card-text fw-bold pt-4 mt-2">Estado del negocio: <br> </span>
             <!-- Muestra si el estado del NEGOCIO en el momento del análisis es iniciado o no-->
             @{bool NO_INICIADO = false;}
-             @if (@analisis.Configuracion.EstadoNegocio == NO_INICIADO)
+             @if (@analisis.Configuracion.TipoNegocio == 0)
             {
                 <span id="estado-negocio" class="card-text pb-2">No iniciado</span>
             } else {
@@ -44,7 +44,7 @@
 @code {
     // Recibe el objeto del análisis para ser mostrado.
     [Parameter]
-    public AnalisisModel? analisis { get; set; }
+    public Analisis? analisis { get; set; }
     
     const int FINALIZADO = 0;
 

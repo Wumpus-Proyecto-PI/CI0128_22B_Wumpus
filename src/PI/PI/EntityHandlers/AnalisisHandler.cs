@@ -36,14 +36,10 @@ namespace PI.EntityHandlers
             return await Contexto.Analisis.Join(Contexto.Configuracion, A => A.FechaCreacion, C => C.FechaAnalisis, (A, C) => new { Analisis = A, Configuracion = C }).Where(x => x.Configuracion.FechaAnalisis == fechaCreacion).Select(x => x.Configuracion.TipoNegocio).FirstOrDefaultAsync();
         }
 
-        public async Task CrearConfigPorDefecto(DateTime fecha, string tipo)
+        public async Task<Configuracion> CrearConfigPorDefecto(DateTime fecha, string tipo)
         {
-            int tipoAnalisis;
-            if (tipo == "Emprendimiento")
-            {
-                tipoAnalisis = 0;
-            }
-            else
+            int tipoAnalisis = 0;
+            if (tipo != "Emprendimiento")
             {
                 tipoAnalisis = 1;
             }
@@ -51,11 +47,14 @@ namespace PI.EntityHandlers
             Configuracion config = new Configuracion
             {
                 FechaAnalisis = fecha,
-                TipoNegocio = tipoAnalisis
+                TipoNegocio = tipoAnalisis,
+                PorcentajePl = 0.0M,
+                PorcentajeSs = 0.0M
             };
 
             await Contexto.Configuracion.AddAsync(config);
             await Contexto.SaveChangesAsync();
+            return config;
 
         }
         public async Task<DateTime> IngresarAnalisis(int idNegocio, string tipo)
@@ -66,9 +65,8 @@ namespace PI.EntityHandlers
                 IdNegocio = idNegocio,
                 FechaCreacion = fecha
             };
-
+            analisis.Configuracion = await CrearConfigPorDefecto(fecha, tipo);
             await Contexto.Analisis.AddAsync(analisis);
-            CrearConfigPorDefecto(fecha, tipo);
 
             await Contexto.SaveChangesAsync();
             return fecha;

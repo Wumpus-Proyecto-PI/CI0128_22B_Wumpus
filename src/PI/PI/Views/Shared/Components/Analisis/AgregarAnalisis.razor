@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavigationManager;
-@using Handlers;
+@inject AnalisisHandler AnalisisHandler
+@using PI.EntityHandlers;
 
 @*Carta de agregar y popup de agregar que redirecciona hacia el progreso del análisis creado*@
 
@@ -59,9 +60,8 @@
 		EstadoNegocio = estadoNegocio;
 	}
 	// Método que redirige al análisis correspondiente.
-	public void crearAnalisis() {
-		AnalisisHandler analisisHandler = new AnalisisHandler();
-		DateTime fechaCreacionAnalisis = analisisHandler.IngresarAnalisis(idNegocio, EstadoNegocio);
+	public async void crearAnalisis() {
+		DateTime fechaCreacionAnalisis = await AnalisisHandler.IngresarAnalisis(idNegocio, EstadoNegocio);
 		string url = "Analisis?fechaAnalisis=" + fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
 		NavigationManager.NavigateTo(url, true);
 	}
