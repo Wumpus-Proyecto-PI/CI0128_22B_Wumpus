@@ -272,7 +272,6 @@ namespace PI.EntityModels
                 entity.HasOne(d => d.Me)
                     .WithMany(p => p.Egresos)
                     .HasForeignKey(d => new { d.Mes, d.FechaAnalisis })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__EGRESO__1F63A897");
             });
 
@@ -366,7 +365,6 @@ namespace PI.EntityModels
                 entity.HasOne(d => d.Me)
                     .WithMany(p => p.Ingresos)
                     .HasForeignKey(d => new { d.Mes, d.FechaAnalisis })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__INGRESO__2610A626");
             });
 

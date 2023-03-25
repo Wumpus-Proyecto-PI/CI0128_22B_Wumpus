@@ -42,7 +42,8 @@ namespace PI.EntityHandlers
 				GenerarMesesIngresos("contado", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("credito", fechaAnalisis, ingresos);
 				GenerarMesesIngresos("otros", fechaAnalisis, ingresos);
-				return await base.Contexto.SaveChangesAsync();
+                await base.Contexto.Ingresos.AddRangeAsync(ingresos);
+                return await base.Contexto.SaveChangesAsync();
 			}
 			return 0;
 		}
@@ -55,7 +56,8 @@ namespace PI.EntityHandlers
 				GenerarMesesEgresos("contado", fechaAnalisis, egresos);
 				GenerarMesesEgresos("credito", fechaAnalisis, egresos);
 				GenerarMesesEgresos("otros", fechaAnalisis, egresos);
-				return await base.Contexto.SaveChangesAsync();
+                await base.Contexto.Egresos.AddRangeAsync(egresos);
+                return await base.Contexto.SaveChangesAsync();
 			}
 			return 0;
 		}
@@ -246,7 +248,7 @@ namespace PI.EntityHandlers
         // Actualiza el monto de un ingreso existente en la base de datos
         public async Task ActualizarIngresoAsync(Ingreso ingreso)
         {
-			var ingresoBD = await base.Contexto.Ingresos.FindAsync(ingreso);
+			var ingresoBD = await base.Contexto.Ingresos.FindAsync(ingreso.Mes, ingreso.FechaAnalisis, ingreso.Tipo);
 			ingresoBD.Monto = ingreso.Monto;
 			await base.Contexto.SaveChangesAsync();
         }
@@ -254,7 +256,7 @@ namespace PI.EntityHandlers
         // Metodo que actualiza un egreso
         public async Task ActualizarEgresoAsync(Egreso egreso)
         {
-            var egresoBD = await base.Contexto.Egresos.FindAsync(egreso);
+            var egresoBD = await base.Contexto.Egresos.FindAsync(egreso.Mes, egreso.FechaAnalisis, egreso.Tipo);
             egresoBD.Monto = egreso.Monto;
             await base.Contexto.SaveChangesAsync();
         }
@@ -268,13 +270,13 @@ namespace PI.EntityHandlers
         // Metodo que obtiene la fraccion de la inversion inicial que posee el mes 
         public async Task<decimal> ObtenerInversionDelMesAsync(Mes mes)
         {
-            return (await base.Contexto.Meses.FindAsync(mes.FechaAnalisis, mes.Nombre)).InversionPorMes ?? 0.0m;
+            return (await base.Contexto.Meses.FindAsync(mes.Nombre, mes.FechaAnalisis))?.InversionPorMes ?? 0.0m;
         }
 
         // Metodo que actualiza la fraccion de la inversion inicial que posee el mes 
         public async Task ActualizarInversionPorMesAsync(Mes mes)
         {
-			Mes mesBD = await base.Contexto.Meses.FindAsync(mes.FechaAnalisis, mes.Nombre);
+			Mes mesBD = await base.Contexto.Meses.FindAsync(mes.Nombre, mes.FechaAnalisis);
 			mesBD.InversionPorMes = mes.InversionPorMes;
             await base.Contexto.SaveChangesAsync();
         }
