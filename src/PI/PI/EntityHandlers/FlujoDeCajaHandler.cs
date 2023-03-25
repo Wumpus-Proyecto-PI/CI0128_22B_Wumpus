@@ -270,13 +270,13 @@ namespace PI.EntityHandlers
         // Metodo que obtiene la fraccion de la inversion inicial que posee el mes 
         public async Task<decimal> ObtenerInversionDelMesAsync(Mes mes)
         {
-            return (await base.Contexto.Meses.FindAsync(mes.FechaAnalisis, mes.Nombre)).InversionPorMes ?? 0.0m;
+            return (await base.Contexto.Meses.FindAsync(mes.Nombre, mes.FechaAnalisis))?.InversionPorMes ?? 0.0m;
         }
 
         // Metodo que actualiza la fraccion de la inversion inicial que posee el mes 
         public async Task ActualizarInversionPorMesAsync(Mes mes)
         {
-			Mes mesBD = await base.Contexto.Meses.FindAsync(mes.FechaAnalisis, mes.Nombre);
+			Mes mesBD = await base.Contexto.Meses.FindAsync(mes.Nombre, mes.FechaAnalisis);
 			mesBD.InversionPorMes = mes.InversionPorMes;
             await base.Contexto.SaveChangesAsync();
         }

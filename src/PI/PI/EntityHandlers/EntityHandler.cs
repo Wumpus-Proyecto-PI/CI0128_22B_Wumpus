@@ -3,7 +3,7 @@ using PI.EntityModels;
 
 namespace PI.EntityHandlers
 {
-    public abstract class EntityHandler : IDisposable
+    public abstract class EntityHandler
     {
         protected DataBaseContext? Contexto = null;
 
@@ -12,16 +12,6 @@ namespace PI.EntityHandlers
             Contexto = contexto;
         }
 
-        ~EntityHandler()
-        {
-            Contexto = null;
-        }
-
-        public void Dispose()
-        {
-            Contexto?.Dispose();
-            Contexto = null;
-        }
 
 		#region GastoFijoHandler
 		public async Task<List<GastoFijo>> ObtenerGastosFijosAsync(DateTime fechaAnalisis)

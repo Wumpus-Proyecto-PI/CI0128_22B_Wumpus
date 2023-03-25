@@ -65,7 +65,7 @@
                         <Cleave NumeralType="NumeralTypes.Type.Thousand" InputType="InputType.Numeral"
                         class="effect-1 text-center input-montos" value="@FormatManager.ToFormatoEstadistico(mes.InversionPorMes)"
                         @onchange="n => mes.InversionPorMes = Convert.ToDecimal(n.Value.ToString())"
-                    @onfocusout="async () => await ActualizarInversionPorMesAsync(mes)" />
+                        @onfocusout="async () => await ActualizarInversionPorMesAsync(mes)" />
                         <span class="focus-border"></span>
                 </div>
             }
@@ -176,11 +176,7 @@
     // Array con la lista de gastos que pertenecen a la estructura organizativa
     public string[] gastosEstructura = new string[] { "Salarios netos", "Prestaciones laborales", "Seguridad social", "Beneficios de empleados" };
 
-    // Metodo que obtiene el total de las inversiones iniciales
-    public async Task<decimal> ObtenerTotalInversionesAsync()
-    {
-        return await FlujoDeCajaHandler.ObtenerMontoTotalInversionesAsync(egresos[0].FechaAnalisis);
-    }
+
 
     // Metodo que obtiene a diferencia entre el valor anterior y el valor actual de la inversion por mes 
     public decimal ObtenerDiferencia(decimal ingresado, decimal actual) {
@@ -191,17 +187,17 @@
 
     // Metodo que actualiza la inversion por mes 
     public async Task ActualizarInversionPorMesAsync(Mes mes) {
-
+        Console.WriteLine("Entro a ActualizarInversionPorMesAsync");
         decimal inversionActual = await FlujoDeCajaHandler.ObtenerInversionDelMesAsync(mes);
 
         decimal totalInversiones = 0; 
 
         if (inversionActual > 0) {
             decimal diferencia = ObtenerDiferencia(mes.InversionPorMes ?? 0.0m, inversionActual);
-            totalInversiones = await ObtenerTotalInversionesAsync() + diferencia;
+            totalInversiones = await FlujoDeCajaHandler.ObtenerMontoTotalInversionesAsync(mes.FechaAnalisis) + diferencia;
         }
         else if (inversionActual == 0 && mes.InversionPorMes>=0) {
-            totalInversiones = await ObtenerTotalInversionesAsync() + mes.InversionPorMes ?? 0.0m;
+            totalInversiones = await FlujoDeCajaHandler.ObtenerMontoTotalInversionesAsync(mes.FechaAnalisis) + mes.InversionPorMes ?? 0.0m;
         }
 
         if (mes.InversionPorMes < 0){
