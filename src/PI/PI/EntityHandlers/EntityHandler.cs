@@ -85,6 +85,7 @@ namespace PI.EntityHandlers
 								on negocio.Id equals analisis.IdNegocio
 								where analisis.FechaCreacion == fechaAnalisis
 								select negocio;
+
 			return await nombreNegocio.FirstOrDefaultAsync();
 		}
 		#endregion

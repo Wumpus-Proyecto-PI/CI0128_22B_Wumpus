@@ -41,6 +41,7 @@ namespace PI.Controllers
 
             ViewData["NombreNegocio"] = await AnalisisHandler.ObtenerNombreNegocioAsync(idNegocio);
             ViewBag.idNegocio = idNegocio;
+
             return View(await AnalisisHandler.ObtenerAnalisis(idNegocio));
         }
         // Devuelve la vista principal del analisis especifico
@@ -49,10 +50,12 @@ namespace PI.Controllers
         {
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
             Analisis analisisActual = await AnalisisHandler.ObtenerUnAnalisis(fechaCreacionAnalisis);
+            analisisActual.Configuracion = await AnalisisHandler.ObtenerConfigAnalisisAsync(fechaCreacionAnalisis);
             ViewData["NombreNegocio"] = await AnalisisHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
             ViewData["TituloPaso"] = "Progreso del análisis";
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];
+            ViewData["IDNegocio"] = analisisActual.IdNegocio;
             ViewBag.fechaAnalisis = fechaCreacionAnalisis;
             ViewBag.gananciaMensual = analisisActual.GananciaMensual;
             PasosProgresoControl controlDePasos = new();

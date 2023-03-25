@@ -13,7 +13,7 @@
     Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
     string getIdNegocio()
     {
-        return AnalisisHandler.ObtenerNegocioDeAnalisisAsync(Model.FechaCreacion).Id.ToString();
+        return  AnalisisHandler.ObtenerNegocioDeAnalisisAsync(Model.FechaCreacion).Id.ToString();
     }
     string claseCarta = "card card-no-clickeable m-4";
     string claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
@@ -33,7 +33,7 @@
     <div class="container">
         <div class="analisis-header row">
             <div class="col-md-1 boton-volver d-flex justify-content-start align-items-center align-content-center">
-                <a asp-controller="Analisis" asp-action="MisAnalisis" asp-route-IDNegocio="@getIdNegocio()" class="hovertext" data-hover="Volver a mis análisis">
+                <a asp-controller="Analisis" asp-action="MisAnalisis" asp-route-IDNegocio="@ViewData["IDNegocio"]" class="hovertext" data-hover="Volver a mis análisis">
                     <img src="img/generic/flecha-comparador.png" alt="Botón para volver">
                 </a>
             </div>

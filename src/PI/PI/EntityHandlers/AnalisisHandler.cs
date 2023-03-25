@@ -23,7 +23,11 @@ namespace PI.EntityHandlers
 
         public async Task<List<Analisis>> ObtenerAnalisis(int idNegocio)
         {
-            return await Contexto.Analisis.AsNoTracking().Where(x => x.IdNegocio == idNegocio).ToListAsync();
+            List<Analisis> lista = await Contexto.Analisis.AsNoTracking().Where(x => x.IdNegocio == idNegocio).ToListAsync();
+            for (int i = 0; i < lista.Count; i += 1) {
+                lista[i].Configuracion = await ObtenerConfigAnalisisAsync(lista[i].FechaCreacion);
+            }
+            return lista;
         }
 
         public async Task<DateTime> UltimaFechaCreacion(int idNegocio)
@@ -65,8 +69,8 @@ namespace PI.EntityHandlers
                 IdNegocio = idNegocio,
                 FechaCreacion = fecha
             };
-            analisis.Configuracion = await CrearConfigPorDefecto(fecha, tipo);
             await Contexto.Analisis.AddAsync(analisis);
+            await CrearConfigPorDefecto(fecha, tipo);
 
             await Contexto.SaveChangesAsync();
             return fecha;
@@ -104,6 +108,11 @@ namespace PI.EntityHandlers
             Contexto.Analisis.Remove(AnalisisPorBorrar);
             await Contexto.SaveChangesAsync();
 
+        }
+
+        public async Task<Configuracion> ObtenerConfigAnalisis(DateTime fechaAnalisis)
+        {
+            return await Contexto.Configuracion.Where(x => x.FechaAnalisis == fechaAnalisis).FirstOrDefaultAsync();
         }
 
     }
