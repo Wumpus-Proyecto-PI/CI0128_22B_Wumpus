@@ -221,7 +221,7 @@
             <div class="col-6 d-flex mt-4 p-0 justify-content-center align-items-center align-content-center">
             @* Botón de eliminar *@
                 <div class="card card-clickeable boton-analisis boton-eliminar text-center py-3 justify-content-center align-items-center mx-0">
-                    <a asp-area="" asp-action="EliminarAnalisis" asp-controller="Analisis" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")" asp-route-idNegocio="@getIdNegocio()">
+                    <a asp-area="" asp-action="EliminarAnalisis" asp-controller="Analisis" asp-route-fechaAnalisis="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss.fff")" asp-route-idNegocio="@ViewData["IDNegocio"]">
                         <div class="card-body mx-0">
                         <img class="mb-3" id="flecha-descarga" src="img/generic/trashCan.png" alt="Ícono de basurero" />
                         <h4 class="card-title">Eliminar análisis</h4>
