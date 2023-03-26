@@ -5,16 +5,12 @@
 @using Microsoft.AspNetCore.Components
 @using System.Globalization
 @inject NavigationManager NavigationManager;
-@inject AnalisisHandler AnalisisHandler
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     Layout = "~/Views/Shared/LayoutPasosAnalisis.cshtml";
-    string getIdNegocio()
-    {
-        return  AnalisisHandler.ObtenerNegocioDeAnalisisAsync(Model.FechaCreacion).Id.ToString();
-    }
+
     string claseCarta = "card card-no-clickeable m-4";
     string claseCirculo = "circulo-num-no-clickeable position-absolute top-100 start-50 translate-middle badge badge-secondary rounded-circle";
     string claseLink = "link-no-clikeable";

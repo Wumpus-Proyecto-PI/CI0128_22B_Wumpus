@@ -33,7 +33,7 @@
 				</div>
 				@* Botones aceptar y cancelar *@
 				<div class="d-flex my-3">
-					<button class="btn btn-primary" @onclick="crearAnalisis">Aceptar </button>
+					<button class="btn btn-primary" @onclick="async() => await crearAnalisis()">Aceptar </button>
 					<button class="btn btn-secondary" @onclick="cambiarEstadoPopup">Cancelar </button>
 				</div>
 			</div>
@@ -60,9 +60,11 @@
 		EstadoNegocio = estadoNegocio;
 	}
 	// Método que redirige al análisis correspondiente.
-	public async void crearAnalisis() {
+	public async Task<DateTime> crearAnalisis() {
 		DateTime fechaCreacionAnalisis = await AnalisisHandler.IngresarAnalisis(idNegocio, EstadoNegocio);
 		string url = "Analisis?fechaAnalisis=" + fechaCreacionAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff");
 		NavigationManager.NavigateTo(url, true);
+
+		return fechaCreacionAnalisis;
 	}
 }
