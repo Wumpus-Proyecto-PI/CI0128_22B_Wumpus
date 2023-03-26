@@ -27,11 +27,18 @@ namespace PI.EntityModels
 
         [JsonIgnore]
         public virtual Configuracion? Configuracion { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Egreso> Egresos { get; set; }
+        [JsonIgnore]
         public virtual ICollection<GastoFijo> GastoFijos { get; set; }
+        [JsonIgnore] 
         public virtual ICollection<InversionInicial> InversionInicials { get; set; }
+
+        [JsonIgnore] 
         public virtual ICollection<Mes> Mes { get; set; }
+        [JsonIgnore] 
         public virtual ICollection<Producto> Productos { get; set; }
+        [JsonIgnore] 
         public virtual ICollection<Puesto> Puestos { get; set; }
     }
 }
