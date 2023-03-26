@@ -42,10 +42,10 @@
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Totales</p>
         </div>
-        @foreach (var mes in Meses)
+        @foreach (var total in IngresosTotales)
         {
             <div class="col col-1">
-                @(async () => await CalcularIngresoMensualTotalAsync(mes.Nombre))
+                @total
             </div>
         }
     </li>
@@ -114,10 +114,15 @@
     [Parameter]
     public List<string> FlujoMensual { get; set; }
 
-    // Método que retorna un string con el total del monto de ingresos de un determinado mes
-    public async Task<string> CalcularIngresoMensualTotalAsync(string mes)
+    [Parameter]
+    public List<string> IngresosTotales { get; set; }
+
+    public async Task ActualizarTotales()
     {
-        return FormatManager.ToFormatoEstadistico(await FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMesAsync(mes, Ingresos[0].FechaAnalisis));
+        for (int i = 0; i < Meses.Count; ++i)
+        {
+            IngresosTotales[i] = FormatManager.ToFormatoEstadistico(await FlujoDeCajaHandler.ObtenerMontoTotalDeIngresosPorMesAsync(Meses[i].Nombre, Meses[i].FechaAnalisis));
+        }
     }
 
     // Método que actualiza un ingreso en la base de datos
@@ -129,5 +134,6 @@
         }
         await FlujoDeCajaHandler.ActualizarIngresoAsync(ingreso);
         await FlujoCajaService.ActualizarFlujoMensualAsync(Meses, FlujoMensual);
+        await ActualizarTotales();
     }
 }
