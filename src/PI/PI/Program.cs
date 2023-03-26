@@ -1,12 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using PI.Areas.Identity.Data;
 using PI.Data;
-using PI.EntityHandlers;
 using PI.EntityModels;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BaseDeDatos") ?? throw new InvalidOperationException("Connection string 'BaseDeDatos' not found.");
@@ -46,6 +42,12 @@ builder.Services.AddScoped<PI.EntityHandlers.FlujoDeCajaHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.EstructuraOrgHandler>();
 builder.Services.AddScoped<PI.Services.FlujoCajaService>();
 builder.Services.AddScoped<PI.EntityHandlers.InversionInicialHandler>();
+builder.Services.AddScoped<PI.Services.PasosProgresoControl>();
+builder.Services.AddScoped<PI.Services.GastosFijosControl>();
+builder.Services.AddScoped<PI.Services.GastoVariableControl>();
+builder.Services.AddScoped<PI.Services.FlujoDeCajaControl>();
+builder.Services.AddScoped<PI.Services.InversionInicialControl>();
+builder.Services.AddScoped<PI.Services.RentabilidadControl>();
 
 
 
