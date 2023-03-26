@@ -11,7 +11,7 @@ namespace PI.EntityHandlers
 
         public async Task<Analisis> ObtenerUnAnalisis(DateTime fechaCreacion)
         {
-            return await Contexto.Analisis.AsNoTracking().Where(x => x.FechaCreacion == fechaCreacion).FirstOrDefaultAsync();
+            return await Contexto.Analisis.AsNoTracking().Where(x => x.FechaCreacion == fechaCreacion).Include(x => x.Configuracion).FirstOrDefaultAsync();
         }
 
         public async Task<Analisis> ObtenerAnalisisMasReciente(int idNegocio)
@@ -23,10 +23,7 @@ namespace PI.EntityHandlers
 
         public async Task<List<Analisis>> ObtenerAnalisis(int idNegocio)
         {
-            List<Analisis> lista = await Contexto.Analisis.AsNoTracking().Where(x => x.IdNegocio == idNegocio).ToListAsync();
-            for (int i = 0; i < lista.Count; i += 1) {
-                lista[i].Configuracion = await ObtenerConfigAnalisisAsync(lista[i].FechaCreacion);
-            }
+            List<Analisis> lista = await Contexto.Analisis.AsNoTracking().Where(x => x.IdNegocio == idNegocio).Include(x => x.Configuracion).ToListAsync();
             return lista;
         }
 

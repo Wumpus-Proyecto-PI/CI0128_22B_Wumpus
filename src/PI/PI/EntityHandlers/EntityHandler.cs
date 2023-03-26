@@ -54,7 +54,7 @@ namespace PI.EntityHandlers
         // (Retorna una clase con la configuracion del analisis | Parametros: fecha del analisis)
         public async Task<Configuracion> ObtenerConfigAnalisisAsync(DateTime fechaAnalisis)
         {
-            Configuracion config = await Contexto.Configuracion.FindAsync(fechaAnalisis);
+            Configuracion config = await Contexto.Configuracion.Where(x => x.FechaAnalisis == fechaAnalisis).FirstOrDefaultAsync();
             return config;
         }
 
