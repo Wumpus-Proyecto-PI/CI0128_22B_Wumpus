@@ -1,17 +1,19 @@
-﻿@using PI.Models
-@using PI.Handlers
+﻿@using PI.EntityModels
+@using PI.EntityHandlers
 @using PI.Services
 @inject NavigationManager NavigationManager;
+@inject EstructuraOrgHandler EstructuraOrgHandler;
+@inject AnalisisHandler AnalisisHandler;
 
 <div style="display: flex; width: 100%; align-items: center; justify-content: center; margin-bottom: 30px">
     <div id="form-parametros-rentabilidad">
         <div class="pill-form">
             <div><h4>Seguro social</h4></div>
-            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajeSS" @onfocusout="ActualizarConfigAnalisis" />
+            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajeSs" @onfocusout="async () => await ActualizarConfigAnalisis()" />
         </div>
         <div class="pill-form">
             <div><h4>Prestaciones</h4></div>
-            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajePL" @onfocusout="ActualizarConfigAnalisis" />
+            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajePl" @onfocusout="async () => await ActualizarConfigAnalisis()" />
         </div>
     </div>
 </div>
@@ -61,7 +63,7 @@
 
                         @*Input de las plazas del puesto*@
                         <div class="fila-form-configuracion">
-                            <label>Plazas</label> <input name="" id="num-plazas" min="1" type="number" @bind="PuestoActivo.Plazas">
+                            <label>Plazas</label> <input name="" id="num-plazas" min="1" type="number" @bind="PuestoActivo.CantidadPlazas">
                         </div>
                         @(
                             (MarkupString)ErrorPlaza
@@ -83,7 +85,7 @@
             <div id="inferior-horizontal">
                 @if (HayPuestoSeleccionado == true) {
                     /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                    <div id="eliminar-puesto"class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="() => EliminarPuesto(PuestoActivo)">
+                    <div id="eliminar-puesto"class="est-org-boton " @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async () => await EliminarPuesto(PuestoActivo)">
                         <a>
                             @if (HoverEliminar == false)
                             {
@@ -93,7 +95,7 @@
                         </a>
                     </div>
                 }
-                <div  class="est-org-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="() => GuardarDatosPuesto(PuestoActivo)">
+                <div  class="est-org-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async () => await GuardarDatosPuesto(PuestoActivo)">
                     <a>
                         @if (HoverGuardar == false) {
                             <img src="img/estructuraOrg/guardarPuesto.png" alt="">
@@ -110,7 +112,7 @@
             <div id="mostrar-puestos">
 
                 @*Renderización de las tarjetas de los Puestos, son componentes razor aparte*@
-                @foreach (PuestoModel puestoActual in Puestos)
+                @foreach (Puesto puestoActual in Puestos)
                 {
                     <div class="puesto-clickeable" @onclick="() => SeleccionarPuesto(puestoActual)" >
                         <div >
@@ -145,7 +147,7 @@
 @code {
     // lista de Puestos de la base de datos
     [Parameter]
-    public List<PuestoModel> Puestos { get; set; }
+    public List<Puesto> Puestos { get; set; }
 
     // fecha del análisis al que pertenece la estructura organanizativa
     [Parameter]
@@ -153,22 +155,16 @@
 
     // Modelo que representa a la configuración del análisis de la fecha que se pasó por parámetro
     [Parameter]
-    public ConfigAnalisisModel Config { get; set; }
+    public Configuracion Config { get; set; }
 
     // booleano que indica si se está editanto un puesto o agregando
     public bool HayPuestoSeleccionado = false;
 
     // puesto seleccionado actualmente, puede ser nuevo o un existente
-    public PuestoModel PuestoActivo = new PuestoModel();
+    public Puesto PuestoActivo = new Puesto();
 
     // bool que indica si se debe mostrar el popup de beneficios
     public bool PopupVisible { get; set; } = false;
-
-    // handler con el cual comunicarse con la base de datos
-    public EstructuraOrgHandler HandlerPuesto = new EstructuraOrgHandler();
-
-    // hanlder para manejar los porcenatjes de seguro social y de prestaciones laborales en la base
-    public AnalisisHandler AnalisisHandler = new AnalisisHandler();
 
     // string que almacena el nombre de un puesto antes de ser modificado para poder actualizarlo en la base de datos
     public string CopiaNombreOriginal = "";
@@ -243,7 +239,7 @@
 
     // método para asignar el puesto activo según el que se clickeó
     // recibe el puesto al que se le hizo click
-    public void SeleccionarPuesto(PuestoModel puestoSeleccionado)
+    public void SeleccionarPuesto(Puesto puestoSeleccionado)
     {
         // se asigna el puesto activo
         PuestoActivo = puestoSeleccionado;
@@ -276,7 +272,7 @@
         CopiaNombreOriginal = "";
 
         // se crea un nuevo puesto
-        PuestoActivo = new PuestoModel();
+        PuestoActivo = new Puesto();
 
         // se resetean variables de errores
         ErrorNombre = "";
@@ -287,7 +283,7 @@
 
     // método que permitir guardar en la base de datos un puesto
     // recibe el puesto a guadar
-    public void GuardarDatosPuesto(PuestoModel puestoGuardar) {
+    public async Task GuardarDatosPuesto(Puesto puestoGuardar) {
 
         // se revisa que el nombre no este repetido y que no haya números negativo
         if (RevisarNombre(puestoGuardar) && RevisarSalario(puestoGuardar) && RevisarPlazasPuesto(puestoGuardar))
@@ -295,12 +291,12 @@
             // se asigna el pueso la fecha del análisis por si es un puesto nuevo
             puestoGuardar.FechaAnalisis = FechaAnalisis;
             // se ingresa con el handler en la base de datos el puesto
-            HandlerPuesto.InsertarPuesto(CopiaNombreOriginal, puestoGuardar);
+            await EstructuraOrgHandler.InsertarPuesto(CopiaNombreOriginal, puestoGuardar);
 
             // se resetean variables de vista y de control
             if (HayPuestoSeleccionado == false)
             {
-                PuestoActivo = new PuestoModel();
+                PuestoActivo = new Puesto();
             }
             ErrorNombre = "";
             ErrorSalario = "";
@@ -312,7 +308,7 @@
     }
 
     // método para revisar si el nombre está repetido y que no esté vacío
-    private bool RevisarNombre(PuestoModel puestoGuardar)
+    private bool RevisarNombre(Puesto puestoGuardar)
     {
         bool valido = true;
         // se revisa que no esté vacío
@@ -356,11 +352,11 @@
 
     // método que revisa si el número de plazas es válido
     // recibe el puesto que se está editando
-    private bool RevisarPlazasPuesto(PuestoModel puestoGuardar)
+    private bool RevisarPlazasPuesto(Puesto puestoGuardar)
     {
         bool valido = true;
         // se revisa que no sea negativo
-        if (puestoGuardar.Plazas < 0.0m)
+        if (puestoGuardar.CantidadPlazas < 0.0m)
         {
             ErrorPlaza = "<p class=\"puesto-error-nombrevacio\"> Error: Ingrese un número de plazas positivo.</p>";
             valido = false;
@@ -372,7 +368,7 @@
 
     // método que revisa que el salario sea válido
     // recibe el puesto que se está editando
-    private bool RevisarSalario(PuestoModel puestoGuardar)
+    private bool RevisarSalario(Puesto puestoGuardar)
     {
         // se revisa que no sea negatvo el salario del puesto
         bool valido = true;
@@ -388,18 +384,18 @@
 
     // método para eliminar un puesto de la base de datos
     // recibe el puesto que se desea eliminar
-    public void EliminarPuesto(PuestoModel puestoEliminar)
+    public async Task EliminarPuesto(Puesto puestoEliminar)
     {
         // se utiliza el handler para eliminar el puesto
-        HandlerPuesto.EliminarPuesto(puestoEliminar);
+        await EstructuraOrgHandler.EliminarPuesto(puestoEliminar);
 
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
     // Método que actualiza los valores de la configuración de un análisis
-    public void ActualizarConfigAnalisis() {
-        AnalisisHandler.ActualizarConfiguracionAnalisis(Config);
+    public async Task ActualizarConfigAnalisis() {
+        await AnalisisHandler.ActualizarConfiguracionAnalisis(Config);
     }
 }
 

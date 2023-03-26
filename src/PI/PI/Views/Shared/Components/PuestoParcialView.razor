@@ -1,4 +1,4 @@
-﻿@using PI.Models
+﻿@using PI.EntityModels
 @using System.Globalization
 
 @*
@@ -13,13 +13,13 @@
     <div class="bottom-puesto">
         <div class="puesto-caracteristica puesto-salario-bruto">
             <p>@(
-                    String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (puesto.SalarioBruto * puesto.Plazas))
+                    String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (puesto.SalarioBruto * puesto.CantidadPlazas))
                 )</p>
             <img class="divisa-img" src="/img/generic/coin-icon.svg">
         </div>
         <div>
             <div class="puesto-caracteristica puesto-numero-plazas">
-                <p>@puesto.Plazas.ToString()</p>
+                <p>@puesto.CantidadPlazas.ToString()</p>
                 <img class="plaza-img" src=img/puesto/plaza.png>
             </div>
         </div>
@@ -40,5 +40,5 @@
 
 @code {
     [Parameter]
-    public PuestoModel puesto { get; set;}
+    public Puesto puesto { get; set;}
 }

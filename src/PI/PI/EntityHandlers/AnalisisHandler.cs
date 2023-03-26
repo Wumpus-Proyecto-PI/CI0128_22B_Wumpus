@@ -75,7 +75,7 @@ namespace PI.EntityHandlers
 
         public async Task ActualizarConfiguracionAnalisis(Configuracion config)
         {
-            Configuracion ConfigPorActualizar = Contexto.Configuracion.Where(x => x.FechaAnalisis == config.FechaAnalisis).FirstOrDefault();
+            Configuracion ConfigPorActualizar =await Contexto.Configuracion.Where(x => x.FechaAnalisis == config.FechaAnalisis).FirstOrDefaultAsync();
             if (config.PorcentajeSs >= 0)
             {
                 ConfigPorActualizar.PorcentajeSs = config.PorcentajeSs;

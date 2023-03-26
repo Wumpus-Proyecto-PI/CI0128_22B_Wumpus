@@ -35,7 +35,7 @@ namespace PI.EntityHandlers
         public async Task<bool> ExistePuestoEnBase(string nombrePuesto, DateTime fechaAnalisis)
         {
             bool encontrado = false;
-            List<Puesto> puestos = Contexto.Puestos.Where(x => x.Nombre == nombrePuesto && x.FechaAnalisis == fechaAnalisis).ToList();
+            List<Puesto> puestos = await Contexto.Puestos.Where(x => x.Nombre == nombrePuesto && x.FechaAnalisis == fechaAnalisis).ToListAsync();
             if (puestos.Count > 0 && puestos[0].Nombre != null)
             {
                 encontrado = true;

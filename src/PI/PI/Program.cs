@@ -43,6 +43,7 @@ builder.Services.AddScoped<PI.EntityHandlers.NegocioHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.GastoFijoHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.ProductoHandler>();
 builder.Services.AddScoped<PI.EntityHandlers.FlujoDeCajaHandler>();
+builder.Services.AddScoped<PI.EntityHandlers.EstructuraOrgHandler>();
 builder.Services.AddScoped<PI.Services.FlujoCajaService>();
 builder.Services.AddScoped<PI.EntityHandlers.InversionInicialHandler>();
 
