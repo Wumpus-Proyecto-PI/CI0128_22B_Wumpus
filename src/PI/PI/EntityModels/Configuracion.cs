@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace PI.EntityModels
@@ -9,7 +10,7 @@ namespace PI.EntityModels
         public int TipoNegocio { get; set; }
         public decimal? PorcentajeSs { get; set; }
         public decimal? PorcentajePl { get; set; }
-
+        [JsonIgnore]
         public virtual Analisis FechaAnalisisNavigation { get; set; } = null!;
     }
 }

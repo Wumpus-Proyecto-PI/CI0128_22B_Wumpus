@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace PI.EntityModels
@@ -23,6 +24,8 @@ namespace PI.EntityModels
         public int EstadoAnalisis { get; set; }
 
         public virtual Negocio IdNegocioNavigation { get; set; } = null!;
+
+        [JsonIgnore]
         public virtual Configuracion? Configuracion { get; set; }
         public virtual ICollection<Egreso> Egresos { get; set; }
         public virtual ICollection<GastoFijo> GastoFijos { get; set; }
