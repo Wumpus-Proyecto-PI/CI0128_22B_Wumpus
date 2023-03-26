@@ -46,16 +46,16 @@ namespace PI.Controllers
         }
         // Devuelve la vista principal del analisis especifico
         // (Retorna la vista del analisis | Parametros: fecha del analisis que se desea visualizar)
-        public async Task<IActionResult> Index(string fechaAnalisis)
+        public async Task<IActionResult> Index(DateTime fechaAnalisis)
         {
-            DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
-            Analisis analisisActual = await AnalisisHandler.ObtenerUnAnalisis(fechaCreacionAnalisis);
-            ViewData["NombreNegocio"] = await AnalisisHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
+            // DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+            Analisis analisisActual = await AnalisisHandler.ObtenerUnAnalisis(fechaAnalisis);
+            ViewData["NombreNegocio"] = await AnalisisHandler.ObtenerNombreNegocioAsync(fechaAnalisis);
             ViewData["TituloPaso"] = "Progreso del análisis";
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];
             ViewData["IDNegocio"] = analisisActual.IdNegocio;
-            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
+            ViewBag.fechaAnalisis = fechaAnalisis;
             ViewBag.gananciaMensual = analisisActual.GananciaMensual;
             PasosProgresoControl controlDePasos = new();
 
