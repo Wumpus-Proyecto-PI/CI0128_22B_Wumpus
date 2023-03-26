@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using PI.EntityHandlers;
-using PI.Controllers;
 using PI.EntityModels;
-using System.Globalization;
 using PI.Services;
-using Microsoft.AspNetCore.Components;
 
 namespace PI.Controllers
 {
@@ -16,9 +9,11 @@ namespace PI.Controllers
     public class AnalisisController : ManejadorUsuariosController
     {
         private AnalisisHandler? AnalisisHandler = null;
-        public AnalisisController(AnalisisHandler analisisHandler)
+        private PasosProgresoControl? PasosProgresoControl = null;
+        public AnalisisController(AnalisisHandler analisisHandler, PasosProgresoControl pasosProgresoControl)
         {
             AnalisisHandler = analisisHandler;
+            PasosProgresoControl = pasosProgresoControl;
         }
         public async Task<IActionResult> CrearAnalisis(int idNegocio, string estadoNegocio)
         {
@@ -57,9 +52,8 @@ namespace PI.Controllers
             ViewData["IDNegocio"] = analisisActual.IdNegocio;
             ViewBag.fechaAnalisis = fechaAnalisis;
             ViewBag.gananciaMensual = analisisActual.GananciaMensual;
-            PasosProgresoControl controlDePasos = new();
 
-            ViewBag.pasoDisponibleMaximo = controlDePasos.EstaActivoMaximo(analisisActual);
+            ViewBag.pasoDisponibleMaximo = await PasosProgresoControl.EstaActivoMaximoAsync(analisisActual);
             
             return View(analisisActual);
         }

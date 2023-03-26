@@ -23,7 +23,7 @@ namespace PI.EntityHandlers
 
         public async Task<List<Analisis>> ObtenerAnalisis(int idNegocio)
         {
-            List<Analisis> lista = await Contexto.Analisis.AsNoTracking().Where(x => x.IdNegocio == idNegocio).Include(x => x.Configuracion).OrderBy(x => x.FechaCreacion).ToListAsync();
+            List<Analisis> lista = await Contexto.Analisis.AsNoTracking().Where(x => x.IdNegocio == idNegocio).Include(x => x.Configuracion).OrderByDescending(x => x.FechaCreacion).ToListAsync();
             return lista;
         }
 
