@@ -50,7 +50,6 @@ namespace PI.Controllers
         {
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
             Analisis analisisActual = await AnalisisHandler.ObtenerUnAnalisis(fechaCreacionAnalisis);
-            analisisActual.Configuracion = await AnalisisHandler.ObtenerConfigAnalisisAsync(fechaCreacionAnalisis);
             ViewData["NombreNegocio"] = await AnalisisHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
             ViewData["TituloPaso"] = "Progreso del análisis";
             // se asigna el titulo en la pestaña del cliente
