@@ -158,7 +158,8 @@ namespace PI.Migrations.DataBase
                 name: "NEGOCIO",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     nombre = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
                     FechaCreacion = table.Column<DateTime>(type: "datetime", nullable: true),
                     idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -171,7 +172,6 @@ namespace PI.Migrations.DataBase
                         column: x => x.idUsuario,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -194,7 +194,6 @@ namespace PI.Migrations.DataBase
                         column: x => x.idNegocio,
                         principalTable: "NEGOCIO",
                         principalColumn: "id",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -215,7 +214,6 @@ namespace PI.Migrations.DataBase
                         column: x => x.fechaAnalisis,
                         principalTable: "ANALISIS",
                         principalColumn: "fechaCreacion",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -225,18 +223,18 @@ namespace PI.Migrations.DataBase
                 {
                     nombre = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
                     fechaAnalisis = table.Column<DateTime>(type: "datetime", nullable: false),
-                    orden = table.Column<int>(type: "int", nullable: false),
-                    monto = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    monto = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    orden = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__GASTO_FI__C10BC2E58A2E7E29", x => new { x.orden, x.nombre, x.fechaAnalisis });
+                    table.PrimaryKey("PK__GASTO_FI__C10BC2E58A2E7E29", x => new { x.nombre, x.fechaAnalisis });
                     table.ForeignKey(
                         name: "FK_GASTO_FECHA",
                         column: x => x.fechaAnalisis,
                         principalTable: "ANALISIS",
                         principalColumn: "fechaCreacion",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -256,7 +254,6 @@ namespace PI.Migrations.DataBase
                         column: x => x.fechaAnalisis,
                         principalTable: "ANALISIS",
                         principalColumn: "fechaCreacion",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -276,7 +273,6 @@ namespace PI.Migrations.DataBase
                         column: x => x.fechaAnalisis,
                         principalTable: "ANALISIS",
                         principalColumn: "fechaCreacion",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -300,7 +296,6 @@ namespace PI.Migrations.DataBase
                         column: x => x.fechaAnalisis,
                         principalTable: "ANALISIS",
                         principalColumn: "fechaCreacion",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -324,7 +319,6 @@ namespace PI.Migrations.DataBase
                         column: x => x.fechaAnalisis,
                         principalTable: "ANALISIS",
                         principalColumn: "fechaCreacion",
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -339,18 +333,12 @@ namespace PI.Migrations.DataBase
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Egreso", x => new { x.mes, x.fechaAnalisis, x.tipo, x.monto });
+                    table.PrimaryKey("PK_Egreso", x => new { x.mes, x.fechaAnalisis, x.tipo });
                     table.ForeignKey(
                         name: "FK__EGRESO__1F63A897",
                         columns: x => new { x.mes, x.fechaAnalisis },
                         principalTable: "MES",
-                        principalColumns: new[] { "nombre", "fechaAnalisis" });
-                    table.ForeignKey(
-                        name: "FK_EGRESO_FECHA_DELETE",
-                        column: x => x.fechaAnalisis,
-                        principalTable: "ANALISIS",
-                        principalColumn: "fechaCreacion",
-                        onUpdate: ReferentialAction.Cascade,
+                        principalColumns: new[] { "nombre", "fechaAnalisis" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -365,13 +353,12 @@ namespace PI.Migrations.DataBase
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ingreso", x => new { x.mes, x.fechaAnalisis, x.tipo, x.monto });
+                    table.PrimaryKey("PK_Ingreso", x => new { x.mes, x.fechaAnalisis, x.tipo });
                     table.ForeignKey(
                         name: "FK__INGRESO__2610A626",
                         columns: x => new { x.mes, x.fechaAnalisis },
                         principalTable: "MES",
                         principalColumns: new[] { "nombre", "fechaAnalisis" },
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -394,8 +381,8 @@ namespace PI.Migrations.DataBase
                         columns: x => new { x.nombreProducto, x.fechaAnalisis },
                         principalTable: "PRODUCTO",
                         principalColumns: new[] { "nombre", "fechaAnalisis" },
-                        onUpdate: ReferentialAction.Cascade,
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade,
+                        onUpdate: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -415,7 +402,6 @@ namespace PI.Migrations.DataBase
                         columns: x => new { x.nombreJefe, x.fechaJefe },
                         principalTable: "PUESTO",
                         principalColumns: new[] { "nombre", "fechaAnalisis" },
-                        onUpdate: ReferentialAction.Cascade,
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -472,11 +458,6 @@ namespace PI.Migrations.DataBase
                 name: "IX_COMPONENTE_nombreProducto_fechaAnalisis",
                 table: "COMPONENTE",
                 columns: new[] { "nombreProducto", "fechaAnalisis" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EGRESO_fechaAnalisis",
-                table: "EGRESO",
-                column: "fechaAnalisis");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ES_EMPLEADO_DE_nombreJefe_fechaJefe",

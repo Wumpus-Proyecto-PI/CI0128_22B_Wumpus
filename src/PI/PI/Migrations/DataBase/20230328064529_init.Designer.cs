@@ -12,14 +12,14 @@ using PI.EntityModels;
 namespace PI.Migrations.DataBase
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20230317031706_BorradoOrdenLlaveGastoFijo")]
-    partial class BorradoOrdenLlaveGastoFijo
+    [Migration("20230328064529_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "6.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -353,10 +353,8 @@ namespace PI.Migrations.DataBase
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("monto");
 
-                    b.HasKey("Mes", "FechaAnalisis", "Tipo", "Monto")
+                    b.HasKey("Mes", "FechaAnalisis", "Tipo")
                         .HasName("PK_Egreso");
-
-                    b.HasIndex("FechaAnalisis");
 
                     b.ToTable("EGRESO", (string)null);
                 });
@@ -408,8 +406,11 @@ namespace PI.Migrations.DataBase
                         .HasColumnName("monto");
 
                     b.Property<int>("Orden")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("orden");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Orden"), 1L, 1);
 
                     b.HasKey("Nombre", "FechaAnalisis")
                         .HasName("PK__GASTO_FI__C10BC2E58A2E7E29");
@@ -441,7 +442,7 @@ namespace PI.Migrations.DataBase
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("monto");
 
-                    b.HasKey("Mes", "FechaAnalisis", "Tipo", "Monto")
+                    b.HasKey("Mes", "FechaAnalisis", "Tipo")
                         .HasName("PK_Ingreso");
 
                     b.ToTable("INGRESO", (string)null);
@@ -498,8 +499,11 @@ namespace PI.Migrations.DataBase
             modelBuilder.Entity("PI.EntityModels.Negocio", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime?>("FechaCreacion")
                         .HasColumnType("datetime");
@@ -707,20 +711,12 @@ namespace PI.Migrations.DataBase
 
             modelBuilder.Entity("PI.EntityModels.Egreso", b =>
                 {
-                    b.HasOne("PI.EntityModels.Analisis", "FechaAnalisisNavigation")
-                        .WithMany("Egresos")
-                        .HasForeignKey("FechaAnalisis")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_EGRESO_FECHA_DELETE");
-
                     b.HasOne("PI.EntityModels.Mes", "Me")
                         .WithMany("Egresos")
                         .HasForeignKey("Mes", "FechaAnalisis")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__EGRESO__1F63A897");
-
-                    b.Navigation("FechaAnalisisNavigation");
 
                     b.Navigation("Me");
                 });
@@ -742,6 +738,7 @@ namespace PI.Migrations.DataBase
                     b.HasOne("PI.EntityModels.Analisis", "FechaAnalisisNavigation")
                         .WithMany("GastoFijos")
                         .HasForeignKey("FechaAnalisis")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_GASTO_FECHA");
 
@@ -753,6 +750,7 @@ namespace PI.Migrations.DataBase
                     b.HasOne("PI.EntityModels.Mes", "Me")
                         .WithMany("Ingresos")
                         .HasForeignKey("Mes", "FechaAnalisis")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__INGRESO__2610A626");
 
@@ -799,6 +797,7 @@ namespace PI.Migrations.DataBase
                     b.HasOne("PI.EntityModels.Analisis", "FechaAnalisisNavigation")
                         .WithMany("Productos")
                         .HasForeignKey("FechaAnalisis")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__PRODUCTO__FECHA");
 
@@ -810,6 +809,7 @@ namespace PI.Migrations.DataBase
                     b.HasOne("PI.EntityModels.Analisis", "FechaAnalisisNavigation")
                         .WithMany("Puestos")
                         .HasForeignKey("FechaAnalisis")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__PUESTO__FECHA__UPDATE");
 
@@ -819,8 +819,6 @@ namespace PI.Migrations.DataBase
             modelBuilder.Entity("PI.EntityModels.Analisis", b =>
                 {
                     b.Navigation("Configuracion");
-
-                    b.Navigation("Egresos");
 
                     b.Navigation("GastoFijos");
 
