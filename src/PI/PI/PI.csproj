@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\DataBase\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

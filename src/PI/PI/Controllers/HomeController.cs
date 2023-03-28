@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PI.Models;
 using System.Diagnostics;
-
+using PI.EntityModels;
 namespace PI.Controllers
 {
     // Controlador del home. Este se usa el deafult de asp.net mvc

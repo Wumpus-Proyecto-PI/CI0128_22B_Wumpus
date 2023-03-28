@@ -1,4 +1,4 @@
-namespace PI.Models
+namespace PI.EntityModels
 {
     public class ErrorViewModel
     {
