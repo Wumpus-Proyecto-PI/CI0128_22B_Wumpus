@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PI.EntityModels;
 using PI.Models;
+using System.Data;
 
 namespace PI.EntityHandlers
 {
@@ -279,6 +280,18 @@ namespace PI.EntityHandlers
 			Mes mesBD = await base.Contexto.Meses.FindAsync(mes.Nombre, mes.FechaAnalisis);
 			mesBD.InversionPorMes = mes.InversionPorMes;
             await base.Contexto.SaveChangesAsync();
+        }
+
+        // Obtiene los Ingresos de un determinado mes en un análisis
+        public async Task<List<Ingreso>> ObtenerIngresosMesAsync(string NombreMes, DateTime FechaAnalisis)
+        {
+			return await base.Contexto.Ingresos.Where(x => x.Mes == NombreMes && x.FechaAnalisis == FechaAnalisis).ToListAsync();
+        }
+
+        // Obtiene los Egresos de un determinado mes en un análisis
+        public async Task<List<Egreso>> ObtenerEgresosMesAsync(string NombreMes, DateTime FechaAnalisis)
+        {
+            return await base.Contexto.Egresos.Where(x => x.Mes == NombreMes && x.FechaAnalisis == FechaAnalisis).ToListAsync();
         }
     }
 }

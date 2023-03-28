@@ -1,6 +1,6 @@
 using ClosedXML.Excel;
 using PI.EntityHandlers;
-using PI.Models;
+using PI.EntityModels;
 using PI.Services;
 using System.Globalization;
 
@@ -53,7 +53,7 @@ namespace PI.Service
         }
 
         // Crea la hoja referente al análisis de rentabilidad y todos sus valores.
-        public void ReportarAnalisisDeRentabilidad(string fechaAnalisis)
+        public async Task ReportarAnalisisDeRentabilidad(string fechaAnalisis)
         {
             hojaAnalisisRentabilidad = libro.AddWorksheet("Analisis de Rentabilidad");
             InsertarEncabezadoRentabilidad();
@@ -62,8 +62,7 @@ namespace PI.Service
 
             AgregarValoresDeEncabezado(fechaCreacionAnalisis);
 
-            ProductoHandler productoHandler = new ProductoHandler();
-            List<ProductoModel> productos = productoHandler.ObtenerProductos(fechaCreacionAnalisis);
+            List<Producto> productos = await ProductoHandler.ObtenerProductosAsync(fechaCreacionAnalisis);
             int cantidadProductos = productos.Count;
 
             AgregarValoresDeProductos(ref productos);
@@ -136,9 +135,8 @@ namespace PI.Service
         }
 
         // Encargado de ingresar los diferentes valores numéricos referentes a los ingresos y egresos sin tomar en cuanta los gastos fijos
-        public void AgregarValoresNumericosIngresosEgresos(DateTime FechaAnalisis)
+        public async Task AgregarValoresNumericosIngresosEgresos(DateTime FechaAnalisis)
         {
-            FlujoDeCajaHandler flujoDeCajaHandler = new FlujoDeCajaHandler();
             decimal IngresosContado;
             decimal IngresosOtros;
             decimal IngresosCredito;
@@ -147,16 +145,17 @@ namespace PI.Service
             decimal EgresosOtros;
             decimal TotalIngresos;
 
-            List<EgresoModel> EgresosActuales;
-            List<IngresoModel> IngresosActuales;
-            List<MesModel> MesesAnalisis = flujoDeCajaHandler.ObtenerMeses(FechaAnalisis);
+            List<Egreso> EgresosActuales;
+            List<Ingreso> IngresosActuales;
+            List<Mes> MesesAnalisis = await FlujoDeCajaHandler.ObtenerMesesAsync(FechaAnalisis);
 
             char[] ColumnasExcel = { 'B', 'C', 'D', 'E', 'F', 'G' };
             for (int i = 1; i < 7; i += 1)
             {
-                IngresosActuales = flujoDeCajaHandler.ObtenerIngresosMes("Mes " + i, FechaAnalisis);
+
+                IngresosActuales = await FlujoDeCajaHandler.ObtenerIngresosMesAsync("Mes " + i, FechaAnalisis);
                 Console.WriteLine("Count: " + IngresosActuales.Count);
-                EgresosActuales = flujoDeCajaHandler.ObtenerEgresosMes("Mes " + i, FechaAnalisis);
+                EgresosActuales = await FlujoDeCajaHandler.ObtenerEgresosMesAsync("Mes " + i, FechaAnalisis);
 
                 IngresosContado = FlujoCajaService.CalcularIngresosTipo("contado", IngresosActuales);
                 IngresosOtros = FlujoCajaService.CalcularIngresosTipo("otros", IngresosActuales);
@@ -182,10 +181,9 @@ namespace PI.Service
         }
 
         // Agrega a la hoja de Flujo de Caja, los diferentes gastos fijos y sus atributos.
-        public void AgregarValoresDeGastosFijos(DateTime FechaAnalisis)
+        public async Task AgregarValoresDeGastosFijos(DateTime FechaAnalisis)
         {
-            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            List<GastoFijoModel> gastosFijos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis);
+            List<GastoFijo> gastosFijos = await GastoFijoHandler.ObtenerGastosFijosAsync(FechaAnalisis);
 
             decimal divisor = 12;
             for (int i = 0; i < gastosFijos.Count; i += 1)
@@ -208,9 +206,8 @@ namespace PI.Service
         }
 
         // Agrega a la tabla Flujo de Caja los valores  y fórmulas referentes al flujo mensual.
-        public void AgregarFlujoMensual(DateTime FechaAnalisis) {
-            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            int NumeroCeldaTotalEgresos = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis).Count+16;
+        public async Task AgregarFlujoMensual(DateTime FechaAnalisis) {
+            int NumeroCeldaTotalEgresos = (await GastoFijoHandler.ObtenerGastosFijosAsync(FechaAnalisis)).Count+16;
 
             hojaFlujoCaja.Cell("A"+NumeroCeldaTotalEgresos).Value = "Flujo Mensual";
             hojaFlujoCaja.Cell("B" + NumeroCeldaTotalEgresos).FormulaA1 = "B7-"+"B" + (NumeroCeldaTotalEgresos - 2);
