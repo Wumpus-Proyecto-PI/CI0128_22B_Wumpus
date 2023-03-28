@@ -21,10 +21,10 @@ namespace PI.Controllers
             AnalisisHandler = analisisHandler;
         }
         // Retorna el archivo que resulta del servicio del exportador de acuerdo a la fecha de análisis enviada.
-        public FileResult Exportar(string fechaAnalisis)
+        public async Task<FileResult> Exportar(string fechaAnalisis)
         {
             ExportadorService exportador = new ExportadorService(ProductoHandler, FlujoDeCajaHandler, GastoFijoHandler, AnalisisHandler);
-            return File(exportador.obtenerReporte(fechaAnalisis).ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Reporte " + DateTime.Now.ToString() + ".xlsx");
+            return File((await exportador.obtenerReporte(fechaAnalisis)).ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Reporte " + DateTime.Now.ToString() + ".xlsx");
         }
     }
 }

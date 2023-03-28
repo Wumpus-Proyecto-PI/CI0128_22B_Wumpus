@@ -40,10 +40,10 @@ namespace PI.Services
             AnalisisHandler = analisisHandler;
         }
         // Invoca la creación del archivo xlsx y lo retorna en memoria.
-        public MemoryStream obtenerReporte(string fechaAnalisis)
+        public async Task<MemoryStream> obtenerReporte(string fechaAnalisis)
         {
-            ReportarAnalisisDeRentabilidad(fechaAnalisis);
-            ReportarFlujoDeCaja(fechaAnalisis);
+            await ReportarAnalisisDeRentabilidad(fechaAnalisis);
+            await ReportarFlujoDeCaja(fechaAnalisis);
             using (MemoryStream stream = new MemoryStream())
             {
                 libro.SaveAs(stream);
@@ -59,7 +59,7 @@ namespace PI.Services
 
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
-            AgregarValoresDeEncabezado(fechaCreacionAnalisis);
+            await AgregarValoresDeEncabezado(fechaCreacionAnalisis);
 
             List<Producto> productos = await ProductoHandler.ObtenerProductosAsync(fechaCreacionAnalisis);
             int cantidadProductos = productos.Count;
@@ -247,17 +247,17 @@ namespace PI.Services
         }
 
         // Encargado de generar el reporte de flujo de caja
-        public void ReportarFlujoDeCaja(string fechaAnalisis)
+        public async Task ReportarFlujoDeCaja(string fechaAnalisis)
         {
             hojaFlujoCaja = libro.AddWorksheet("Flujo de Caja");
             InsertarTitulosFlujoDeCaja();
 
             DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
 
-            AgregarValoresNumericosIngresosEgresos(fechaCreacionAnalisis);
-            AgregarValoresDeGastosFijos(fechaCreacionAnalisis);
-            AgregarFlujoMensual(fechaCreacionAnalisis);
-            AgregarEstiloFlujoDeCaja(fechaCreacionAnalisis);
+            await AgregarValoresNumericosIngresosEgresos(fechaCreacionAnalisis);
+            await AgregarValoresDeGastosFijos(fechaCreacionAnalisis);
+            await AgregarFlujoMensual(fechaCreacionAnalisis);
+            await AgregarEstiloFlujoDeCaja(fechaCreacionAnalisis);
         }
 
 
