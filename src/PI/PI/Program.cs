@@ -48,7 +48,7 @@ builder.Services.AddScoped<PI.Services.GastoVariableControl>();
 builder.Services.AddScoped<PI.Services.FlujoDeCajaControl>();
 builder.Services.AddScoped<PI.Services.InversionInicialControl>();
 builder.Services.AddScoped<PI.Services.RentabilidadControl>();
-
+builder.Services.AddScoped<PI.Services.ExportadorService>();
 
 
 var app = builder.Build();

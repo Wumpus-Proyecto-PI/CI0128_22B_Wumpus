@@ -4,7 +4,7 @@ using PI.EntityModels;
 using PI.Services;
 using System.Globalization;
 
-namespace PI.Service
+namespace PI.Services
 {
     // Servicio encargado de exportar el libro de reporte con la hoja de análisis de rentabilidad y del flujo de caja
     public class ExportadorService
@@ -32,14 +32,13 @@ namespace PI.Service
         private GastoFijoHandler? GastoFijoHandler = null;
         private AnalisisHandler? AnalisisHandler = null;
 
-        public ExportadorService(ProductoHandler productoHandler, FlujoDeCajaHandler flujoDeCajaHandler, GastoFijoHandler gastoFijoHandler, AnalisisHandler analisisHandler) 
+        public ExportadorService(ProductoHandler? productoHandler, FlujoDeCajaHandler? flujoDeCajaHandler, GastoFijoHandler? gastoFijoHandler, AnalisisHandler? analisisHandler)
         {
             ProductoHandler = productoHandler;
             FlujoDeCajaHandler = flujoDeCajaHandler;
             GastoFijoHandler = gastoFijoHandler;
             AnalisisHandler = analisisHandler;
         }
-
         // Invoca la creación del archivo xlsx y lo retorna en memoria.
         public MemoryStream obtenerReporte(string fechaAnalisis)
         {
