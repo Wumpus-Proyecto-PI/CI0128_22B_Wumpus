@@ -34,4 +34,8 @@
     <None Include="wwwroot\css\negocio\Index.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\DataBase\" />
+  </ItemGroup>
+
 </Project>
