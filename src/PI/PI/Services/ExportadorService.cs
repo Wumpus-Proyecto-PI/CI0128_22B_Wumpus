@@ -1,6 +1,6 @@
 using ClosedXML.Excel;
 using PI.EntityHandlers;
-using PI.Models;
+using PI.EntityModels;
 using PI.Services;
 using System.Globalization;
 
@@ -222,9 +222,8 @@ namespace PI.Service
         }
 
         // Encargado de agregar estilo a la hoja de Flujo de Caja
-        public void AgregarEstiloFlujoDeCaja(DateTime FechaAnalisis) {
-            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
-            int FilaFlujoMensual = gastoFijoHandler.ObtenerGastosFijos(FechaAnalisis).Count + 16;
+        public async Task AgregarEstiloFlujoDeCaja(DateTime FechaAnalisis) {
+            int FilaFlujoMensual = (await GastoFijoHandler.ObtenerGastosFijosAsync(FechaAnalisis)).Count + 16;
             int FilaTotalEgresos = FilaFlujoMensual-2;
             char[] ColumnasExcel = { 'B', 'C', 'D', 'E', 'F', 'G' };
             for (int i = 0; i < 6; i+=1) {
@@ -267,30 +266,27 @@ namespace PI.Service
 
 
         // Inserta los valores cargados del encabezado de la hoja de análisis de rentabilidad
-        public void AgregarValoresDeEncabezado(DateTime fechaCreacionAnalisis)
+        async public Task AgregarValoresDeEncabezado(DateTime fechaCreacionAnalisis)
         {
             // añade nombre del negocio
-            Handler handler = new Handler();
-            string nombreNegocio = handler.obtenerNombreNegocio(fechaCreacionAnalisis);
+            string nombreNegocio = await GastoFijoHandler.ObtenerNombreNegocioAsync(fechaCreacionAnalisis);
 
             // añade estado del negocio
-            AnalisisHandler analisisHandler = new AnalisisHandler();
-            AnalisisModel analisis = analisisHandler.ObtenerUnAnalisis(fechaCreacionAnalisis);
-            string estadoNegocioEnAnalisis = analisis.Configuracion.EstadoNegocio == true ? "En marcha" : "No iniciado";
+            Analisis analisis = await AnalisisHandler.ObtenerUnAnalisis(fechaCreacionAnalisis);
+            string estadoNegocioEnAnalisis = analisis.Configuracion.TipoNegocio == 1 ? "En marcha" : "No iniciado";
             hojaAnalisisRentabilidad.Cell("B2").Value = $"{nombreNegocio}{Environment.NewLine}{estadoNegocioEnAnalisis}";
 
             // añade fecha de creación del análisis
             hojaAnalisisRentabilidad.Cell("B3").Value = analisis.FechaCreacion.ToString("dd/MMM/yyyy", new CultureInfo("es-Es"));
 
             // añade la ganancia mensual y los gastos fijos mensuales
-            GastoFijoHandler gastoFijoHandler = new GastoFijoHandler();
             hojaAnalisisRentabilidad.Cell("B5").Value = analisis.GananciaMensual;
-            hojaAnalisisRentabilidad.Cell("B6").Value = $"{gastoFijoHandler.obtenerTotalAnual(fechaCreacionAnalisis) / 12}";
+            hojaAnalisisRentabilidad.Cell("B6").Value = $"{(await GastoFijoHandler.ObtenerTotalAnualAsync(fechaCreacionAnalisis)) / 12}";
         }
 
         // Agrega los valores (que no son fórmulas) que posee cada producto a la hoja de análisis de rentabilidad.
         // Detalle: El costo variable sí contempla una fórmula debido a la comisión de ventas.
-        public void AgregarValoresDeProductos(ref List<ProductoModel> productos)
+        public void AgregarValoresDeProductos(ref List<Producto> productos)
         {
             int productoActual = 0;
             char columnaActual = 'A'; // Llega hasta la columna E 
