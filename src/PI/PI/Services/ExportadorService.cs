@@ -1,11 +1,8 @@
 using ClosedXML.Excel;
-using PI.Handlers;
+using PI.EntityHandlers;
 using PI.Models;
 using PI.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Globalization;
-using PI.Views.Shared.Components.GastoFijo;
 
 namespace PI.Service
 {
@@ -29,6 +26,19 @@ namespace PI.Service
         const char PtoEquilibrioMontoRentabilidad = 'I';
         const char MetaVentasUnidadRentabilidad = 'J';
         const char MetaVentasMontoRentabilidad = 'K';
+
+        private ProductoHandler? ProductoHandler = null;
+        private FlujoDeCajaHandler? FlujoDeCajaHandler = null;
+        private GastoFijoHandler? GastoFijoHandler = null;
+        private AnalisisHandler? AnalisisHandler = null;
+
+        public ExportadorService(ProductoHandler productoHandler, FlujoDeCajaHandler flujoDeCajaHandler, GastoFijoHandler gastoFijoHandler, AnalisisHandler analisisHandler) 
+        {
+            ProductoHandler = productoHandler;
+            FlujoDeCajaHandler = flujoDeCajaHandler;
+            GastoFijoHandler = gastoFijoHandler;
+            AnalisisHandler = analisisHandler;
+        }
 
         // Invoca la creación del archivo xlsx y lo retorna en memoria.
         public MemoryStream obtenerReporte(string fechaAnalisis)

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ExportadorController.cs" />
-    <Compile Remove="Services\ExportadorService.cs" />
   </ItemGroup>
 
   <ItemGroup>
