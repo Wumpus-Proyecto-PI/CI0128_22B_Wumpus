@@ -8,7 +8,6 @@ namespace PI.EntityModels
     {
         public Analisis()
         {
-            Egresos = new HashSet<Egreso>();
             GastoFijos = new HashSet<GastoFijo>();
             InversionInicials = new HashSet<InversionInicial>();
             Mes = new HashSet<Mes>();
@@ -27,8 +26,7 @@ namespace PI.EntityModels
 
         [JsonIgnore]
         public virtual Configuracion? Configuracion { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Egreso> Egresos { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<GastoFijo> GastoFijos { get; set; }
         [JsonIgnore] 

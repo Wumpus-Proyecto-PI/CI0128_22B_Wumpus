@@ -333,7 +333,6 @@ namespace PI.EntityModels
                 entity.HasOne(d => d.FechaAnalisisNavigation)
                     .WithMany(p => p.GastoFijos)
                     .HasForeignKey(d => d.FechaAnalisis)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GASTO_FECHA");
             });
 
@@ -489,7 +488,6 @@ namespace PI.EntityModels
                 entity.HasOne(d => d.FechaAnalisisNavigation)
                     .WithMany(p => p.Productos)
                     .HasForeignKey(d => d.FechaAnalisis)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__PRODUCTO__FECHA");
             });
 
@@ -527,7 +525,6 @@ namespace PI.EntityModels
                 entity.HasOne(d => d.FechaAnalisisNavigation)
                     .WithMany(p => p.Puestos)
                     .HasForeignKey(d => d.FechaAnalisis)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__PUESTO__FECHA__UPDATE");
             });
 
