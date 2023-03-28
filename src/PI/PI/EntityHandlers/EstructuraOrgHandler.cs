@@ -25,10 +25,24 @@ namespace PI.EntityHandlers
         public async Task ActualizarPuesto(string nombrePuesto, Puesto puestoAInsertar)
         {
             Puesto PuestoAActualizar = await Contexto.Puestos.Where(x => x.Nombre == nombrePuesto && x.FechaAnalisis == puestoAInsertar.FechaAnalisis).FirstOrDefaultAsync();
-            PuestoAActualizar.Nombre = puestoAInsertar.Nombre;
-            PuestoAActualizar.CantidadPlazas = puestoAInsertar.CantidadPlazas;
-            PuestoAActualizar.SalarioBruto = puestoAInsertar.SalarioBruto;
-            PuestoAActualizar.Beneficios = puestoAInsertar.Beneficios;
+            if (PuestoAActualizar != null)
+            {
+                Contexto.Puestos.Remove(PuestoAActualizar);
+                await Contexto.Puestos.AddAsync(new Puesto
+                {
+                    Nombre = puestoAInsertar.Nombre,
+                    CantidadPlazas = puestoAInsertar.CantidadPlazas,
+                    SalarioBruto = puestoAInsertar.SalarioBruto,
+                    Beneficios = puestoAInsertar.Beneficios,
+                    FechaAnalisis = puestoAInsertar.FechaAnalisis
+                });
+            } else
+            {
+                PuestoAActualizar.CantidadPlazas = puestoAInsertar.CantidadPlazas;
+                PuestoAActualizar.SalarioBruto = puestoAInsertar.SalarioBruto;
+                PuestoAActualizar.Beneficios = puestoAInsertar.Beneficios;
+            }
+
             await Contexto.SaveChangesAsync();
         }
 
@@ -51,7 +65,7 @@ namespace PI.EntityHandlers
                 if (await ExistePuestoEnBase(nombrePuesto, puestoAInsertar.FechaAnalisis))
                 {
                     // si existe el puesto lo actualizamos
-                    ActualizarPuesto(nombrePuesto, puestoAInsertar);
+                    await ActualizarPuesto(nombrePuesto, puestoAInsertar);
                 }
                 else
                 {
