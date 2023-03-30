@@ -9,7 +9,7 @@ namespace PI.EntityHandlers
 
         public async Task<List<Negocio>> ObtenerNegociosAsync(string userId)
         {
-             return await Contexto.Negocios.AsNoTracking().Where(x => x.IdUsuario == userId).OrderByDescending(negocio => negocio.Id).ToListAsync();
+             return await Contexto.Negocios.AsNoTracking().Where(x => x.IdUsuario == userId).Include(x => x.Analisis).OrderByDescending(negocio => negocio.Id).ToListAsync();
         }
 
         public async Task<int> AgregarNegocioAsync(Negocio nuevoNegocio) {
