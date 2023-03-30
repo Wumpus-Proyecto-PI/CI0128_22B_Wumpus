@@ -10,9 +10,11 @@ namespace PI.Controllers
     public class NegocioController : ManejadorUsuariosController
     {
         private NegocioHandler? NegocioHandler = null;
-        public NegocioController (NegocioHandler negocioHandler)
+        private AnalisisHandler? AnalisisHandler = null;
+        public NegocioController (NegocioHandler negocioHandler, AnalisisHandler analisisHandler)
         {
             NegocioHandler = negocioHandler;
+            AnalisisHandler = analisisHandler;
         }
 
         // Retorna una lista con todos los modelos de negocio existentes y el título del paso.
@@ -50,12 +52,13 @@ namespace PI.Controllers
                 IdUsuario = userId
             };
 
-            await NegocioHandler.AgregarNegocioAsync(nuevoNegocio);
+            nuevoNegocio = await NegocioHandler.AgregarNegocioAsync(nuevoNegocio);
+
+            await AnalisisHandler.IngresarAnalisis(nuevoNegocio.Id, tipoNegocio);
 
             // Redirecciona al analisis por defecto
             // TODO redireccionar a la página de análisis creados (que contiene las opciones de visualizar, descargar, comparar, crear y crear copia)
             return RedirectToAction("MisAnalisis", "Analisis", new { IDNegocio = nuevoNegocio.Id });
-            // return RedirectToAction("Index", "Negocio");
         }
 
         // Elimina el negocio indicado por parámetro (mediante el ID) de la base de datos
