@@ -12,9 +12,10 @@ namespace PI.EntityHandlers
              return await Contexto.Negocios.AsNoTracking().Where(x => x.IdUsuario == userId).Include(x => x.Analisis).OrderByDescending(negocio => negocio.Id).ToListAsync();
         }
 
-        public async Task<int> AgregarNegocioAsync(Negocio nuevoNegocio) {
-            await base.Contexto.Negocios.AddAsync(nuevoNegocio);
-            return await base.Contexto.SaveChangesAsync();
+        public async Task<Negocio> AgregarNegocioAsync(Negocio nuevoNegocio) {
+            var negocioCreado = await base.Contexto.Negocios.AddAsync(nuevoNegocio);
+            await base.Contexto.SaveChangesAsync();
+            return negocioCreado.Entity;
         }
 
         public async Task<int> EliminarNegocioAsync(int idNegocio)
