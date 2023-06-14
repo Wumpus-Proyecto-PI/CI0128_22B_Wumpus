@@ -9,20 +9,20 @@
     <div id="form-parametros-rentabilidad">
         <div class="pill-form">
             <div><h4>Seguro social</h4></div>
-            <input id="form-ganancia-mensual" class="form-control" type="text" pattern="[0-9]+([,.][0-9]+)?"  @bind="Config.PorcentajeSs" @onfocusout="async () => await ActualizarConfigAnalisis()"/>
+            <input id="form-ganancia-mensual" class="form-control" type="text" pattern="[0-9]+([,.][0-9]+)?" @bind="Config.PorcentajeSs" @onmousedown="GuardarValorAnteriorSs" @onfocusout="async () => await ActualizarConfigAnalisis()" />
             <span class="simbolo-porcentaje">%</span>
         </div>
         <div class="pill-form">
             <div><h4>Prestaciones</h4></div>
-            <input id="form-ganancia-mensual" class="form-control" type="text" pattern="[0-9]+([,.][0-9]+)?" @bind="Config.PorcentajePl" @onfocusout="async () => await ActualizarConfigAnalisis()" />
+            <input id="form-ganancia-mensual" class="form-control" type="text" pattern="[0-9]+([,.][0-9]+)?" @bind="Config.PorcentajePl" @onmousedown="GuardarValorAnteriorPl" @onfocusout="async () => await ActualizarConfigAnalisis()" />
             <span class="simbolo-porcentaje">%</span>
         </div>
     </div>
 </div>
-@if (valorValidoSsyPl == false)
+@if (ValorValidoSsyPl == false)
 {
     <!-- Mostrar mensaje de error si el porcentaje ingresado está fuera del rango válido -->
-    <p class="text-center text-danger">ERROR: El porcentaje ingresado debe estar entre 0 y 100. Ingréselo nuevamente.</p>
+    <p class="text-center text-danger">ERROR: El porcentaje ingresado debe estar entre 0 y 100. Valor anterior restaurado.</p>
 }
 <div id="contenido-puestos-pestañas">   
     @*se llama al componente reazor dinamico que contiene lado del cliente de agregar Puestos y beneficios*@
@@ -194,7 +194,9 @@
     public string ErrorSalario = "";
     public string ErrorPlaza = "";
 
-    private bool valorValidoSsyPl = true;
+    public decimal? ValorAnteriorSs = 0m;
+    public decimal? ValorAnteriorPl = 0m;
+    private bool ValorValidoSsyPl = true;
 
     // método para controlar el hover de los botones guardar y agregar
     public void Hover(int action)
@@ -405,18 +407,42 @@
     // Método que actualiza los valores de la configuración de un análisis
     public async Task ActualizarConfigAnalisis()
     {
-        // Verificar si los porcentajes están dentro del rango válido (0-100)
-        if (Config.PorcentajeSs >= 0 && Config.PorcentajeSs <= 100
-            && Config.PorcentajePl >= 0 && Config.PorcentajePl <= 100)
+        // Verificar si los porcentajes de Ss y Pl están dentro del rango válido (0-100)
+        bool porcentajeSsValido = Config.PorcentajeSs >= 0 && Config.PorcentajeSs <= 100;
+        bool porcentajePlValido = Config.PorcentajePl >= 0 && Config.PorcentajePl <= 100;
+
+        if (porcentajeSsValido && porcentajePlValido)
         {
-            valorValidoSsyPl = true;
-            // Actualizar la configuración del análisis
+            // Los porcentajes son válidos
+            ValorValidoSsyPl = true;
+
+            // Actualizar la configuración del análisis mediante el objeto AnalisisHandler
             await AnalisisHandler.ActualizarConfiguracionAnalisis(Config);
+        }
+        else if (!porcentajeSsValido)
+        {
+            // El porcentaje de Ss es inválido, se restablece al valor anterior
+            ValorValidoSsyPl = false;
+            Config.PorcentajeSs = ValorAnteriorSs;
         }
         else
         {
-            valorValidoSsyPl = false;
+            // El porcentaje de Pl es inválido, se restablece al valor anterior
+            ValorValidoSsyPl = false;
+            Config.PorcentajePl = ValorAnteriorPl;
         }
+    }
+    
+    // Guarda el valor anterior del porcentaje de Ss en la variable ValorAnteriorSs por si hay un error de entrada de datos poder restablecer el valor.
+    public void GuardarValorAnteriorSs()
+    {
+        ValorAnteriorSs = Config.PorcentajeSs;
+    }
+
+    // Guarda el valor anterior del porcentaje de Pl en la variable ValorAnteriorPl por si hay un error de entrada de datos poder restablecer el valor.
+    public void GuardarValorAnteriorPl()
+    {
+        ValorAnteriorPl = Config.PorcentajePl;
     }
 }
 
