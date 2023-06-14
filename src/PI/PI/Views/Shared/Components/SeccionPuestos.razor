@@ -9,14 +9,21 @@
     <div id="form-parametros-rentabilidad">
         <div class="pill-form">
             <div><h4>Seguro social</h4></div>
-            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajeSs" @onfocusout="async () => await ActualizarConfigAnalisis()" />
+            <input id="form-ganancia-mensual" class="form-control" type="text" pattern="[0-9]+([,.][0-9]+)?"  @bind="Config.PorcentajeSs" @onfocusout="async () => await ActualizarConfigAnalisis()"/>
+            <span class="simbolo-porcentaje">%</span>
         </div>
         <div class="pill-form">
             <div><h4>Prestaciones</h4></div>
-            <input id="form-ganancia-mensual" type="number" min=0 style="font-size: larger" step="any" class="form-control" @bind="Config.PorcentajePl" @onfocusout="async () => await ActualizarConfigAnalisis()" />
+            <input id="form-ganancia-mensual" class="form-control" type="text" pattern="[0-9]+([,.][0-9]+)?" @bind="Config.PorcentajePl" @onfocusout="async () => await ActualizarConfigAnalisis()" />
+            <span class="simbolo-porcentaje">%</span>
         </div>
     </div>
 </div>
+@if (valorValidoSsyPl == false)
+{
+    <!-- Mostrar mensaje de error si el porcentaje ingresado está fuera del rango válido -->
+    <p class="text-center text-danger">ERROR: El porcentaje ingresado debe estar entre 0 y 100. Ingréselo nuevamente.</p>
+}
 <div id="contenido-puestos-pestañas">   
     @*se llama al componente reazor dinamico que contiene lado del cliente de agregar Puestos y beneficios*@
     <div style="width: 100%; display: flex;">
@@ -186,6 +193,8 @@
     public string ErrorNombre = "";
     public string ErrorSalario = "";
     public string ErrorPlaza = "";
+
+    private bool valorValidoSsyPl = true;
 
     // método para controlar el hover de los botones guardar y agregar
     public void Hover(int action)
@@ -394,8 +403,20 @@
     }
 
     // Método que actualiza los valores de la configuración de un análisis
-    public async Task ActualizarConfigAnalisis() {
-        await AnalisisHandler.ActualizarConfiguracionAnalisis(Config);
+    public async Task ActualizarConfigAnalisis()
+    {
+        // Verificar si los porcentajes están dentro del rango válido (0-100)
+        if (Config.PorcentajeSs >= 0 && Config.PorcentajeSs <= 100
+            && Config.PorcentajePl >= 0 && Config.PorcentajePl <= 100)
+        {
+            valorValidoSsyPl = true;
+            // Actualizar la configuración del análisis
+            await AnalisisHandler.ActualizarConfiguracionAnalisis(Config);
+        }
+        else
+        {
+            valorValidoSsyPl = false;
+        }
     }
 }
 
