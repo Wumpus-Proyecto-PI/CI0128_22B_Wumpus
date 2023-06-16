@@ -76,11 +76,11 @@ namespace PI.EntityHandlers
         public async Task ActualizarConfiguracionAnalisis(Configuracion config)
         {
             Configuracion ConfigPorActualizar =await Contexto.Configuracion.Where(x => x.FechaAnalisis == config.FechaAnalisis).FirstOrDefaultAsync();
-            if (config.PorcentajeSs >= 0)
+            if (config.PorcentajeSs >= 0 && config.PorcentajeSs <= 100)
             {
                 ConfigPorActualizar.PorcentajeSs = config.PorcentajeSs;
             }
-            if (config.PorcentajePl >= 0)
+            if (config.PorcentajePl >= 0 && config.PorcentajePl <= 100)
             {
                 ConfigPorActualizar.PorcentajePl = config.PorcentajePl;
             }
