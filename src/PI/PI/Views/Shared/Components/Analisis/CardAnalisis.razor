@@ -16,9 +16,9 @@
             @{bool NO_INICIADO = false;}
              @if (analisis.Configuracion.TipoNegocio == 0)
             {
-                <span id="estado-negocio" class="card-text pb-2">No iniciado</span>
+                <span id="estado-negocio" class="card-text pb-2">En diseño</span>
             } else {
-                <span id="estado-negocio" class="card-text pb-2">En marcha</span>
+                <span id="estado-negocio" class="card-text pb-2">En operación</span>
             }
     
         </div>
@@ -33,10 +33,6 @@
                 <span class="fw-bold analisis-en-curso text-center"> Análisis en curso </span>
             </div>
         }
-    </div>
-    <!-- Botón de editar -->
-    <div class="edit-icon d-flex justify-content-center align-items-center">
-        <img src=/img/generic/editPhoto.png alt="Icono de editar">
     </div>
 </div>
 
