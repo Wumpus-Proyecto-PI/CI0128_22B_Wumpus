@@ -38,12 +38,19 @@
                                 <span> @item.Nombre </span></div>
                             <!-- Estado del negocio -->
                             <div class="card-tipo">
-                                @*@if (@item.TipoUltimoAnalisis == false)
-                                {*@
-                                <span id="tipoNegocio">En diseño</span>
-                                @*}else {
+                                @if (@item.Analisis.Last().Configuracion?.TipoNegocio != null)
+                                {
+                                    @if (@item.Analisis.Last().Configuracion?.TipoNegocio == 0) {
+ 
+                                    <span id="tipoNegocio">En diseño</span>
+                                    }
+                                    else {
                                     <span id="tipoNegocio">En marcha</span>
-                                }*@
+                                    }
+                                }
+                                else {
+                                    <span id="tipoNegocio">En diseño</span>
+                                }
                                 <div class="inicial-nombre">
                                     <span> @item.Nombre[0] </span></div>
                             </div>
