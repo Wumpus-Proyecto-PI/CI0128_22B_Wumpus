@@ -465,16 +465,17 @@ div a {
     margin: 10px 0px 10px 0px;
 }
 
-.fila-form-configuracion label {
-    border: solid;
-    border-radius: 20px 0px 0px 20px;
-    padding: 5px 10px 5px 10px;
-    border-width: 1px;
-    font-size: 25px;
-    width: 235px;
-    text-align: center;
-    background-color: #E2E2E2;
-}
+    .fila-form-configuracion label {
+        border: solid;
+        border-radius: 20px 0px 0px 20px;
+        padding: 5px 10px 5px 10px;
+        border-width: 1px;
+        font-size: 25px;
+        width: 265px;
+        text-align: center;
+        background-color: #E2E2E2;
+        white-space: nowrap;
+    }
 
 .fila-form-configuracion input {
     border: solid;
