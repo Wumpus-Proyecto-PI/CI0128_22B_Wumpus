@@ -16,10 +16,12 @@ namespace PI.Controllers
     {
 
         private GastoFijoHandler? GastoFijoHandler = null;
+        private int NumeroPaso;
 
         public GastoFijoController(GastoFijoHandler gastoFijoHandler)
         {
             GastoFijoHandler = gastoFijoHandler;
+            NumeroPaso = 2;
         }
 
         // Retorna una lista de gastos fijos que pertenecen al análisis con la fecha pasada por parámetro.
@@ -66,7 +68,7 @@ namespace PI.Controllers
                     gastosFijos.Add(gastoFijo);
                 }
             }
-
+            ViewBag.NumeroPasoActual = NumeroPaso;
             return View(gastosFijos);
         }
     }

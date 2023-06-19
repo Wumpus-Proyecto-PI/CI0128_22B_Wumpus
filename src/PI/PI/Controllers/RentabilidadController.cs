@@ -9,10 +9,12 @@ namespace PI.Controllers
     {
 
         private ProductoHandler? ProductoHandler = null;
+        private int NumeroPaso;
 
         public RentabilidadController( ProductoHandler productoHandler )
         {
             ProductoHandler = productoHandler;
+            NumeroPaso = 4;
         }
 
         // // Retorna una lista con todos los modelos de producto existentes y el título del paso.
@@ -25,6 +27,7 @@ namespace PI.Controllers
             List<Producto> productos = await ProductoHandler.ObtenerProductosAsync(fechaConversion);
             Analisis model = await ProductoHandler.ObtenerUnAnalisis(ViewBag.fechaAnalisis);
             ViewBag.AnalisisActual = model;
+            ViewBag.EstadoAnalisis = await ProductoHandler.ObtenerTipoAnalisisAsync(ViewBag.fechaAnalisis);
 
             decimal totalAnualGastosFijos = await ProductoHandler.ObtenerTotalAnualAsync(fechaConversion);
             ViewBag.MontoGastosFijosMensuales = AnalisisRentabilidadService.CalcularGastosFijosTotalesMensuales(totalAnualGastosFijos);
@@ -38,6 +41,7 @@ namespace PI.Controllers
             ViewData["TituloPaso"] = "Análisis de rentabilidad";
             // se asigna el titulo en la pestaña del cliente
             ViewData["Title"] = ViewData["TituloPaso"];
+            ViewBag.NumeroPasoActual = NumeroPaso;
 
             return View(productos);
         }
