@@ -4,7 +4,16 @@
 @using System.Globalization
 @inject NavigationManager NavigationManager;
 @inject PI.EntityHandlers.ProductoHandler HandlerProducto;
+@inject PI.Services.PasosProgresoControl PasosProgresoControl;
+@inject AnalisisHandler AnalisisHandler;
 
+
+<div class="w-100">
+
+<div class="d-flex col-9 justify-content-end mb-4">
+    <BotonesFlujoPasos NumeroPasoActual=NumeroPasoActual NumeroPasoMaximo=NumeroPasoMaximo FechaAnalisis=fechaAnalisis></BotonesFlujoPasos>
+</div>
+<div>   
 
 @*Comienzo de seccion de gastos variables*@
 <div class="altura-seccion" id="seccion-gastosVar">
@@ -241,7 +250,19 @@
     </div>
 }
 @*Fin de popup de los gastos variables *@
+
+    </div>
+</div>
 @code {
+    // numero del paso actual. Se usa para el control de los botones de los pasos
+    [Parameter]
+    public int NumeroPasoActual { get; set; }
+
+    // numero maximo de paso al que se puede acceder
+    public int NumeroPasoMaximo { get; set; }
+
+    public EntityModels.Analisis? AnalisisActual = null;
+
     // lista de gastos variables de la base de datos
     [Parameter]
     public List<PI.EntityModels.Producto> productos { get; set; }
@@ -680,5 +701,14 @@
     }
 
 
+    public async Task ActualizarBotonesControlPasos()
+    {
+        NumeroPasoMaximo = await PasosProgresoControl.EstaActivoMaximoAsync(AnalisisActual);
+    }
 
+    protected override async Task OnInitializedAsync()
+    {
+        AnalisisActual = await AnalisisHandler.ObtenerUnAnalisis(fechaAnalisis);
+        await ActualizarBotonesControlPasos();
+    }
 }

@@ -13,12 +13,15 @@ namespace PI.Controllers
         private ProductoHandler? ProductoHandler = null;
         private AnalisisHandler? AnalisisHandler = null;
         private NegocioHandler? NegocioHandler = null;
+        private int NumeroPaso;
+
 
         public ProductoController(NegocioHandler negocioHandler, ProductoHandler productoHandler, AnalisisHandler analisisHandler)
         {
             ProductoHandler = productoHandler;
             AnalisisHandler = analisisHandler;
             NegocioHandler = negocioHandler;
+            NumeroPaso = 3;
         }
 
 
@@ -41,6 +44,8 @@ namespace PI.Controllers
             // asignamos el nombre del negocio en la vista
             // este se extrae de la base de datos con la fecha del análisis
             ViewData["NombreNegocio"] = await NegocioHandler.ObtenerNombreNegocioAsync(fechaAnalisis);
+
+            ViewBag.NumeroPasoActual = NumeroPaso;
 
             // cargamos una lista con todos los productos que existen en la base de datos
             List<Producto> productos = await ProductoHandler.ObtenerProductosAsync(fechaAnalisis);

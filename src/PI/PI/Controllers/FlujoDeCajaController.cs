@@ -24,9 +24,10 @@ namespace PI.Controllers
 		public async Task<IActionResult> IndexFlujoDeCaja(string fechaAnalisis)
 		{
 			DateTime fechaCreacionAnalisis = DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null);
+            ViewBag.fechaAnalisis = fechaCreacionAnalisis;
 
-			// Acciones para calcular datos que se envian a la vista
-			await FlujoDeCajaHandler.CrearIngresoPorMesAsync(fechaCreacionAnalisis);
+            // Acciones para calcular datos que se envian a la vista
+            await FlujoDeCajaHandler.CrearIngresoPorMesAsync(fechaCreacionAnalisis);
 			await FlujoDeCajaHandler.CrearEgresoPorMesAsync(fechaCreacionAnalisis);
 
 			List<Mes> meses = await FlujoDeCajaHandler.ObtenerMesesAsync(fechaCreacionAnalisis);

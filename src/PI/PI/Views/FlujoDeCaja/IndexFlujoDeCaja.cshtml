@@ -26,34 +26,8 @@
 
     <div class="container-xl">
 
-        <div class="row fila-meta-inversion d-flex justify-content-center">
-
-            @*Meta de mensual de ventas*@
-            <div class="col-6 d-flex justify-content-center">
-                <label>Meta mensual de ventas</label>
-                <div class="dato-meta-inversion">
-                    <span>
-                        @FormatManager.ToFormatoEstadistico(metaDeVentasMensual)
-                    </span>
-                </div>
-            </div>
-
-            @*Inversion inicial*@
-            @if (estadoIniciado == false)
-            {
-                <div class="col-6 d-flex justify-content-center">
-                    <label>Inversion inicial</label>
-                    <div class="dato-meta-inversion">
-                        <span>
-                            @FormatManager.ToFormatoEstadistico(inversionInicial)
-                        </span>
-                    </div>
-                </div>
-            }
-        </div>
-
         @(
-            await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TabsFlujoCaja>(RenderMode.ServerPrerendered, new { ingresos = ViewBag.Ingresos, meses = ViewBag.Meses, egresos = ViewBag.Egresos, gastosFijos = ViewBag.GastosFijos, estadoIniciado, inversionInicial, flujoMensual = ViewBag.flujoMensual, ingresosTotales = ViewBag.IngresosTotales, egresosTotales = ViewBag.EgresosTotales })
+            await Html.RenderComponentAsync<PI.Views.Shared.Components.FlujoDeCaja.TabsFlujoCaja>(RenderMode.ServerPrerendered, new { ingresos = ViewBag.Ingresos, meses = ViewBag.Meses, egresos = ViewBag.Egresos, gastosFijos = ViewBag.GastosFijos, estadoIniciado, inversionInicial, flujoMensual = ViewBag.flujoMensual, ingresosTotales = ViewBag.IngresosTotales, egresosTotales = ViewBag.EgresosTotales, FechaAnalisis = ViewBag.fechaAnalisis, metaDeVentasMensual = metaDeVentasMensual})
         )
     </div>
 </body>

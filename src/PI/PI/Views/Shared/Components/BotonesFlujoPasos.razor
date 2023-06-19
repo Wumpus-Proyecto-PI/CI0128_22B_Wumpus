@@ -1,0 +1,198 @@
+﻿@inject NavigationManager NavigationManager;
+@inject PI.EntityHandlers.AnalisisHandler AnalisisHandler;
+
+
+<div class="d-flex align-content-center align-items-center justify-content-center">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination align-content-center align-items-center justify-content-center mb-0 mt-0">
+            @switch (NumeroPasoActual)
+            {
+                default:
+                case 1:
+                    <li class="page-item disabled hovertext stretched-link" data-hover="No hay un paso anterior">
+                        <a class="page-link h2 mb-0 stretched-link" href="#">
+                            <span aria-hidden="true">&#60;</span>
+                        </a>
+                    </li>
+                break;
+
+                case 2:
+                    <li class="page-item hovertext stretched-link" data-hover="Estructura Organizativa" @onclick="@(() => { NavigationManager.NavigateTo("EstructuraOrg?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                        <a class="page-link h2 mb-0" href="#">
+
+                            <span aria-hidden="true">&#60;</span>
+                        </a>
+                    </li>
+                    break;
+                case 3:
+                    <li class="page-item hovertext stretched-link" data-hover="Gastos Fijos" @onclick="@(() => { NavigationManager.NavigateTo("GastoFijo/GastoFijo?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                        <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo">
+                            <span aria-hidden="true">&#60;</span>
+                        </a>
+                    </li>
+                    break;
+                case 4:
+                    <li class="page-item hovertext stretched-link" data-hover="Gastos Variables" @onclick="@(() => { NavigationManager.NavigateTo("Producto?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                        <a class="page-link h2 mb-0" asp-controller="Producto" asp-action="Index">
+                            <span aria-hidden="true">&#60;</span>
+                        </a>
+                    </li>
+                    break;
+                case 5:
+                    <li class="page-item hovertext stretched-link" data-hover="Análisis de Rentabilidad" @onclick="@(() => { NavigationManager.NavigateTo("Rentabilidad?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                        <a class="page-link h2 mb-0" asp-controller="Rentabilidad" asp-action="Index">
+                            <span aria-hidden="true">&#60;</span>
+                        </a>
+                    </li>
+                    break;
+                case 6:
+                    if (EnMarcha)
+                    {
+                        <li class="page-item hovertext stretched-link" data-hover="Análisis de Rentabilidad" @onclick="@(() => { NavigationManager.NavigateTo("Rentabilidad?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo">
+                                <span aria-hidden="true"> &#60; </span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item hovertext stretched-link" data-hover="Inversión Inicial" @onclick="@(() => { NavigationManager.NavigateTo("InversionInicial/InversionInicial?fechaAnalisis=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                            <a class="page-link h2 mb-0" asp-controller="InversionInicial" asp-action="InversionInicial">
+                                <span aria-hidden="true">&#60;</span>
+                            </a>
+                        </li>
+                    }
+                    break;
+                    break;
+            }
+
+            <li class="page-item disabled "><a class="page-link h2 mb-0" href="">Pasos</a></li>
+
+            @switch (NumeroPasoActual)
+            {
+                default:
+                case 1:
+                    if (NumeroPasoActual < NumeroPasoMaximo)
+                    {
+                        <li class="page-item hovertext stretched-link" data-hover="Gastos Fijos" @onclick="@(() => { NavigationManager.NavigateTo("GastoFijo/GastoFijo?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                            <a class="page-link h2 mb-0 stretched-link" asp-controller="GastoFijo" asp-action="GastoFijo">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    } else {
+                        <li class="page-item hovertext disabled stretched-link" data-hover="Debe crear puestos para seguir">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    break;
+
+                case 2:
+                    if (NumeroPasoActual < NumeroPasoMaximo)
+                    {
+                        <li class="page-item hovertext stretched-link" data-hover="Gastos Variables" @onclick="@(() => { NavigationManager.NavigateTo("Producto?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item hovertext disabled stretched-link" data-hover="Debe crear gastos para seguir">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    break;
+                case 3:
+                    if (NumeroPasoActual < NumeroPasoMaximo)
+                    {
+                        <li class="page-item hovertext stretched-link" data-hover="Análisis de Rentabilidad" @onclick="@(() => { NavigationManager.NavigateTo("Rentabilidad?fecha=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item hovertext disabled stretched-link" data-hover="Debe crear productos para seguir">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    break;
+                case 4:
+                    if (NumeroPasoActual < NumeroPasoMaximo)
+                    {
+                        if (EnMarcha)
+                        {
+                            <li class="page-item hovertext stretched-link" data-hover="Flujo de Caja" @onclick="@(() => { NavigationManager.NavigateTo("FlujoDeCaja/IndexFlujoDeCaja?fechaAnalisis=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                                <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo">
+                                    <span aria-hidden="true"> > </span>
+                                </a>
+                            </li>
+                        } else
+                        {
+                            <li class="page-item hovertext stretched-link" data-hover="Inversión Inicial" @onclick="@(() => { NavigationManager.NavigateTo("InversionInicial/InversionInicial?fechaAnalisis=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                                <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo">
+                                    <span aria-hidden="true"> > </span>
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="page-item hovertext disabled stretched-link" data-hover="Debe asignar precios y porcentajes de venta">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    break;
+                case 5:
+                    if (NumeroPasoActual < NumeroPasoMaximo)
+                    {
+                        <li class="page-item hovertext stretched-link" data-hover="Flujo de Caja" @onclick="@(() => { NavigationManager.NavigateTo("FlujoDeCaja/IndexFlujoDeCaja?fechaAnalisis=" + FechaAnalisis.ToString("yyyy-MM-dd HH:mm:ss.fff"), forceLoad: true);})">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item hovertext disabled stretched-link" data-hover="Debe crear elementos de ínversión inicial">
+                            <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="">
+                                <span aria-hidden="true"> > </span>
+                            </a>
+                        </li>
+                    }
+                    break;
+                case 6:
+                    <li class="page-item hovertext disabled stretched-link" data-hover="No existen más pasos">
+                        <a class="page-link h2 mb-0" asp-controller="GastoFijo" asp-action="GastoFijo" asp-route-fecha="">
+                            <span aria-hidden="true"> > </span>
+                        </a>
+                    </li>
+                    break;
+            }
+            
+        </ul>
+    </nav>
+</div>
+
+@code {
+    [Parameter]
+    public int NumeroPasoActual { get; set; }
+
+    [Parameter]
+    public int NumeroPasoMaximo { get; set; }
+
+    [Parameter]
+    public DateTime FechaAnalisis { get; set; }
+
+    [Parameter]
+    public bool EnMarcha { get; set; } = false;
+}
