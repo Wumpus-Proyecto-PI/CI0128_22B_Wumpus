@@ -16,7 +16,7 @@ namespace PI.EntityHandlers
 
         public async Task<List<Puesto>> ObtenerListaDePuestos(DateTime fechaAnalisis)
         {
-            return await Contexto.Puestos.Where(x => x.FechaAnalisis == fechaAnalisis).OrderByDescending(x => x.SalarioBruto).ToListAsync();
+            return await Contexto.Puestos.Where(x => x.FechaAnalisis == fechaAnalisis).OrderByDescending(x => x.SalarioBruto * x.CantidadPlazas).ToListAsync();
         }
 
         public async Task ActualizarPuesto(string nombrePuesto, Puesto puestoAInsertar)
