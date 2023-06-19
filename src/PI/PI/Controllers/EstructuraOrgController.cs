@@ -11,10 +11,13 @@ namespace PI.Controllers
     {
         private EstructuraOrgHandler? EstructuraOrgHandler = null;
         private AnalisisHandler? AnalisisHandler = null;
+        private int NumeroPaso;
+
         public EstructuraOrgController(EstructuraOrgHandler estructuraOrgHandler, AnalisisHandler analisisHandler)
         {
             EstructuraOrgHandler = estructuraOrgHandler;
             AnalisisHandler = analisisHandler;
+            NumeroPaso = 1;
         }
         // Acción que retorna la vista predeterminada de la estrutura organizativa
         // Recibe un string que indica la fecha del análisis a la que pertenece la estrutura organizativa actual
@@ -47,6 +50,7 @@ namespace PI.Controllers
             Models.Add(puestos);
             Models.Add(config);
 
+            ViewBag.NumeroPasoActual = NumeroPaso;
             return View(Models);
         }
     }
