@@ -107,7 +107,7 @@ namespace PI.EntityHandlers
 
         }
 
-        public async Task<Configuracion> ObtenerConfigAnalisis(DateTime fechaAnalisis)
+        public async Task<Configuracion> ObtenerConfigAnalisis(DateTime? fechaAnalisis)
         {
             return await Contexto.Configuracion.Where(x => x.FechaAnalisis == fechaAnalisis).FirstOrDefaultAsync();
         }

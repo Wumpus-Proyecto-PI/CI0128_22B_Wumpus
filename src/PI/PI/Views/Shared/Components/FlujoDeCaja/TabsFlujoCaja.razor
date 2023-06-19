@@ -7,6 +7,34 @@
 @using PI.Views.Shared.Components.FlujoDeCaja
 @inject FlujoCajaService FlujoCajaService;
 
+<div class="d-flex col-10 justify-content-end mb-4">
+    <BotonesFlujoPasos NumeroPasoActual=6 NumeroPasoMaximo=6 FechaAnalisis=FechaAnalisis EnMarcha=estadoIniciado></BotonesFlujoPasos>
+</div>
+<div class="row fila-meta-inversion d-flex justify-content-center">
+
+    @*Meta de mensual de ventas*@
+    <div class="col-6 d-flex justify-content-center">
+        <label>Meta mensual de ventas</label>
+        <div class="dato-meta-inversion">
+            <span>
+                @FormatManager.ToFormatoEstadistico(metaDeVentasMensual)
+            </span>
+        </div>
+    </div>
+
+    @*Inversion inicial*@
+    @if (estadoIniciado == false)
+    {
+        <div class="col-6 d-flex justify-content-center">
+            <label>Inversion inicial</label>
+            <div class="dato-meta-inversion">
+                <span>
+                    @FormatManager.ToFormatoEstadistico(inversionInicial)
+                </span>
+            </div>
+        </div>
+    }
+</div>
 <div id="contenedor-tabs" class="my-5">
     <nav>
         <div class="nav nav-tabs tabs-tablas" id="nav-tab" role="tablist">
@@ -55,6 +83,9 @@
     public decimal inversionInicial { get; set; }
 
     [Parameter]
+    public decimal metaDeVentasMensual { get; set; }
+
+    [Parameter]
     public List<Mes> meses { get; set; }
 
     [Parameter]
@@ -65,6 +96,11 @@
 
     [Parameter]
     public List<string> egresosTotales { get; set; }
+
+    [Parameter]
+    public DateTime FechaAnalisis { get; set; }
+    
+
 
     public async Task ActualizarFlujoMensualAsync(){
         await FlujoCajaService.ActualizarFlujoMensualAsync(meses, flujoMensual);

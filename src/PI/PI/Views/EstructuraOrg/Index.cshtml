@@ -14,11 +14,12 @@
     <title>HTML template</title>
     <link rel="stylesheet" href="~/css/est_org.css">
     <link rel="stylesheet" href="~/css/estructuraOrg/PuestoParcialView.css">
+    <link rel="stylesheet" href="~/css/HoverTexto.css" />
 </head>
+ 
 
-@Html.Partial("LayoutNombreEmpresa")
-
+ @Html.Partial("LayoutNombreEmpresa")
 
 @(
-await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { Puestos = Model[0], Config = Model[1], FechaAnalisis = ViewBag.FechaAnalisis})
+await Html.RenderComponentAsync<PI.Views.Shared.Components.SeccionPuestos>(RenderMode.ServerPrerendered, new { Puestos = Model[0], Config = Model[1], FechaAnalisis = ViewBag.FechaAnalisis, NumeroPasoActual = ViewBag.NumeroPasoActual })
          )

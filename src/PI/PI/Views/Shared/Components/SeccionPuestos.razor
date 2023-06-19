@@ -4,6 +4,8 @@
 @inject NavigationManager NavigationManager;
 @inject EstructuraOrgHandler EstructuraOrgHandler;
 @inject AnalisisHandler AnalisisHandler;
+@inject PasosProgresoControl PasosProgresoControl;
+
 
 <div style="display: flex; width: 100%; align-items: center; justify-content: center; margin-bottom: 30px">
     <div id="form-parametros-rentabilidad">
@@ -16,6 +18,9 @@
             <div><h4>Prestaciones</h4></div>
             <input id="form-ganancia-mensual" class="form-control" type="text" pattern="[0-9]+([,.][0-9]+)?" @bind="Config.PorcentajePl" @onmousedown="GuardarValorAnteriorPl" @onfocusout="async () => await ActualizarConfigAnalisis()" />
             <span class="simbolo-porcentaje">%</span>
+        </div>
+         <div>
+            <BotonesFlujoPasos NumeroPasoActual=NumeroPasoActual NumeroPasoMaximo=NumeroPasoMaximo FechaAnalisis=FechaAnalisis></BotonesFlujoPasos>
         </div>
     </div>
 </div>
@@ -163,6 +168,15 @@
     // Modelo que representa a la configuración del análisis de la fecha que se pasó por parámetro
     [Parameter]
     public Configuracion Config { get; set; }
+
+    // numero del paso actual. Se usa para el control de los botones de los pasos
+    [Parameter]
+    public int NumeroPasoActual { get; set; }
+
+    // numero maximo de paso al que se puede acceder
+    public int NumeroPasoMaximo { get; set; }
+
+    public EntityModels.Analisis? AnalisisActual = null;
 
     // booleano que indica si se está editanto un puesto o agregando
     public bool HayPuestoSeleccionado = false;
@@ -312,6 +326,7 @@
             ErrorNombre = "";
             ErrorSalario = "";
             ErrorPlaza = "";
+            await ActualizarBotonesControlPasos();
 
             // se recarga la página para que se vean los cambios
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); 
@@ -399,7 +414,7 @@
     {
         // se utiliza el handler para eliminar el puesto
         await EstructuraOrgHandler.EliminarPuesto(puestoEliminar);
-
+        await ActualizarBotonesControlPasos();
         // se recarga la página para que se vean los cambios
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
@@ -432,7 +447,7 @@
             Config.PorcentajePl = ValorAnteriorPl;
         }
     }
-    
+
     // Guarda el valor anterior del porcentaje de Ss en la variable ValorAnteriorSs por si hay un error de entrada de datos poder restablecer el valor.
     public void GuardarValorAnteriorSs()
     {
@@ -443,6 +458,17 @@
     public void GuardarValorAnteriorPl()
     {
         ValorAnteriorPl = Config.PorcentajePl;
+    }
+
+    public async Task ActualizarBotonesControlPasos()
+    {
+        NumeroPasoMaximo = await PasosProgresoControl.EstaActivoMaximoAsync(AnalisisActual);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AnalisisActual = await AnalisisHandler.ObtenerUnAnalisis(FechaAnalisis);
+        await ActualizarBotonesControlPasos();
     }
 }
 

@@ -7,10 +7,12 @@ namespace PI.Controllers
     public class InversionInicialController : ManejadorUsuariosController
     {
         public InversionInicialHandler? InversionInicialHandler = null;
+        private int NumeroPaso;
 
         public InversionInicialController(InversionInicialHandler inversionInicialHandler)
         {
-            InversionInicialHandler = inversionInicialHandler; 
+            InversionInicialHandler = inversionInicialHandler;
+            NumeroPaso = 5;
         }
 
         // Recibe la fecha del análisis del que se quiere obtener los gastos iniciales.
@@ -33,7 +35,8 @@ namespace PI.Controllers
             ViewBag.montoTotal = await InversionInicialHandler.ObtenerMontoTotalAsync(fechaCreacionAnalisis);
 
             List<InversionInicial> inversionInicialList = await InversionInicialHandler.ObtenerGastosInicialesAsync(fechaCreacionAnalisis);
-            
+            ViewBag.NumeroPasoActual = NumeroPaso;
+
             return View(inversionInicialList);
         }
     }
