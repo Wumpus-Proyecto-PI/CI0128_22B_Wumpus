@@ -4,8 +4,14 @@
 @using System.Globalization
 @inject PI.EntityHandlers.ProductoHandler HandlerProducto;
 @inject PI.EntityHandlers.AnalisisHandler HandlerAnalisis;
+@inject PI.Services.PasosProgresoControl PasosProgresoControl;
+@inject AnalisisHandler AnalisisHandler;
 
+<div class="d-flex flex-column">
 
+<div class="d-flex col-9 justify-content-end mt-0">
+        <BotonesFlujoPasos NumeroPasoActual=NumeroPasoActual NumeroPasoMaximo=NumeroPasoMaximo FechaAnalisis=FechaCreacion EnMarcha=EstadoAnalisis></BotonesFlujoPasos>
+</div>
 <div class="container text-center mt-5">
     <div id="container-forms-top">
         <div id="form-parametros-rentabilidad">
@@ -47,7 +53,7 @@
          <p>ERROR: El monto de ganancia mensual ingresado debe ser de 18 dígitos o menos. Ingréselo nuevamente.</p>   
     }
     <ul class="responsive-table">
-        <li class="table-header">
+            <li class="table-header li-tabla">
             <div class="col col-1">
                 <p class="datos-header">Nombre de producto</p>
             </div>
@@ -74,7 +80,7 @@
             </div>
         </li>
 
-        <li class="table-row-totales">
+            <li class="table-row-totales li-tabla">
             <div class="col col-1" data-label="Nombre">
                 <p class="datos-calculados texto-nombres">Totales</p>
             </div>
@@ -110,7 +116,7 @@
 
         @foreach (var productoActual in productos)
         {
-            <li class="table-row">
+                <li class="table-row li-tabla">
                 <div class="col col-1" data-label="Nombre">
                     <p class="datos-calculados texto-nombres">@productoActual.Nombre</p>
                 </div>
@@ -149,8 +155,24 @@
         }
     </ul>
 </div>
+</div>
 
 @code {
+    // numero del paso actual. Se usa para el control de los botones de los pasos
+    [Parameter]
+    public int NumeroPasoActual { get; set; }
+
+    // numero maximo de paso al que se puede acceder
+    public int NumeroPasoMaximo { get; set; }
+
+    public EntityModels.Analisis? AnalisisActual = null;
+
+    [Parameter]
+    public DateTime FechaCreacion { get; set; }
+
+    [Parameter]
+    public bool EstadoAnalisis { get; set; }
+
     // Lista de productos de la base de datos
     [Parameter]
     public List<Producto> productos { get; set; }
@@ -174,6 +196,8 @@
     protected override async Task OnInitializedAsync()
     {
         porcentajeVentasTotal = await getPorcentajeVentasTotal();
+        AnalisisActual = await AnalisisHandler.ObtenerUnAnalisis(FechaCreacion);
+        await ActualizarBotonesControlPasos();
     }
 
     // Se cambia el estado del switch de la representacion de la meta de ventas
@@ -202,6 +226,8 @@
             gananciaMensualValida = false;
             //analisis.GananciaMensual = handler.ObtenerGananciaMensual(analisis.FechaCreacion);
         }
+        await ActualizarBotonesControlPasos();
+
     }
 
     // Metodo que actualiza el porcentaje de ventas de un producto en la base de datos
@@ -219,6 +245,8 @@
         {
             producto.PorcentajeDeVentas = await HandlerProducto.ObtenerPorcentajeVentas(analisis.FechaCreacion, producto.Nombre);
         }
+        await ActualizarBotonesControlPasos();
+
     }
 
     // Metodo que retorna el porcentaje de ventas total de un analisis
@@ -244,6 +272,7 @@
         {
             producto.ComisionDeVentas = 0;
         }
+        await ActualizarBotonesControlPasos();
     }
 
     public decimal actualizarCostoVariable(Producto producto) 
@@ -267,6 +296,8 @@
         {
             producto.Precio = 0;
         }
+        await ActualizarBotonesControlPasos();
+
     }
 
     // Metodo que calcula y retorna el margen de un producto
@@ -354,6 +385,11 @@
             result += AnalisisRentabilidadService.CalcularMargenPonderado((decimal)productoActual.PorcentajeDeVentas, margenActual);
         }
         return result;
+    }
+
+    public async Task ActualizarBotonesControlPasos()
+    {
+        NumeroPasoMaximo = await PasosProgresoControl.EstaActivoMaximoAsync(AnalisisActual);
     }
 
 }

@@ -4,9 +4,16 @@
 @using PI.Services
 @inject NavigationManager NavigationManager;
 @inject PI.EntityHandlers.InversionInicialHandler InversionInicialHandler; 
+@inject PI.Services.PasosProgresoControl PasosProgresoControl;
+@inject AnalisisHandler AnalisisHandler;
 
+<div class="d-flex w-100 flex-column">
 <!-- Representa la sección de la inversión inicial -->
+<div class="d-flex col-9 justify-content-end mt-0 mb-4">
+    <BotonesFlujoPasos NumeroPasoActual=NumeroPasoActual NumeroPasoMaximo=NumeroPasoMaximo FechaAnalisis=@(DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null))></BotonesFlujoPasos>
+</div>
 
+    <div class="d-flex w-100">
 <div id="seccion-gastosVar"> <!-- Contenedor de tarjetas -->
     <div class="w-100 text-center">
         <h2 class="fw-bold mt-3">Gastos iniciales</h2>
@@ -123,9 +130,19 @@
 		</div>
 	</section>
  }
-
-
+    </div>
+</div>
 @code {
+    // numero del paso actual. Se usa para el control de los botones de los pasos
+    [Parameter]
+    public int NumeroPasoActual { get; set; }
+
+    // numero maximo de paso al que se puede acceder
+    public int NumeroPasoMaximo { get; set; }
+
+    public EntityModels.Analisis? AnalisisActual = null;
+
+
     // Gastos iniciales del análisis.
     [Parameter]
     public List<InversionInicial>? GastosIniciales { get; set; }
@@ -296,5 +313,16 @@
             hoverEliminar = false;
             hoverTextEliminar = "";
         }
+    }
+
+    public async Task ActualizarBotonesControlPasos()
+    {
+        NumeroPasoMaximo = await PasosProgresoControl.EstaActivoMaximoAsync(AnalisisActual);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AnalisisActual = await AnalisisHandler.ObtenerUnAnalisis(DateTime.ParseExact(fechaAnalisis, "yyyy-MM-dd HH:mm:ss.fff", null));
+        await ActualizarBotonesControlPasos();
     }
 }

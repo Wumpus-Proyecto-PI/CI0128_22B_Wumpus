@@ -11,7 +11,7 @@
 <ul class="responsive-table">
 
     @*Header*@
-    <li class="table-header sticky-top">
+    <li class="table-header sticky-top li-tabla">
         <div class="col col-1">
             <p>Egresos</p>
         </div>
@@ -39,7 +39,7 @@
     <FilaFlujoMensual flujoMensual=flujoMensual />
 
     @*Totales*@
-    <li class="table-row-totales">
+    <li class="table-row-totales li-tabla">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Totales</p>
         </div>
@@ -55,7 +55,7 @@
     @*Inversion inicial*@
     @if (estadoIniciado == false)
     {
-        <li class="table-row">
+        <li class="table-row li-tabla">
             <div class="col col-1">
                 <p class="datos-calculados texto-nombres">Inversión inicial</p>
             </div>
@@ -73,7 +73,7 @@
     }
 
     @*Compras de contado*@
-    <li class="table-row">
+    <li class="table-row li-tabla">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Compras de contado</p>
         </div>
@@ -90,7 +90,7 @@
     </li>
 
     @*Compras a credito*@
-    <li class="table-row">
+    <li class="table-row li-tabla">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Compras a crédito</p>
         </div>
@@ -107,7 +107,7 @@
     </li>
 
     @*Otros egresos*@
-    <li class="table-row">
+    <li class="table-row li-tabla">
         <div class="col col-1">
             <p class="datos-calculados texto-nombres">Otros egresos</p>
         </div>
@@ -126,7 +126,7 @@
     @*Gastos fijos*@
     @foreach (var gasto in gastosFijos)
     {
-        <li class="table-row">
+        <li class="table-row li-tabla">
             <div class="col col-1">
                 <p class="datos-calculados texto-nombres">@gasto.Nombre</p>
             </div>

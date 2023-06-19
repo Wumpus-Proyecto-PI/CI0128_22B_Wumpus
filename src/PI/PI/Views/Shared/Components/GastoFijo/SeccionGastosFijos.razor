@@ -3,136 +3,144 @@
 @using System.Globalization
 @inject NavigationManager NavigationManager;
 @inject PI.EntityHandlers.GastoFijoHandler HandlerGastoFijo;
+@inject PI.Services.PasosProgresoControl PasosProgresoControl;
+@inject AnalisisHandler AnalisisHandler;
+
 
 <!-- Razor que representa la sección de gastos fijos -->
-
+<div class="d-flex col-9 justify-content-end mb-4">
+    <BotonesFlujoPasos NumeroPasoActual=NumeroPasoActual NumeroPasoMaximo=NumeroPasoMaximo FechaAnalisis=fechaAnalasis></BotonesFlujoPasos>
+</div>
 <!-- Sección de edición (lado izquierdo) -->
 @*Comienzo ventana izquierda de edición e ingreso de gastos fijos*@
-    <div class="altura-seccion" id="seccion-pestañas">
+<div class="d-flex">
+        <div class="altura-seccion" id="seccion-pestañas">
 
-        <div id="titulo-contenido">
-            @*TODO: quitar. Aqui se agrega lo de las pestanas*@
+            <div id="titulo-contenido">
+                @*TODO: quitar. Aqui se agrega lo de las pestanas*@
+                @*
+                    Se revisa si hay un gasto fijo seleccionado o no
+                    En caso de haber uno seleccionado, se está editando un gasto fijo
+                    Caso contrario se está agregando uno nuevo
+                *@
+                @if (hayGastoFijoSeleccionado == false)
+                {
+                <h2 class="mt-3 fw-bold">Nuevo gasto fijo</h2>
+                } else {
+                <h2 class="mt-3 fw-bold">Editar gasto fijo</h2>
+                }
+                @*
+                    Comienzo sección de ingreso de datos de un gasto fijo
+                    Ya se edición o creación de puesto
+                *@
+                @if (pestanyaConfiguracionActiva == true)
+                {
+                    <div id="cuadro_configuracion">
+
+                        <form id="form_configuracion">
+                            <div class="fila-form-configuracion">
+                                <label>Nombre</label> <input id="nombre-gasto" name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
+                            </div>
+                            @((MarkupString)CasoError_repetido)
+
+                            <div class="fila-form-configuracion">
+                                <label>Monto anual</label> <input id="monto-gasto" name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
+                            </div>
+                            @((MarkupString)CasoError_negativo)
+                        </form>
+                    </div>
+                }   
+            </div>
             @*
-                Se revisa si hay un gasto fijo seleccionado o no
-                En caso de haber uno seleccionado, se está editando un gasto fijo
-                Caso contrario se está agregando uno nuevo
-            *@
-            @if (hayGastoFijoSeleccionado == false)
-            {
-            <h2 class="mt-3 fw-bold">Nuevo gasto fijo</h2>
-            } else {
-            <h2 class="mt-3 fw-bold">Editar gasto fijo</h2>
-            }
-            @*
-                Comienzo sección de ingreso de datos de un gasto fijo
+                Fin sección de ingreso de datos de un gasto fijo
                 Ya se edición o creación de puesto
             *@
-            @if (pestanyaConfiguracionActiva == true)
-            {
-                <div id="cuadro_configuracion">
-
-                    <form id="form_configuracion">
-                        <div class="fila-form-configuracion">
-                            <label>Nombre</label> <input id="nombre-gasto" name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
-                        </div>
-                        @((MarkupString)CasoError_repetido)
-
-                        <div class="fila-form-configuracion">
-                            <label>Monto anual</label> <input id="monto-gasto" name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
-                        </div>
-                        @((MarkupString)CasoError_negativo)
-                    </form>
-                </div>
-            }   
-        </div>
-        @*
-            Fin sección de ingreso de datos de un gasto fijo
-            Ya se edición o creación de puesto
-        *@
-        <!-- Botón de guardar el gasto fijo-->
-        <div id="inferior-horizontal">
-            @if (hayGastoFijoSeleccionado == true)
-            {
-                /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await eliminarGastoFijo(gastoFijoActivo)">
-                    <a>
-                        @if (hoverEliminar == false)
-                        {
-                            <img src="img/generic/trashCan.png" alt="">
-                        }
-                        @hoverTextEliminar
-                    </a>
-                </div>
-            }
-            <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await GuardarDatosGastoFijo(gastoFijoActivo)">
-
-                    @if (hoverGuardar == false) {
-                        <img src="img/estructuraOrg/guardarPuesto.png" alt="">
-                    }
-                    @hoverTextGuardar
-            </div>
-        </div>
-    </div>
-@*Fin ventana izquierda de edición e ingreso de gastos fijos*@
-
-<!-- Sección gastos fijos creados (lado derecho) -->
-
-@*Comienzo de sección de totales*@
-    <div class="altura-seccion" id="seccion-gastosFijos">
-        <div class="totales"> 
-            <div class="fila-form-configuracion">
-                <!-- Con N2 indica que quiere un número de 2 decimales siempre -->
-            <label class="total">Total mensual</label> <p>
-                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (totalAnual / 12))) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
-            </div>
-            <div class="fila-form-configuracion">
-           
-                <label class="total">Total anual </label> <p>
-                @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", totalAnual)) <img class="divisa-img" src="/img/generic/coin-icon.svg">
-            </p>
-            </div>
-@*Fin de sección de totales*@
-
-        </div>
-        <div id="mostrar-gastosFijos">
-        @*Comienzo de sección de totales*@
-
-            <!-- Carga cada gasto fijo en la vista -->
-            @foreach (PI.EntityModels.GastoFijo gastoFijoActual in gastosFijos)
-            {
-            @*
-                Renderización de las tarjetas de los gastos fijos, son componentes razor aparte
-                Se muestran no clikeables las prestaciones sociales, seguro social y suma de beneficios
-            *@
-                @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
+            <!-- Botón de guardar el gasto fijo-->
+            <div id="inferior-horizontal">
+                @if (hayGastoFijoSeleccionado == true)
                 {
-                    <div class="gastoFijo-clickeable" @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
-                        <div >
-                            <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
-                        </div>
-                        <div class="gastoFijo-icono-editar">
-                            <img src=img/generic/editPhoto.png>
-                        </div>
+                    /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
+                    <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await eliminarGastoFijo(gastoFijoActivo)">
+                        <a>
+                            @if (hoverEliminar == false)
+                            {
+                                <img src="img/generic/trashCan.png" alt="">
+                            }
+                            @hoverTextEliminar
+                        </a>
                     </div>
-                } else {
-                    <div class="gastoFijo-noClickeable-noEliminable">
-                            <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
-                        </div>
                 }
+                <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await GuardarDatosGastoFijo(gastoFijoActivo)">
 
-            }
+                        @if (hoverGuardar == false) {
+                            <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                        }
+                        @hoverTextGuardar
+                </div>
+            </div>
         </div>
-        <!-- Botón de agregar un nuevo gasto fijo-->
-        <div class="transition gastoFijo-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
-            <a>
-                @if (hoverAgregar == false)
+    @*Fin ventana izquierda de edición e ingreso de gastos fijos*@
+
+    <!-- Sección gastos fijos creados (lado derecho) -->
+
+    @*Comienzo de sección de totales*@
+        <div class="altura-seccion" id="seccion-gastosFijos">
+            <div class="totales"> 
+                <div class="fila-form-configuracion">
+                    <!-- Con N2 indica que quiere un número de 2 decimales siempre -->
+                <label class="total">Total mensual</label> <p>
+                    @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (totalAnual / 12))) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
+                </div>
+                <div class="fila-form-configuracion">
+           
+                    <label class="total">Total anual </label> <p>
+                    @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", totalAnual)) <img class="divisa-img" src="/img/generic/coin-icon.svg">
+                </p>
+                </div>
+    @*Fin de sección de totales*@
+
+            </div>
+            <div id="mostrar-gastosFijos">
+            @*Comienzo de sección de totales*@
+
+                <!-- Carga cada gasto fijo en la vista -->
+                @foreach (PI.EntityModels.GastoFijo gastoFijoActual in gastosFijos)
                 {
-                    <img src="img/estructuraOrg/addPuesto.png" alt="">
+                @*
+                    Renderización de las tarjetas de los gastos fijos, son componentes razor aparte
+                    Se muestran no clikeables las prestaciones sociales, seguro social y suma de beneficios
+                *@
+                    @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
+                    {
+                        <div class="gastoFijo-clickeable" @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
+                            <div >
+                                <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                            </div>
+                            <div class="gastoFijo-icono-editar">
+                                <img src=img/generic/editPhoto.png>
+                            </div>
+                        </div>
+                    } else {
+                        <div class="gastoFijo-noClickeable-noEliminable">
+                                <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
+                            </div>
+                    }
+
                 }
-                @hoverTextAgregar
-                </a>
+            </div>
+            <!-- Botón de agregar un nuevo gasto fijo-->
+            <div class="transition gastoFijo-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
+                <a>
+                    @if (hoverAgregar == false)
+                    {
+                        <img src="img/estructuraOrg/addPuesto.png" alt="">
+                    }
+                    @hoverTextAgregar
+                    </a>
+            </div>
         </div>
     </div>
+
 
 
 @code {
@@ -150,6 +158,15 @@
 
     // booleano que indica si se está editanto un gasto fijo o agregando
     public bool hayGastoFijoSeleccionado = false;
+
+    // numero del paso actual. Se usa para el control de los botones de los pasos
+    [Parameter]
+    public int NumeroPasoActual { get; set; }
+
+    // numero maximo de paso al que se puede acceder
+    public int NumeroPasoMaximo { get; set; }
+
+    public EntityModels.Analisis? AnalisisActual = null;
 
     // gasto fijo seleccionado actualmente, puede ser nuevo o un existente
     public PI.EntityModels.GastoFijo gastoFijoActivo = new PI.EntityModels.GastoFijo();
@@ -326,5 +343,16 @@
     public async Task<decimal> actualizarMontoAnual () {
         this.totalAnual = await HandlerGastoFijo.ObtenerTotalAnualAsync(this.fechaAnalasis);
         return this.totalAnual; 
+    }
+
+    public async Task ActualizarBotonesControlPasos()
+    {
+        NumeroPasoMaximo = await PasosProgresoControl.EstaActivoMaximoAsync(AnalisisActual);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AnalisisActual = await AnalisisHandler.ObtenerUnAnalisis(fechaAnalasis);
+        await ActualizarBotonesControlPasos();
     }
 }
