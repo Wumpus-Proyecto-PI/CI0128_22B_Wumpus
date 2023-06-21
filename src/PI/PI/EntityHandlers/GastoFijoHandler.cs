@@ -113,7 +113,7 @@ namespace PI.EntityHandlers
             decimal totalSalarios = 0.0m;
             foreach (var puesto in puestos)
             {
-                totalSalarios = (puesto.CantidadPlazas * puesto.SalarioBruto) ?? 0.0m;
+                totalSalarios += (puesto.CantidadPlazas * puesto.SalarioBruto) ?? 0.0m;
             }
             return totalSalarios * 12;
         }
@@ -208,12 +208,12 @@ namespace PI.EntityHandlers
         public async Task<decimal> ObtenerTotalBeneficiosAsync(DateTime fechaAnalisis)
         {
             List<Puesto> puestos = await base.Contexto.Puestos.AsNoTracking().Where(x => x.FechaAnalisis == fechaAnalisis).ToListAsync();
-            decimal totalSalarios = 0.0m;
+            decimal totalBeneficios = 0.0m;
             foreach (var puesto in puestos)
             {
-                totalSalarios = (puesto.CantidadPlazas * puesto.Beneficios) ?? 0.0m;
+                totalBeneficios += (puesto.CantidadPlazas * puesto.Beneficios) ?? 0.0m;
             }
-            return totalSalarios * 12;
+            return totalBeneficios * 12;
         }
     }
 }
