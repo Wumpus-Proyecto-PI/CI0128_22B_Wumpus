@@ -396,11 +396,19 @@ div a {
     margin: 0px 20px 0px 0px;
     width: fit-content;
     padding: 0px;
-    padding-inline: 50px;
+    padding-inline: 15px;
 }
 .totales label {
     background-color: white;
+    text-align: center;
+    width: 240px;
     padding: 0px;
+    padding-inline: 5px;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    white-space: nowrap;
+    flex-basis: content;
 }
 
 .error {
