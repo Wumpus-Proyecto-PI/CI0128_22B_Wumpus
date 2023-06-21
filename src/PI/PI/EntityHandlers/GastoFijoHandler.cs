@@ -113,7 +113,7 @@ namespace PI.EntityHandlers
             decimal totalSalarios = 0.0m;
             foreach (var puesto in puestos)
             {
-                totalSalarios = (puesto.CantidadPlazas * puesto.SalarioBruto) ?? 0.0m;
+                totalSalarios += (puesto.CantidadPlazas * puesto.SalarioBruto) ?? 0.0m;
             }
             return totalSalarios * 12;
         }
