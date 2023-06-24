@@ -441,6 +441,7 @@
             gastoGuardar.FechaAnalisis = fechaAnalisis;
             // se ingresa con el handler en la base de datos el gasto variable
 
+            gastoGuardar.CostoVariable = CalcularPrecioTotal();
 
             resultado = await HandlerProducto.InsertarProductoAsync(copiaNombreOriginal, gastoGuardar);
 
@@ -458,6 +459,23 @@
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
         return resultado;
+    }
+
+    public decimal CalcularPrecioTotal() {
+        decimal total = 0;
+
+        foreach(Componente componente in productoActivo.Componentes) {
+            if (componente.Monto != null && componente.Cantidad > 0)
+            {
+                total += (decimal)(componente.Monto * componente.Cantidad);
+            }
+            else {
+                total += 0;
+            }
+
+        }
+
+        return total; 
     }
 
     // método para revisar si el nombre está repetido y que no esté vacío
