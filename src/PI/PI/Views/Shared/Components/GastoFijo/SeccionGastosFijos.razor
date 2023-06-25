@@ -119,7 +119,7 @@
             @if (pestanyaConfiguracionActiva == true)
             {
 
-                <form id="form_configuracion">
+                <form id="form_configuracion" class="mt-4">
                     <div class="fila-form-configuracion">
                         <label>Nombre</label> <input id="nombre-gasto" name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
                     </div>
@@ -339,12 +339,12 @@
     {
         int agregado = 0; 
 
-        if (gastosFijos.Exists(x => x.Nombre == gastoFijoGuardar.Nombre) && hayGastoFijoSeleccionado == false)
+        if (gastosFijos.Exists(x => x.Nombre == gastoFijoGuardar.Nombre))
         {  // ya existe el gasto fijo
-            CasoError_repetido = "<p class=\"error error-gastoFijo\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
+            CasoError_repetido = "<p class=\"error error-gastoFijo my-0\">Error: el nombre del gasto fijo ya existe.<br>Cambie el nombre o seleccione y modifique el existente.</p>";
         } else if (gastoFijoGuardar.Monto < 0) {
             // el monto ingresado es negativo
-            CasoError_negativo = "<p class=\"error error-gastoFijo\">Error: el monto es un número negativo.<br>ingrese un monto positivo.</p>";
+            CasoError_negativo = "<p class=\"error error-gastoFijo my-0\">Error: el monto es un número negativo.<br>ingrese un monto positivo.</p>";
         }
         else {
             CasoError_negativo = "";
