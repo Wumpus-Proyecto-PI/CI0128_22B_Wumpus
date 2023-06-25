@@ -1,5 +1,27 @@
 ﻿@charset "UTF-8";
 
+.seccion-gastoFijo {
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.19);
+    margin-inline: 60px;
+    margin-bottom: 20px;
+}
+
+.boton-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+}
+
 .gastoFijo {
     border: solid;
     border-color: white;
@@ -206,6 +228,7 @@ div a {
     height: fit-content;
 }
 
+/* borrar */
 #seccion-gastosFijos {
     display: flex;
     flex-direction: column;
@@ -225,6 +248,7 @@ div a {
     max-height: fit-content;
 }
 
+/* borrar */
 #seccion-pestañas {
     display: flex;
     flex-direction: column;
