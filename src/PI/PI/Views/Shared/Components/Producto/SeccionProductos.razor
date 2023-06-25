@@ -125,10 +125,10 @@
                         int index = i;
 
                         <tr class="filas-tabla-componente">
-                            <td> @productoActivo.Componentes.ToList()[index].NombreComponente</td>
-                            <td> @productoActivo.Componentes.ToList()[index].Unidad</td>
-                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes.ToList()[index].Cantidad)))</td>
-                            <td> @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (@productoActivo.Componentes.ToList()[index].Monto)))</td>
+                            <td><input style="width:100%" @bind = "productoActivo.Componentes.ToList()[index].NombreComponente" /></td>
+                            <td> <input style="width:100%" @bind="productoActivo.Componentes.ToList()[index].Unidad" /></td>
+                            <td> <input style="width:100%" @bind="productoActivo.Componentes.ToList()[index].Cantidad" /></td>
+                            <td> <input style="width:100%" @bind="productoActivo.Componentes.ToList()[index].Monto" /></td>
                             @*Botón para borrar un beenficio*@
                             <td class="columna-borrar-componente"><div class="borrar-componente" @onclick="()=>BorrarComponente(productoActivo.Componentes.ToList()[index])"><img src="img/puesto/trashCan.png" width="35px" height="35px"></div></td>
                         </tr>
@@ -147,7 +147,7 @@
                         @*Sección donde se encuentra el form donde se ingresa el nombre del nuevo componente*@
                         <div id="container-input-nombre-componente">
                             <label for="nombreComponente">Nombre:</label>
-                            <input class="input-componente" id="nombreComponente" name="nombreComponente" @bind="componentes[componenteActual].NombreComponente" maxlength="30">
+                            <input class="input-componente" id="nombreComponente" name="nombreComponente"  @bind="componentes[componenteActual].NombreComponente" maxlength="30">
                         </div>
                         @*Sección donde se encuentra el form donde se ingresa la unidad del nuevo componente*@
                         <div id="container-input-unidad-componente">
@@ -367,7 +367,7 @@
         nuevosComponentes = componentesNuevos.Count() > 0;
         if (PopupVisible && nuevosComponentes)
         {
-            ErrorComponentesNuevos = "<p class=\"mensaje-error\">Error: hay componentes nuevos, presione el botón de guardar datos antes de salir.</p>";
+            ErrorComponentesNuevos = "<p class=\"mensaje-error\">Error: hay componentes nuevos o recién editados sin guardar, presione el botón de guardar datos antes de salir.</p>";
         }
         else if (PopupVisible) {
             ErrorComponentesNuevos = "";
@@ -428,19 +428,35 @@
         ErrorComponentesNuevos = "";
     }
 
+    public bool RevisarComponentesGasto(PI.EntityModels.Producto gastoGuardar)
+    {
+        bool todoCorrecto = true;
+        for (int i = 0; i < gastoGuardar.Componentes.Count; i += 1)
+        {
+            if (gastoGuardar.Componentes.ElementAt(i).Cantidad < 0 || gastoGuardar.Componentes.ElementAt(i).Monto < 0)
+            {
+                todoCorrecto = false;
+                ErrorNombre = "<p class=\"mensaje-error\"> Error: Los valores de Cantidad y Monto deben ser positivos.</p>";
+                break;
+            }
+        }
+        return todoCorrecto;
+    }
+
     // método que permitir guardar en la base de datos un gasto variable
     // recibe el gasto variable a guardar
     public async Task<int> GuardarDatosGasto(PI.EntityModels.Producto gastoGuardar)
     {
         int resultado = 0;
         // se revisa que el nombre no este repetido y que no haya números negativo
-        if (RevisarNombre(gastoGuardar) && RevisarLote(gastoGuardar))
+        if (RevisarNombre(gastoGuardar) && RevisarLote(gastoGuardar) && RevisarComponentesGasto(gastoGuardar))
         {
 
             // se asigna la fecha del análisis por si es un gasto variable nuevo
             gastoGuardar.FechaAnalisis = fechaAnalisis;
             // se ingresa con el handler en la base de datos el gasto variable
 
+            gastoGuardar.CostoVariable = CalcularPrecioTotal();
 
             resultado = await HandlerProducto.InsertarProductoAsync(copiaNombreOriginal, gastoGuardar);
 
@@ -458,6 +474,23 @@
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
         return resultado;
+    }
+
+    public decimal CalcularPrecioTotal() {
+        decimal total = 0;
+
+        foreach(Componente componente in productoActivo.Componentes) {
+            if (componente.Monto != null && componente.Cantidad > 0)
+            {
+                total += (decimal)(componente.Monto * componente.Cantidad);
+            }
+            else {
+                total += 0;
+            }
+
+        }
+
+        return total; 
     }
 
     // método para revisar si el nombre está repetido y que no esté vacío
