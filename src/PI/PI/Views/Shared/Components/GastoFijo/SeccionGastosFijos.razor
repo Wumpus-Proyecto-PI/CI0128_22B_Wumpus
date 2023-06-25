@@ -11,141 +11,10 @@
 <div class="d-flex col-9 justify-content-end mb-4">
     <BotonesFlujoPasos NumeroPasoActual=NumeroPasoActual NumeroPasoMaximo=NumeroPasoMaximo FechaAnalisis=fechaAnalasis></BotonesFlujoPasos>
 </div>
-<!-- Sección de edición (lado izquierdo) -->
-@*Comienzo ventana izquierda de edición e ingreso de gastos fijos*@
-<div class="d-flex">
-        <div class="altura-seccion" id="seccion-pestañas">
-
-            <div id="titulo-contenido">
-                @*TODO: quitar. Aqui se agrega lo de las pestanas*@
-                @*
-                    Se revisa si hay un gasto fijo seleccionado o no
-                    En caso de haber uno seleccionado, se está editando un gasto fijo
-                    Caso contrario se está agregando uno nuevo
-                *@
-                @if (hayGastoFijoSeleccionado == false)
-                {
-                <h2 class="mt-3 fw-bold">Nuevo gasto fijo</h2>
-                } else {
-                <h2 class="mt-3 fw-bold">Editar gasto fijo</h2>
-                }
-                @*
-                    Comienzo sección de ingreso de datos de un gasto fijo
-                    Ya se edición o creación de puesto
-                *@
-                @if (pestanyaConfiguracionActiva == true)
-                {
-                    <div id="cuadro_configuracion">
-
-                        <form id="form_configuracion">
-                            <div class="fila-form-configuracion">
-                                <label>Nombre</label> <input id="nombre-gasto" name="" type="text" @bind="gastoFijoActivo.Nombre" placeholder="@placeHolderNombre">
-                            </div>
-                            @((MarkupString)CasoError_repetido)
-
-                            <div class="fila-form-configuracion">
-                                <label>Monto anual</label> <input id="monto-gasto" name="" type="number" min=0 step="any" @bind="gastoFijoActivo.Monto" placeholder="@placeHolderMonto">
-                            </div>
-                            @((MarkupString)CasoError_negativo)
-                        </form>
-                    </div>
-                }   
-            </div>
-            @*
-                Fin sección de ingreso de datos de un gasto fijo
-                Ya se edición o creación de puesto
-            *@
-            <!-- Botón de guardar el gasto fijo-->
-            <div id="inferior-horizontal">
-                @if (hayGastoFijoSeleccionado == true)
-                {
-                    /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-                    <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await eliminarGastoFijo(gastoFijoActivo)">
-                        <a>
-                            @if (hoverEliminar == false)
-                            {
-                                <img src="img/generic/trashCan.png" alt="">
-                            }
-                            @hoverTextEliminar
-                        </a>
-                    </div>
-                }
-                <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await GuardarDatosGastoFijo(gastoFijoActivo)">
-
-                        @if (hoverGuardar == false) {
-                            <img src="img/estructuraOrg/guardarPuesto.png" alt="">
-                        }
-                        @hoverTextGuardar
-                </div>
-            </div>
-        </div>
-    @*Fin ventana izquierda de edición e ingreso de gastos fijos*@
-
-    <!-- Sección gastos fijos creados (lado derecho) -->
-
-    @*Comienzo de sección de totales*@
-        <div class="altura-seccion" id="seccion-gastosFijos">
-            <div class="totales"> 
-                <div class="fila-form-configuracion">
-                    <!-- Con N2 indica que quiere un número de 2 decimales siempre -->
-                <label class="total">Gasto fijo mensual</label> <p>
-                    @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", (totalAnual / 12))) <img class="divisa-img" src="/img/generic/coin-icon.svg"> </p>
-                </div>
-                <div class="fila-form-configuracion">
-           
-                    <label class="total">Gasto fijo anual</label> <p>
-                    @(String.Format(CultureInfo.InvariantCulture, "{0:#,##0.00}", totalAnual)) <img class="divisa-img" src="/img/generic/coin-icon.svg">
-                </p>
-                </div>
-    @*Fin de sección de totales*@
-
-            </div>
-            <div id="mostrar-gastosFijos">
-            @*Comienzo de sección de totales*@
-
-                <!-- Carga cada gasto fijo en la vista -->
-                @foreach (PI.EntityModels.GastoFijo gastoFijoActual in gastosFijos)
-                {
-                @*
-                    Renderización de las tarjetas de los gastos fijos, son componentes razor aparte
-                    Se muestran no clikeables las prestaciones sociales, seguro social y suma de beneficios
-                *@
-                    @if (!nombresEstOrg.Contains(gastoFijoActual.Nombre))
-                    {
-                        <div class="gastoFijo-clickeable" @onclick="() => SeleccionarGastoFijo(gastoFijoActual)">
-                            <div >
-                                <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
-                            </div>
-                            <div class="gastoFijo-icono-editar">
-                                <img src=img/generic/editPhoto.png>
-                            </div>
-                        </div>
-                    } else {
-                        <div class="gastoFijo-noClickeable-noEliminable">
-                                <GastoFijo gastoFijo=gastoFijoActual></GastoFijo>
-                            </div>
-                    }
-
-                }
-            </div>
-            <!-- Botón de agregar un nuevo gasto fijo-->
-            <div class="transition gastoFijo-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
-                <a>
-                    @if (hoverAgregar == false)
-                    {
-                        <img src="img/estructuraOrg/addPuesto.png" alt="">
-                    }
-                    @hoverTextAgregar
-                    </a>
-            </div>
-        </div>
-    </div>
-
-
 
 @* Comienzo de seccion con los gastos *@
 
-<div class="altura-seccion seccion-gastoFijo justify-content-around">
+<div class="altura-seccion seccion-gastoFijo justify-content-start">
     @* Comienzo de sección de totales *@
     <div class="totales">
         <div class="fila-form-configuracion">
@@ -200,7 +69,7 @@
 
 
         @* Comienzo de sección boton de agregar *@
-        <div class="transition gastoFijo-boton" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
+        <div class="transition gastoFijo-boton boton-agregar" @onmouseover="() => Hover(1)" @onmouseout="() => HoverOut(1)" @onclick="AgregarNuevoGastoFijo">
             <a>
                 @if (hoverAgregar == false)
                 {
@@ -219,28 +88,36 @@
 @* Empieza seccion de popup *@
 @if (PopupVisible == true)
 {
-    <div id="titulo-contenido">
-        @*TODO: quitar. Aqui se agrega lo de las pestanas*@
-        @*
-    Se revisa si hay un gasto fijo seleccionado o no
-    En caso de haber uno seleccionado, se está editando un gasto fijo
-    Caso contrario se está agregando uno nuevo
-    *@
-        @if (hayGastoFijoSeleccionado == false)
-        {
-            <h2 class="mt-3 fw-bold">Nuevo gasto fijo</h2>
-        }
-        else
-        {
-            <h2 class="mt-3 fw-bold">Editar gasto fijo</h2>
-        }
-        @*
-    Comienzo sección de ingreso de datos de un gasto fijo
-    Ya se edición o creación de puesto
-    *@
-        @if (pestanyaConfiguracionActiva == true)
-        {
-            <div id="cuadro_configuracion">
+    @*Se agrega Overlay sobre la pantalla, para que el Popup sobresalga*@
+    <div id="overlay" @onclick="CambiarVisibilidadPopup"></div>
+    <div id="contenedor-popup">
+
+        <div id="contenedor-crear-gasto">
+            <div class="popup-top">
+                @*
+                Se revisa si hay un gasto fijo seleccionado o no
+                En caso de haber uno seleccionado, se está editando un gasto fijo
+                Caso contrario se está agregando uno nuevo
+                *@
+                @if (hayGastoFijoSeleccionado == false)
+                {
+                    <h2 class="mt-3 mb-0 fw-bold">Nuevo gasto fijo</h2>
+                }
+                else
+                {
+                    <h2 class="mt-3 mb-0 fw-bold">Editar gasto fijo</h2>
+                }
+                <div class="salir-popup">
+                    <img src="img/estructuraOrg/x.png" alt="" width="15px" height="15px" @onclick="CambiarVisibilidadPopup">
+                </div>
+            </div>
+
+            @*
+            Comienzo sección de ingreso de datos de un gasto fijo
+            Ya se edición o creación de puesto
+            *@
+            @if (pestanyaConfiguracionActiva == true)
+            {
 
                 <form id="form_configuracion">
                     <div class="fila-form-configuracion">
@@ -253,37 +130,38 @@
                     </div>
                     @((MarkupString)CasoError_negativo)
                 </form>
-            </div>
-        }
-    </div>
-    @*
-                Fin sección de ingreso de datos de un gasto fijo
-                Ya se edición o creación de puesto
-            *@
-    <!-- Botón de guardar el gasto fijo-->
-    <div id="inferior-horizontal">
-        @if (hayGastoFijoSeleccionado == true)
-        {
-            /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
-            <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await eliminarGastoFijo(gastoFijoActivo)">
-                <a>
-                    @if (hoverEliminar == false)
-                    {
-                        <img src="img/generic/trashCan.png" alt="">
-                    }
-                    @hoverTextEliminar
-                </a>
-            </div>
-        }
-        <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await GuardarDatosGastoFijo(gastoFijoActivo)">
-
-            @if (hoverGuardar == false)
-            {
-                <img src="img/estructuraOrg/guardarPuesto.png" alt="">
             }
-            @hoverTextGuardar
+        </div>
+        @*
+                    Fin sección de ingreso de datos de un gasto fijo
+                    Ya se edición o creación de puesto
+                *@
+        <!-- Botón de guardar el gasto fijo-->
+        <div id="inferior-horizontal">
+            @if (hayGastoFijoSeleccionado == true)
+            {
+                /*Mostramos el boton de elimnar solo si se selccionó un puesto*/
+                <div id="eliminar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(3)" @onmouseout="() => HoverOut(3)" @onclick="async() => await eliminarGastoFijo(gastoFijoActivo)">
+                    <a>
+                        @if (hoverEliminar == false)
+                        {
+                            <img src="img/generic/trashCan.png" alt="">
+                        }
+                        @hoverTextEliminar
+                    </a>
+                </div>
+            }
+            <div id="guardar-gastoFijo" class="gastoFijo-boton" @onmouseover="() => Hover(2)" @onmouseout="() => HoverOut(2)" @onclick="async() => await GuardarDatosGastoFijo(gastoFijoActivo)">
+
+                @if (hoverGuardar == false)
+                {
+                    <img src="img/estructuraOrg/guardarPuesto.png" alt="">
+                }
+                @hoverTextGuardar
+            </div>
         </div>
     </div>
+
 }
 @* Final seccion de popup *@
 
@@ -426,6 +304,7 @@
         // se indica que hay un puesto seleccionado
         hayGastoFijoSeleccionado = true;
 
+        PopupVisible = true;
     }
 
     // método llamado por el botón de agregar
@@ -449,6 +328,9 @@
 
         // se crea un nuevo gasti fijo
         gastoFijoActivo = new PI.EntityModels.GastoFijo();
+
+        // abrimos el popup para crear el gasto
+        PopupVisible = true;
     }
 
     // método que permitir guardar en la base de datos un gasto fijo
