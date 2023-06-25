@@ -134,6 +134,7 @@ footer {
   padding-block-start: 1em;
   padding-block-end: 1em;
   margin: 0px;
+  z-index: -1;
 }
 
 .container-contacts {

@@ -1,4 +1,97 @@
 ﻿@charset "UTF-8";
+.popup-top {
+    display: flex;
+    flex-direction: row;
+    top: 0px;
+}
+
+#contenedor-crear-gasto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    width: fit-content;
+    height: 250px;
+    border-bottom: 1px solid rgb(117, 115, 115);
+    padding-inline: 75px;
+    margin-inline: 25px;
+}
+
+.salir-popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    border-radius: 40px;
+    top: 15px;
+    left: 585px;
+}
+
+.salir-popup:hover {
+    background-color: #FFC8C8;
+    transform: scale(1.1);
+    border-color: #FFC8C8;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+
+#contenedor-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: black;
+    background-color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    width: fit-content;
+    height: fit-content;
+    border-color: black;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px 20px 20px 20px;
+    block-size: fit-content;
+}
+
+#overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    cursor: pointer;
+    background-color: black;
+    opacity: 0.5;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+}
+
+.seccion-gastoFijo {
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.19);
+    margin-inline: 60px;
+    margin-bottom: 20px;
+}
+
+.boton-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+}
 
 .gastoFijo {
     border: solid;
@@ -206,6 +299,7 @@ div a {
     height: fit-content;
 }
 
+/* borrar */
 #seccion-gastosFijos {
     display: flex;
     flex-direction: column;
@@ -225,6 +319,7 @@ div a {
     max-height: fit-content;
 }
 
+/* borrar */
 #seccion-pestañas {
     display: flex;
     flex-direction: column;
@@ -433,6 +528,13 @@ div a {
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.19);
     margin: 25px;
     transition-duration: 0.3s;
+    
+}
+
+.boton-agregar {
+    position: fixed;
+    background: white;
+    top: 82%;
 }
 
 .gastoFijo-boton:hover {
