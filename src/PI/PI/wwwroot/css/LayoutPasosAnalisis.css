@@ -174,3 +174,19 @@ footer {
 .logout-button:hover {
     color: #0d6efd; 
 }
+
+@media screen and (min-height: 900px) {
+    #botonesPasos {
+        position: absolute;
+        left: 47%;
+        top: 8%;
+    }
+}
+
+@media screen and (max-height: 900px) {
+    #botonesPasos {
+        position: absolute;
+        left: 47%;
+        top: 150px;
+    }
+}
